@@ -1,0 +1,28 @@
+name: Android Develop branch CI
+
+on:
+  push:
+    branches: [ "develop" ]
+  pull_request:
+    branches: [ "develop" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: check out repository
+        uses: actions/checkout@v4
+
+      - name: set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Run unit tests
+        run: ./gradlew testDebugUnitTest
+
+      - name: Build with Gradle
+        run: ./gradlew assembleDebug
