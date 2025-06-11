@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Bitnagil"
 include(":app")
+include(":data")
