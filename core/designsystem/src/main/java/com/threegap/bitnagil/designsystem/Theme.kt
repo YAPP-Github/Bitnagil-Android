@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.ui.theme
+package com.threegap.bitnagil.designsystem
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

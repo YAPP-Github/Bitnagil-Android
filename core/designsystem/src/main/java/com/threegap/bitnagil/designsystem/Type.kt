@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.ui.theme
+package com.threegap.bitnagil.designsystem
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
