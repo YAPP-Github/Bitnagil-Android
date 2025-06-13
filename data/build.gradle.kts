@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.threegap.bitnagil"
+    namespace = "com.threegap.bitnagil.data"
 }
 
 dependencies {
