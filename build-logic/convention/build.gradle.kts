@@ -19,3 +19,32 @@ dependencies {
     compileOnly(libs.kotlin.gradle.plugin)
     compileOnly(libs.compose.compiler.gradle.plugin)
 }
+
+gradlePlugin {
+    plugins {
+        register("androidApplication") {
+            id = "bitnagil.android.application"
+            implementationClass = "com.threegap.bitnagil.convention.AndroidApplicationPlugin"
+        }
+
+        register("androidLibrary") {
+            id = "bitnagil.android.library"
+            implementationClass = "com.threegap.bitnagil.convention.AndroidLibraryPlugin"
+        }
+
+        register("androidComposeLibrary") {
+            id = "bitnagil.android.compose.library"
+            implementationClass = "com.threegap.bitnagil.convention.AndroidComposePlugin"
+        }
+
+        register("androidHilt") {
+            id = "bitnagil.android.hilt"
+            implementationClass = "com.threegap.bitnagil.convention.HiltPlugin"
+        }
+
+        register("kotlin") {
+            id = "bitnagil.kotlin"
+            implementationClass = "com.threegap.bitnagil.convention.KotlinJvmPlugin"
+        }
+    }
+}

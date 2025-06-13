@@ -176,3 +176,9 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 
+# Custom Plugins
+bitnagil-android-application = { id = "bitnagil.android.application", version = "unspecified" }
+bitnagil-android-library = { id = "bitnagil.android.library", version = "unspecified" }
+bitnagil-android-compose-library = { id = "bitnagil.android.compose.library", version = "unspecified" }
+bitnagil-android-hilt = { id = "bitnagil.android.hilt", version = "unspecified" }
+bitnagil-kotlin = { id = "bitnagil.kotlin", version = "unspecified" }
