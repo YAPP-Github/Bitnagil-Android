@@ -48,8 +48,8 @@ espressoCore = "3.6.1"
 
 ## Other
 material = "1.12.0"
-timber = "5.0.1"
 orbit = "6.1.0"
+javax = "1"
 
 [libraries]
 ## Android Gradle Plugin
@@ -89,6 +89,7 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 ## Hilt
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javax" }
 
 # Orbit
 orbit-core = { group = "org.orbit-mvi", name = "orbit-core", version.ref = "orbit" }
@@ -112,7 +113,6 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 
 ## Other
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 
 [bundles]
 androidx-core = [
