@@ -13,8 +13,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val mainNavigator = rememberMainNavigator()
             BitnagilTheme {
-                MainScreen()
+                MainScreen(
+                    navigator = mainNavigator,
+                )
             }
         }
     }

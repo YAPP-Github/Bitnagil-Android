@@ -8,8 +8,8 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun MainScreen(
+    navigator: MainNavigator,
     modifier: Modifier = Modifier,
-    navigator: MainNavigator = rememberMainNavigator(),
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
