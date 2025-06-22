@@ -20,14 +20,35 @@ abstract class MviViewModel<STATE : MviState, SIDE_EFFECT : MviSideEffect, INTEN
     val stateFlow: StateFlow<STATE> get() = container.stateFlow
     val sideEffectFlow: Flow<SIDE_EFFECT> get() = container.sideEffectFlow
 
-    protected suspend fun SimpleSyntax<STATE, SIDE_EFFECT>.sendSideEffect(sideEffect: SIDE_EFFECT) = postSideEffect(sideEffect)
+    /**
+ * Emits a side effect within the Orbit MVI syntax context.
+ *
+ * @param sideEffect The side effect to be posted.
+ */
+protected suspend fun SimpleSyntax<STATE, SIDE_EFFECT>.sendSideEffect(sideEffect: SIDE_EFFECT) = postSideEffect(sideEffect)
 
+    /**
+     * Computes a new state in response to the given intent and current state.
+     *
+     * Subclasses must implement this to define how each intent transforms the state.
+     *
+     * @param intent The intent representing a user or system action.
+     * @param state The current UI state.
+     * @return The new state if a state change should occur, or null to leave the state unchanged.
+     */
     protected abstract suspend fun SimpleSyntax<STATE, SIDE_EFFECT>.reduceState(
         intent: INTENT,
         state: STATE,
     ): STATE?
 
-    fun sendIntent(intent: INTENT) =
+    /**
+         * Processes the given intent by invoking state reduction and updating the state if a new state is produced.
+         *
+         * If the `reduceState` function returns a non-null state, the container's state is updated accordingly.
+         *
+         * @param intent The intent to be handled.
+         */
+        fun sendIntent(intent: INTENT) =
         intent {
             val newState = reduceState(intent, state)
 
