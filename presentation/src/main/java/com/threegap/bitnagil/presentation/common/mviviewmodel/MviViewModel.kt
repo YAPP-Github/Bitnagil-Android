@@ -20,7 +20,7 @@ abstract class MviViewModel<STATE : MviState, SIDE_EFFECT : MviSideEffect, INTEN
     val stateFlow: StateFlow<STATE> get() = container.stateFlow
     val sideEffectFlow: Flow<SIDE_EFFECT> get() = container.sideEffectFlow
 
-    suspend fun SimpleSyntax<STATE, SIDE_EFFECT>.sendSideEffect(sideEffect: SIDE_EFFECT) = postSideEffect(sideEffect)
+    protected suspend fun SimpleSyntax<STATE, SIDE_EFFECT>.sendSideEffect(sideEffect: SIDE_EFFECT) = postSideEffect(sideEffect)
 
     protected abstract suspend fun SimpleSyntax<STATE, SIDE_EFFECT>.reduceState(
         intent: INTENT,
