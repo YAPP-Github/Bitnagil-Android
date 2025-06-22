@@ -13,4 +13,8 @@ dependencies {
 
     implementation(libs.bundles.androidx.core)
     implementation(libs.bundles.orbit)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlin.coroutines.test)
+    testImplementation(libs.orbit.test)
 }
