@@ -16,6 +16,7 @@ dependencies {
     implementation(projects.core.datastore)
     implementation(projects.core.designsystem)
     implementation(projects.core.network)
+    implementation(projects.core.security)
     implementation(projects.data)
     implementation(projects.domain)
     implementation(projects.presentation)
