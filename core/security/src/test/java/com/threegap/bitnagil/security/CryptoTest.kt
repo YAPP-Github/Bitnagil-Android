@@ -4,6 +4,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertThrows
 import org.junit.Test
+import javax.crypto.BadPaddingException
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 
@@ -51,14 +52,22 @@ class CryptoTest {
     }
 
     @Test
-    fun `잘못된 데이터로 복호화를 시도하면 예외가 발생해야 한다`() {
+    fun `입력값이 너무 짧은 경우 IllegalArgumentException이 발생해야 한다`() {
         // given
         val invalid = ByteArray(4) { 0x00 }
 
         // when & then
-        assertThrows(Exception::class.java) {
+        assertThrows(IllegalArgumentException::class.java) {
             crypto.decrypt(invalid)
         }
+    }
+
+    @Test
+    fun `빈 바이트 배열 암호화 시 예외가 발생하지 않아야 한다`() {
+        val input = ByteArray(0)
+        val encrypted = crypto.encrypt(input)
+        val decrypted = crypto.decrypt(encrypted)
+        assertEquals(String(input), String(decrypted))
     }
 
     @Test
@@ -83,7 +92,7 @@ class CryptoTest {
         encrypted[encrypted.lastIndex] = encrypted.last().inc()
 
         // when & then
-        assertThrows(Exception::class.java) {
+        assertThrows(BadPaddingException::class.java) {
             crypto.decrypt(encrypted)
         }
     }
@@ -106,7 +115,7 @@ class CryptoTest {
         val otherCrypto = Crypto(otherKeyProvider, "AES/CBC/PKCS5Padding")
 
         // when & then
-        assertThrows(Exception::class.java) {
+        assertThrows(BadPaddingException::class.java) {
             otherCrypto.decrypt(encrypted)
         }
     }
