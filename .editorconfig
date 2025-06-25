@@ -13,3 +13,4 @@ insert_final_newline = true
 tab_width = 4
 ij_kotlin_allow_trailing_comma = true
 ktlint_function_naming_ignore_when_annotated_with=Composable
+ktlint_standard_annotation = disabled
