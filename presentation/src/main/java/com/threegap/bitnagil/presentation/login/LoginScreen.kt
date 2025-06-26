@@ -1,42 +1,81 @@
 package com.threegap.bitnagil.presentation.login
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.kakao.sdk.user.UserApiClient
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.presentation.login.model.LoginIntent
+import com.threegap.bitnagil.presentation.login.model.LoginSideEffect
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
-fun LoginScreen(
-    onLoginClick: () -> Unit,
+fun LoginScreenContainer(viewModel: LoginViewModel = hiltViewModel()) {
+    val context = LocalContext.current
+    val client = UserApiClient.instance
+
+    viewModel.collectSideEffect { sideEffect ->
+        when (sideEffect) {
+            is LoginSideEffect.RequestKakaoTalkLogin -> {
+                client.loginWithKakaoTalk(context) { token, error ->
+                    viewModel.sendIntent(LoginIntent.OnKakaoLoginResult(token, error))
+                }
+            }
+
+            is LoginSideEffect.RequestKakaoAccountLogin -> {
+                client.loginWithKakaoAccount(context) { token, error ->
+                    viewModel.sendIntent(LoginIntent.OnKakaoLoginResult(token, error))
+                }
+            }
+        }
+    }
+
+    LoginScreen(
+        onKakaoLoginClick = {
+            viewModel.sendIntent(
+                LoginIntent.OnKakaoLoginClick(client.isKakaoTalkLoginAvailable(context)),
+            )
+        },
+    )
+}
+
+@Composable
+private fun LoginScreen(
+    onKakaoLoginClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Box(
         modifier =
             modifier
                 .fillMaxSize()
                 .background(Color.White),
     ) {
-        Text(text = "여긴 로그인 화면")
-
-        Spacer(modifier = Modifier.height(10.dp))
+        Text(
+            text = "빛나길 로고",
+            modifier = Modifier.align(Alignment.Center),
+        )
 
         Button(
-            onClick = onLoginClick,
+            onClick = onKakaoLoginClick,
+            modifier =
+                Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(20.dp),
         ) {
-            Text("로그인 버튼 눌러보던가")
+            Text(
+                text = "카카오 로그인버튼",
+            )
         }
     }
 }
@@ -46,7 +85,7 @@ fun LoginScreen(
 private fun LoginScreenPreview() {
     BitnagilTheme {
         LoginScreen(
-            onLoginClick = {},
+            onKakaoLoginClick = {},
         )
     }
 }
