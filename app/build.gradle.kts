@@ -20,11 +20,16 @@ android {
     defaultConfig {
         applicationId = "com.threegap.bitnagil"
 
-        manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = properties["kakao.native.app.key"] as String
+        val kakaoNativeAppKey =
+            (properties["kakao.native.app.key"] as? String)
+                ?: System.getenv("KAKAO_NATIVE_APP_KEY")
+                ?: throw GradleException("KAKAO_NATIVE_APP_KEY 값이 없습니다.")
+
+        manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = kakaoNativeAppKey
         buildConfigField(
             type = "String",
             name = "KAKAO_NATIVE_APP_KEY",
-            value = "\"${properties["kakao.native.app.key"]}\"",
+            value = "\"$kakaoNativeAppKey\"",
         )
     }
 
