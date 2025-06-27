@@ -6,8 +6,8 @@ import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.dataStoreFile
 import com.threegap.bitnagil.datastore.model.AuthToken
-import com.threegap.bitnagil.datastore.serializer.TokenSerializer
 import com.threegap.bitnagil.datastore.serializer.AuthTokenSerializer
+import com.threegap.bitnagil.datastore.serializer.TokenSerializer
 import com.threegap.bitnagil.security.crypto.Crypto
 import dagger.Module
 import dagger.Provides
