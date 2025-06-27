@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.security
+package com.threegap.bitnagil.security.keystore
 
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
@@ -6,7 +6,7 @@ import java.security.KeyStore
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 
-class AndroidKeyProvider : KeyProvider {
+internal class AndroidKeyProvider : KeyProvider {
     private val keyStore =
         KeyStore
             .getInstance("AndroidKeyStore")
