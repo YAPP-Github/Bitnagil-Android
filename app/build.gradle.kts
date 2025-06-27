@@ -11,7 +11,10 @@ android {
 
     val properties =
         Properties().apply {
-            load(rootProject.file("local.properties").inputStream())
+            val propFile = rootProject.file("local.properties")
+            if (propFile.exists()) {
+                load(propFile.inputStream())
+            }
         }
 
     defaultConfig {
