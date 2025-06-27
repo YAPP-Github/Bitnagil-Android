@@ -26,8 +26,8 @@ internal class AuthTokenDataStoreImpl
 
         override suspend fun updateAccessToken(accessToken: String): AuthToken =
             runCatching {
-                dataStore.updateData { authToke ->
-                    authToke.copy(accessToken = accessToken)
+                dataStore.updateData { authToken ->
+                    authToken.copy(accessToken = accessToken)
                 }
             }.fold(
                 onSuccess = { it },
