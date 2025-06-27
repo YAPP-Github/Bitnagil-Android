@@ -1,5 +1,6 @@
-package com.threegap.bitnagil.security
+package com.threegap.bitnagil.security.crypto
 
+import com.threegap.bitnagil.security.keystore.KeyProvider
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertThrows
@@ -8,7 +9,7 @@ import javax.crypto.BadPaddingException
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 
-class CryptoTest {
+class SecureCryptoTest {
     private class FakeKeyProvider : KeyProvider {
         private val key: SecretKey =
             KeyGenerator
@@ -19,8 +20,8 @@ class CryptoTest {
         override fun getKey(): SecretKey = key
     }
 
-    private val crypto =
-        Crypto(
+    private val secureCrypto =
+        SecureCrypto(
             keyProvider = FakeKeyProvider(),
             transformation = "AES/CBC/PKCS5Padding",
         )
@@ -31,8 +32,8 @@ class CryptoTest {
         val original = "테스트 데이터".toByteArray()
 
         // when
-        val encrypted = crypto.encrypt(original)
-        val decrypted = crypto.decrypt(encrypted)
+        val encrypted = secureCrypto.encrypt(original)
+        val decrypted = secureCrypto.decrypt(encrypted)
 
         // then
         assertEquals(String(original), String(decrypted))
@@ -44,8 +45,8 @@ class CryptoTest {
         val input = "같은 입력".toByteArray()
 
         // when
-        val encrypted1 = crypto.encrypt(input)
-        val encrypted2 = crypto.encrypt(input)
+        val encrypted1 = secureCrypto.encrypt(input)
+        val encrypted2 = secureCrypto.encrypt(input)
 
         // then
         assertNotEquals(encrypted1.toList(), encrypted2.toList())
@@ -58,15 +59,15 @@ class CryptoTest {
 
         // when & then
         assertThrows(IllegalArgumentException::class.java) {
-            crypto.decrypt(invalid)
+            secureCrypto.decrypt(invalid)
         }
     }
 
     @Test
     fun `빈 바이트 배열 암호화 시 예외가 발생하지 않아야 한다`() {
         val input = ByteArray(0)
-        val encrypted = crypto.encrypt(input)
-        val decrypted = crypto.decrypt(encrypted)
+        val encrypted = secureCrypto.encrypt(input)
+        val decrypted = secureCrypto.decrypt(encrypted)
         assertEquals(String(input), String(decrypted))
     }
 
@@ -74,11 +75,11 @@ class CryptoTest {
     fun `IV 일부가 조작된 경우 복호화하면 원래 데이터와 달라야 한다`() {
         // given
         val original = "iv 테스트".toByteArray()
-        val encrypted = crypto.encrypt(original)
+        val encrypted = secureCrypto.encrypt(original)
         encrypted[0] = encrypted[0].inc()
 
         // when
-        val decrypted = crypto.decrypt(encrypted)
+        val decrypted = secureCrypto.decrypt(encrypted)
 
         // then
         assertNotEquals(String(original), String(decrypted))
@@ -88,12 +89,12 @@ class CryptoTest {
     fun `암호화된 데이터가 조작된 경우 복호화 실패해야 한다`() {
         // given
         val original = "데이터 조작".toByteArray()
-        val encrypted = crypto.encrypt(original)
+        val encrypted = secureCrypto.encrypt(original)
         encrypted[encrypted.lastIndex] = encrypted.last().inc()
 
         // when & then
         assertThrows(BadPaddingException::class.java) {
-            crypto.decrypt(encrypted)
+            secureCrypto.decrypt(encrypted)
         }
     }
 
@@ -101,7 +102,7 @@ class CryptoTest {
     fun `다른 키로 복호화하면 실패해야 한다`() {
         // given
         val original = "다른 키 테스트".toByteArray()
-        val encrypted = crypto.encrypt(original)
+        val encrypted = secureCrypto.encrypt(original)
 
         val otherKeyProvider =
             object : KeyProvider {
@@ -112,11 +113,11 @@ class CryptoTest {
                 }
             }
 
-        val otherCrypto = Crypto(otherKeyProvider, "AES/CBC/PKCS5Padding")
+        val otherSecureCrypto = SecureCrypto(otherKeyProvider, "AES/CBC/PKCS5Padding")
 
         // when & then
         assertThrows(BadPaddingException::class.java) {
-            otherCrypto.decrypt(encrypted)
+            otherSecureCrypto.decrypt(encrypted)
         }
     }
 }
