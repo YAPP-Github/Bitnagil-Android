@@ -18,7 +18,7 @@ class AuthTokenSerializerTest {
     private lateinit var encrypted: ByteArray
     private lateinit var json: String
 
-    class FakeCrypto(
+    private class FakeCrypto(
         private val encryptResult: ByteArray,
         private val decryptResult: ByteArray,
         private val shouldFailDecrypt: Boolean = false,
@@ -47,7 +47,7 @@ class AuthTokenSerializerTest {
     }
 
     @Test
-    fun `writeTo는 토큰을 암호화해서 저장한다`() =
+    fun `writeTo는 AuthToken을 직렬화하여 기록한다`() =
         runTest {
             // given
             val outputStream = ByteArrayOutputStream()
@@ -61,7 +61,7 @@ class AuthTokenSerializerTest {
         }
 
     @Test
-    fun `readFrom은 암호화된 데이터를 복호화하여 토큰으로 변환한다`() =
+    fun `readFrom은 InputStream을 역직렬화하여 AuthToken으로 복원한다`() =
         runTest {
             // given
             val input = Base64.getEncoder().encode(encrypted)

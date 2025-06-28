@@ -29,7 +29,7 @@ class AuthTokenDataStoreImplTest {
     private lateinit var dataStore: DataStore<AuthToken>
     private lateinit var authTokenDataStore: AuthTokenDataStore
 
-    object FakeAuthTokenSerializer : Serializer<AuthToken> {
+    private object FakeAuthTokenSerializer : Serializer<AuthToken> {
         override val defaultValue: AuthToken
             get() = AuthToken()
 
