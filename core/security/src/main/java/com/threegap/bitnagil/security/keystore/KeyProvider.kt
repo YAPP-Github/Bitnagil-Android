@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.security
+package com.threegap.bitnagil.security.keystore
 
 import javax.crypto.SecretKey
 

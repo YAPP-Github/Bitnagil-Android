@@ -1,13 +1,14 @@
-package com.threegap.bitnagil.security
+package com.threegap.bitnagil.security.crypto
 
+import com.threegap.bitnagil.security.keystore.KeyProvider
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 
-class Crypto(
+internal class SecureCrypto(
     private val keyProvider: KeyProvider,
     private val transformation: String = "AES/CBC/PKCS7Padding",
-) {
-    fun encrypt(bytes: ByteArray): ByteArray {
+) : Crypto {
+    override fun encrypt(bytes: ByteArray): ByteArray {
         val cipher = Cipher.getInstance(transformation)
         cipher.init(Cipher.ENCRYPT_MODE, keyProvider.getKey())
         val iv = cipher.iv
@@ -15,7 +16,7 @@ class Crypto(
         return iv + encrypted
     }
 
-    fun decrypt(bytes: ByteArray): ByteArray {
+    override fun decrypt(bytes: ByteArray): ByteArray {
         val cipher = Cipher.getInstance(transformation)
         require(bytes.size >= cipher.blockSize) {
             INVALID_INPUT_TOO_SHORT_MSG
