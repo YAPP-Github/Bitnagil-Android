@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.threegap.bitnagil.presentation.home.HomeScreen
-import com.threegap.bitnagil.presentation.login.LoginScreen
+import com.threegap.bitnagil.presentation.login.LoginScreenContainer
 
 @Composable
 fun MainNavHost(
@@ -18,9 +18,7 @@ fun MainNavHost(
         modifier = modifier,
     ) {
         composable<Route.Login> {
-            LoginScreen(
-                onLoginClick = { navigator.navController.navigate(Route.Home) },
-            )
+            LoginScreenContainer()
         }
 
         composable<Route.Home> {

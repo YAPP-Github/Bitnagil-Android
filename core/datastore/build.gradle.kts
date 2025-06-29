@@ -9,5 +9,11 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.datastore)
+    implementation(projects.core.security)
+
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.kotlinx.serialization.json)
+
+    testImplementation(libs.androidx.junit)
+    testImplementation(libs.kotlin.coroutines.test)
 }

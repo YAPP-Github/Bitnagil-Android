@@ -13,6 +13,7 @@ dependencies {
 
     implementation(libs.bundles.androidx.core)
     implementation(libs.bundles.orbit)
+    implementation(libs.kakao.v2.user)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlin.coroutines.test)
