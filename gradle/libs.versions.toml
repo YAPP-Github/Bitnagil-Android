@@ -12,7 +12,7 @@ versionName = "1.0"
 androidGradlePlugin = "8.10.1"
 
 # Formatting Plugin
-ktlint = "12.3.0"
+ktlint = "11.3.2"
 
 # AndroidX
 androidxCore = "1.16.0"
