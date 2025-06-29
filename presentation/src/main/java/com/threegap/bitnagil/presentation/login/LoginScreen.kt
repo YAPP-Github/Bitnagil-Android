@@ -56,10 +56,9 @@ private fun LoginScreen(
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier =
-            modifier
-                .fillMaxSize()
-                .background(Color.White),
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color.White),
     ) {
         Text(
             text = "빛나길 로고",
@@ -68,10 +67,9 @@ private fun LoginScreen(
 
         Button(
             onClick = onKakaoLoginClick,
-            modifier =
-                Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(20.dp),
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(20.dp),
         ) {
             Text(
                 text = "카카오 로그인버튼",

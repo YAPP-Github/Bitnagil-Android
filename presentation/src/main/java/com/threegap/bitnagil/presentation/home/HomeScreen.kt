@@ -17,10 +17,9 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier =
-            modifier
-                .fillMaxSize()
-                .background(Color.White),
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color.White),
     ) {
         Text(text = "여긴 홈 화면")
     }
