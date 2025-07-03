@@ -35,12 +35,16 @@ android {
 
     buildTypes {
         debug {
-            val devUrl = properties["bitnagil.dev.url"] as? String ?: throw GradleException("bitnagil.dev.url 값이 없습니다.")
+            val devUrl = properties["bitnagil.dev.url"] as? String
+                ?: System.getenv("BITNAGIL_DEV_URL")
+                ?: throw GradleException("bitnagil.dev.url 값이 없습니다.")
             buildConfigField("String", "BASE_URL", "\"$devUrl\"")
         }
 
         release {
-            val prodUrl = properties["bitnagil.prod.url"] as? String ?: throw GradleException("bitnagil.prod.url 값이 없습니다.")
+            val prodUrl = properties["bitnagil.prod.url"] as? String
+                ?: System.getenv("BITNAGIL_PROD_URL")
+                ?: throw GradleException("bitnagil.prod.url 값이 없습니다.")
             buildConfigField("String", "BASE_URL", "\"$prodUrl\"")
             isMinifyEnabled = false
             proguardFiles(
