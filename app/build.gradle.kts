@@ -33,6 +33,27 @@ android {
         )
     }
 
+    buildTypes {
+        debug {
+            val devUrl = properties["bitnagil.dev.url"] as? String
+                ?: System.getenv("BITNAGIL_DEV_URL")
+                ?: throw GradleException("bitnagil.dev.url 값이 없습니다.")
+            buildConfigField("String", "BASE_URL", "\"$devUrl\"")
+        }
+
+        release {
+            val prodUrl = properties["bitnagil.prod.url"] as? String
+                ?: System.getenv("BITNAGIL_PROD_URL")
+                ?: throw GradleException("bitnagil.prod.url 값이 없습니다.")
+            buildConfigField("String", "BASE_URL", "\"$prodUrl\"")
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
+        }
+    }
+
     buildFeatures {
         buildConfig = true
     }
@@ -46,5 +67,10 @@ dependencies {
     implementation(projects.data)
     implementation(projects.domain)
     implementation(projects.presentation)
+
     implementation(libs.kakao.v2.user)
+    implementation(platform(libs.retrofit.bom))
+    implementation(libs.bundles.retrofit)
+    implementation(platform(libs.okhttp.bom))
+    implementation(libs.bundles.okhttp)
 }
