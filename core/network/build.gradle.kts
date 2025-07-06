@@ -9,8 +9,6 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.datastore)
-
     implementation(libs.kotlinx.serialization.json)
     implementation(platform(libs.retrofit.bom))
     implementation(libs.bundles.retrofit)

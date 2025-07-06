@@ -1,7 +1,5 @@
 package com.threegap.bitnagil.network.auth
 
-import com.threegap.bitnagil.datastore.storage.AuthTokenDataStore
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request
@@ -9,18 +7,14 @@ import okhttp3.Response
 import okhttp3.Route
 import javax.inject.Inject
 
-class TokenAuthenticator @Inject constructor(
-    private val dataStore: AuthTokenDataStore,
-) : Authenticator {
+class TokenAuthenticator @Inject constructor() : Authenticator {
 
     override fun authenticate(route: Route?, response: Response): Request? {
         if (response.code != UNAUTHORIZED) return null
         if (responseCount(response) >= MAX_RETRY) return null
 
         // 재발급 api 연결 시 수정 예정입니다.(현재 코드는 임시)
-        val newAccessToken = runBlocking {
-            runCatching { dataStore.tokenFlow.first().refreshToken }.getOrNull()
-        } ?: return null
+        val newAccessToken = runBlocking {}
 
         return response.request.newBuilder()
             .header(AUTHORIZATION, "$BEARER $newAccessToken")

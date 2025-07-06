@@ -1,18 +1,17 @@
 package com.threegap.bitnagil.network.auth
 
-import com.threegap.bitnagil.datastore.storage.AuthTokenDataStore
-import kotlinx.coroutines.flow.first
+import com.threegap.bitnagil.network.token.TokenProvider
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
 
 class AuthInterceptor @Inject constructor(
-    private val dataStore: AuthTokenDataStore,
+    private val tokenProvider: TokenProvider,
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
-        val token = runBlocking { dataStore.tokenFlow.first().accessToken }
+        val token = runBlocking { tokenProvider.getToken() }
         if (token.isNullOrBlank()) {
             return chain.proceed(originalRequest)
         }
