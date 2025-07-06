@@ -4,9 +4,8 @@ import com.threegap.bitnagil.network.token.TokenProvider
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
-import javax.inject.Inject
 
-class AuthInterceptor @Inject constructor(
+class AuthInterceptor(
     private val tokenProvider: TokenProvider,
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
