@@ -4,7 +4,7 @@ import com.threegap.bitnagil.security.keystore.KeyProvider
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 
-internal class SecureCrypto(
+class SecureCrypto(
     private val keyProvider: KeyProvider,
     private val transformation: String = "AES/CBC/PKCS7Padding",
 ) : Crypto {
