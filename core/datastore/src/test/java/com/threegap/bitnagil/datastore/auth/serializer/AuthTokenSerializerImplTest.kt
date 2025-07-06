@@ -11,7 +11,7 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.util.Base64
 
-class AuthAuthTokenSerializerImplTest {
+class AuthTokenSerializerImplTest {
     private lateinit var serializer: AuthTokenSerializerImpl
     private lateinit var crypto: FakeCrypto
     private lateinit var fakeToken: AuthToken
