@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.bitnagil.android.library)
-    alias(libs.plugins.bitnagil.android.hilt)
     alias(libs.plugins.kotlin.serialization)
 }
 
@@ -9,8 +8,6 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.datastore)
-
     implementation(libs.kotlinx.serialization.json)
     implementation(platform(libs.retrofit.bom))
     implementation(libs.bundles.retrofit)

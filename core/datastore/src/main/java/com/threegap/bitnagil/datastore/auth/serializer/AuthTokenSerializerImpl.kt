@@ -1,18 +1,18 @@
-package com.threegap.bitnagil.datastore.serializer
+package com.threegap.bitnagil.datastore.auth.serializer
 
-import com.threegap.bitnagil.datastore.model.AuthToken
-import com.threegap.bitnagil.security.crypto.Crypto
+import androidx.datastore.core.Serializer
+import com.threegap.bitnagil.datastore.auth.crypto.TokenCrypto
+import com.threegap.bitnagil.datastore.auth.model.AuthToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.Base64
-import javax.inject.Inject
 
-internal class AuthTokenSerializer @Inject constructor(
-    private val crypto: Crypto,
-) : TokenSerializer {
+class AuthTokenSerializerImpl(
+    private val crypto: TokenCrypto,
+) : Serializer<AuthToken> {
     override val defaultValue: AuthToken
         get() = AuthToken()
 

@@ -1,9 +1,9 @@
-package com.threegap.bitnagil.datastore.storage
+package com.threegap.bitnagil.datastore.auth.storage
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.Serializer
-import com.threegap.bitnagil.datastore.model.AuthToken
+import com.threegap.bitnagil.datastore.auth.model.AuthToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf

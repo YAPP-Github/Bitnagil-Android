@@ -1,12 +1,11 @@
-package com.threegap.bitnagil.datastore.storage
+package com.threegap.bitnagil.datastore.auth.storage
 
 import android.util.Log
 import androidx.datastore.core.DataStore
-import com.threegap.bitnagil.datastore.model.AuthToken
+import com.threegap.bitnagil.datastore.auth.model.AuthToken
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
 
-internal class AuthTokenDataStoreImpl @Inject constructor(
+class AuthTokenDataStoreImpl(
     private val dataStore: DataStore<AuthToken>,
 ) : AuthTokenDataStore {
     override val tokenFlow: Flow<AuthToken> = dataStore.data

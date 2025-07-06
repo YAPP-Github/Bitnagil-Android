@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.security.di
+package com.threegap.bitnagil.di.core
 
 import com.threegap.bitnagil.security.crypto.Crypto
 import com.threegap.bitnagil.security.crypto.SecureCrypto
@@ -13,6 +13,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object SecurityModule {
+
     @Provides
     @Singleton
     fun provideKeyProvider(): KeyProvider = AndroidKeyProvider()

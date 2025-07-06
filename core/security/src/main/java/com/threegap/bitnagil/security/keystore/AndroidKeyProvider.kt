@@ -6,7 +6,7 @@ import java.security.KeyStore
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 
-internal class AndroidKeyProvider : KeyProvider {
+class AndroidKeyProvider : KeyProvider {
     private val keyStore =
         KeyStore
             .getInstance("AndroidKeyStore")

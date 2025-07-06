@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.di
+package com.threegap.bitnagil.di.core
 
 import javax.inject.Qualifier
 

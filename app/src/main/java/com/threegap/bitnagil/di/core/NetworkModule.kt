@@ -1,11 +1,14 @@
-package com.threegap.bitnagil.di
+package com.threegap.bitnagil.di.core
 
 import com.threegap.bitnagil.BuildConfig
+import com.threegap.bitnagil.datastore.auth.storage.AuthTokenDataStore
 import com.threegap.bitnagil.network.auth.AuthInterceptor
+import com.threegap.bitnagil.network.token.TokenProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
@@ -107,4 +110,11 @@ object NetworkModule {
         .addConverterFactory(converterFactory)
         .client(okHttpClient)
         .build()
+
+    @Provides
+    @Singleton
+    fun provideTokenStore(dataStore: AuthTokenDataStore): TokenProvider =
+        object : TokenProvider {
+            override suspend fun getToken(): String? = dataStore.tokenFlow.first().accessToken
+        }
 }
