@@ -1,11 +1,14 @@
-package com.threegap.bitnagil.di
+package com.threegap.bitnagil.di.core
 
 import com.threegap.bitnagil.BuildConfig
+import com.threegap.bitnagil.datastore.auth.storage.AuthTokenDataStore
+import com.threegap.bitnagil.network.token.TokenProvider
 import com.threegap.bitnagil.network.auth.AuthInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
