@@ -1,7 +1,7 @@
-package com.threegap.bitnagil.datastore.serializer
+package com.threegap.bitnagil.datastore.auth.serializer
 
-import com.threegap.bitnagil.datastore.model.AuthToken
-import com.threegap.bitnagil.security.crypto.Crypto
+import com.threegap.bitnagil.datastore.auth.crypto.TokenCrypto
+import com.threegap.bitnagil.datastore.auth.model.AuthToken
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import org.junit.Assert.assertEquals
@@ -11,8 +11,8 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.util.Base64
 
-class AuthTokenSerializerTest {
-    private lateinit var serializer: AuthTokenSerializer
+class AuthAuthTokenSerializerImplTest {
+    private lateinit var serializer: AuthTokenSerializerImpl
     private lateinit var crypto: FakeCrypto
     private lateinit var fakeToken: AuthToken
     private lateinit var encrypted: ByteArray
@@ -22,7 +22,7 @@ class AuthTokenSerializerTest {
         private val encryptResult: ByteArray,
         private val decryptResult: ByteArray,
         private val shouldFailDecrypt: Boolean = false,
-    ) : Crypto {
+    ) : TokenCrypto {
         override fun encrypt(bytes: ByteArray): ByteArray = encryptResult
 
         override fun decrypt(bytes: ByteArray): ByteArray {
@@ -43,7 +43,7 @@ class AuthTokenSerializerTest {
                 decryptResult = json.toByteArray(),
             )
 
-        serializer = AuthTokenSerializer(crypto)
+        serializer = AuthTokenSerializerImpl(crypto)
     }
 
     @Test
@@ -84,7 +84,7 @@ class AuthTokenSerializerTest {
                     decryptResult = byteArrayOf(),
                     shouldFailDecrypt = true,
                 )
-            val brokenSerializer = AuthTokenSerializer(brokenCrypto)
+            val brokenSerializer = AuthTokenSerializerImpl(brokenCrypto)
             val inputStream = ByteArrayInputStream(Base64.getEncoder().encode(encrypted))
 
             // when

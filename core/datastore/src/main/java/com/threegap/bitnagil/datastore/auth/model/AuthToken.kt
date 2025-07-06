@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.datastore.model
+package com.threegap.bitnagil.datastore.auth.model
 
 import kotlinx.serialization.Serializable
 

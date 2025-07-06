@@ -1,6 +1,6 @@
-package com.threegap.bitnagil.datastore.storage
+package com.threegap.bitnagil.datastore.auth.storage
 
-import com.threegap.bitnagil.datastore.model.AuthToken
+import com.threegap.bitnagil.datastore.auth.model.AuthToken
 import kotlinx.coroutines.flow.Flow
 
 interface AuthTokenDataStore {
