@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.bitnagil.android.library)
     alias(libs.plugins.bitnagil.android.compose.library)
+    alias(libs.plugins.bitnagil.android.hilt)
     alias(libs.plugins.kotlin.parcelize)
 }
 
@@ -10,6 +11,7 @@ android {
 
 dependencies {
     implementation(projects.core.designsystem)
+    implementation(projects.domain)
 
     implementation(libs.bundles.androidx.core)
     implementation(libs.bundles.orbit)
