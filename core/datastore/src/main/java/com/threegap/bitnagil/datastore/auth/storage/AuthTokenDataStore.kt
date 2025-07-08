@@ -6,11 +6,11 @@ import kotlinx.coroutines.flow.Flow
 interface AuthTokenDataStore {
     val tokenFlow: Flow<AuthToken>
 
-    suspend fun updateAuthToken(authToken: AuthToken): AuthToken
+    suspend fun updateAuthToken(accessToken: String, refreshToken: String)
 
-    suspend fun updateAccessToken(accessToken: String): AuthToken
+    suspend fun updateAccessToken(accessToken: String)
 
-    suspend fun updateRefreshToken(refreshToken: String): AuthToken
+    suspend fun updateRefreshToken(refreshToken: String)
 
-    suspend fun clearAuthToken(): AuthToken
+    suspend fun clearAuthToken()
 }

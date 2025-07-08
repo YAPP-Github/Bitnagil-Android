@@ -6,5 +6,5 @@ import com.threegap.bitnagil.domain.auth.model.AuthSession
 internal fun LoginResponseDto.toDomain() = AuthSession(
     accessToken = accessToken,
     refreshToken = refreshToken,
-    role = role
+    role = role,
 )
