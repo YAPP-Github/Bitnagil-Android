@@ -4,7 +4,8 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
-import com.kakao.sdk.user.UserApiClient
+import com.threegap.bitnagil.domain.auth.usecase.LoginUseCase
+import com.threegap.bitnagil.domain.error.model.BitnagilError
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
 import com.threegap.bitnagil.presentation.login.model.LoginIntent
 import com.threegap.bitnagil.presentation.login.model.LoginSideEffect
@@ -16,6 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
+    private val loginUseCase: LoginUseCase,
 ) : MviViewModel<LoginState, LoginSideEffect, LoginIntent>(
     initState = LoginState(),
     savedStateHandle = savedStateHandle,
@@ -38,18 +40,20 @@ class LoginViewModel @Inject constructor(
                 when {
                     intent.token != null -> {
                         Log.i("KakaoLogin", "로그인 성공 ${intent.token.accessToken}")
-                        UserApiClient.instance.me { user, error ->
-                            if (error != null) {
-                                Log.e("KakaoLogin", "사용자 정보 요청 실패", error)
-                            } else if (user != null) {
-                                Log.i(
-                                    "KakaoLogin",
-                                    "사용자 정보 요청 성공" +
-                                        "\n이메일: ${user.kakaoAccount?.email}" +
-                                        "\n닉네임: ${user.kakaoAccount?.profile?.nickname}",
-                                )
-                            }
-                        }
+                        loginUseCase(
+                            socialAccessToken = intent.token.accessToken,
+                            socialType = "KAKAO",
+                        ).fold(
+                            onSuccess = {
+                                Log.i("Login", "서버 로그인 성공")
+                            },
+                            onFailure = { exception ->
+                                if (exception is BitnagilError) {
+                                    Log.e("Login", "${exception.code} ${exception.message}")
+                                }
+                                Log.e("Login", "${exception.message}")
+                            },
+                        )
                     }
 
                     intent.error is ClientError && intent.error.reason == ClientErrorCause.Cancelled -> {
