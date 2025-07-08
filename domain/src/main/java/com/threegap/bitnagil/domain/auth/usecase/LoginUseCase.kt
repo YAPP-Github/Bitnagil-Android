@@ -9,7 +9,9 @@ class LoginUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(socialAccessToken: String, socialType: String): Result<AuthSession> =
         authRepository.login(socialAccessToken, socialType)
-            .onSuccess { authSession ->
+            .mapCatching { authSession ->
                 authRepository.updateAuthToken(authSession.accessToken, authSession.refreshToken)
+                    .getOrThrow()
+                authSession
             }
 }
