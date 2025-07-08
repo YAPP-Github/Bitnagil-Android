@@ -6,4 +6,8 @@ sealed interface LoginSideEffect : MviSideEffect {
     data object RequestKakaoTalkLogin : LoginSideEffect
 
     data object RequestKakaoAccountLogin : LoginSideEffect
+
+    data object NavigateToHome : LoginSideEffect
+
+    data object NavigateToTermsOfService : LoginSideEffect
 }

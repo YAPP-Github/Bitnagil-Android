@@ -21,7 +21,9 @@ import com.threegap.bitnagil.presentation.login.model.LoginSideEffect
 import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
-fun LoginScreenContainer(viewModel: LoginViewModel = hiltViewModel()) {
+fun LoginScreenContainer(
+    viewModel: LoginViewModel = hiltViewModel(),
+) {
     val context = LocalContext.current
     val client = UserApiClient.instance
 
@@ -37,6 +39,14 @@ fun LoginScreenContainer(viewModel: LoginViewModel = hiltViewModel()) {
                 client.loginWithKakaoAccount(context) { token, error ->
                     viewModel.sendIntent(LoginIntent.OnKakaoLoginResult(token, error))
                 }
+            }
+
+            is LoginSideEffect.NavigateToHome -> {
+                // TODO: Navigate to Home
+            }
+
+            is LoginSideEffect.NavigateToTermsOfService -> {
+                // TODO: Navigate to Terms of Service
             }
         }
     }

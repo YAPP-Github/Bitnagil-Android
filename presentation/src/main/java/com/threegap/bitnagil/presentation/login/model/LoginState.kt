@@ -5,5 +5,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class LoginState(
-    val isLoggedIn: Boolean = false,
+    val isLoading: Boolean = false,
+    val isGuest: Boolean = false,
 ) : MviState

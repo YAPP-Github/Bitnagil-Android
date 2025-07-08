@@ -12,6 +12,8 @@ import com.threegap.bitnagil.presentation.login.model.LoginSideEffect
 import com.threegap.bitnagil.presentation.login.model.LoginState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
+import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.reduce
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,34 +39,70 @@ class LoginViewModel @Inject constructor(
             }
 
             is LoginIntent.OnKakaoLoginResult -> {
-                when {
-                    intent.token != null -> {
-                        Log.i("KakaoLogin", "로그인 성공 ${intent.token.accessToken}")
-                        loginUseCase(
-                            socialAccessToken = intent.token.accessToken,
-                            socialType = "KAKAO",
-                        ).fold(
-                            onSuccess = {
-                                Log.i("Login", "서버 로그인 성공")
-                            },
-                            onFailure = { exception ->
-                                if (exception is BitnagilError) {
-                                    Log.e("Login", "${exception.code} ${exception.message}")
-                                }
-                                Log.e("Login", "${exception.message}")
-                            },
-                        )
-                    }
-
-                    intent.error is ClientError && intent.error.reason == ClientErrorCause.Cancelled -> {
-                        Log.e("KakaoLogin", "로그인 취소", intent.error)
-                    }
-
-                    intent.error != null -> {
-                        Log.e("KakaoLogin", "로그인 실패", intent.error)
-                    }
-                }
+                intent { handleKakaoLoginResult(intent) }
                 null
             }
         }
+
+    private suspend fun SimpleSyntax<LoginState, LoginSideEffect>.handleKakaoLoginResult(
+        intent: LoginIntent.OnKakaoLoginResult,
+    ) {
+        reduce { state.copy(isLoading = true) }
+
+        when {
+            intent.token != null -> {
+                processBitnagilLogin(
+                    socialAccessToken = intent.token.accessToken,
+                    socialType = "KAKAO",
+                )
+            }
+
+            intent.error is ClientError && intent.error.reason == ClientErrorCause.Cancelled -> {
+                Log.e("KakaoLogin", "로그인 취소", intent.error)
+                reduce { state.copy(isLoading = false) }
+            }
+
+            intent.error != null -> {
+                Log.e("KakaoLogin", "로그인 실패", intent.error)
+                reduce { state.copy(isLoading = false) }
+            }
+        }
+    }
+
+    private suspend fun SimpleSyntax<LoginState, LoginSideEffect>.processBitnagilLogin(
+        socialAccessToken: String,
+        socialType: String,
+    ) {
+        loginUseCase(
+            socialAccessToken = socialAccessToken,
+            socialType = socialType,
+        ).fold(
+            onSuccess = {
+                val isGuest = it.role.isGuest()
+
+                reduce {
+                    state.copy(
+                        isGuest = isGuest,
+                        isLoading = false,
+                    )
+                }
+
+                sendSideEffect(
+                    if (isGuest) {
+                        LoginSideEffect.NavigateToTermsOfService
+                    } else {
+                        LoginSideEffect.NavigateToHome
+                    },
+                )
+            },
+            onFailure = { e ->
+                reduce { state.copy(isLoading = false) }
+
+                if (e is BitnagilError) {
+                    Log.e("Login", "${e.code} ${e.message}")
+                }
+                Log.e("Login", "${e.message}")
+            },
+        )
+    }
 }
