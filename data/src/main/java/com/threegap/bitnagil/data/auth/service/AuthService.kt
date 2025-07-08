@@ -5,10 +5,12 @@ import com.threegap.bitnagil.data.auth.model.response.LoginResponseDto
 import com.threegap.bitnagil.network.model.BaseResponse
 import retrofit2.http.Body
 import retrofit2.http.Header
+import retrofit2.http.Headers
 import retrofit2.http.POST
 
 interface AuthService {
     @POST("/api/v1/auth/login")
+    @Headers("No-Service-Token: true")
     suspend fun postLogin(
         @Header("SocialAccessToken") socialAccessToken: String,
         @Body loginRequestDto: LoginRequestDto,
