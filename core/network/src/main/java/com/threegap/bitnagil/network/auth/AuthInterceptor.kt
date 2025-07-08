@@ -10,7 +10,7 @@ class AuthInterceptor(
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
-        val token = runBlocking { tokenProvider.getToken() }
+        val token = runBlocking { tokenProvider.getAccessToken() }
         if (token.isNullOrBlank()) {
             return chain.proceed(originalRequest)
         }
@@ -24,6 +24,6 @@ class AuthInterceptor(
 
     companion object {
         private const val HEADER_AUTHORIZATION = "Authorization"
-        private const val TOKEN_PREFIX = "Bearer "
+        private const val TOKEN_PREFIX = "Bearer"
     }
 }

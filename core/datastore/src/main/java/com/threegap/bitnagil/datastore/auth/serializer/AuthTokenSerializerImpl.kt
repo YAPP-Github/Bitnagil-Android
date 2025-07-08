@@ -1,6 +1,5 @@
 package com.threegap.bitnagil.datastore.auth.serializer
 
-import androidx.datastore.core.Serializer
 import com.threegap.bitnagil.datastore.auth.crypto.TokenCrypto
 import com.threegap.bitnagil.datastore.auth.model.AuthToken
 import kotlinx.coroutines.Dispatchers
@@ -12,7 +11,7 @@ import java.util.Base64
 
 class AuthTokenSerializerImpl(
     private val crypto: TokenCrypto,
-) : Serializer<AuthToken> {
+) : AuthTokenSerializer {
     override val defaultValue: AuthToken
         get() = AuthToken()
 

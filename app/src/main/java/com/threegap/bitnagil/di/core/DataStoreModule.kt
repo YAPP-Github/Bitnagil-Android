@@ -3,6 +3,7 @@ package com.threegap.bitnagil.di.core
 import android.content.Context
 import com.threegap.bitnagil.datastore.auth.crypto.TokenCrypto
 import com.threegap.bitnagil.datastore.auth.serializer.AuthTokenSerializer
+import com.threegap.bitnagil.datastore.auth.serializer.AuthTokenSerializerImpl
 import com.threegap.bitnagil.datastore.auth.storage.AuthTokenDataStore
 import com.threegap.bitnagil.datastore.auth.storage.AuthTokenStorageFactory
 import com.threegap.bitnagil.security.crypto.Crypto
@@ -25,6 +26,11 @@ object DataStoreModule {
 
             override fun decrypt(bytes: ByteArray): ByteArray = crypto.decrypt(bytes)
         }
+
+    @Provides
+    @Singleton
+    fun provideAuthTokenSerializer(tokenCrypto: TokenCrypto): AuthTokenSerializer =
+        AuthTokenSerializerImpl(tokenCrypto)
 
     @Provides
     @Singleton
