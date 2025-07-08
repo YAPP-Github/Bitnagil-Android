@@ -8,7 +8,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
@@ -58,7 +58,7 @@ object NetworkModule {
     @Singleton
     fun provideTokenStore(dataStore: AuthTokenDataStore): TokenProvider =
         object : TokenProvider {
-            override suspend fun getAccessToken(): String? = dataStore.tokenFlow.first().accessToken
+            override suspend fun getAccessToken(): String? = dataStore.tokenFlow.firstOrNull()?.accessToken
         }
 
     @Provides
