@@ -31,13 +31,13 @@ fun LoginScreenContainer(
         when (sideEffect) {
             is LoginSideEffect.RequestKakaoTalkLogin -> {
                 client.loginWithKakaoTalk(context) { token, error ->
-                    viewModel.sendIntent(LoginIntent.OnKakaoLoginResult(token, error))
+                    viewModel.kakaoLogin(token, error)
                 }
             }
 
             is LoginSideEffect.RequestKakaoAccountLogin -> {
                 client.loginWithKakaoAccount(context) { token, error ->
-                    viewModel.sendIntent(LoginIntent.OnKakaoLoginResult(token, error))
+                    viewModel.kakaoLogin(token, error)
                 }
             }
 
