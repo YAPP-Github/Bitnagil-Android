@@ -70,16 +70,19 @@ class AuthTokenDataStoreImplTest {
     fun `토큰 전체 업데이트가 성공하면 저장된 토큰을 반환해야 한다`() =
         runTest {
             // given
+            val accessToken = "access"
+            val refreshToken = "refresh"
             val token =
                 AuthToken(
-                    accessToken = "access",
-                    refreshToken = "refresh",
+                    accessToken = accessToken,
+                    refreshToken = refreshToken,
                 )
 
             // when
-            val result = authTokenDataStore.updateAuthToken(token)
+            authTokenDataStore.updateAuthToken(accessToken, refreshToken)
 
             // then
+            val result = authTokenDataStore.tokenFlow.first()
             assertEquals(token, result)
         }
 
@@ -88,18 +91,17 @@ class AuthTokenDataStoreImplTest {
         runTest {
             // given
             authTokenDataStore.updateAuthToken(
-                AuthToken(
-                    accessToken = "oldAccess",
-                    refreshToken = "oldRefresh",
-                ),
+                accessToken = "oldAccess",
+                refreshToken = "oldRefresh",
             )
 
             // when
-            val updated = authTokenDataStore.updateAccessToken(accessToken = "newAccess")
+            authTokenDataStore.updateAccessToken(accessToken = "newAccess")
 
             // then
-            assertEquals("newAccess", updated.accessToken)
-            assertEquals("oldRefresh", updated.refreshToken)
+            val result = authTokenDataStore.tokenFlow.first()
+            assertEquals("newAccess", result.accessToken)
+            assertEquals("oldRefresh", result.refreshToken)
         }
 
     @Test
@@ -107,18 +109,17 @@ class AuthTokenDataStoreImplTest {
         runTest {
             // given
             authTokenDataStore.updateAuthToken(
-                AuthToken(
-                    accessToken = "oldAccess",
-                    refreshToken = "oldRefresh",
-                ),
+                accessToken = "oldAccess",
+                refreshToken = "oldRefresh",
             )
 
             // when
-            val updated = authTokenDataStore.updateRefreshToken(refreshToken = "newRefresh")
+            authTokenDataStore.updateRefreshToken(refreshToken = "newRefresh")
 
             // then
-            assertEquals("oldAccess", updated.accessToken)
-            assertEquals("newRefresh", updated.refreshToken)
+            val result = authTokenDataStore.tokenFlow.first()
+            assertEquals("oldAccess", result.accessToken)
+            assertEquals("newRefresh", result.refreshToken)
         }
 
     @Test
@@ -126,16 +127,15 @@ class AuthTokenDataStoreImplTest {
         runTest {
             // given
             authTokenDataStore.updateAuthToken(
-                AuthToken(
-                    accessToken = "someAccess",
-                    refreshToken = "someRefresh",
-                ),
+                accessToken = "someAccess",
+                refreshToken = "someRefresh",
             )
 
             // when
-            val cleared = authTokenDataStore.clearAuthToken()
+            authTokenDataStore.clearAuthToken()
 
             // then
+            val cleared = authTokenDataStore.tokenFlow.first()
             assertEquals(AuthToken(), cleared)
         }
 
@@ -150,7 +150,7 @@ class AuthTokenDataStoreImplTest {
                 )
 
             // when
-            authTokenDataStore.updateAuthToken(token)
+            authTokenDataStore.updateAuthToken("flowAccess", "flowRefresh")
 
             // then
             val flowValue = authTokenDataStore.tokenFlow.first()
@@ -172,7 +172,7 @@ class AuthTokenDataStoreImplTest {
             val failingDataStore = AuthTokenDataStoreImpl(brokenStore)
 
             // when & then
-            failingDataStore.updateAuthToken(AuthToken("access", "refresh"))
+            failingDataStore.updateAuthToken("access", "refresh")
         }
 
     @Test(expected = RuntimeException::class)

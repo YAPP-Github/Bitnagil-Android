@@ -8,7 +8,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
@@ -56,15 +56,23 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    fun provideTokenStore(dataStore: AuthTokenDataStore): TokenProvider =
+        object : TokenProvider {
+            override suspend fun getAccessToken(): String? = dataStore.tokenFlow.firstOrNull()?.accessToken
+        }
+
+    @Provides
+    @Singleton
     @Auth
-    fun provideAuthInterceptor(authInterceptor: AuthInterceptor): Interceptor = authInterceptor
+    fun provideAuthInterceptor(tokenProvider: TokenProvider): Interceptor =
+        AuthInterceptor(tokenProvider)
 
     @Provides
     @Singleton
     @Auth
     fun provideAuthOkHttpClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
-        authInterceptor: Interceptor,
+        @Auth authInterceptor: Interceptor,
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(authInterceptor)
         .addInterceptor(httpLoggingInterceptor)
@@ -110,11 +118,4 @@ object NetworkModule {
         .addConverterFactory(converterFactory)
         .client(okHttpClient)
         .build()
-
-    @Provides
-    @Singleton
-    fun provideTokenStore(dataStore: AuthTokenDataStore): TokenProvider =
-        object : TokenProvider {
-            override suspend fun getToken(): String? = dataStore.tokenFlow.first().accessToken
-        }
 }
