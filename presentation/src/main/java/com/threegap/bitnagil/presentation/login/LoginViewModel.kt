@@ -30,15 +30,6 @@ class LoginViewModel @Inject constructor(
         state: LoginState,
     ): LoginState? =
         when (intent) {
-            is LoginIntent.OnKakaoLoginClick -> {
-                if (!intent.onKakaoTalkLoginAvailable) {
-                    sendSideEffect(LoginSideEffect.RequestKakaoAccountLogin)
-                } else {
-                    sendSideEffect(LoginSideEffect.RequestKakaoTalkLogin)
-                }
-                null
-            }
-
             is LoginIntent.SetLoading -> {
                 state.copy(isLoading = intent.isLoading)
             }

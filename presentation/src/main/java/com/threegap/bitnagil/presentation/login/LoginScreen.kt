@@ -14,9 +14,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.kakao.sdk.user.UserApiClient
 import com.threegap.bitnagil.designsystem.BitnagilTheme
-import com.threegap.bitnagil.presentation.login.model.LoginIntent
+import com.threegap.bitnagil.presentation.login.kakao.KakaoLoginHandlerImpl
 import com.threegap.bitnagil.presentation.login.model.LoginSideEffect
 import org.orbitmvi.orbit.compose.collectSideEffect
 
@@ -25,18 +24,11 @@ fun LoginScreenContainer(
     viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val client = UserApiClient.instance
 
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
-            is LoginSideEffect.RequestKakaoTalkLogin -> {
-                client.loginWithKakaoTalk(context) { token, error ->
-                    viewModel.kakaoLogin(token, error)
-                }
-            }
-
             is LoginSideEffect.RequestKakaoAccountLogin -> {
-                client.loginWithKakaoAccount(context) { token, error ->
+                KakaoLoginHandlerImpl.accountLogin(context) { token, error ->
                     viewModel.kakaoLogin(token, error)
                 }
             }
@@ -53,9 +45,9 @@ fun LoginScreenContainer(
 
     LoginScreen(
         onKakaoLoginClick = {
-            viewModel.sendIntent(
-                LoginIntent.OnKakaoLoginClick(client.isKakaoTalkLoginAvailable(context)),
-            )
+            KakaoLoginHandlerImpl.login(context) { token, error ->
+                viewModel.kakaoLogin(token, error)
+            }
         },
     )
 }
