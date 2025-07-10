@@ -15,6 +15,7 @@ dependencies {
 
     implementation(libs.bundles.androidx.core)
     implementation(libs.bundles.orbit)
+    implementation(libs.bundles.coil)
     implementation(libs.kakao.v2.user)
 
     testImplementation(libs.junit)
