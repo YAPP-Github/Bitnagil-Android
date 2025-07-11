@@ -3,7 +3,6 @@ package com.threegap.bitnagil.datastore.auth.storage
 import androidx.datastore.core.DataStore
 import com.threegap.bitnagil.datastore.auth.model.AuthToken
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 
 class AuthTokenDataStoreImpl(
