@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import com.threegap.bitnagil.datastore.auth.model.AuthToken
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 
 class AuthTokenDataStoreImpl(
     private val dataStore: DataStore<AuthToken>,
@@ -12,8 +13,10 @@ class AuthTokenDataStoreImpl(
 
     override suspend fun hasToken(): Boolean {
         return try {
-            val currentToken = dataStore.data.first()
-            !currentToken.accessToken.isNullOrEmpty() && !currentToken.refreshToken.isNullOrEmpty()
+            val currentToken = dataStore.data.firstOrNull()
+            currentToken?.let {
+                !it.accessToken.isNullOrEmpty() && !it.refreshToken.isNullOrEmpty()
+            } ?: false
         } catch (e: Exception) {
             false
         }
