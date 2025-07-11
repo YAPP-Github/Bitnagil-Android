@@ -8,7 +8,7 @@ import androidx.navigation.compose.rememberNavController
 class MainNavigator(
     val navController: NavHostController,
 ) {
-    val startDestination = Route.Login
+    val startDestination = Route.Splash
 }
 
 @Composable

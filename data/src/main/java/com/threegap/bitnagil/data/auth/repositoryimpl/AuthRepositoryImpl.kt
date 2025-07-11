@@ -16,6 +16,8 @@ class AuthRepositoryImpl @Inject constructor(
         authRemoteDataSource.login(socialAccessToken, LoginRequestDto(socialType))
             .map { it.toDomain() }
 
+    override suspend fun hasToken(): Boolean = authLocalDataSource.hasToken()
+
     override suspend fun updateAuthToken(accessToken: String, refreshToken: String): Result<Unit> =
         authLocalDataSource.updateAuthToken(accessToken, refreshToken)
 }
