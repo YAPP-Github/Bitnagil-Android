@@ -27,7 +27,9 @@ fun MainNavHost(
         }
 
         composable<Route.Intro> {
-            IntroScreenContainer()
+            IntroScreenContainer(
+                navigateToLogin = { navigator.navController.navigate(Route.Login) },
+            )
         }
 
         composable<Route.Login> {
