@@ -33,13 +33,14 @@ fun OnBoardingSelectButton(
     modifier: Modifier = Modifier,
     iconResourceId: Int? = null,
     title: String,
-    description: String,
+    description: String?,
     onClick: () -> Unit,
+    selected: Boolean = false,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
 
-    val backgroundColor = if (isPressed) Color(0xFFD6E0F5) else Color.White
+    val backgroundColor = if (isPressed || selected) Color(0xFFD6E0F5) else Color.White
     val contentColor = Color(0xFF70737C)
 
     Row(
@@ -79,14 +80,17 @@ fun OnBoardingSelectButton(
                     color = contentColor,
                 ),
             )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = description,
-                style = TextStyle(
-                    fontSize = 14.sp,
-                    color = contentColor.copy(alpha = 0.7f),
-                ),
-            )
+
+            description?.let {
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = description,
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        color = contentColor.copy(alpha = 0.7f),
+                    ),
+                )
+            }
         }
     }
 }

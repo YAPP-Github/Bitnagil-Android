@@ -13,6 +13,7 @@ sealed class OnBoardingPageInfo : Parcelable {
         val title: String,
         val description: String?,
         @Stable val items: List<OnBoardingItem> = emptyList(),
+        val multipleSelectable: Boolean = false,
     ) : OnBoardingPageInfo() {
         companion object {
             fun fromOnBoarding(onBoarding: OnBoarding) : SelectOnBoarding {
@@ -20,23 +21,50 @@ sealed class OnBoardingPageInfo : Parcelable {
                     title = onBoarding.title,
                     description = onBoarding.description,
                     items = onBoarding.onboardingItemList.map {
-                        OnBoardingItem(
-                            id = it.id,
-                            title = it.title,
-                            description = it.description,
-                            selected = false,
-                        )
-                    }
+                        OnBoardingItem.fromOnBoardingItem(it)
+                    },
+                    multipleSelectable = onBoarding.multipleSelectable,
                 )
             }
+        }
+
+        val isItemSelected : Boolean get() = items.any { it.selected }
+
+        fun selectItem(itemId: String) : SelectOnBoarding {
+            return copy(
+                items = items.map {
+                    if (it.id == itemId) {
+                        it.copy(selected = !it.selected)
+                    } else {
+                        if (!multipleSelectable) {
+                            it.copy(selected = false)
+                        } else {
+                            it
+                        }
+                    }
+                }
+            )
         }
     }
 
     @Parcelize
-    data class Abstract(val title: String, @Stable val selectedItems: List<OnBoardingItem>) : OnBoardingPageInfo()
+    data class Abstract(@Stable val selectedItems: List<OnBoardingItem>) : OnBoardingPageInfo()
 
     @Parcelize
-    data class RecommendRoutines(@Stable val routineList: List<OnBoardingItem>) : OnBoardingPageInfo()
+    data class RecommendRoutines(@Stable val routineList: List<OnBoardingItem>) : OnBoardingPageInfo() {
+        val isItemSelected : Boolean get() = routineList.any { it.selected }
 
+        fun selectItem(itemId: String) : RecommendRoutines {
+            return copy(
+                routineList = routineList.map {
+                    if (it.id == itemId) {
+                        it.copy(selected = !it.selected)
+                    } else {
+                        it
+                    }
+                }
+            )
+        }
+    }
 
 }

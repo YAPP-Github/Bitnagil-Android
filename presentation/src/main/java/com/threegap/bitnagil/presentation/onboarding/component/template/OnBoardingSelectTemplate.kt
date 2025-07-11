@@ -24,6 +24,7 @@ fun OnBoardingSelectTemplate(
     items: List<OnBoardingItem>,
     nextButtonEnable: Boolean = false,
     onClickNextButton: () -> Unit,
+    onClickItem: (String) -> Unit,
 ) {
     val titleTextStyle = TextStyle(fontSize = 20.sp)
     val subTextStyle = TextStyle(fontSize = 14.sp)
@@ -51,8 +52,11 @@ fun OnBoardingSelectTemplate(
                 OnBoardingSelectButton(
                     modifier = Modifier.padding(bottom = 12.dp),
                     title = item.title,
-                    description = item.description ?: "",
-                    onClick = { },
+                    description = item.description,
+                    onClick = {
+                        onClickItem(item.id)
+                    },
+                    selected = item.selected
                 )
             }
         }

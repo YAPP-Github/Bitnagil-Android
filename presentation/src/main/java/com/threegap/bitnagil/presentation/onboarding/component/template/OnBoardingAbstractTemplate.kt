@@ -8,17 +8,25 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.delay
 
 @Composable
 fun OnBoardingAbstractTemplate(
     modifier: Modifier = Modifier,
     title: String,
+    moveToNext: () -> Unit,
     subText: @Composable ColumnScope.() -> Unit,
 ) {
+    LaunchedEffect(Unit) {
+        delay(2000L)
+        moveToNext()
+    }
+
     val titleTextStyle = TextStyle(fontSize = 20.sp)
 
     Column(

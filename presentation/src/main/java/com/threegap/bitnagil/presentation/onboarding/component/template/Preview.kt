@@ -36,6 +36,7 @@ fun OnBoardingTemplatePreview() {
                 selected = false,
             ),
         ),
-        onClickNextButton = {}
+        onClickNextButton = {},
+        onClickItem = {}
     )
 }
