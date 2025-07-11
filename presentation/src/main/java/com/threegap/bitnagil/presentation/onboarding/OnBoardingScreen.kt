@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -76,9 +75,8 @@ fun OnBoardingScreen(
                             modifier = Modifier.weight(1f),
                             title = "이제 당신에게\n꼭 맞는 루틴을 제안해드릴게요.",
                             moveToNext = loadRecommendRoutines,
-                        ) {
-                            Text(text = "description")
-                        }
+                            onBoardingAbstractTextItemLists = currentOnBoardingPageInfo.abstractTextList
+                        )
                     }
                     is OnBoardingPageInfo.RecommendRoutines -> {
                         OnBoardingSelectTemplate(

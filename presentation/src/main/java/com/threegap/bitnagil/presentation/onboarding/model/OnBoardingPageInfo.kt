@@ -48,7 +48,7 @@ sealed class OnBoardingPageInfo : Parcelable {
     }
 
     @Parcelize
-    data class Abstract(@Stable val selectedItems: List<OnBoardingItem>) : OnBoardingPageInfo()
+    data class Abstract(@Stable val abstractTextList: List<List<OnBoardingAbstractTextItem>>) : OnBoardingPageInfo()
 
     @Parcelize
     data class RecommendRoutines(@Stable val routineList: List<OnBoardingItem>) : OnBoardingPageInfo() {

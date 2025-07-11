@@ -2,9 +2,11 @@ package com.threegap.bitnagil.presentation.onboarding
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingAbstractTextListUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingListUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.GetRecommendOnBoardingRoutineListUseCase
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
+import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingAbstractTextItem
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingItem
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingPageInfo
 import com.threegap.bitnagil.presentation.onboarding.model.mvi.OnBoardingIntent
@@ -20,6 +22,7 @@ class OnBoardingViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getOnBoardingListUseCase: GetOnBoardingListUseCase,
     private val getRecommendOnBoardingRoutineListUseCase: GetRecommendOnBoardingRoutineListUseCase,
+    private val getOnBoardingAbstractTextListUseCase: GetOnBoardingAbstractTextListUseCase,
 ) : MviViewModel<OnBoardingState, OnBoardingSideEffect, OnBoardingIntent>(
     initState = OnBoardingState.Loading,
     savedStateHandle = savedStateHandle,
@@ -85,11 +88,19 @@ class OnBoardingViewModel @Inject constructor(
                         .map { onBoardingPage ->
                             onBoardingPage.items.filter { onBoardingItem ->
                                 onBoardingItem.selected
+                            }.map { onBoardingItem ->
+                                onBoardingItem.id
                             }
                         }
-                        .flatten()
+
+                    val abstractTextList = getOnBoardingAbstractTextListUseCase(selectedOnBoardingItemIdLists = selectedItems)
+
                     val abstractPageInfo = OnBoardingPageInfo.Abstract(
-                        selectedItems = selectedItems
+                        abstractTextList = abstractTextList.map { onBoardingAbstractText ->
+                            onBoardingAbstractText.textItemList.map { onBoardingAbstractTextItem ->
+                                OnBoardingAbstractTextItem.fromOnBoardingAbstractTextItem(onBoardingAbstractTextItem)
+                            }
+                        }
                     )
                     return currentState.copy(
                         currentOnBoardingPageInfo = abstractPageInfo,
