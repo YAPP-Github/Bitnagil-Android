@@ -1,6 +1,7 @@
 package com.threegap.bitnagil.data.auth.service
 
 import com.threegap.bitnagil.data.auth.model.request.LoginRequestDto
+import com.threegap.bitnagil.data.auth.model.request.TermsAgreementRequestDto
 import com.threegap.bitnagil.data.auth.model.response.LoginResponseDto
 import com.threegap.bitnagil.network.model.BaseResponse
 import retrofit2.http.Body
@@ -15,4 +16,9 @@ interface AuthService {
         @Header("SocialAccessToken") socialAccessToken: String,
         @Body loginRequestDto: LoginRequestDto,
     ): BaseResponse<LoginResponseDto>
+
+    @POST("/api/v1/auth/agreements")
+    suspend fun submitAgreement(
+        @Body termsAgreementRequestDto: TermsAgreementRequestDto,
+    ): BaseResponse<Unit>
 }
