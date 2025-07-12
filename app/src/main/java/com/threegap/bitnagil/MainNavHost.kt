@@ -8,6 +8,7 @@ import com.threegap.bitnagil.presentation.home.HomeScreen
 import com.threegap.bitnagil.presentation.intro.IntroScreenContainer
 import com.threegap.bitnagil.presentation.login.LoginScreenContainer
 import com.threegap.bitnagil.presentation.splash.SplashScreenContainer
+import com.threegap.bitnagil.presentation.terms.TermsAgreementScreenContainer
 
 @Composable
 fun MainNavHost(
@@ -33,7 +34,17 @@ fun MainNavHost(
         }
 
         composable<Route.Login> {
-            LoginScreenContainer()
+            LoginScreenContainer(
+                navigateToHome = { navigator.navController.navigate(Route.Home) },
+                navigateToTermsAgreement = { navigator.navController.navigate(Route.TermsAgreement) },
+            )
+        }
+
+        composable<Route.TermsAgreement> {
+            TermsAgreementScreenContainer(
+                navigateToOnBoarding = { },
+                navigateToBack = { navigator.navController.popBackStack() },
+            )
         }
 
         composable<Route.Home> {

@@ -37,7 +37,7 @@ class LoginViewModel @Inject constructor(
             is LoginIntent.LoginSuccess -> {
                 sendSideEffect(
                     if (intent.isGuest) {
-                        LoginSideEffect.NavigateToTermsOfService
+                        LoginSideEffect.NavigateToTermsAgreement
                     } else {
                         LoginSideEffect.NavigateToHome
                     },

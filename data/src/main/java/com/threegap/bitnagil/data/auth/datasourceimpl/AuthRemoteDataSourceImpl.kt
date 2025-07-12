@@ -2,6 +2,7 @@ package com.threegap.bitnagil.data.auth.datasourceimpl
 
 import com.threegap.bitnagil.data.auth.datasource.AuthRemoteDataSource
 import com.threegap.bitnagil.data.auth.model.request.LoginRequestDto
+import com.threegap.bitnagil.data.auth.model.request.TermsAgreementRequestDto
 import com.threegap.bitnagil.data.auth.model.response.LoginResponseDto
 import com.threegap.bitnagil.data.auth.service.AuthService
 import com.threegap.bitnagil.data.common.safeApiCall
@@ -13,5 +14,10 @@ class AuthRemoteDataSourceImpl @Inject constructor(
     override suspend fun login(socialAccessToken: String, loginRequestDto: LoginRequestDto): Result<LoginResponseDto> =
         safeApiCall {
             authService.postLogin(socialAccessToken, loginRequestDto)
+        }
+
+    override suspend fun submitAgreement(termsAgreementRequestDto: TermsAgreementRequestDto): Result<Unit> =
+        safeApiCall {
+            authService.submitAgreement(termsAgreementRequestDto)
         }
 }

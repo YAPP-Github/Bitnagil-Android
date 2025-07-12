@@ -21,6 +21,8 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun LoginScreenContainer(
+    navigateToHome: () -> Unit,
+    navigateToTermsAgreement: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -34,11 +36,11 @@ fun LoginScreenContainer(
             }
 
             is LoginSideEffect.NavigateToHome -> {
-                // TODO: Navigate to Home
+                navigateToHome()
             }
 
-            is LoginSideEffect.NavigateToTermsOfService -> {
-                // TODO: Navigate to Terms of Service
+            is LoginSideEffect.NavigateToTermsAgreement -> {
+                navigateToTermsAgreement()
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.threegap.bitnagil.domain.auth.repository
 
 import com.threegap.bitnagil.domain.auth.model.AuthSession
+import com.threegap.bitnagil.domain.auth.model.TermsAgreement
 
 interface AuthRepository {
     suspend fun login(socialAccessToken: String, socialType: String): Result<AuthSession>
@@ -8,4 +9,6 @@ interface AuthRepository {
     suspend fun hasToken(): Boolean
 
     suspend fun updateAuthToken(accessToken: String, refreshToken: String): Result<Unit>
+
+    suspend fun submitAgreement(termsAgreement: TermsAgreement): Result<Unit>
 }

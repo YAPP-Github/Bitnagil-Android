@@ -3,8 +3,10 @@ package com.threegap.bitnagil.data.auth.repositoryimpl
 import com.threegap.bitnagil.data.auth.datasource.AuthLocalDataSource
 import com.threegap.bitnagil.data.auth.datasource.AuthRemoteDataSource
 import com.threegap.bitnagil.data.auth.mapper.toDomain
+import com.threegap.bitnagil.data.auth.mapper.toDto
 import com.threegap.bitnagil.data.auth.model.request.LoginRequestDto
 import com.threegap.bitnagil.domain.auth.model.AuthSession
+import com.threegap.bitnagil.domain.auth.model.TermsAgreement
 import com.threegap.bitnagil.domain.auth.repository.AuthRepository
 import javax.inject.Inject
 
@@ -20,4 +22,9 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun updateAuthToken(accessToken: String, refreshToken: String): Result<Unit> =
         authLocalDataSource.updateAuthToken(accessToken, refreshToken)
+
+    override suspend fun submitAgreement(termsAgreement: TermsAgreement): Result<Unit> =
+        authRemoteDataSource.submitAgreement(
+            termsAgreement.toDto(),
+        )
 }
