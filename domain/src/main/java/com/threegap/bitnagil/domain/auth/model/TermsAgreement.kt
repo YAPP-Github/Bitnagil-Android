@@ -5,5 +5,6 @@ data class TermsAgreement(
     val agreedToPrivacyPolicy: Boolean,
     val isOverFourteen: Boolean,
 ) {
-    fun isValid(): Boolean = agreedToTermsOfService && agreedToPrivacyPolicy && isOverFourteen
+    val isValid: Boolean
+        get() = agreedToTermsOfService && agreedToPrivacyPolicy && isOverFourteen
 }
