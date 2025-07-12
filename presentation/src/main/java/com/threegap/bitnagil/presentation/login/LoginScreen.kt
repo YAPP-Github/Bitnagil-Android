@@ -37,8 +37,8 @@ fun LoginScreenContainer(
                 // TODO: Navigate to Home
             }
 
-            is LoginSideEffect.NavigateToTermsOfService -> {
                 // TODO: Navigate to Terms of Service
+            is LoginSideEffect.NavigateToTermsAgreement -> {
             }
         }
     }
