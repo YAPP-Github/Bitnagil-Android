@@ -10,6 +10,7 @@ sealed class OnBoardingPageInfo : Parcelable {
 
     @Parcelize
     data class SelectOnBoarding(
+        val id: String,
         val title: String,
         val description: String?,
         @Stable val items: List<OnBoardingItem> = emptyList(),
@@ -18,6 +19,7 @@ sealed class OnBoardingPageInfo : Parcelable {
         companion object {
             fun fromOnBoarding(onBoarding: OnBoarding) : SelectOnBoarding {
                 return SelectOnBoarding(
+                    id = onBoarding.id,
                     title = onBoarding.title,
                     description = onBoarding.description,
                     items = onBoarding.onboardingItemList.map {
@@ -48,7 +50,10 @@ sealed class OnBoardingPageInfo : Parcelable {
     }
 
     @Parcelize
-    data class Abstract(@Stable val abstractTextList: List<List<OnBoardingAbstractTextItem>>) : OnBoardingPageInfo()
+    data class Abstract(
+        val prefix: String,
+        @Stable val abstractTextList: List<List<OnBoardingAbstractTextItem>>
+    ) : OnBoardingPageInfo()
 
     @Parcelize
     data class RecommendRoutines(@Stable val routineList: List<OnBoardingItem>) : OnBoardingPageInfo() {

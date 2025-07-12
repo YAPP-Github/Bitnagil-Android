@@ -2,7 +2,7 @@ package com.threegap.bitnagil.presentation.onboarding
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingAbstractTextListUseCase
+import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingAbstractUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingListUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.GetRecommendOnBoardingRoutineListUseCase
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
@@ -22,7 +22,7 @@ class OnBoardingViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getOnBoardingListUseCase: GetOnBoardingListUseCase,
     private val getRecommendOnBoardingRoutineListUseCase: GetRecommendOnBoardingRoutineListUseCase,
-    private val getOnBoardingAbstractTextListUseCase: GetOnBoardingAbstractTextListUseCase,
+    private val getOnBoardingAbstractTextListUseCase: GetOnBoardingAbstractUseCase,
 ) : MviViewModel<OnBoardingState, OnBoardingSideEffect, OnBoardingIntent>(
     initState = OnBoardingState.Loading,
     savedStateHandle = savedStateHandle,
@@ -86,17 +86,20 @@ class OnBoardingViewModel @Inject constructor(
                 if (isLastSelectOnBoarding) {
                     val selectedItems = onBoardingPageInfos
                         .map { onBoardingPage ->
-                            onBoardingPage.items.filter { onBoardingItem ->
+                            val id = onBoardingPage.id
+                            val selectedItemIds = onBoardingPage.items.filter { onBoardingItem ->
                                 onBoardingItem.selected
                             }.map { onBoardingItem ->
                                 onBoardingItem.id
                             }
+                            Pair(id, selectedItemIds)
                         }
 
-                    val abstractTextList = getOnBoardingAbstractTextListUseCase(selectedOnBoardingItemIdLists = selectedItems)
+                    val onBoardingAbstract = getOnBoardingAbstractTextListUseCase(selectedOnBoardingItemIdLists = selectedItems)
 
                     val abstractPageInfo = OnBoardingPageInfo.Abstract(
-                        abstractTextList = abstractTextList.map { onBoardingAbstractText ->
+                        prefix = onBoardingAbstract.prefix,
+                        abstractTextList = onBoardingAbstract.abstractTextList.map { onBoardingAbstractText ->
                             onBoardingAbstractText.textItemList.map { onBoardingAbstractTextItem ->
                                 OnBoardingAbstractTextItem.fromOnBoardingAbstractTextItem(onBoardingAbstractTextItem)
                             }

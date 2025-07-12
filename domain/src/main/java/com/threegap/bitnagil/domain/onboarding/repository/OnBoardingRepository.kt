@@ -1,0 +1,11 @@
+package com.threegap.bitnagil.domain.onboarding.repository
+
+import com.threegap.bitnagil.domain.onboarding.model.OnBoarding
+import com.threegap.bitnagil.domain.onboarding.model.OnBoardingAbstract
+import com.threegap.bitnagil.domain.onboarding.model.OnBoardingRecommendRoutine
+
+interface OnBoardingRepository {
+    suspend fun getOnBoardingList(): List<OnBoarding>
+    suspend fun getOnBoardingAbstract(selectedOnBoardingItemsList: List<Pair<String, List<String>>>): OnBoardingAbstract
+    suspend fun getRecommendOnBoardingRouteList(): Result<List<OnBoardingRecommendRoutine>>
+}

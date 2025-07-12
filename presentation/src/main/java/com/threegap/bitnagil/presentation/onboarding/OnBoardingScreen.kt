@@ -117,7 +117,7 @@ fun OnBoardingScreenPreview() {
     OnBoardingScreen(
         state = OnBoardingState.Idle(
             nextButtonEnable = false,
-            currentOnBoardingPageInfo = OnBoardingPageInfo.SelectOnBoarding(title = "title", description = "description"),
+            currentOnBoardingPageInfo = OnBoardingPageInfo.SelectOnBoarding(id = "id", title = "title", description = "description"),
             totalStep = 5,
             currentStep = 1,
         ),

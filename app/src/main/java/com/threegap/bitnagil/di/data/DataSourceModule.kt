@@ -4,6 +4,8 @@ import com.threegap.bitnagil.data.auth.datasource.AuthLocalDataSource
 import com.threegap.bitnagil.data.auth.datasource.AuthRemoteDataSource
 import com.threegap.bitnagil.data.auth.datasourceimpl.AuthLocalDataSourceImpl
 import com.threegap.bitnagil.data.auth.datasourceimpl.AuthRemoteDataSourceImpl
+import com.threegap.bitnagil.data.onboarding.datasource.OnBoardingDataSource
+import com.threegap.bitnagil.data.onboarding.datasourceImpl.OnBoardingDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -21,4 +23,8 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindAuthLocalDataSource(authLocalDataSourceImpl: AuthLocalDataSourceImpl): AuthLocalDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindOnBoardingDataSource(onBoardingDataSourceImpl: OnBoardingDataSourceImpl): OnBoardingDataSource
 }
