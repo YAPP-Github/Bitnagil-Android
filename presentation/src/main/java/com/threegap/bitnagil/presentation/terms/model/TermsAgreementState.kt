@@ -12,4 +12,7 @@ data class TermsAgreementState(
 ) : MviState {
     val isAllAgreed: Boolean
         get() = agreedTermsOfService && agreedPrivacyPolicy && agreedOverFourteen
+
+    val submitEnabled: Boolean
+        get() = !isLoading && isAllAgreed
 }

@@ -180,7 +180,7 @@ private fun TermsAgreementScreen(
 
         Button(
             onClick = onStartButtonClick,
-            enabled = uiState.isAllAgreed,
+            enabled = uiState.submitEnabled,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
