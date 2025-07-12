@@ -31,7 +31,8 @@ class TermsAgreementViewModel @Inject constructor(
         }
 
         is TermsAgreementIntent.ToggleAllAgreements -> {
-            state.copy(
+            if (state.isLoading) null
+            else state.copy(
                 agreedTermsOfService = intent.agreed,
                 agreedPrivacyPolicy = intent.agreed,
                 agreedOverFourteen = intent.agreed,
@@ -39,15 +40,18 @@ class TermsAgreementViewModel @Inject constructor(
         }
 
         is TermsAgreementIntent.ToggleTermsOfService -> {
-            state.copy(agreedTermsOfService = intent.agreed)
+            if (state.isLoading) null
+            else state.copy(agreedTermsOfService = intent.agreed)
         }
 
         is TermsAgreementIntent.TogglePrivacyPolicy -> {
-            state.copy(agreedPrivacyPolicy = intent.agreed)
+            if (state.isLoading) null
+            else state.copy(agreedPrivacyPolicy = intent.agreed)
         }
 
         is TermsAgreementIntent.ToggleOverFourteen -> {
-            state.copy(agreedOverFourteen = intent.agreed)
+            if (state.isLoading) null
+            else state.copy(agreedOverFourteen = intent.agreed)
         }
 
         is TermsAgreementIntent.SubmitSuccess -> {
