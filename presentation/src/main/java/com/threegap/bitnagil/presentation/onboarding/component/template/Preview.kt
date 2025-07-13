@@ -12,22 +12,22 @@ fun OnBoardingTemplatePreview() {
         subText = "subText",
         items = listOf(
             OnBoardingItem(
-                id = "id",
+                id = "item1",
                 title = "title1",
                 description = "description1",
             ),
             OnBoardingItem(
-                id = "id",
+                id = "item2",
                 title = "title2",
                 description = "description2",
             ),
             OnBoardingItem(
-                id = "id",
+                id = "item3",
                 title = "title3",
                 description = "description3",
             ),
             OnBoardingItem(
-                id = "id",
+                id = "item4",
                 title = "title4",
                 description = "description4",
             ),

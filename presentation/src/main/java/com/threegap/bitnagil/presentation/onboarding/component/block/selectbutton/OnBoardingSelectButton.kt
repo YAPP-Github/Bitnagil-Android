@@ -1,3 +1,5 @@
+package com.threegap.bitnagil.presentation.onboarding.component.block.selectbutton
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

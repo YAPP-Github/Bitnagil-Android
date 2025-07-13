@@ -1,3 +1,5 @@
+package com.threegap.bitnagil.presentation.onboarding.component.atom.progress
+
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween

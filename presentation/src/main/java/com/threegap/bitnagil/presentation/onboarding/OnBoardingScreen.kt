@@ -1,6 +1,6 @@
 package com.threegap.bitnagil.presentation.onboarding
 
-import OnBoardingProgressBar
+import com.threegap.bitnagil.presentation.onboarding.component.atom.progress.OnBoardingProgressBar
 import android.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -76,7 +76,7 @@ fun OnBoardingScreen(
                         OnBoardingAbstractTemplate(
                             modifier = Modifier.weight(1f),
                             title = "이제 당신에게\n꼭 맞는 루틴을 제안해드릴게요.",
-                            moveToNext = loadRecommendRoutines,
+                            onInit = loadRecommendRoutines,
                             onBoardingAbstractTexts = currentOnBoardingPageInfo.abstractTexts,
                             onDispose = cancelRecommendRoutines,
                         )

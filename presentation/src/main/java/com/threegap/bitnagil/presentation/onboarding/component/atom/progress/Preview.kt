@@ -1,6 +1,5 @@
 package com.threegap.bitnagil.presentation.onboarding.component.atom.progress
 
-import OnBoardingProgressBar
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
