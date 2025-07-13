@@ -1,6 +1,5 @@
 package com.threegap.bitnagil.presentation.onboarding
 
-import com.threegap.bitnagil.presentation.onboarding.component.atom.progress.OnBoardingProgressBar
 import android.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -17,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.presentation.onboarding.component.atom.iconbutton.IconButton
+import com.threegap.bitnagil.presentation.onboarding.component.atom.progress.OnBoardingProgressBar
 import com.threegap.bitnagil.presentation.onboarding.component.template.OnBoardingAbstractTemplate
 import com.threegap.bitnagil.presentation.onboarding.component.template.OnBoardingSelectTemplate
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingPageInfo

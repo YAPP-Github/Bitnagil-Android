@@ -12,9 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingItem
 import com.threegap.bitnagil.presentation.onboarding.component.atom.textbutton.TextButton
 import com.threegap.bitnagil.presentation.onboarding.component.block.selectbutton.OnBoardingSelectButton
+import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingItem
 
 @Composable
 fun OnBoardingSelectTemplate(
