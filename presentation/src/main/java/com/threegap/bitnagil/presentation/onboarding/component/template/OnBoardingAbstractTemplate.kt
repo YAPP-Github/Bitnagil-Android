@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
@@ -20,18 +20,21 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingAbstractTextItem
-import kotlinx.coroutines.delay
 
 @Composable
 fun OnBoardingAbstractTemplate(
     modifier: Modifier = Modifier,
     title: String,
     moveToNext: () -> Unit,
-    onBoardingAbstractTextItemLists: List<List<OnBoardingAbstractTextItem>>
+    onBoardingAbstractTextItemLists: List<List<OnBoardingAbstractTextItem>>,
+    onDispose: () -> Unit,
 ) {
-    LaunchedEffect(Unit) {
-        delay(3000L)
+    DisposableEffect(Unit) {
         moveToNext()
+
+        onDispose {
+            onDispose()
+        }
     }
 
     val titleTextStyle = TextStyle(fontSize = 20.sp)

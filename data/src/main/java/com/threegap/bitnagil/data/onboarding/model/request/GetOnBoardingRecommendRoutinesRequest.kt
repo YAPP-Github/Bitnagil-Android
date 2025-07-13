@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class OnBoardingRecommendRoutinesRequest(
+data class GetOnBoardingRecommendRoutinesRequest(
     @SerialName("timeSlot")
     val timeSlot: String,
     @SerialName("emotionType")

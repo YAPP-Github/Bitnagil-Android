@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingAbstractUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingListUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.GetRecommendOnBoardingRoutineListUseCase
+import com.threegap.bitnagil.domain.onboarding.usecase.RegisterRecommendOnBoardingRoutineListUseCase
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingAbstractTextItem
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingItem
@@ -13,6 +14,10 @@ import com.threegap.bitnagil.presentation.onboarding.model.mvi.OnBoardingIntent
 import com.threegap.bitnagil.presentation.onboarding.model.mvi.OnBoardingSideEffect
 import com.threegap.bitnagil.presentation.onboarding.model.mvi.OnBoardingState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
 import javax.inject.Inject
@@ -23,12 +28,16 @@ class OnBoardingViewModel @Inject constructor(
     private val getOnBoardingListUseCase: GetOnBoardingListUseCase,
     private val getRecommendOnBoardingRoutineListUseCase: GetRecommendOnBoardingRoutineListUseCase,
     private val getOnBoardingAbstractTextListUseCase: GetOnBoardingAbstractUseCase,
+    private val registerRecommendOnBoardingRoutineListUseCase: RegisterRecommendOnBoardingRoutineListUseCase,
 ) : MviViewModel<OnBoardingState, OnBoardingSideEffect, OnBoardingIntent>(
     initState = OnBoardingState.Loading,
     savedStateHandle = savedStateHandle,
 ) {
     // 내부에 전체 온보딩 항목 저장
     private val onBoardingPageInfos = mutableListOf<OnBoardingPageInfo.SelectOnBoarding>()
+
+    private var loadRecommendRoutinesJob: Job? = null
+
 
     init {
         loadOnBoardingItems()
@@ -221,7 +230,11 @@ class OnBoardingViewModel @Inject constructor(
     }
 
     fun loadRecommendRoutines() {
-        viewModelScope.launch {
+        loadRecommendRoutinesJob = viewModelScope.async {
+            val minimumDelayDeferred = async {
+                delay(2000L)
+            }
+
             val selectedItems = onBoardingPageInfos
                 .map { onBoardingPage ->
                     val id = onBoardingPage.id
@@ -237,13 +250,16 @@ class OnBoardingViewModel @Inject constructor(
 
             getRecommendOnBoardingRoutineListUseCase(selectedItems).fold(
                 onSuccess = { recommendRoutines ->
-                    sendIntent(
-                        intent = OnBoardingIntent.LoadRecommendRoutinesSuccess(
-                            routineList = recommendRoutines.map {
-                                OnBoardingItem.fromOnBoardingRecommendRoutine(it)
-                            },
-                        ),
-                    )
+                    minimumDelayDeferred.await()
+                    if (isActive) {
+                        sendIntent(
+                            intent = OnBoardingIntent.LoadRecommendRoutinesSuccess(
+                                routineList = recommendRoutines.map {
+                                    OnBoardingItem.fromOnBoardingRecommendRoutine(it)
+                                },
+                            ),
+                        )
+                    }
                 },
                 onFailure = {
 
@@ -252,15 +268,38 @@ class OnBoardingViewModel @Inject constructor(
         }
     }
 
+    fun cancelLoadRecommendRoutines() {
+        loadRecommendRoutinesJob?.cancel()
+    }
+
     fun selectRoutine(routineId: String) {
         viewModelScope.launch {
             sendIntent(intent = OnBoardingIntent.SelectRoutine(routineId = routineId))
         }
     }
 
-    fun navigateToHome() {
+    fun registerRecommendRoutineList() {
         viewModelScope.launch {
-            sendIntent(intent = OnBoardingIntent.NavigateToHome)
+            val currentState = stateFlow.value
+            if (currentState !is OnBoardingState.Idle) return@launch
+
+            val currentPageInfo = currentState.currentOnBoardingPageInfo
+            if (currentPageInfo !is OnBoardingPageInfo.RecommendRoutines) return@launch
+
+            val selectedRoutineIds = currentPageInfo.routineList.filter { routineItem ->
+                routineItem.selectedIndex != null
+            }.map {
+                it.id
+            }
+
+            registerRecommendOnBoardingRoutineListUseCase(selectedRecommendRoutineIdList = selectedRoutineIds).fold(
+                onSuccess = { _ ->
+                    sendIntent(intent = OnBoardingIntent.NavigateToHome)
+                },
+                onFailure = {
+
+                }
+            )
         }
     }
 }

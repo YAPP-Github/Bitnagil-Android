@@ -7,8 +7,8 @@ import com.threegap.bitnagil.data.onboarding.model.dto.OnBoardingAbstractTextDto
 import com.threegap.bitnagil.data.onboarding.model.dto.OnBoardingAbstractTextItemDto
 import com.threegap.bitnagil.data.onboarding.model.dto.OnBoardingDto
 import com.threegap.bitnagil.data.onboarding.model.dto.OnBoardingItemDto
-import com.threegap.bitnagil.data.onboarding.model.request.OnBoardingRecommendRoutinesRequest
-import com.threegap.bitnagil.data.onboarding.model.response.OnBoardingRecommendRoutinesResponse
+import com.threegap.bitnagil.data.onboarding.model.request.GetOnBoardingRecommendRoutinesRequest
+import com.threegap.bitnagil.data.onboarding.model.response.GetOnBoardingRecommendRoutinesResponse
 import com.threegap.bitnagil.data.onboarding.service.OnBoardingService
 import javax.inject.Inject
 
@@ -26,7 +26,7 @@ class OnBoardingDataSourceImpl @Inject constructor(
         return onBoardingDtoList
     }
 
-    override suspend fun getOnBoardingRecommendRoutines(request: OnBoardingRecommendRoutinesRequest): Result<OnBoardingRecommendRoutinesResponse> {
+    override suspend fun getOnBoardingRecommendRoutines(request: GetOnBoardingRecommendRoutinesRequest): Result<GetOnBoardingRecommendRoutinesResponse> {
         return safeApiCall {
             onBoardingService.postOnBoarding(request)
         }

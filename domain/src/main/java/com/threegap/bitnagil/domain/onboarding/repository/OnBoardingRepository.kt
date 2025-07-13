@@ -8,4 +8,5 @@ interface OnBoardingRepository {
     suspend fun getOnBoardingList(): List<OnBoarding>
     suspend fun getOnBoardingAbstract(selectedOnBoardingItemsList: List<Pair<String, List<String>>>): OnBoardingAbstract
     suspend fun getRecommendOnBoardingRouteList(selectedOnBoardingItemsList: List<Pair<String, List<String>>>): Result<List<OnBoardingRecommendRoutine>>
+    suspend fun registerRecommendRoutineList(selectedRecommendRoutineIdList: List<String>): Result<Unit>
 }
