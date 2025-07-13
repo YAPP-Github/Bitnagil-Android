@@ -83,41 +83,15 @@ class OnBoardingViewModel @Inject constructor(
                 if (currentState !is OnBoardingState.Idle) return null
 
                 val isLastSelectOnBoarding = currentState.currentStep >= onBoardingPageInfos.size
-                if (isLastSelectOnBoarding) {
-                    val selectedItems = onBoardingPageInfos
-                        .map { onBoardingPage ->
-                            val id = onBoardingPage.id
-                            val selectedItemIds = onBoardingPage.items.filter { onBoardingItem ->
-                                onBoardingItem.selectedIndex != null
-                            }.map { onBoardingItem ->
-                                onBoardingItem.id
-                            }
-                            Pair(id, selectedItemIds)
-                        }
+                if (isLastSelectOnBoarding) return null
 
-                    val onBoardingAbstract = getOnBoardingAbstractTextListUseCase(selectedOnBoardingItemIdLists = selectedItems)
-
-                    val abstractPageInfo = OnBoardingPageInfo.Abstract(
-                        prefix = onBoardingAbstract.prefix,
-                        abstractTextList = onBoardingAbstract.abstractTextList.map { onBoardingAbstractText ->
-                            onBoardingAbstractText.textItemList.map { onBoardingAbstractTextItem ->
-                                OnBoardingAbstractTextItem.fromOnBoardingAbstractTextItem(onBoardingAbstractTextItem)
-                            }
-                        }
-                    )
-                    return currentState.copy(
-                        currentOnBoardingPageInfo = abstractPageInfo,
-                        currentStep = currentState.currentStep + 1,
-                    )
-                } else {
-                    val nextOnBoardingPageInfo = onBoardingPageInfos[currentState.currentStep]
-                    val nextButtonEnable = nextOnBoardingPageInfo.isItemSelected
-                    return currentState.copy(
-                        currentOnBoardingPageInfo = nextOnBoardingPageInfo,
-                        nextButtonEnable = nextButtonEnable,
-                        currentStep = currentState.currentStep + 1,
-                    )
-                }
+                val nextOnBoardingPageInfo = onBoardingPageInfos[currentState.currentStep]
+                val nextButtonEnable = nextOnBoardingPageInfo.isItemSelected
+                return currentState.copy(
+                    currentOnBoardingPageInfo = nextOnBoardingPageInfo,
+                    nextButtonEnable = nextButtonEnable,
+                    currentStep = currentState.currentStep + 1,
+                )
             }
 
             is OnBoardingIntent.SelectPrevious -> {
@@ -177,6 +151,16 @@ class OnBoardingViewModel @Inject constructor(
                 sendSideEffect(sideEffect = OnBoardingSideEffect.NavigateToHomeScreen)
                 return null
             }
+
+            is OnBoardingIntent.LoadOnBoardingAbstractSuccess -> {
+                val currentState = state
+                if (currentState !is OnBoardingState.Idle) return null
+
+                return currentState.copy(
+                    currentOnBoardingPageInfo = intent.onBoardingAbstract,
+                    currentStep = currentState.currentStep + 1,
+                )
+            }
         }
     }
 
@@ -188,7 +172,45 @@ class OnBoardingViewModel @Inject constructor(
 
     fun selectNext() {
         viewModelScope.launch {
-            sendIntent(intent = OnBoardingIntent.SelectNext)
+            val currentState = stateFlow.value
+            if (currentState !is OnBoardingState.Idle) return@launch
+
+            val isLastSelectOnBoarding = currentState.currentStep >= onBoardingPageInfos.size
+            if (isLastSelectOnBoarding) {
+                val selectedItems = getSelectedOnBoardingItemIdsWithId(onBoardingPageInfos)
+
+                val onBoardingAbstract = getOnBoardingAbstractTextListUseCase(selectedOnBoardingItemIdLists = selectedItems)
+
+                val abstractPagePrefixText = onBoardingAbstract.prefix
+                val abstractTextList = onBoardingAbstract.abstractTextList.map { onBoardingAbstractText ->
+                    onBoardingAbstractText.textItemList.map { onBoardingAbstractTextItem ->
+                        OnBoardingAbstractTextItem.fromOnBoardingAbstractTextItem(onBoardingAbstractTextItem)
+                    }
+                }
+
+                sendIntent(
+                    intent = OnBoardingIntent.LoadOnBoardingAbstractSuccess(
+                        onBoardingAbstract = OnBoardingPageInfo.Abstract(
+                            prefix = abstractPagePrefixText,
+                            abstractTextList = abstractTextList,
+                        ),
+                    ),
+                )
+            } else {
+                sendIntent(intent = OnBoardingIntent.SelectNext)
+            }
+        }
+    }
+
+    private fun getSelectedOnBoardingItemIdsWithId(onboardingPageInfos: List<OnBoardingPageInfo.SelectOnBoarding>): List<Pair<String, List<String>>> {
+        return onboardingPageInfos.map { onBoardingPage ->
+            val id = onBoardingPage.id
+            val selectedItemIds = onBoardingPage.items.filter { onBoardingItem ->
+                onBoardingItem.selectedIndex != null
+            }.map { onBoardingItem ->
+                onBoardingItem.id
+            }
+            Pair(id, selectedItemIds)
         }
     }
 
