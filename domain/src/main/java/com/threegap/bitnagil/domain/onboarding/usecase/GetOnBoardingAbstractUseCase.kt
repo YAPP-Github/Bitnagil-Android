@@ -7,7 +7,7 @@ import javax.inject.Inject
 class GetOnBoardingAbstractUseCase @Inject constructor(
     private val onBoardingRepository: OnBoardingRepository
 ) {
-    suspend operator fun invoke(selectedOnBoardingItemIdLists: List<Pair<String, List<String>>>): OnBoardingAbstract {
-        return onBoardingRepository.getOnBoardingAbstract(selectedOnBoardingItemIdLists)
+    suspend operator fun invoke(selectedItemIdsWithOnBoardingId: List<Pair<String, List<String>>>): OnBoardingAbstract {
+        return onBoardingRepository.getOnBoardingAbstract(selectedItemIdsWithOnBoardingId)
     }
 }

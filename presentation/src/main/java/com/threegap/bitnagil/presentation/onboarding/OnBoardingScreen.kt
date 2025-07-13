@@ -35,7 +35,7 @@ fun OnBoardingScreenContainer(
         onClickItem = onBoardingViewModel::selectItem,
         onClickRoutine = onBoardingViewModel::selectRoutine,
         loadRecommendRoutines = onBoardingViewModel::loadRecommendRoutines,
-        onClickRegister = onBoardingViewModel::registerRecommendRoutineList,
+        onClickRegister = onBoardingViewModel::registerRecommendRoutines,
         cancelRecommendRoutines = onBoardingViewModel::cancelLoadRecommendRoutines
     )
 }
@@ -77,7 +77,7 @@ fun OnBoardingScreen(
                             modifier = Modifier.weight(1f),
                             title = "이제 당신에게\n꼭 맞는 루틴을 제안해드릴게요.",
                             moveToNext = loadRecommendRoutines,
-                            onBoardingAbstractTextItemLists = currentOnBoardingPageInfo.abstractTextList,
+                            onBoardingAbstractTexts = currentOnBoardingPageInfo.abstractTexts,
                             onDispose = cancelRecommendRoutines
                         )
                     }
@@ -86,7 +86,7 @@ fun OnBoardingScreen(
                             modifier = Modifier.weight(1f),
                             title = "당신만의 추천 루틴이\n생성되었어요!",
                             subText = "당신의 생활 패턴과 목표에 맞춰 구성된 맞춤 루틴이에요.\n지금부터 가볍게 시작해보세요.",
-                            items = currentOnBoardingPageInfo.routineList,
+                            items = currentOnBoardingPageInfo.routines,
                             nextButtonEnable = state.nextButtonEnable,
                             onClickNextButton = onClickRegister,
                             onClickItem = onClickRoutine,

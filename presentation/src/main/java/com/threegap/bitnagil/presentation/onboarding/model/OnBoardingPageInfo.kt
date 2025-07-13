@@ -59,20 +59,20 @@ sealed class OnBoardingPageInfo : Parcelable {
     @Parcelize
     data class Abstract(
         val prefix: String,
-        @Stable val abstractTextList: List<List<OnBoardingAbstractTextItem>>
+        @Stable val abstractTexts: List<List<OnBoardingAbstractTextItem>>
     ) : OnBoardingPageInfo()
 
     @Parcelize
-    data class RecommendRoutines(@Stable val routineList: List<OnBoardingItem>) : OnBoardingPageInfo() {
+    data class RecommendRoutines(@Stable val routines: List<OnBoardingItem>) : OnBoardingPageInfo() {
         companion object {
             private var lastSelectedIndex = 0
         }
 
-        val isItemSelected : Boolean get() = routineList.any { it.selectedIndex != null }
+        val isItemSelected : Boolean get() = routines.any { it.selectedIndex != null }
 
         fun selectItem(itemId: String) : RecommendRoutines {
             return copy(
-                routineList = routineList.map {
+                routines = routines.map {
                     if (it.id == itemId) {
                         val alreadySelected = (it.selectedIndex != null)
                         val selectedIndex = if (alreadySelected) {

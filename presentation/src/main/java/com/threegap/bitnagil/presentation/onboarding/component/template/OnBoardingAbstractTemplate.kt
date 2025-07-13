@@ -26,7 +26,7 @@ fun OnBoardingAbstractTemplate(
     modifier: Modifier = Modifier,
     title: String,
     moveToNext: () -> Unit,
-    onBoardingAbstractTextItemLists: List<List<OnBoardingAbstractTextItem>>,
+    onBoardingAbstractTexts: List<List<OnBoardingAbstractTextItem>>,
     onDispose: () -> Unit,
 ) {
     DisposableEffect(Unit) {
@@ -46,7 +46,7 @@ fun OnBoardingAbstractTemplate(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        onBoardingAbstractTextItemLists.map { onBoardingAbstractTextItemList ->
+        onBoardingAbstractTexts.map { onBoardingAbstractTextItemList ->
             Spacer(modifier = Modifier.height(2.dp))
             OnBoardingAbstractText(onBoardingAbstractTextList = onBoardingAbstractTextItemList)
         }

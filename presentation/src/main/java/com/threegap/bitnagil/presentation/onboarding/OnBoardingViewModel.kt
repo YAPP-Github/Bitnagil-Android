@@ -3,9 +3,9 @@ package com.threegap.bitnagil.presentation.onboarding
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingAbstractUseCase
-import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingListUseCase
-import com.threegap.bitnagil.domain.onboarding.usecase.GetRecommendOnBoardingRoutineListUseCase
-import com.threegap.bitnagil.domain.onboarding.usecase.RegisterRecommendOnBoardingRoutineListUseCase
+import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingsUseCase
+import com.threegap.bitnagil.domain.onboarding.usecase.GetRecommendOnBoardingRoutinesUseCase
+import com.threegap.bitnagil.domain.onboarding.usecase.RegisterRecommendOnBoardingRoutinesUseCase
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingAbstractTextItem
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingItem
@@ -25,10 +25,10 @@ import javax.inject.Inject
 @HiltViewModel
 class OnBoardingViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val getOnBoardingListUseCase: GetOnBoardingListUseCase,
-    private val getRecommendOnBoardingRoutineListUseCase: GetRecommendOnBoardingRoutineListUseCase,
-    private val getOnBoardingAbstractTextListUseCase: GetOnBoardingAbstractUseCase,
-    private val registerRecommendOnBoardingRoutineListUseCase: RegisterRecommendOnBoardingRoutineListUseCase,
+    private val getOnBoardingsUseCase: GetOnBoardingsUseCase,
+    private val getRecommendOnBoardingRoutinesUseCase: GetRecommendOnBoardingRoutinesUseCase,
+    private val getOnBoardingAbstractUseCase: GetOnBoardingAbstractUseCase,
+    private val registerRecommendOnBoardingRoutinesUseCase: RegisterRecommendOnBoardingRoutinesUseCase,
 ) : MviViewModel<OnBoardingState, OnBoardingSideEffect, OnBoardingIntent>(
     initState = OnBoardingState.Loading,
     savedStateHandle = savedStateHandle,
@@ -38,20 +38,19 @@ class OnBoardingViewModel @Inject constructor(
 
     private var loadRecommendRoutinesJob: Job? = null
 
-
     init {
         loadOnBoardingItems()
     }
 
     private fun loadOnBoardingItems() {
         viewModelScope.launch {
-            val onBoardings = getOnBoardingListUseCase()
+            val onBoardings = getOnBoardingsUseCase()
 
-            val onBoardingPageList = onBoardings.map { onBoarding ->
+            val onBoardingPages = onBoardings.map { onBoarding ->
                 OnBoardingPageInfo.SelectOnBoarding.fromOnBoarding(onBoarding = onBoarding)
             }
 
-            sendIntent(intent = OnBoardingIntent.LoadOnBoardingSuccess(onBoardingPageInfos = onBoardingPageList))
+            sendIntent(intent = OnBoardingIntent.LoadOnBoardingSuccess(onBoardingPageInfos = onBoardingPages))
         }
     }
 
@@ -134,7 +133,7 @@ class OnBoardingViewModel @Inject constructor(
                 val currentState = state
                 if (currentState !is OnBoardingState.Idle) return null
 
-                val recommendRoutinePageInfo = OnBoardingPageInfo.RecommendRoutines(routineList = intent.routineList)
+                val recommendRoutinePageInfo = OnBoardingPageInfo.RecommendRoutines(routines = intent.routines)
                 return currentState.copy(
                     currentOnBoardingPageInfo = recommendRoutinePageInfo,
                     currentStep = currentState.currentStep + 1,
@@ -186,13 +185,13 @@ class OnBoardingViewModel @Inject constructor(
 
             val isLastSelectOnBoarding = currentState.currentStep >= onBoardingPageInfos.size
             if (isLastSelectOnBoarding) {
-                val selectedItems = getSelectedOnBoardingItemIdsWithId(onBoardingPageInfos)
+                val selectedItemIdsWithOnBoardingId = getSelectedOnBoardingItemIdsWithId(onBoardingPageInfos)
 
-                val onBoardingAbstract = getOnBoardingAbstractTextListUseCase(selectedOnBoardingItemIdLists = selectedItems)
+                val onBoardingAbstract = getOnBoardingAbstractUseCase(selectedItemIdsWithOnBoardingId = selectedItemIdsWithOnBoardingId)
 
                 val abstractPagePrefixText = onBoardingAbstract.prefix
-                val abstractTextList = onBoardingAbstract.abstractTextList.map { onBoardingAbstractText ->
-                    onBoardingAbstractText.textItemList.map { onBoardingAbstractTextItem ->
+                val abstractTexts = onBoardingAbstract.abstractTexts.map { onBoardingAbstractText ->
+                    onBoardingAbstractText.textItems.map { onBoardingAbstractTextItem ->
                         OnBoardingAbstractTextItem.fromOnBoardingAbstractTextItem(onBoardingAbstractTextItem)
                     }
                 }
@@ -201,7 +200,7 @@ class OnBoardingViewModel @Inject constructor(
                     intent = OnBoardingIntent.LoadOnBoardingAbstractSuccess(
                         onBoardingAbstract = OnBoardingPageInfo.Abstract(
                             prefix = abstractPagePrefixText,
-                            abstractTextList = abstractTextList,
+                            abstractTexts = abstractTexts,
                         ),
                     ),
                 )
@@ -248,13 +247,13 @@ class OnBoardingViewModel @Inject constructor(
                     Pair(id, selectedItemIds)
                 }
 
-            getRecommendOnBoardingRoutineListUseCase(selectedItems).fold(
+            getRecommendOnBoardingRoutinesUseCase(selectedItems).fold(
                 onSuccess = { recommendRoutines ->
                     minimumDelayDeferred.await()
                     if (isActive) {
                         sendIntent(
                             intent = OnBoardingIntent.LoadRecommendRoutinesSuccess(
-                                routineList = recommendRoutines.map {
+                                routines = recommendRoutines.map {
                                     OnBoardingItem.fromOnBoardingRecommendRoutine(it)
                                 },
                             ),
@@ -278,7 +277,7 @@ class OnBoardingViewModel @Inject constructor(
         }
     }
 
-    fun registerRecommendRoutineList() {
+    fun registerRecommendRoutines() {
         viewModelScope.launch {
             val currentState = stateFlow.value
             if (currentState !is OnBoardingState.Idle) return@launch
@@ -286,13 +285,13 @@ class OnBoardingViewModel @Inject constructor(
             val currentPageInfo = currentState.currentOnBoardingPageInfo
             if (currentPageInfo !is OnBoardingPageInfo.RecommendRoutines) return@launch
 
-            val selectedRoutineIds = currentPageInfo.routineList.filter { routineItem ->
+            val selectedRoutineIds = currentPageInfo.routines.filter { routineItem ->
                 routineItem.selectedIndex != null
             }.map {
                 it.id
             }
 
-            registerRecommendOnBoardingRoutineListUseCase(selectedRecommendRoutineIdList = selectedRoutineIds).fold(
+            registerRecommendOnBoardingRoutinesUseCase(selectedRecommendRoutineIds = selectedRoutineIds).fold(
                 onSuccess = { _ ->
                     sendIntent(intent = OnBoardingIntent.NavigateToHome)
                 },

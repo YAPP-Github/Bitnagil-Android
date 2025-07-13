@@ -6,7 +6,7 @@ import com.threegap.bitnagil.domain.onboarding.model.OnBoardingRecommendRoutine
 
 interface OnBoardingRepository {
     suspend fun getOnBoardingList(): List<OnBoarding>
-    suspend fun getOnBoardingAbstract(selectedOnBoardingItemsList: List<Pair<String, List<String>>>): OnBoardingAbstract
-    suspend fun getRecommendOnBoardingRouteList(selectedOnBoardingItemsList: List<Pair<String, List<String>>>): Result<List<OnBoardingRecommendRoutine>>
-    suspend fun registerRecommendRoutineList(selectedRecommendRoutineIdList: List<String>): Result<Unit>
+    suspend fun getOnBoardingAbstract(selectedItemIdsWithOnBoardingId: List<Pair<String, List<String>>>): OnBoardingAbstract
+    suspend fun getRecommendOnBoardingRouteList(selectedItemIdsWithOnBoardingId: List<Pair<String, List<String>>>): Result<List<OnBoardingRecommendRoutine>>
+    suspend fun registerRecommendRoutineList(selectedRecommendRoutineIds: List<String>): Result<Unit>
 }

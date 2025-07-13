@@ -9,7 +9,7 @@ data class OnBoardingAbstractDto(
     fun toOnBoardingAbstract(): OnBoardingAbstract {
         return OnBoardingAbstract(
             prefix = prefixText,
-            abstractTextList = detailTextsList.map { detailTexts ->
+            abstractTexts = detailTextsList.map { detailTexts ->
                 detailTexts.toOnBoardingAbstractText()
             }
         )

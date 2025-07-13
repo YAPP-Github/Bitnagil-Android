@@ -7,7 +7,7 @@ data class OnBoardingAbstractTextDto(
 ) {
     fun toOnBoardingAbstractText(): OnBoardingAbstractText {
         return OnBoardingAbstractText(
-            textItemList = textItemList.map { textItemDto ->
+            textItems = textItemList.map { textItemDto ->
                 textItemDto.toOnBoardingAbstractTextItem()
             }
         )
