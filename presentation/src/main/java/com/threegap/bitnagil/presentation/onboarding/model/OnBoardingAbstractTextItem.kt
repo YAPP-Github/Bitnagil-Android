@@ -10,7 +10,7 @@ data class OnBoardingAbstractTextItem(
     val isBold: Boolean,
 ) : Parcelable {
     companion object {
-        fun fromOnBoardingAbstractTextItem(onBoardingAbstractTextItem: DomainOnBoardingAbstractTextItem) : OnBoardingAbstractTextItem {
+        fun fromOnBoardingAbstractTextItem(onBoardingAbstractTextItem: DomainOnBoardingAbstractTextItem): OnBoardingAbstractTextItem {
             return OnBoardingAbstractTextItem(
                 text = onBoardingAbstractTextItem.text,
                 isBold = onBoardingAbstractTextItem.isBold,

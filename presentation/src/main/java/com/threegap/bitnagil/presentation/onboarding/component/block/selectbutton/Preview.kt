@@ -12,7 +12,6 @@ import androidx.compose.ui.unit.dp
 @Preview(showBackground = true)
 @Composable
 fun OnBoardingSelectButtonPreview() {
-
     Column {
         OnBoardingSelectButton(
             title = "루틴명",

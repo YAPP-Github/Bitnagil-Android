@@ -33,6 +33,6 @@ fun OnBoardingTemplatePreview() {
             ),
         ),
         onClickNextButton = {},
-        onClickItem = {}
+        onClickItem = {},
     )
 }

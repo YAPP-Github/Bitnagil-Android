@@ -42,7 +42,7 @@ data class OnBoardingDto(
                 OnBoardingItemDto.RealOutingOneToTwoPerWeek,
                 OnBoardingItemDto.RealOutingThreeToFourPerWeek,
                 OnBoardingItemDto.RealOutingMoreThanFivePerWeek,
-            )
+            ),
         )
 
         val EmotionType = OnBoardingDto(
@@ -55,7 +55,7 @@ data class OnBoardingDto(
                 OnBoardingItemDto.Connectedness,
                 OnBoardingItemDto.Vitality,
                 OnBoardingItemDto.Growth,
-            )
+            ),
         )
 
         val TargetOutingFrequency = OnBoardingDto(
@@ -68,7 +68,7 @@ data class OnBoardingDto(
                 OnBoardingItemDto.TargetOutingThreeToFourPerWeek,
                 OnBoardingItemDto.TargetOutingMoreThenFivePerWeek,
                 OnBoardingItemDto.TargetOutingUnknown,
-            )
+            ),
         )
     }
 }

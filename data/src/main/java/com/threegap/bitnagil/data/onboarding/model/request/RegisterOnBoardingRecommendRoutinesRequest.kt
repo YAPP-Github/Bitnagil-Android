@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class RegisterOnBoardingRecommendRoutinesRequest(
     @SerialName("recommendedRoutineIds")
-    val recommendedRoutineIds: List<String>
+    val recommendedRoutineIds: List<String>,
 )

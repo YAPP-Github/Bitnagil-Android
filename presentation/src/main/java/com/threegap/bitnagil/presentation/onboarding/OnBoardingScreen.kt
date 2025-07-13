@@ -36,7 +36,7 @@ fun OnBoardingScreenContainer(
         onClickRoutine = onBoardingViewModel::selectRoutine,
         loadRecommendRoutines = onBoardingViewModel::loadRecommendRoutines,
         onClickRegister = onBoardingViewModel::registerRecommendRoutines,
-        cancelRecommendRoutines = onBoardingViewModel::cancelLoadRecommendRoutines
+        cancelRecommendRoutines = onBoardingViewModel::cancelLoadRecommendRoutines,
     )
 }
 
@@ -52,10 +52,10 @@ fun OnBoardingScreen(
     onClickRegister: () -> Unit,
 ) {
     Column(
-        modifier = Modifier.background(color = Color(0xFFF7F7F8))
+        modifier = Modifier.background(color = Color(0xFFF7F7F8)),
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             IconButton(
                 modifier = Modifier.padding(start = 4.dp, top = 9.dp, bottom = 9.dp),
@@ -71,14 +71,14 @@ fun OnBoardingScreen(
 
         when (state) {
             is OnBoardingState.Idle -> {
-                when(val currentOnBoardingPageInfo = state.currentOnBoardingPageInfo) {
+                when (val currentOnBoardingPageInfo = state.currentOnBoardingPageInfo) {
                     is OnBoardingPageInfo.Abstract -> {
                         OnBoardingAbstractTemplate(
                             modifier = Modifier.weight(1f),
                             title = "이제 당신에게\n꼭 맞는 루틴을 제안해드릴게요.",
                             moveToNext = loadRecommendRoutines,
                             onBoardingAbstractTexts = currentOnBoardingPageInfo.abstractTexts,
-                            onDispose = cancelRecommendRoutines
+                            onDispose = cancelRecommendRoutines,
                         )
                     }
                     is OnBoardingPageInfo.RecommendRoutines -> {
@@ -104,13 +104,11 @@ fun OnBoardingScreen(
                         )
                     }
                 }
-
             }
             OnBoardingState.Loading -> {
                 Box(modifier = Modifier)
             }
         }
-
     }
 }
 
@@ -130,6 +128,6 @@ fun OnBoardingScreenPreview() {
         onClickRoutine = {},
         loadRecommendRoutines = {},
         onClickRegister = {},
-        cancelRecommendRoutines = {}
+        cancelRecommendRoutines = {},
     )
 }

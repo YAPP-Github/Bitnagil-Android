@@ -13,7 +13,7 @@ data class OnBoardingItem(
     val selectedIndex: Int? = null,
 ) : Parcelable {
     companion object {
-        fun fromOnBoardingItem(onBoardingItem: DomainOnBoardingItem) : OnBoardingItem {
+        fun fromOnBoardingItem(onBoardingItem: DomainOnBoardingItem): OnBoardingItem {
             return OnBoardingItem(
                 id = onBoardingItem.id,
                 title = onBoardingItem.title,
@@ -27,7 +27,7 @@ data class OnBoardingItem(
                 id = onBoardingRecommendRoutine.id,
                 title = onBoardingRecommendRoutine.name,
                 description = onBoardingRecommendRoutine.description,
-                selectedIndex = null
+                selectedIndex = null,
             )
         }
     }

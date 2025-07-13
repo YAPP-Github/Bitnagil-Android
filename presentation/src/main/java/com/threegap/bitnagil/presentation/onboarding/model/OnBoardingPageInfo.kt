@@ -16,7 +16,7 @@ sealed class OnBoardingPageInfo : Parcelable {
         val multipleSelectable: Boolean = false,
     ) : OnBoardingPageInfo() {
         companion object {
-            fun fromOnBoarding(onBoarding: OnBoarding) : SelectOnBoarding {
+            fun fromOnBoarding(onBoarding: OnBoarding): SelectOnBoarding {
                 return SelectOnBoarding(
                     id = onBoarding.id,
                     title = onBoarding.title,
@@ -31,9 +31,9 @@ sealed class OnBoardingPageInfo : Parcelable {
             private var lastSelectedIndex = 0
         }
 
-        val isItemSelected : Boolean get() = items.any { it.selectedIndex != null }
+        val isItemSelected: Boolean get() = items.any { it.selectedIndex != null }
 
-        fun selectItem(itemId: String) : SelectOnBoarding {
+        fun selectItem(itemId: String): SelectOnBoarding {
             return copy(
                 items = items.map {
                     if (it.id == itemId) {
@@ -51,7 +51,7 @@ sealed class OnBoardingPageInfo : Parcelable {
                             it
                         }
                     }
-                }
+                },
             )
         }
     }
@@ -59,7 +59,7 @@ sealed class OnBoardingPageInfo : Parcelable {
     @Parcelize
     data class Abstract(
         val prefix: String,
-        @Stable val abstractTexts: List<List<OnBoardingAbstractTextItem>>
+        @Stable val abstractTexts: List<List<OnBoardingAbstractTextItem>>,
     ) : OnBoardingPageInfo()
 
     @Parcelize
@@ -68,9 +68,9 @@ sealed class OnBoardingPageInfo : Parcelable {
             private var lastSelectedIndex = 0
         }
 
-        val isItemSelected : Boolean get() = routines.any { it.selectedIndex != null }
+        val isItemSelected: Boolean get() = routines.any { it.selectedIndex != null }
 
-        fun selectItem(itemId: String) : RecommendRoutines {
+        fun selectItem(itemId: String): RecommendRoutines {
             return copy(
                 routines = routines.map {
                     if (it.id == itemId) {
@@ -84,9 +84,8 @@ sealed class OnBoardingPageInfo : Parcelable {
                     } else {
                         it
                     }
-                }
+                },
             )
         }
     }
-
 }

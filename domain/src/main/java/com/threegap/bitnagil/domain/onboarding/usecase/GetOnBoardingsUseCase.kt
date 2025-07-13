@@ -5,7 +5,7 @@ import com.threegap.bitnagil.domain.onboarding.repository.OnBoardingRepository
 import javax.inject.Inject
 
 class GetOnBoardingsUseCase @Inject constructor(
-    private val onBoardingRepository: OnBoardingRepository
+    private val onBoardingRepository: OnBoardingRepository,
 ) {
     suspend operator fun invoke(): List<OnBoarding> {
         return onBoardingRepository.getOnBoardingList()

@@ -59,7 +59,7 @@ fun OnBoardingAbstractTemplate(
 
 @Composable
 private fun OnBoardingAbstractText(
-    onBoardingAbstractTextList: List<OnBoardingAbstractTextItem>
+    onBoardingAbstractTextList: List<OnBoardingAbstractTextItem>,
 ) {
     val annotatedString = buildAnnotatedString {
         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
@@ -75,6 +75,6 @@ private fun OnBoardingAbstractText(
 
     Text(
         text = annotatedString,
-        style = TextStyle(fontSize = 14.sp)
+        style = TextStyle(fontSize = 14.sp),
     )
 }

@@ -56,7 +56,7 @@ fun OnBoardingSelectTemplate(
                     onClick = {
                         onClickItem(item.id)
                     },
-                    selected = item.selected
+                    selected = item.selected,
                 )
             }
         }

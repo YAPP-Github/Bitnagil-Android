@@ -58,7 +58,7 @@ class OnBoardingViewModel @Inject constructor(
         intent: OnBoardingIntent,
         state: OnBoardingState,
     ): OnBoardingState? {
-        when(intent) {
+        when (intent) {
             is OnBoardingIntent.LoadOnBoardingSuccess -> {
                 onBoardingPageInfos.clear()
                 onBoardingPageInfos.addAll(intent.onBoardingPageInfos)
@@ -261,8 +261,7 @@ class OnBoardingViewModel @Inject constructor(
                     }
                 },
                 onFailure = {
-
-                }
+                },
             )
         }
     }
@@ -296,8 +295,7 @@ class OnBoardingViewModel @Inject constructor(
                     sendIntent(intent = OnBoardingIntent.NavigateToHome)
                 },
                 onFailure = {
-
-                }
+                },
             )
         }
     }

@@ -11,7 +11,7 @@ import com.threegap.bitnagil.domain.onboarding.repository.OnBoardingRepository
 import javax.inject.Inject
 
 class OnBoardingRepositoryImpl @Inject constructor(
-    private val onBoardingDataSource: OnBoardingDataSource
+    private val onBoardingDataSource: OnBoardingDataSource,
 ) : OnBoardingRepository {
     override suspend fun getOnBoardingList(): List<OnBoarding> {
         val onBoardingDtos = onBoardingDataSource.getOnBoardingList()
@@ -25,7 +25,9 @@ class OnBoardingRepositoryImpl @Inject constructor(
         return onBoardingAbstractDto.toOnBoardingAbstract()
     }
 
-    override suspend fun getRecommendOnBoardingRouteList(selectedItemIdsWithOnBoardingId: List<Pair<String, List<String>>>): Result<List<OnBoardingRecommendRoutine>> {
+    override suspend fun getRecommendOnBoardingRouteList(
+        selectedItemIdsWithOnBoardingId: List<Pair<String, List<String>>>,
+    ): Result<List<OnBoardingRecommendRoutine>> {
         val timeSlot = selectedItemIdsWithOnBoardingId.find { it.first == OnBoardingDto.TimeSlot.id }?.second?.first()
         val emotionType = selectedItemIdsWithOnBoardingId.find { it.first == OnBoardingDto.EmotionType.id }?.second?.first()
         val realOutingFrequency = selectedItemIdsWithOnBoardingId.find { it.first == OnBoardingDto.RealOutingFrequency.id }?.second?.first()
@@ -35,7 +37,7 @@ class OnBoardingRepositoryImpl @Inject constructor(
             timeSlot = timeSlot ?: "",
             emotionType = emotionType ?: "",
             realOutingFrequency = realOutingFrequency ?: "",
-            targetOutingFrequency = targetOutingFrequency ?: ""
+            targetOutingFrequency = targetOutingFrequency ?: "",
         )
 
         return onBoardingDataSource.getOnBoardingRecommendRoutines(request = request).map {
@@ -51,5 +53,4 @@ class OnBoardingRepositoryImpl @Inject constructor(
         // todo - 서버측 구현시 연결
         return Result.success(Unit)
     }
-
 }

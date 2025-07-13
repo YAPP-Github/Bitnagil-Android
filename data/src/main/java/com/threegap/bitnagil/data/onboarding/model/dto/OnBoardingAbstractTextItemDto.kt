@@ -9,7 +9,7 @@ data class OnBoardingAbstractTextItemDto(
     fun toOnBoardingAbstractTextItem(): OnBoardingAbstractTextItem {
         return OnBoardingAbstractTextItem(
             text = text,
-            isBold= isBold,
+            isBold = isBold,
         )
     }
 }

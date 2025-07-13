@@ -9,6 +9,6 @@ import retrofit2.http.POST
 interface OnBoardingService {
     @POST("/api/v1/onboarding")
     suspend fun postOnBoarding(
-        @Body onBoardingRecommendRoutinesRequest: GetOnBoardingRecommendRoutinesRequest
+        @Body onBoardingRecommendRoutinesRequest: GetOnBoardingRecommendRoutinesRequest,
     ): BaseResponse<GetOnBoardingRecommendRoutinesResponse>
 }

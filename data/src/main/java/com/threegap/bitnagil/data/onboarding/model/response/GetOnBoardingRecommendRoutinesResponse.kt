@@ -7,5 +7,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GetOnBoardingRecommendRoutinesResponse(
     @SerialName("recommendedRoutines")
-    val recommendedRoutines: List<OnBoardingRecommendRoutineDto>
+    val recommendedRoutines: List<OnBoardingRecommendRoutineDto>,
 )
