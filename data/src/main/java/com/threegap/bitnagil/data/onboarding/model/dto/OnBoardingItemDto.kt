@@ -72,14 +72,14 @@ data class OnBoardingItemDto(
 
         val Vitality = OnBoardingItemDto(
             id = "VITALITY",
-            title = "성장감",
-            description = "작은 변화라도 시작하고 싶어요",
+            title = "생동감",
+            description = "무기력을 이겨내고 활력을 찾고싶어요",
         )
 
         val Growth = OnBoardingItemDto(
             id = "GROWTH",
-            title = "생동감",
-            description = "무기력을 이겨내고 활력을 찾고싶어요",
+            title = "성장감",
+            description = "작은 변화라도 시작하고 싶어요",
         )
 
         val TargetOutingOneToTwoPerWeek = OnBoardingItemDto(
