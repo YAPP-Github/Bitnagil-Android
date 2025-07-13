@@ -1,16 +1,20 @@
 package com.threegap.bitnagil.data.onboarding.datasourceImpl
 
+import com.threegap.bitnagil.data.common.safeApiCall
 import com.threegap.bitnagil.data.onboarding.datasource.OnBoardingDataSource
 import com.threegap.bitnagil.data.onboarding.model.dto.OnBoardingAbstractDto
 import com.threegap.bitnagil.data.onboarding.model.dto.OnBoardingAbstractTextDto
 import com.threegap.bitnagil.data.onboarding.model.dto.OnBoardingAbstractTextItemDto
 import com.threegap.bitnagil.data.onboarding.model.dto.OnBoardingDto
 import com.threegap.bitnagil.data.onboarding.model.dto.OnBoardingItemDto
-import com.threegap.bitnagil.data.onboarding.model.dto.OnBoardingRecommendRoutineDto
 import com.threegap.bitnagil.data.onboarding.model.request.OnBoardingRecommendRoutinesRequest
+import com.threegap.bitnagil.data.onboarding.model.response.OnBoardingRecommendRoutinesResponse
+import com.threegap.bitnagil.data.onboarding.service.OnBoardingService
 import javax.inject.Inject
 
-class OnBoardingDataSourceImpl @Inject constructor() : OnBoardingDataSource {
+class OnBoardingDataSourceImpl @Inject constructor(
+    private val onBoardingService: OnBoardingService
+) : OnBoardingDataSource {
     private val onBoardingDtoList = listOf(
         OnBoardingDto.TimeSlot,
         OnBoardingDto.RealOutingFrequency,
@@ -22,8 +26,10 @@ class OnBoardingDataSourceImpl @Inject constructor() : OnBoardingDataSource {
         return onBoardingDtoList
     }
 
-    override suspend fun getOnBoardingRecommendRoutines(request: OnBoardingRecommendRoutinesRequest): Result<List<OnBoardingRecommendRoutineDto>> {
-        return Result.success(value = listOf())
+    override suspend fun getOnBoardingRecommendRoutines(request: OnBoardingRecommendRoutinesRequest): Result<OnBoardingRecommendRoutinesResponse> {
+        return safeApiCall {
+            onBoardingService.postOnBoarding(request)
+        }
     }
 
     override suspend fun getOnBoardingAbstract(selectedOnBoardingItemIdList: List<Pair<String, List<String>>>): OnBoardingAbstractDto {

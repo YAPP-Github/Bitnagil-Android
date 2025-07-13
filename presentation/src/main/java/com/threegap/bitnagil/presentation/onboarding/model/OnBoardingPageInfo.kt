@@ -7,7 +7,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 sealed class OnBoardingPageInfo : Parcelable {
-
     @Parcelize
     data class SelectOnBoarding(
         val id: String,
@@ -28,18 +27,26 @@ sealed class OnBoardingPageInfo : Parcelable {
                     multipleSelectable = onBoarding.multipleSelectable,
                 )
             }
+
+            private var lastSelectedIndex = 0
         }
 
-        val isItemSelected : Boolean get() = items.any { it.selected }
+        val isItemSelected : Boolean get() = items.any { it.selectedIndex != null }
 
         fun selectItem(itemId: String) : SelectOnBoarding {
             return copy(
                 items = items.map {
                     if (it.id == itemId) {
-                        it.copy(selected = !it.selected)
+                        val alreadySelected = (it.selectedIndex != null)
+                        val selectedIndex = if (alreadySelected) {
+                            null
+                        } else {
+                            lastSelectedIndex++
+                        }
+                        it.copy(selectedIndex = selectedIndex)
                     } else {
                         if (!multipleSelectable) {
-                            it.copy(selected = false)
+                            it.copy(selectedIndex = null)
                         } else {
                             it
                         }
@@ -57,13 +64,23 @@ sealed class OnBoardingPageInfo : Parcelable {
 
     @Parcelize
     data class RecommendRoutines(@Stable val routineList: List<OnBoardingItem>) : OnBoardingPageInfo() {
-        val isItemSelected : Boolean get() = routineList.any { it.selected }
+        companion object {
+            private var lastSelectedIndex = 0
+        }
+
+        val isItemSelected : Boolean get() = routineList.any { it.selectedIndex != null }
 
         fun selectItem(itemId: String) : RecommendRoutines {
             return copy(
                 routineList = routineList.map {
                     if (it.id == itemId) {
-                        it.copy(selected = !it.selected)
+                        val alreadySelected = (it.selectedIndex != null)
+                        val selectedIndex = if (alreadySelected) {
+                            null
+                        } else {
+                            lastSelectedIndex++
+                        }
+                        it.copy(selectedIndex = selectedIndex)
                     } else {
                         it
                     }

@@ -88,7 +88,7 @@ class OnBoardingViewModel @Inject constructor(
                         .map { onBoardingPage ->
                             val id = onBoardingPage.id
                             val selectedItemIds = onBoardingPage.items.filter { onBoardingItem ->
-                                onBoardingItem.selected
+                                onBoardingItem.selectedIndex != null
                             }.map { onBoardingItem ->
                                 onBoardingItem.id
                             }
@@ -200,14 +200,32 @@ class OnBoardingViewModel @Inject constructor(
 
     fun loadRecommendRoutines() {
         viewModelScope.launch {
-            val recommendRoutines = getRecommendOnBoardingRoutineListUseCase()
+            val selectedItems = onBoardingPageInfos
+                .map { onBoardingPage ->
+                    val id = onBoardingPage.id
+                    val selectedItemIds = onBoardingPage.items.filter { onBoardingItem ->
+                        onBoardingItem.selectedIndex != null
+                    }.sortedBy { onBoardingItem ->
+                        onBoardingItem.selectedIndex
+                    }.map { onBoardingItem ->
+                        onBoardingItem.id
+                    }
+                    Pair(id, selectedItemIds)
+                }
 
-            sendIntent(
-                intent = OnBoardingIntent.LoadRecommendRoutinesSuccess(
-                    routineList = recommendRoutines.map {
-                        OnBoardingItem.fromOnBoardingItem(it)
-                    },
-                ),
+            getRecommendOnBoardingRoutineListUseCase(selectedItems).fold(
+                onSuccess = { recommendRoutines ->
+                    sendIntent(
+                        intent = OnBoardingIntent.LoadRecommendRoutinesSuccess(
+                            routineList = recommendRoutines.map {
+                                OnBoardingItem.fromOnBoardingRecommendRoutine(it)
+                            },
+                        ),
+                    )
+                },
+                onFailure = {
+
+                }
             )
         }
     }
