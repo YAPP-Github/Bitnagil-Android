@@ -31,8 +31,17 @@ fun IconButton(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
+    val context = LocalContext.current
 
     val iconColor = if (isPressed) pressedColor else defaultColor
+
+    val imageLoader = remember {
+        ImageLoader.Builder(context)
+            .components {
+                add(SvgDecoder.Factory())
+            }
+            .build()
+    }
 
     Box(
         modifier = modifier
@@ -44,12 +53,6 @@ fun IconButton(
             ),
         contentAlignment = Alignment.Center, // 내부 아이콘을 중앙에 배치
     ) {
-        val imageLoader = ImageLoader.Builder(LocalContext.current)
-            .components {
-                add(SvgDecoder.Factory())
-            }
-            .build()
-
         Image(
             painter = rememberAsyncImagePainter(
                 model = svgResourceId, // 앱 리소스 ID 직접 사용

@@ -25,12 +25,12 @@ import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingAbstractTex
 fun OnBoardingAbstractTemplate(
     modifier: Modifier = Modifier,
     title: String,
-    moveToNext: () -> Unit,
     onBoardingAbstractTexts: List<List<OnBoardingAbstractTextItem>>,
+    onInit: () -> Unit,
     onDispose: () -> Unit,
 ) {
     DisposableEffect(Unit) {
-        moveToNext()
+        onInit()
 
         onDispose {
             onDispose()
@@ -46,7 +46,7 @@ fun OnBoardingAbstractTemplate(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        onBoardingAbstractTexts.map { onBoardingAbstractTextItemList ->
+        onBoardingAbstractTexts.forEach { onBoardingAbstractTextItemList ->
             Spacer(modifier = Modifier.height(2.dp))
             OnBoardingAbstractText(onBoardingAbstractTextList = onBoardingAbstractTextItemList)
         }
@@ -66,7 +66,7 @@ private fun OnBoardingAbstractText(
             append("• ")
         }
 
-        onBoardingAbstractTextList.map {
+        onBoardingAbstractTextList.forEach {
             withStyle(style = SpanStyle(fontWeight = if (it.isBold) FontWeight.Bold else null)) {
                 append(it.text)
             }

@@ -49,6 +49,7 @@ class OnBoardingDataSourceImpl @Inject constructor(
     }
 
     private fun getOnBoardingAbstractText(onBoardingId: String, selectedOnBoardingDetailIdList: List<String>): OnBoardingAbstractTextDto? {
+        if (selectedOnBoardingDetailIdList.isEmpty()) return null
         val onBoarding = onBoardingDtoList.find { it.id == onBoardingId }
         if (onBoarding == null) return null
 
@@ -121,7 +122,7 @@ class OnBoardingDataSourceImpl @Inject constructor(
                                     isBold = true,
                                 ),
                                 OnBoardingAbstractTextItemDto(
-                                    text = " 목표로 해볼꼐요!",
+                                    text = " 목표로 해볼게요!",
                                     isBold = false,
                                 ),
                             ),
@@ -135,7 +136,7 @@ class OnBoardingDataSourceImpl @Inject constructor(
                                     isBold = true,
                                 ),
                                 OnBoardingAbstractTextItemDto(
-                                    text = " 목표로 해볼께요!",
+                                    text = " 목표로 해볼게요!",
                                     isBold = false,
                                 ),
                             ),
@@ -149,7 +150,7 @@ class OnBoardingDataSourceImpl @Inject constructor(
                                     isBold = true,
                                 ),
                                 OnBoardingAbstractTextItemDto(
-                                    text = " 목표로 해볼께요!",
+                                    text = " 목표로 해볼게요!",
                                     isBold = false,
                                 ),
                             ),
@@ -163,7 +164,7 @@ class OnBoardingDataSourceImpl @Inject constructor(
                                     isBold = true,
                                 ),
                                 OnBoardingAbstractTextItemDto(
-                                    text = " 목표로 해볼께요!",
+                                    text = " 목표로 해볼게요!",
                                     isBold = false,
                                 ),
                             ),
@@ -223,7 +224,7 @@ class OnBoardingDataSourceImpl @Inject constructor(
                             onBoardingAbstractTextItemList.apply {
                                 add(
                                     OnBoardingAbstractTextItemDto(
-                                        text = "성장감",
+                                        text = "생동감",
                                         isBold = true,
                                     ),
                                 )
@@ -239,7 +240,7 @@ class OnBoardingDataSourceImpl @Inject constructor(
                             onBoardingAbstractTextItemList.apply {
                                 add(
                                     OnBoardingAbstractTextItemDto(
-                                        text = "생동감",
+                                        text = "성장감",
                                         isBold = true,
                                     ),
                                 )
