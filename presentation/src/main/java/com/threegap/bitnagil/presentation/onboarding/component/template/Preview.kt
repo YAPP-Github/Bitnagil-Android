@@ -34,5 +34,6 @@ fun OnBoardingTemplatePreview() {
         ),
         onClickNextButton = {},
         onClickItem = {},
+        onClickSkip = {},
     )
 }

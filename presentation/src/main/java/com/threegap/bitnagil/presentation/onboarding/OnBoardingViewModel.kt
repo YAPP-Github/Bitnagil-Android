@@ -299,4 +299,10 @@ class OnBoardingViewModel @Inject constructor(
             )
         }
     }
+
+    fun skipRegisterRecommendRoutines() {
+        viewModelScope.launch {
+            sendIntent(intent = OnBoardingIntent.NavigateToHome)
+        }
+    }
 }

@@ -15,18 +15,33 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.onboarding.component.atom.iconbutton.IconButton
 import com.threegap.bitnagil.presentation.onboarding.component.atom.progress.OnBoardingProgressBar
 import com.threegap.bitnagil.presentation.onboarding.component.template.OnBoardingAbstractTemplate
 import com.threegap.bitnagil.presentation.onboarding.component.template.OnBoardingSelectTemplate
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingPageInfo
+import com.threegap.bitnagil.presentation.onboarding.model.mvi.OnBoardingSideEffect
 import com.threegap.bitnagil.presentation.onboarding.model.mvi.OnBoardingState
 
 @Composable
 fun OnBoardingScreenContainer(
     onBoardingViewModel: OnBoardingViewModel = hiltViewModel(),
+    navigateToHome: () -> Unit,
+    navigateToBack: () -> Unit,
 ) {
     val state by onBoardingViewModel.stateFlow.collectAsState()
+
+    onBoardingViewModel.sideEffectFlow.collectAsEffect { sideEffect ->
+        when (sideEffect) {
+            OnBoardingSideEffect.MoveToPreviousScreen -> {
+                navigateToBack()
+            }
+            OnBoardingSideEffect.NavigateToHomeScreen -> {
+                navigateToHome()
+            }
+        }
+    }
 
     OnBoardingScreen(
         state = state,
@@ -37,11 +52,12 @@ fun OnBoardingScreenContainer(
         loadRecommendRoutines = onBoardingViewModel::loadRecommendRoutines,
         onClickRegister = onBoardingViewModel::registerRecommendRoutines,
         cancelRecommendRoutines = onBoardingViewModel::cancelLoadRecommendRoutines,
+        onClickSkip = onBoardingViewModel::skipRegisterRecommendRoutines,
     )
 }
 
 @Composable
-fun OnBoardingScreen(
+private fun OnBoardingScreen(
     state: OnBoardingState,
     onClickNext: () -> Unit,
     onClickPreviousInSelectOnBoarding: () -> Unit,
@@ -50,6 +66,7 @@ fun OnBoardingScreen(
     loadRecommendRoutines: () -> Unit,
     cancelRecommendRoutines: () -> Unit,
     onClickRegister: () -> Unit,
+    onClickSkip: () -> Unit,
 ) {
     Column(
         modifier = Modifier.background(color = Color(0xFFF7F7F8)),
@@ -90,6 +107,7 @@ fun OnBoardingScreen(
                             nextButtonEnable = state.nextButtonEnable,
                             onClickNextButton = onClickRegister,
                             onClickItem = onClickRoutine,
+                            onClickSkip = onClickSkip,
                         )
                     }
                     is OnBoardingPageInfo.SelectOnBoarding -> {
@@ -129,5 +147,6 @@ fun OnBoardingScreenPreview() {
         loadRecommendRoutines = {},
         onClickRegister = {},
         cancelRecommendRoutines = {},
+        onClickSkip = {},
     )
 }
