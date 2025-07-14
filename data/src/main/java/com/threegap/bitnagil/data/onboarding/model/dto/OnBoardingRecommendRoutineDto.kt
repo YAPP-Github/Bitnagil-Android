@@ -12,8 +12,8 @@ data class OnBoardingRecommendRoutineDto(
     val recommendedRoutineName: String,
     @SerialName("routineDescription")
     val routineDescription: String,
-    @SerialName("recommendedRoutineDetails")
-    val recommendedRoutineDetails: List<OnBoardingRecommendRoutineDetailDto>,
+    @SerialName("recommendedSubRoutines")
+    val recommendedSubRoutines: List<OnBoardingRecommendSubRoutineDto>,
 ) {
     fun toOnBoardingRecommendRoutine(): OnBoardingRecommendRoutine {
         return OnBoardingRecommendRoutine(

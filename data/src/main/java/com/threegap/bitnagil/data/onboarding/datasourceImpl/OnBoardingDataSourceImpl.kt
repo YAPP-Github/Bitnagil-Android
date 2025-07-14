@@ -8,6 +8,7 @@ import com.threegap.bitnagil.data.onboarding.model.dto.OnBoardingAbstractTextIte
 import com.threegap.bitnagil.data.onboarding.model.dto.OnBoardingDto
 import com.threegap.bitnagil.data.onboarding.model.dto.OnBoardingItemDto
 import com.threegap.bitnagil.data.onboarding.model.request.GetOnBoardingRecommendRoutinesRequest
+import com.threegap.bitnagil.data.onboarding.model.request.RegisterOnBoardingRecommendRoutinesRequest
 import com.threegap.bitnagil.data.onboarding.model.response.GetOnBoardingRecommendRoutinesResponse
 import com.threegap.bitnagil.data.onboarding.service.OnBoardingService
 import javax.inject.Inject
@@ -46,6 +47,13 @@ class OnBoardingDataSourceImpl @Inject constructor(
             prefixText = "당신은 지금",
             detailTextsList = onBoardingAbstractTextList,
         )
+    }
+
+    override suspend fun registerRecommendRoutineList(selectedRecommendRoutineIds: List<Int>): Result<Unit> {
+        val registerRecommendRoutineListRequest = RegisterOnBoardingRecommendRoutinesRequest(recommendedRoutineIds = selectedRecommendRoutineIds)
+        return safeApiCall {
+            onBoardingService.postOnBoardingRoutines(registerRecommendRoutineListRequest)
+        }
     }
 
     private fun getOnBoardingAbstractText(onBoardingId: String, selectedOnBoardingDetailIdList: List<String>): OnBoardingAbstractTextDto? {

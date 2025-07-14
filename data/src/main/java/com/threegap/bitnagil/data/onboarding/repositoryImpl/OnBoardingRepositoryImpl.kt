@@ -48,9 +48,10 @@ class OnBoardingRepositoryImpl @Inject constructor(
     }
 
     override suspend fun registerRecommendRoutineList(selectedRecommendRoutineIds: List<String>): Result<Unit> {
-        val request = RegisterOnBoardingRecommendRoutinesRequest(recommendedRoutineIds = selectedRecommendRoutineIds)
+        val request = RegisterOnBoardingRecommendRoutinesRequest(
+            recommendedRoutineIds = selectedRecommendRoutineIds.mapNotNull { it.toIntOrNull() },
+        )
 
-        // todo - 서버측 구현시 연결
-        return Result.success(Unit)
+        return onBoardingDataSource.registerRecommendRoutineList(selectedRecommendRoutineIds = request.recommendedRoutineIds)
     }
 }

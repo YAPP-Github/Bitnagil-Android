@@ -9,4 +9,5 @@ interface OnBoardingDataSource {
     suspend fun getOnBoardingList(): List<OnBoardingDto>
     suspend fun getOnBoardingRecommendRoutines(request: GetOnBoardingRecommendRoutinesRequest): Result<GetOnBoardingRecommendRoutinesResponse>
     suspend fun getOnBoardingAbstract(selectedOnBoardingItemIdList: List<Pair<String, List<String>>>): OnBoardingAbstractDto
+    suspend fun registerRecommendRoutineList(selectedRecommendRoutineIds: List<Int>): Result<Unit>
 }
