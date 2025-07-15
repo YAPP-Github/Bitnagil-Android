@@ -17,7 +17,7 @@ internal data class BitnagilTextStyle(
     val fontSize: Int,
     val lineHeight: Int,
     val letterSpacing: Float = 0f,
-    val decoration: TextDecoration? = null
+    val decoration: TextDecoration? = null,
 ) {
     val toDpTextStyle: TextStyle
         @Composable get() =
@@ -38,7 +38,7 @@ internal data class BitnagilTextStyle(
                 fontSize = fontSize.sp,
                 letterSpacing = letterSpacing.sp,
                 lineHeight = lineHeight.sp,
-                textDecoration = decoration
+                textDecoration = decoration,
             )
 }
 

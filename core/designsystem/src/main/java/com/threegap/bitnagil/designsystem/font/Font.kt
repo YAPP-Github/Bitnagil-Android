@@ -24,5 +24,5 @@ val pretendard = FontFamily(
     Font(R.font.pretendard_regular, FontWeight.W400, FontStyle.Normal),
     Font(R.font.pretendard_light, FontWeight.W300, FontStyle.Normal),
     Font(R.font.pretendard_extra_light, FontWeight.W200, FontStyle.Normal),
-    Font(R.font.pretendard_thin, FontWeight.W100, FontStyle.Normal)
+    Font(R.font.pretendard_thin, FontWeight.W100, FontStyle.Normal),
 )
