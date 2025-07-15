@@ -4,7 +4,6 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
-import androidx.compose.runtime.staticCompositionLocalOf
 import com.threegap.bitnagil.designsystem.color.BitnagilColors
 import com.threegap.bitnagil.designsystem.color.LocalBitnagilColors
 import com.threegap.bitnagil.designsystem.color.bitnagilColorsDark
@@ -30,13 +29,13 @@ fun BitnagilTheme(
     content: @Composable () -> Unit,
 ) {
     val colors = when {
-        darkTheme -> staticCompositionLocalOf { bitnagilColorsLight() }
-        else -> staticCompositionLocalOf { bitnagilColorsDark() }
+        darkTheme -> bitnagilColorsDark()
+        else -> bitnagilColorsLight()
     }
 
     CompositionLocalProvider(
         LocalBitnagilTypography provides LocalBitnagilTypography.current,
-        LocalBitnagilColors provides colors.current,
+        LocalBitnagilColors provides colors,
         content = content,
     )
 }
