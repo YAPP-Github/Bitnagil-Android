@@ -46,7 +46,7 @@ fun RoutineDifficultyBottomSheet(
                     onClick = {
                         val newDifficulty = if (selectedDifficulty == difficulty) null else difficulty
                         onDifficultySelected(newDifficulty)
-                    }
+                    },
                 )
 
                 if (index < RecommendRoutineDifficulty.entries.size - 1) {
@@ -72,7 +72,7 @@ private fun DifficultyOption(
         modifier = modifier
             // todo: 리플효과 제거하기
             .clickable { onClick() }
-            .padding(vertical = 8.dp)
+            .padding(vertical = 8.dp),
     ) {
         Text(
             text = optionText,
@@ -86,7 +86,7 @@ private fun DifficultyOption(
             Icon(
                 imageVector = Icons.Default.Check,
                 contentDescription = null,
-                tint = BitnagilTheme.colors.orange500
+                tint = BitnagilTheme.colors.orange500,
             )
         }
     }
@@ -98,7 +98,7 @@ private fun RoutineDifficultyBottomSheetPreview() {
     RoutineDifficultyBottomSheet(
         selectedDifficulty = null,
         onDifficultySelected = {},
-        onDismiss = {}
+        onDismiss = {},
     )
 }
 
@@ -108,7 +108,6 @@ private fun DifficultyOptionPreview() {
     DifficultyOption(
         optionText = "가볍게 할 수 있어요",
         isSelected = true,
-        onClick = {}
+        onClick = {},
     )
 }
-

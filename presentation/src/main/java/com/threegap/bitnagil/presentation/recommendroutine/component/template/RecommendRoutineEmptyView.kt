@@ -19,11 +19,11 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 @Composable
 fun RecommendRoutineEmptyView(
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
+        modifier = modifier,
     ) {
         Text(
             text = "맞춤 추천 루틴이 없어요",
@@ -46,14 +46,14 @@ fun RecommendRoutineEmptyView(
             modifier = Modifier
                 .background(
                     color = BitnagilTheme.colors.navy50,
-                    shape = RoundedCornerShape(100.dp)
+                    shape = RoundedCornerShape(100.dp),
                 )
                 // todo: 리플효과 제거하기
                 .clickable { onClick() }
                 .padding(
                     vertical = 8.dp,
-                    horizontal = 10.dp
-                )
+                    horizontal = 10.dp,
+                ),
         ) {
             Text(
                 text = "루틴 등록하기",
@@ -68,6 +68,6 @@ fun RecommendRoutineEmptyView(
 @Composable
 private fun RecommendRoutineEmptyViewPreview() {
     RecommendRoutineEmptyView(
-        onClick = {}
+        onClick = {},
     )
 }

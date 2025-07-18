@@ -23,7 +23,7 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 @Composable
 fun EmotionRecommendRoutineButton(
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
