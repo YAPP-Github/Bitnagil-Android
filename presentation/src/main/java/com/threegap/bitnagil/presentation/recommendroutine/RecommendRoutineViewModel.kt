@@ -21,18 +21,21 @@ class RecommendRoutineViewModel @Inject constructor(
 ) {
 
     init {
-        sendIntent(RecommendRoutineIntent.LoadRecommendRoutines)
+        loadRecommendRoutines()
     }
 
     override suspend fun SimpleSyntax<RecommendRoutineState, RecommendRoutineSideEffect>.reduceState(
         intent: RecommendRoutineIntent,
         state: RecommendRoutineState,
     ): RecommendRoutineState? = when (intent) {
+        is RecommendRoutineIntent.SetLoading -> {
+            state.copy(isLoading = intent.isLoading)
+        }
+
         is RecommendRoutineIntent.LoadRecommendRoutines -> {
-            val dummyRecommendRoutines = generateDummyRecommendRoutine()
             state.copy(
                 isLoading = false,
-                recommendRoutines = dummyRecommendRoutines,
+                recommendRoutines = intent.recommendRoutines,
             )
         }
 
@@ -56,6 +59,17 @@ class RecommendRoutineViewModel @Inject constructor(
         RecommendRoutineIntent.ClearDifficultyFilter -> state.copy(
             selectedDifficulty = null,
         )
+    }
+
+    private fun loadRecommendRoutines() {
+        sendIntent(RecommendRoutineIntent.SetLoading(true))
+        try {
+            val recommendRoutines = generateDummyRecommendRoutine()
+            sendIntent(RecommendRoutineIntent.LoadRecommendRoutines(recommendRoutines))
+        } catch (e: Exception) {
+            sendIntent(RecommendRoutineIntent.SetLoading(false))
+            // todo: 실제 api 연결에서는 예외처리
+        }
     }
 
     private fun generateDummyRecommendRoutine(): Map<RecommendRoutineCategory, List<RecommendRoutine>> {
