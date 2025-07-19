@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomTimePickerStyle" parent="@android:style/Theme.Material.Light">
+        <item name="android:timePickerMode">spinner</item>
+        <item name="android:textColorPrimary">#171719</item>
+        <item name="android:textColorSecondary">#171719</item>
+        <item name="colorControlNormal">#A9D0FF</item>
+    </style>
+</resources>

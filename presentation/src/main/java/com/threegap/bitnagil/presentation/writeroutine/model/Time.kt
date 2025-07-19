@@ -7,4 +7,9 @@ import kotlinx.parcelize.Parcelize
 data class Time(
     val hour: Int,
     val minute: Int,
-) : Parcelable
+) : Parcelable {
+    companion object {
+        val Init = Time(hour = 12, minute = 0)
+        val AllDay = Time(hour = 23, minute = 59)
+    }
+}

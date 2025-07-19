@@ -15,4 +15,6 @@ sealed class WriteRoutineIntent : MviIntent {
     data class SetPeriodWeek(val periodWeek: Int): WriteRoutineIntent()
     data class SetStartTime(val time: Time): WriteRoutineIntent()
     data object SelectAllTime: WriteRoutineIntent()
+    data object ShowTimePickerBottomSheet: WriteRoutineIntent()
+    data object HideTimePickerBottomSheet: WriteRoutineIntent()
 }
