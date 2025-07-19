@@ -74,7 +74,11 @@ class RecommendRoutineViewModel @Inject constructor(
 
     private fun generateDummyRecommendRoutine(): Map<RecommendRoutineCategory, List<RecommendRoutine>> {
         return mapOf(
-            RecommendRoutineCategory.CUSTOM_RECOMMEND to emptyList(),
+            RecommendRoutineCategory.CUSTOM_RECOMMEND to listOf(
+                RecommendRoutine("추천 루틴", "추천 루틴임", RecommendRoutineDifficulty.EASY),
+                RecommendRoutine("추천 루틴22", "추천 루틴임22", RecommendRoutineDifficulty.NORMAL),
+                RecommendRoutine("추천 루틴33", "추천 루틴임33", RecommendRoutineDifficulty.NORMAL),
+            ),
             RecommendRoutineCategory.GO_OUT to listOf(
                 RecommendRoutine("나가는 루틴", "밖으로 나가보자고", RecommendRoutineDifficulty.EASY),
                 RecommendRoutine("나가는 루틴22", "밖으로 나가보자고", RecommendRoutineDifficulty.NORMAL),
@@ -85,7 +89,13 @@ class RecommendRoutineViewModel @Inject constructor(
                 RecommendRoutine("나가는 루틴77", "밖으로 나가보자고", RecommendRoutineDifficulty.EASY),
                 RecommendRoutine("나가는 루틴88", "밖으로 나가보자고", RecommendRoutineDifficulty.NORMAL),
             ),
-            RecommendRoutineCategory.WAKE_UP to emptyList(),
+            RecommendRoutineCategory.WAKE_UP to listOf(
+                RecommendRoutine("깨어나요 루틴", "깨어나요 루틴임", RecommendRoutineDifficulty.EASY),
+                RecommendRoutine("깨어나요 루틴22", "깨어나요 루틴임22", RecommendRoutineDifficulty.NORMAL),
+                RecommendRoutine("깨어나요 루틴33", "깨어나요 루틴임33", RecommendRoutineDifficulty.HARD),
+                RecommendRoutine("깨어나요 루틴44", "깨어나요 루틴임44", RecommendRoutineDifficulty.EASY),
+                RecommendRoutine("깨어나요 루틴55", "깨어나요 루틴임55", RecommendRoutineDifficulty.NORMAL),
+            ),
             RecommendRoutineCategory.CONNECT to listOf(
                 RecommendRoutine("연결해요 루틴", "연결하는 루틴임", RecommendRoutineDifficulty.EASY),
                 RecommendRoutine("연결해요 루틴22", "연결하는 루틴임22", RecommendRoutineDifficulty.NORMAL),

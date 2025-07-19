@@ -23,7 +23,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,7 +33,6 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.presentation.recommendroutine.component.atom.RecommendCategoryChip
 import com.threegap.bitnagil.presentation.recommendroutine.component.block.EmotionRecommendRoutineButton
 import com.threegap.bitnagil.presentation.recommendroutine.component.block.RecommendRoutineItem
-import com.threegap.bitnagil.presentation.recommendroutine.component.template.RecommendRoutineEmptyView
 import com.threegap.bitnagil.presentation.recommendroutine.component.template.RoutineDifficultyBottomSheet
 import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutineIntent
 import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutineState
@@ -161,68 +159,24 @@ private fun RecommendRoutineScreen(
         Column(
             modifier = Modifier.padding(horizontal = 16.dp),
         ) {
-            when {
-                uiState.isDefaultCategory && uiState.currentRoutines.isEmpty() -> {
-                    EmotionRecommendRoutineButton(
-                        onClick = {},
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    RecommendRoutineEmptyView(
-                        onClick = {},
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(top = 96.dp),
-                    )
-                }
-
-                uiState.isDefaultCategory && uiState.currentRoutines.isNotEmpty() -> {
-                    LazyColumn(
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
-                    ) {
-                        items(
-                            items = uiState.currentRoutines,
-                            key = { "${uiState.selectedCategory.name}_${it.name}" },
-                        ) { routine ->
-                            RecommendRoutineItem(
-                                routineName = routine.name,
-                                routineDescription = routine.description,
-                                onAddRoutineClick = {},
-                            )
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    EmotionRecommendRoutineButton(
-                        onClick = {},
-                    )
-                }
-
-                !uiState.isDefaultCategory && uiState.currentRoutines.isNotEmpty() -> {
-                    LazyColumn(
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
-                    ) {
-                        items(
-                            items = uiState.currentRoutines,
-                            key = { "${uiState.selectedCategory.name}_${it.name}" },
-                        ) { routine ->
-                            RecommendRoutineItem(
-                                routineName = routine.name,
-                                routineDescription = routine.description,
-                                onAddRoutineClick = {},
-                            )
-                        }
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                if (uiState.isDefaultCategory) {
+                    item {
+                        EmotionRecommendRoutineButton(
+                            onClick = {},
+                        )
                     }
                 }
-
-                else -> {
-                    RecommendRoutineEmptyView(
-                        onClick = {},
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(top = 160.dp),
+                items(
+                    items = uiState.currentRoutines,
+                    key = { "${uiState.selectedCategory.name}_${it.name}" },
+                ) { routine ->
+                    RecommendRoutineItem(
+                        routineName = routine.name,
+                        routineDescription = routine.description,
+                        onAddRoutineClick = {},
                     )
                 }
             }
