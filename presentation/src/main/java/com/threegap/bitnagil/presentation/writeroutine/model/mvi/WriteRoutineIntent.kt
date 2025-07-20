@@ -4,6 +4,7 @@ import com.threegap.bitnagil.presentation.common.mviviewmodel.MviIntent
 import com.threegap.bitnagil.presentation.writeroutine.model.Day
 import com.threegap.bitnagil.presentation.writeroutine.model.RepeatType
 import com.threegap.bitnagil.presentation.writeroutine.model.Time
+import com.threegap.bitnagil.presentation.writeroutine.model.WriteRoutineType
 
 sealed class WriteRoutineIntent : MviIntent {
     data class SetRoutineName(val name: String): WriteRoutineIntent()
@@ -14,6 +15,7 @@ sealed class WriteRoutineIntent : MviIntent {
     data class SelectDay(val day: Day): WriteRoutineIntent()
     data class SetPeriodWeek(val periodWeek: Int): WriteRoutineIntent()
     data class SetStartTime(val time: Time): WriteRoutineIntent()
+    data class SetWriteRoutineType(val writeRoutineType: WriteRoutineType): WriteRoutineIntent()
     data object SelectAllTime: WriteRoutineIntent()
     data object ShowTimePickerBottomSheet: WriteRoutineIntent()
     data object HideTimePickerBottomSheet: WriteRoutineIntent()

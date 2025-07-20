@@ -2,13 +2,16 @@ package com.threegap.bitnagil.presentation.writeroutine
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
 import com.threegap.bitnagil.presentation.writeroutine.model.Day
 import com.threegap.bitnagil.presentation.writeroutine.model.RepeatType
 import com.threegap.bitnagil.presentation.writeroutine.model.Time
+import com.threegap.bitnagil.presentation.writeroutine.model.WriteRoutineType
 import com.threegap.bitnagil.presentation.writeroutine.model.mvi.WriteRoutineIntent
 import com.threegap.bitnagil.presentation.writeroutine.model.mvi.WriteRoutineSideEffect
 import com.threegap.bitnagil.presentation.writeroutine.model.mvi.WriteRoutineState
+import com.threegap.bitnagil.presentation.writeroutine.model.navarg.WriteRoutineScreenArg
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
@@ -21,6 +24,35 @@ class WriteRoutineViewModel @Inject constructor(
     initState = WriteRoutineState.Init,
     savedStateHandle = savedStateHandle,
 ) {
+    init {
+        val navigationArg = try {
+            savedStateHandle.toRoute<WriteRoutineScreenArg>()
+        } catch (e : IllegalArgumentException) {
+            WriteRoutineScreenArg.Add(baseRoutineId = null)
+        }
+
+        initResource(navigationArg)
+    }
+
+    private fun initResource(navigationArg: WriteRoutineScreenArg) {
+        when(navigationArg) {
+            is WriteRoutineScreenArg.Add -> {
+                viewModelScope.launch {
+                    sendIntent(WriteRoutineIntent.SetWriteRoutineType(WriteRoutineType.ADD))
+                }
+
+                // routineId가 존재할 시 이에 해당하는 루틴 조회 후 반영
+            }
+            is WriteRoutineScreenArg.Edit -> {
+                viewModelScope.launch {
+                    sendIntent(WriteRoutineIntent.SetWriteRoutineType(WriteRoutineType.EDIT))
+                }
+
+                // routineId 에 해당하는 루틴 조회 후 반영
+            }
+        }
+    }
+
     override suspend fun SimpleSyntax<WriteRoutineState, WriteRoutineSideEffect>.reduceState(
         intent: WriteRoutineIntent,
         state: WriteRoutineState,
@@ -93,6 +125,11 @@ class WriteRoutineViewModel @Inject constructor(
             WriteRoutineIntent.HideTimePickerBottomSheet -> {
                 return state.copy(
                     showTimePickerBottomSheet = false
+                )
+            }
+            is WriteRoutineIntent.SetWriteRoutineType -> {
+                return state.copy(
+                    writeRoutineType = intent.writeRoutineType
                 )
             }
         }

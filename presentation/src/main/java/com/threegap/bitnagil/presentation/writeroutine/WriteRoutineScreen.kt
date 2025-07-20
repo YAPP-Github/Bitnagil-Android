@@ -27,16 +27,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
-import com.threegap.bitnagil.presentation.onboarding.component.atom.textbutton.TextButton
+import com.threegap.bitnagil.presentation.writeroutine.component.atom.textbutton.TextButton
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.namefield.NameField
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.selectcell.SelectCell
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.strokebutton.StrokeButton
+import com.threegap.bitnagil.presentation.writeroutine.component.atom.tooltipbutton.TooltipButton
 import com.threegap.bitnagil.presentation.writeroutine.component.block.labeledcheckbox.LabeledCheckBox
 import com.threegap.bitnagil.presentation.writeroutine.component.template.TImePickerBottomSheet
 import com.threegap.bitnagil.presentation.writeroutine.model.Day
 import com.threegap.bitnagil.presentation.writeroutine.model.RepeatType
 import com.threegap.bitnagil.presentation.writeroutine.model.SelectableDay
 import com.threegap.bitnagil.presentation.writeroutine.model.Time
+import com.threegap.bitnagil.presentation.writeroutine.model.WriteRoutineType
 import com.threegap.bitnagil.presentation.writeroutine.model.mvi.WriteRoutineState
 
 @Composable
@@ -93,12 +95,18 @@ private fun WriteRoutineScreen(
                     .padding(start = 4.dp)
                     .align(alignment = Alignment.CenterStart)
                     .size(36.dp)
-                    .clickable { }
-                    .background(BitnagilTheme.colors.coolGray50)
-            )
+                    .clickable { },
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.ic_media_play,),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
 
             Text(
-                "루틴 등록",
+                if (state.writeRoutineType == WriteRoutineType.ADD) "루틴 등록" else "루틴 수정",
                 modifier = Modifier.align(alignment = Alignment.Center),
                 style = BitnagilTheme.typography.title3SemiBold,
             )
@@ -137,11 +145,17 @@ private fun WriteRoutineScreen(
             Spacer(modifier = Modifier.height(40.dp))
 
             Column {
-                Row {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Text(
                         "세부 루틴",
                         style = BitnagilTheme.typography.body1SemiBold,
                     )
+
+                    Spacer(modifier = Modifier.width(2.dp))
+
+                    TooltipButton("어려운 루틴이라면 단계별로 나눠보세요!")
                 }
 
                 Spacer(modifier = Modifier.height(14.dp))
@@ -155,7 +169,7 @@ private fun WriteRoutineScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Image(
-                            painter = painterResource(R.drawable.ic_delete,),
+                            painter = painterResource(R.drawable.ic_media_play,),
                             contentDescription = null,
                             modifier = Modifier.size(20.dp)
                         )
@@ -183,10 +197,18 @@ private fun WriteRoutineScreen(
             Spacer(modifier = Modifier.height(40.dp))
 
             Column {
-                Row {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Text(
                         "루틴 반복",
                         style = BitnagilTheme.typography.body1SemiBold,
+                    )
+
+                    Spacer(modifier = Modifier.width(2.dp))
+
+                    TooltipButton(
+                        "선택하지 않을 경우, 당일 루틴으로만 자동 설정돼요."
                     )
                 }
 
@@ -278,7 +300,7 @@ private fun WriteRoutineScreen(
                         Spacer(modifier = Modifier.weight(1f))
 
                         Image(
-                            painter = painterResource(R.drawable.ic_delete,),
+                            painter = painterResource(R.drawable.ic_media_play,),
                             contentDescription = null,
                             modifier = Modifier.size(20.dp)
                         )
@@ -293,7 +315,7 @@ private fun WriteRoutineScreen(
             modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 14.dp),
             text = "등록하기",
             onClick = {},
-            enabled = false
+            enabled = state.registerButtonEnabled
         )
     }
 }
@@ -345,6 +367,7 @@ fun WriteRoutineScreenPreview() {
                 selectAllTime = false,
                 loading = false,
                 showTimePickerBottomSheet = false,
+                writeRoutineType = WriteRoutineType.ADD
             ),
             setRoutineName = {},
             setSubRoutineName = { _, _ -> },

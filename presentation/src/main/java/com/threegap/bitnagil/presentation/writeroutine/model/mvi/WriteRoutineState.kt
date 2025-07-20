@@ -5,6 +5,7 @@ import com.threegap.bitnagil.presentation.writeroutine.model.Day
 import com.threegap.bitnagil.presentation.writeroutine.model.RepeatType
 import com.threegap.bitnagil.presentation.writeroutine.model.SelectableDay
 import com.threegap.bitnagil.presentation.writeroutine.model.Time
+import com.threegap.bitnagil.presentation.writeroutine.model.WriteRoutineType
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -18,6 +19,7 @@ data class WriteRoutineState(
     val selectAllTime: Boolean,
     val loading: Boolean,
     val showTimePickerBottomSheet: Boolean,
+    val writeRoutineType: WriteRoutineType,
 ): MviState {
     companion object {
         val Init = WriteRoutineState(
@@ -59,6 +61,12 @@ data class WriteRoutineState(
             selectAllTime = false,
             loading = false,
             showTimePickerBottomSheet = false,
+            writeRoutineType = WriteRoutineType.ADD,
         )
     }
+
+    val registerButtonEnabled: Boolean
+        get() = routineName.isNotEmpty() &&
+            (repeatType == RepeatType.DAILY || (repeatType == RepeatType.DAY && repeatDays.any { it.selected })) &&
+            startTime != null
 }
