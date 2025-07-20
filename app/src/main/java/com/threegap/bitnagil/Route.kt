@@ -18,4 +18,10 @@ sealed interface Route {
 
     @Serializable
     data object Home : Route
+
+    @Serializable
+    data class WebView(
+        val title: String,
+        val url: String,
+    ) : Route
 }
