@@ -10,8 +10,8 @@ import com.threegap.bitnagil.data.writeroutine.service.WriteRoutineService
 import javax.inject.Inject
 
 class WriteRoutineDataSourceImpl @Inject constructor(
-    private val writeRoutineService: WriteRoutineService
-): WriteRoutineDataSource{
+    private val writeRoutineService: WriteRoutineService,
+) : WriteRoutineDataSource {
     override suspend fun registerRoutine(request: RegisterRoutineRequest): Result<Unit> {
         return safeApiCall {
             writeRoutineService.postRoutine(request)
@@ -34,9 +34,9 @@ class WriteRoutineDataSourceImpl @Inject constructor(
                 SubRoutineDto(
                     subRoutineId = "id1",
                     subRoutineName = "서브루틴 1",
-                    sortOrder = 1
-                )
-            )
+                    sortOrder = 1,
+                ),
+            ),
         )
         return Result.success(routineDto)
     }

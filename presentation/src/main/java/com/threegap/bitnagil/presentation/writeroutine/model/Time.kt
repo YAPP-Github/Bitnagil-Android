@@ -18,7 +18,7 @@ data class Time(
         }
     }
 
-    fun toDomainTime(): DomainTime{
+    fun toDomainTime(): DomainTime {
         return DomainTime(hour = hour, minute = minute)
     }
 }

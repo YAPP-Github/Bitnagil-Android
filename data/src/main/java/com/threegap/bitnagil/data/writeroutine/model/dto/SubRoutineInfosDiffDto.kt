@@ -11,14 +11,14 @@ data class SubRoutineInfosDiffDto(
     @SerialName("subRoutineName")
     val subRoutineName: String?,
     @SerialName("sortOrder")
-    val sortOrder: Int?
+    val sortOrder: Int?,
 ) {
     companion object {
         fun fromSubRoutineDiff(subRoutineDiff: SubRoutineDiff): SubRoutineInfosDiffDto {
             return SubRoutineInfosDiffDto(
                 subRoutineId = subRoutineDiff.id,
                 subRoutineName = subRoutineDiff.name,
-                sortOrder = subRoutineDiff.sort
+                sortOrder = subRoutineDiff.sort,
             )
         }
     }

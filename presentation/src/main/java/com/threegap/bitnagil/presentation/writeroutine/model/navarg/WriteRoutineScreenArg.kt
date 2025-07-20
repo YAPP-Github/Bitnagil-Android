@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 sealed class WriteRoutineScreenArg {
     @Serializable
     data class Add(val baseRoutineId: String?) : WriteRoutineScreenArg()
+
     @Serializable
     data class Edit(val routineId: String) : WriteRoutineScreenArg()
 }

@@ -21,7 +21,7 @@ class StrokeButton {
             isSelected: Boolean,
             onClick: () -> Unit,
             modifier: Modifier = Modifier,
-            enabled: Boolean = true
+            enabled: Boolean = true,
         ) {
             val textColor = if (isSelected) BitnagilTheme.colors.navy500 else BitnagilTheme.colors.navy100
 
@@ -33,11 +33,11 @@ class StrokeButton {
             ) {
                 Box(
                     modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Center,
                 ) {
                     Text(
                         text = text,
-                        style = BitnagilTheme.typography.body2SemiBold.copy(color = textColor)
+                        style = BitnagilTheme.typography.body2SemiBold.copy(color = textColor),
                     )
                 }
             }
@@ -49,7 +49,7 @@ class StrokeButton {
             isSelected: Boolean,
             onClick: () -> Unit,
             enabled: Boolean = true,
-            content: @Composable () -> Unit
+            content: @Composable () -> Unit,
         ) {
             StrokeButtonFrame(
                 modifier = modifier,
@@ -69,7 +69,7 @@ private fun StrokeButtonFrame(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val borderColor = if (isSelected) BitnagilTheme.colors.navy500 else BitnagilTheme.colors.navy100
 
@@ -79,10 +79,10 @@ private fun StrokeButtonFrame(
             .border(
                 width = 1.5.dp,
                 color = borderColor,
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(12.dp),
             )
             .clickable(enabled = enabled, onClick = onClick),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         content()
     }

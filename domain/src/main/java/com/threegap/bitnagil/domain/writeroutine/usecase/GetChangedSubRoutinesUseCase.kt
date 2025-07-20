@@ -21,16 +21,16 @@ class GetChangedSubRoutinesUseCase @Inject constructor() {
                     SubRoutineDiff(
                         id = null,
                         name = name,
-                        sort = sort
-                    )
+                        sort = sort,
+                    ),
                 )
             } else if (oldSubRoutine.sort != sort) {
                 changedSubRoutines.add(
                     SubRoutineDiff(
                         id = oldSubRoutine.id,
                         name = oldSubRoutine.name,
-                        sort = sort
-                    )
+                        sort = sort,
+                    ),
                 )
             }
         }
@@ -45,8 +45,8 @@ class GetChangedSubRoutinesUseCase @Inject constructor() {
                     SubRoutineDiff(
                         id = newSubRoutine.id,
                         name = null,
-                        sort = null
-                    )
+                        sort = null,
+                    ),
                 )
             }
         }

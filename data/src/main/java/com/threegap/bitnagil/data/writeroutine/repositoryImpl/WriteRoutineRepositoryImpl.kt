@@ -12,19 +12,25 @@ import com.threegap.bitnagil.domain.writeroutine.repository.WriteRoutineReposito
 import javax.inject.Inject
 
 class WriteRoutineRepositoryImpl @Inject constructor(
-    private val writeRoutineDataSource: WriteRoutineDataSource
-): WriteRoutineRepository {
+    private val writeRoutineDataSource: WriteRoutineDataSource,
+) : WriteRoutineRepository {
     override suspend fun registerRoutine(name: String, repeatDay: List<RepeatDay>, startTime: Time, subRoutines: List<String>): Result<Unit> {
         val request = RegisterRoutineRequest(
             routineName = name,
             repeatDay = repeatDay.map { it.name },
             executionTime = startTime.toString(),
-            subRoutineName = subRoutines
+            subRoutineName = subRoutines,
         )
         return writeRoutineDataSource.registerRoutine(request)
     }
 
-    override suspend fun editRoutine(routineId: String, name: String, repeatDay: List<RepeatDay>, startTime: Time, subRoutines: List<SubRoutineDiff>): Result<Unit> {
+    override suspend fun editRoutine(
+        routineId: String,
+        name: String,
+        repeatDay: List<RepeatDay>,
+        startTime: Time,
+        subRoutines: List<SubRoutineDiff>,
+    ): Result<Unit> {
         val request = EditRoutineRequest(
             routineId = routineId,
             routineName = name,
@@ -32,7 +38,7 @@ class WriteRoutineRepositoryImpl @Inject constructor(
             executionTime = startTime.toString(),
             subRoutineInfos = subRoutines.map {
                 SubRoutineInfosDiffDto.fromSubRoutineDiff(it)
-            }
+            },
         )
 
         return writeRoutineDataSource.editRoutine(request)

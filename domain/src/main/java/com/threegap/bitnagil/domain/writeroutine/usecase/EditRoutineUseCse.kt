@@ -7,21 +7,21 @@ import com.threegap.bitnagil.domain.writeroutine.repository.WriteRoutineReposito
 import javax.inject.Inject
 
 class EditRoutineUseCse @Inject constructor(
-    private val writeRoutineRepository: WriteRoutineRepository
-){
+    private val writeRoutineRepository: WriteRoutineRepository,
+) {
     suspend operator fun invoke(
         routineId: String,
         name: String,
         repeatDay: List<RepeatDay>,
         startTime: Time,
         subRoutines: List<SubRoutineDiff>,
-    ): Result<Unit>  {
+    ): Result<Unit> {
         return writeRoutineRepository.editRoutine(
             routineId = routineId,
             name = name,
             repeatDay = repeatDay,
             startTime = startTime,
-            subRoutines = subRoutines
+            subRoutines = subRoutines,
         )
     }
 }

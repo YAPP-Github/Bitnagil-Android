@@ -20,7 +20,7 @@ data class WriteRoutineState(
     val loading: Boolean,
     val showTimePickerBottomSheet: Boolean,
     val writeRoutineType: WriteRoutineType,
-): MviState {
+) : MviState {
     companion object {
         val Init = WriteRoutineState(
             routineName = "",
@@ -29,32 +29,32 @@ data class WriteRoutineState(
             repeatDays = listOf(
                 SelectableDay(
                     day = Day.MON,
-                    selected = false
+                    selected = false,
                 ),
                 SelectableDay(
                     day = Day.TUE,
-                    selected = false
+                    selected = false,
                 ),
                 SelectableDay(
                     day = Day.WED,
-                    selected = false
+                    selected = false,
                 ),
                 SelectableDay(
                     day = Day.THU,
-                    selected = false
+                    selected = false,
                 ),
                 SelectableDay(
                     day = Day.FRI,
-                    selected = false
+                    selected = false,
                 ),
                 SelectableDay(
                     day = Day.SAT,
-                    selected = false
+                    selected = false,
                 ),
                 SelectableDay(
                     day = Day.SUN,
-                    selected = false
-                )
+                    selected = false,
+                ),
             ),
             periodWeek = null,
             startTime = null,

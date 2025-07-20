@@ -36,15 +36,15 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
-import com.threegap.bitnagil.presentation.writeroutine.component.atom.tooltipbutton.model.CustomTooltipPositionProvider
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.tooltipbutton.model.TooltipDirection
+import com.threegap.bitnagil.presentation.writeroutine.component.atom.tooltipbutton.model.TooltipPositionProvider
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TooltipButton(
     tooltipText: String,
-    tooltipDirection: TooltipDirection = TooltipDirection.Left
+    tooltipDirection: TooltipDirection = TooltipDirection.Left,
 ) {
     val tooltipState = rememberTooltipState()
     val coroutineScope = rememberCoroutineScope()
@@ -54,27 +54,27 @@ fun TooltipButton(
 
     TooltipBox(
         positionProvider = remember {
-            CustomTooltipPositionProvider(
+            TooltipPositionProvider(
                 direction = tooltipDirection,
-                addPositionX = tooltipPositionX
+                addPositionX = tooltipPositionX,
             )
         },
         tooltip = {
             Column(
-                modifier = Modifier.padding(bottom = 2.dp)
+                modifier = Modifier.padding(bottom = 2.dp),
             ) {
                 Text(
                     tooltipText,
                     modifier = Modifier
                         .background(
                             color = BitnagilTheme.colors.navy400,
-                            shape = RoundedCornerShape(8.dp)
+                            shape = RoundedCornerShape(8.dp),
                         )
                         .clickable {
                             tooltipState.dismiss()
                         }
                         .padding(10.dp),
-                    style = BitnagilTheme.typography.caption1Medium.copy(color = BitnagilTheme.colors.white)
+                    style = BitnagilTheme.typography.caption1Medium.copy(color = BitnagilTheme.colors.white),
                 )
 
                 Canvas(
@@ -85,14 +85,14 @@ fun TooltipButton(
                             IntOffset(x = tooltipPositionX + (buttonSize.width / 2) - 8.dp.toPx().toInt(), y = 0)
                         },
                 ) {
-                    drawTooltipArrow(this, tooltipBoxColor,)
+                    drawTooltipArrow(this, tooltipBoxColor)
                 }
             }
         },
         state = tooltipState,
     ) {
         Image(
-            painter = painterResource(R.drawable.ic_menu_info_details,),
+            painter = painterResource(R.drawable.ic_menu_info_details),
             contentDescription = null,
             modifier = Modifier
                 .size(24.dp)
@@ -103,12 +103,12 @@ fun TooltipButton(
                 }
                 .onGloballyPositioned { coordinate ->
                     buttonSize = coordinate.size
-                }
+                },
         )
     }
 }
 
-private fun DrawScope.drawTooltipArrow(scope: DrawScope, color: Color,) {
+private fun DrawScope.drawTooltipArrow(scope: DrawScope, color: Color) {
     val path = Path().apply {
         moveTo(0f, 0f)
         lineTo(size.width / 2, size.height)
@@ -117,7 +117,7 @@ private fun DrawScope.drawTooltipArrow(scope: DrawScope, color: Color,) {
     }
     scope.drawPath(
         path = path,
-        color = color
+        color = color,
     )
 }
 
@@ -125,7 +125,7 @@ private fun DrawScope.drawTooltipArrow(scope: DrawScope, color: Color,) {
 @Composable
 fun ToolTipButtonPreview() {
     Box(
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         TooltipButton(tooltipText = "이것은 툴팁입니다.")
     }

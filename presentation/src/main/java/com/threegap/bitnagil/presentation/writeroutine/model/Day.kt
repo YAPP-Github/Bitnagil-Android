@@ -9,10 +9,11 @@ enum class Day(val text: String) {
     THU(text = "목"),
     FRI(text = "금"),
     SAT(text = "토"),
-    SUN(text = "일");
+    SUN(text = "일"),
+    ;
 
     fun toRepeatDay(): RepeatDay {
-        return when(this) {
+        return when (this) {
             MON -> RepeatDay.MON
             TUE -> RepeatDay.TUE
             WED -> RepeatDay.WED
@@ -25,7 +26,7 @@ enum class Day(val text: String) {
 
     companion object {
         fun fromRepeatDay(repeatDay: RepeatDay): Day {
-            return when(repeatDay) {
+            return when (repeatDay) {
                 RepeatDay.MON -> MON
                 RepeatDay.TUE -> TUE
                 RepeatDay.WED -> WED

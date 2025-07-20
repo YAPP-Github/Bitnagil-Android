@@ -30,7 +30,7 @@ fun TImePickerBottomSheet(
     onTimeSelected: (Int, Int) -> Unit,
     hour: Int,
     minute: Int,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState()
     val coroutineScope = rememberCoroutineScope()
@@ -72,7 +72,7 @@ fun TimePickerBottomSheetContent(
         modifier = modifier.background(
             color = BitnagilTheme.colors.white,
         ),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         AndroidView(
             modifier = Modifier.padding(vertical = 20.dp),
@@ -110,7 +110,7 @@ fun TimePickerBottomSheetContent(
             onClick = {
                 onTimeSelected(currentHour, currentMinute)
             },
-            enabled = true
+            enabled = true,
         )
     }
 }

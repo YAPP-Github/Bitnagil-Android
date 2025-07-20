@@ -11,13 +11,13 @@ data class SubRoutineDto(
     @SerialName("subRoutineName")
     val subRoutineName: String,
     @SerialName("sortOrder")
-    val sortOrder: Int
+    val sortOrder: Int,
 ) {
     fun toSubRoutine(): SubRoutine {
         return SubRoutine(
             id = subRoutineId,
             name = subRoutineName,
-            sort = sortOrder
+            sort = sortOrder,
         )
     }
 }

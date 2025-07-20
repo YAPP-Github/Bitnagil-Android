@@ -18,11 +18,11 @@ import com.threegap.bitnagil.presentation.writeroutine.model.mvi.WriteRoutineInt
 import com.threegap.bitnagil.presentation.writeroutine.model.mvi.WriteRoutineSideEffect
 import com.threegap.bitnagil.presentation.writeroutine.model.mvi.WriteRoutineState
 import com.threegap.bitnagil.presentation.writeroutine.model.navarg.WriteRoutineScreenArg
-import com.threegap.bitnagil.domain.writeroutine.model.SubRoutine as DomainSubRoutine
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
 import javax.inject.Inject
+import com.threegap.bitnagil.domain.writeroutine.model.SubRoutine as DomainSubRoutine
 
 @HiltViewModel
 class WriteRoutineViewModel @Inject constructor(
@@ -30,7 +30,7 @@ class WriteRoutineViewModel @Inject constructor(
     private val getChangedSubRoutinesUseCase: GetChangedSubRoutinesUseCase,
     private val registerRoutineUseCase: RegisterRoutineUseCase,
     private val editRoutineUseCase: EditRoutineUseCse,
-    private val getRoutineUseCase: GetRoutineUseCase
+    private val getRoutineUseCase: GetRoutineUseCase,
 ) : MviViewModel<WriteRoutineState, WriteRoutineSideEffect, WriteRoutineIntent>(
     initState = WriteRoutineState.Init,
     savedStateHandle = savedStateHandle,
@@ -41,7 +41,7 @@ class WriteRoutineViewModel @Inject constructor(
     init {
         val navigationArg = try {
             savedStateHandle.toRoute<WriteRoutineScreenArg>()
-        } catch (e : IllegalArgumentException) {
+        } catch (e: IllegalArgumentException) {
             WriteRoutineScreenArg.Add(baseRoutineId = null)
         }
 
@@ -49,7 +49,7 @@ class WriteRoutineViewModel @Inject constructor(
     }
 
     private fun initResource(navigationArg: WriteRoutineScreenArg) {
-        when(navigationArg) {
+        when (navigationArg) {
             is WriteRoutineScreenArg.Add -> {
                 viewModelScope.launch {
                     sendIntent(WriteRoutineIntent.SetWriteRoutineType(WriteRoutineType.ADD))
@@ -59,7 +59,6 @@ class WriteRoutineViewModel @Inject constructor(
                     routineId = it
                     loadRoutine(it)
                 }
-
             }
             is WriteRoutineScreenArg.Edit -> {
                 viewModelScope.launch {
@@ -84,13 +83,13 @@ class WriteRoutineViewModel @Inject constructor(
                             name = routine.name,
                             repeatDays = routine.repeatDays.map { Day.fromRepeatDay(it) },
                             startTime = Time.fromDomainTime(routine.startTime),
-                            subRoutines = routine.subRoutines.map { it.name }
-                        )
+                            subRoutines = routine.subRoutines.map { it.name },
+                        ),
                     )
                 },
                 onFailure = {
                     // 실패 케이스 처리 예정
-                }
+                },
             )
         }
     }
@@ -99,23 +98,23 @@ class WriteRoutineViewModel @Inject constructor(
         intent: WriteRoutineIntent,
         state: WriteRoutineState,
     ): WriteRoutineState {
-        when(intent) {
+        when (intent) {
             WriteRoutineIntent.AddSubRoutine -> {
                 return state.copy(
-                    subRoutines = state.subRoutines + ""
+                    subRoutines = state.subRoutines + "",
                 )
             }
             is WriteRoutineIntent.RemoveSubRoutine -> {
                 return state.copy(
                     subRoutines = state.subRoutines.filterIndexed { index, _ ->
                         index != intent.index
-                    }
+                    },
                 )
             }
             WriteRoutineIntent.SelectAllTime -> {
                 return state.copy(
                     selectAllTime = !state.selectAllTime,
-                    startTime = Time.AllDay
+                    startTime = Time.AllDay,
                 )
             }
             is WriteRoutineIntent.SelectDay -> {
@@ -126,22 +125,22 @@ class WriteRoutineViewModel @Inject constructor(
                         } else {
                             it
                         }
-                    }
+                    },
                 )
             }
             is WriteRoutineIntent.SetPeriodWeek -> {
                 return state.copy(
-                    periodWeek = intent.periodWeek
+                    periodWeek = intent.periodWeek,
                 )
             }
             is WriteRoutineIntent.SetRepeatType -> {
                 return state.copy(
-                    repeatType = intent.repeatType
+                    repeatType = intent.repeatType,
                 )
             }
             is WriteRoutineIntent.SetRoutineName -> {
                 return state.copy(
-                    routineName = intent.name
+                    routineName = intent.name,
                 )
             }
             is WriteRoutineIntent.SetStartTime -> {
@@ -158,57 +157,57 @@ class WriteRoutineViewModel @Inject constructor(
                         } else {
                             subRoutine
                         }
-                    }
+                    },
                 )
             }
             WriteRoutineIntent.ShowTimePickerBottomSheet -> {
                 return state.copy(
-                    showTimePickerBottomSheet = true
+                    showTimePickerBottomSheet = true,
                 )
             }
             WriteRoutineIntent.HideTimePickerBottomSheet -> {
                 return state.copy(
-                    showTimePickerBottomSheet = false
+                    showTimePickerBottomSheet = false,
                 )
             }
             is WriteRoutineIntent.SetWriteRoutineType -> {
                 return state.copy(
-                    writeRoutineType = intent.writeRoutineType
+                    writeRoutineType = intent.writeRoutineType,
                 )
             }
 
             WriteRoutineIntent.EditRoutineFailure -> {
                 return state.copy(
-                    loading = false
+                    loading = false,
                 )
             }
             WriteRoutineIntent.EditRoutineSuccess -> {
                 sendSideEffect(WriteRoutineSideEffect.MoveToPreviousScreen)
 
                 return state.copy(
-                    loading = false
+                    loading = false,
                 )
             }
             WriteRoutineIntent.EditRoutineLoading -> {
                 return state.copy(
-                    loading = true
+                    loading = true,
                 )
             }
             WriteRoutineIntent.RegisterRoutineFailure -> {
                 return state.copy(
-                    loading = false
+                    loading = false,
                 )
             }
             WriteRoutineIntent.RegisterRoutineSuccess -> {
                 sendSideEffect(WriteRoutineSideEffect.MoveToPreviousScreen)
 
                 return state.copy(
-                    loading = false
+                    loading = false,
                 )
             }
             WriteRoutineIntent.RegisterRoutineLoading -> {
                 return state.copy(
-                    loading = true
+                    loading = true,
                 )
             }
 
@@ -216,13 +215,13 @@ class WriteRoutineViewModel @Inject constructor(
                 val selectedDaySet = intent.repeatDays.toSet()
                 val repeatDays = SelectableDay.defaultList.map {
                     it.copy(
-                        selected = it.day in selectedDaySet
+                        selected = it.day in selectedDaySet,
                     )
                 }
                 val repeatType = if (repeatDays.none { it.selected }) {
                     null
                 } else if (repeatDays.all { it.selected }) {
-                     RepeatType.DAILY
+                    RepeatType.DAILY
                 } else {
                     RepeatType.DAY
                 }
@@ -238,7 +237,7 @@ class WriteRoutineViewModel @Inject constructor(
 
             WriteRoutineIntent.GetRoutineLoading -> {
                 return state.copy(
-                    loading = true
+                    loading = true,
                 )
             }
         }
@@ -248,7 +247,6 @@ class WriteRoutineViewModel @Inject constructor(
         viewModelScope.launch {
             sendIntent(WriteRoutineIntent.SetRoutineName(name))
         }
-
     }
 
     fun setSubRoutineName(index: Int, name: String) {
@@ -310,7 +308,7 @@ class WriteRoutineViewModel @Inject constructor(
         viewModelScope.launch {
             val currentState = stateFlow.value
 
-            when(currentState.writeRoutineType) {
+            when (currentState.writeRoutineType) {
                 WriteRoutineType.ADD -> {
                     sendIntent(WriteRoutineIntent.RegisterRoutineLoading)
                     val registerRoutineResult = registerRoutineUseCase(
@@ -319,7 +317,7 @@ class WriteRoutineViewModel @Inject constructor(
                             .filter { it.selected }
                             .map { it.day.toRepeatDay() },
                         currentState.startTime!!.toDomainTime(),
-                        currentState.subRoutines
+                        currentState.subRoutines,
                     )
 
                     if (registerRoutineResult.isSuccess) {
@@ -334,10 +332,10 @@ class WriteRoutineViewModel @Inject constructor(
                             DomainSubRoutine(
                                 id = subRoutine.id,
                                 name = subRoutine.name,
-                                sort = index + 1
+                                sort = index + 1,
                             )
                         },
-                        newSubRoutineNames = currentState.subRoutines
+                        newSubRoutineNames = currentState.subRoutines,
                     )
 
                     sendIntent(WriteRoutineIntent.EditRoutineLoading)
@@ -348,7 +346,7 @@ class WriteRoutineViewModel @Inject constructor(
                             .filter { it.selected }
                             .map { it.day.toRepeatDay() },
                         startTime = currentState.startTime!!.toDomainTime(),
-                        subRoutines = subRoutineDiffs
+                        subRoutines = subRoutineDiffs,
                     )
 
                     if (editRoutineResult.isSuccess) {

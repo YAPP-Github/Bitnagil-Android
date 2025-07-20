@@ -27,7 +27,7 @@ fun NameField(
     onValueChange: (String) -> Unit,
     onClickRemove: (() -> Unit)?,
     modifier: Modifier = Modifier,
-    placeholder: String = ""
+    placeholder: String = "",
 ) {
     BasicTextField(
         value = value,
@@ -41,7 +41,7 @@ fun NameField(
         decorationBox = { innerTextField ->
             Row(
                 modifier = Modifier.padding(start = 24.dp, end = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Box(modifier = Modifier.weight(1f)) {
                     if (value.isEmpty()) {
@@ -56,16 +56,16 @@ fun NameField(
                 if (onClickRemove != null) {
                     IconButton(
                         onClick = onClickRemove,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(24.dp),
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = "텍스트 전체 삭제",
-                            tint = Color.Gray
+                            tint = Color.Gray,
                         )
                     }
                 }
             }
-        }
+        },
     )
 }

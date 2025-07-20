@@ -15,7 +15,7 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 
 @Composable
 fun SelectCell(
-    modifier : Modifier = Modifier,
+    modifier: Modifier = Modifier,
     text: String,
     selected: Boolean,
     onClick: () -> Unit,

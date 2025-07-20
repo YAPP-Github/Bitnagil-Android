@@ -18,12 +18,12 @@ data class RoutineDto(
     @SerialName("executionTime")
     val executionTime: String,
     @SerialName("subRoutineInfos")
-    val subRoutineInfos: List<SubRoutineDto>
+    val subRoutineInfos: List<SubRoutineDto>,
 ) {
     fun toRoutine(): Routine {
         val startTime = Time(
             hour = executionTime.split(":")[0].toInt(),
-            minute = executionTime.split(":")[1].toInt()
+            minute = executionTime.split(":")[1].toInt(),
         )
 
         return Routine(
@@ -35,8 +35,8 @@ data class RoutineDto(
             endDate = Date(
                 year = 2099,
                 month = 12,
-                day = 31
-            )
+                day = 31,
+            ),
         )
     }
 }

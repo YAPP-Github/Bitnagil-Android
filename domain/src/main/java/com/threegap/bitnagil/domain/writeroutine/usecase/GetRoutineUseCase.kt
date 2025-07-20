@@ -5,12 +5,11 @@ import com.threegap.bitnagil.domain.writeroutine.repository.WriteRoutineReposito
 import javax.inject.Inject
 
 class GetRoutineUseCase @Inject constructor(
-    private val routineRepository: WriteRoutineRepository
+    private val routineRepository: WriteRoutineRepository,
 ) {
     suspend operator fun invoke(
-        routineId: String
-    ): Result<Routine>{
+        routineId: String,
+    ): Result<Routine> {
         return routineRepository.getRoutine(routineId)
     }
-
 }

@@ -28,10 +28,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
-import com.threegap.bitnagil.presentation.writeroutine.component.atom.textbutton.TextButton
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.namefield.NameField
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.selectcell.SelectCell
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.strokebutton.StrokeButton
+import com.threegap.bitnagil.presentation.writeroutine.component.atom.textbutton.TextButton
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.tooltipbutton.TooltipButton
 import com.threegap.bitnagil.presentation.writeroutine.component.block.labeledcheckbox.LabeledCheckBox
 import com.threegap.bitnagil.presentation.writeroutine.component.template.TImePickerBottomSheet
@@ -51,7 +51,7 @@ fun WriteRoutineScreenContainer(
     val state by viewModel.stateFlow.collectAsState()
 
     viewModel.sideEffectFlow.collectAsEffect { sideEffect ->
-        when(sideEffect) {
+        when (sideEffect) {
             WriteRoutineSideEffect.MoveToPreviousScreen -> {
                 navigateToBack()
             }
@@ -64,7 +64,7 @@ fun WriteRoutineScreenContainer(
             onTimeSelected = viewModel::setStartTime,
             hour = state.startTime?.hour ?: Time.Init.hour,
             minute = state.startTime?.minute ?: Time.Init.minute,
-            onDismiss = viewModel::hideTimePickerBottomSheet
+            onDismiss = viewModel::hideTimePickerBottomSheet,
         )
     }
 
@@ -78,7 +78,7 @@ fun WriteRoutineScreenContainer(
         selectAllTime = viewModel::selectAllTime,
         showTimePickerBottomSheet = viewModel::showTimePickerBottomSheet,
         onClickRegister = viewModel::registerRoutine,
-        removeSubRoutine = viewModel::removeSubRoutine
+        removeSubRoutine = viewModel::removeSubRoutine,
     )
 }
 
@@ -98,12 +98,12 @@ private fun WriteRoutineScreen(
     val scrollState = rememberScrollState()
 
     Column(
-        modifier = Modifier.fillMaxSize().background(color = BitnagilTheme.colors.white)
+        modifier = Modifier.fillMaxSize().background(color = BitnagilTheme.colors.white),
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(54.dp)
+                .height(54.dp),
         ) {
             Box(
                 modifier = Modifier
@@ -111,12 +111,12 @@ private fun WriteRoutineScreen(
                     .align(alignment = Alignment.CenterStart)
                     .size(36.dp)
                     .clickable { },
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 Image(
-                    painter = painterResource(R.drawable.ic_media_play,),
+                    painter = painterResource(R.drawable.ic_media_play),
                     contentDescription = null,
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(24.dp),
                 )
             }
 
@@ -129,9 +129,9 @@ private fun WriteRoutineScreen(
 
         Column(
             modifier = Modifier
-                .padding(start = 16.dp, end = 16.dp, top = 32.dp,)
+                .padding(start = 16.dp, end = 16.dp, top = 32.dp)
                 .weight(1f)
-                .verticalScroll(state = scrollState)
+                .verticalScroll(state = scrollState),
         ) {
             Column {
                 Row {
@@ -154,7 +154,7 @@ private fun WriteRoutineScreen(
                     value = state.routineName,
                     onValueChange = setRoutineName,
                     placeholder = "ex) 아침에 개운하게 일어나기",
-                    onClickRemove = null
+                    onClickRemove = null,
                 )
             }
 
@@ -162,7 +162,7 @@ private fun WriteRoutineScreen(
 
             Column {
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         "세부 루틴",
@@ -179,23 +179,23 @@ private fun WriteRoutineScreen(
                 StrokeButton.Custom(
                     isSelected = false,
                     onClick = addSubRoutine,
-                    enabled = state.addSubRoutineButtonEnabled
+                    enabled = state.addSubRoutineButtonEnabled,
                 ) {
                     Row(
                         modifier = Modifier.height(52.dp).fillMaxWidth().padding(start = 24.dp, end = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Image(
-                            painter = painterResource(R.drawable.ic_media_play,),
+                            painter = painterResource(R.drawable.ic_media_play),
                             contentDescription = null,
-                            modifier = Modifier.size(20.dp)
+                            modifier = Modifier.size(20.dp),
                         )
 
                         Spacer(modifier = Modifier.width(10.dp))
 
                         Text(
                             "세부 루틴 추가",
-                            style = BitnagilTheme.typography.body2Medium.copy(color = BitnagilTheme.colors.coolGray40)
+                            style = BitnagilTheme.typography.body2Medium.copy(color = BitnagilTheme.colors.coolGray40),
                         )
                     }
                 }
@@ -210,7 +210,7 @@ private fun WriteRoutineScreen(
                         placeholder = getSubRoutinePlaceHolder(index),
                         onClickRemove = {
                             removeSubRoutine(index)
-                        }
+                        },
                     )
                 }
             }
@@ -219,7 +219,7 @@ private fun WriteRoutineScreen(
 
             Column {
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         "루틴 반복",
@@ -229,7 +229,7 @@ private fun WriteRoutineScreen(
                     Spacer(modifier = Modifier.width(2.dp))
 
                     TooltipButton(
-                        "선택하지 않을 경우, 당일 루틴으로만 자동 설정돼요."
+                        "선택하지 않을 경우, 당일 루틴으로만 자동 설정돼요.",
                     )
                 }
 
@@ -242,7 +242,7 @@ private fun WriteRoutineScreen(
                         isSelected = state.repeatType == RepeatType.DAILY,
                         onClick = {
                             selectRepeatTime(RepeatType.DAILY)
-                        }
+                        },
                     )
 
                     Spacer(modifier = Modifier.width(12.dp))
@@ -253,7 +253,7 @@ private fun WriteRoutineScreen(
                         isSelected = state.repeatType == RepeatType.DAY,
                         onClick = {
                             selectRepeatTime(RepeatType.DAY)
-                        }
+                        },
                     )
                 }
 
@@ -268,7 +268,7 @@ private fun WriteRoutineScreen(
                                 onClick = {
                                     selectDay(selectableDay.day)
                                 },
-                                selected = selectableDay.selected
+                                selected = selectableDay.selected,
                             )
                             if (index != state.repeatDays.lastIndex) {
                                 Spacer(modifier = Modifier.width(8.dp))
@@ -299,7 +299,7 @@ private fun WriteRoutineScreen(
                     LabeledCheckBox(
                         label = "하루종일",
                         checked = state.selectAllTime,
-                        onClick = selectAllTime
+                        onClick = selectAllTime,
                     )
                 }
 
@@ -311,19 +311,26 @@ private fun WriteRoutineScreen(
                 ) {
                     Row(
                         modifier = Modifier.height(52.dp).fillMaxWidth().padding(start = 24.dp, end = 20.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
-                            if (state.startTime == null) "시간 선택" else "${state.startTime.hour}".padStart(2, '0') + ":" + "${state.startTime.minute}".padStart(2, '0'),
-                            style = BitnagilTheme.typography.body2Medium.copy(color = BitnagilTheme.colors.coolGray40)
+                            if (state.startTime == null) {
+                                "시간 선택"
+                            } else {
+                                "${state.startTime.hour}".padStart(2, '0') + ":" + "${state.startTime.minute}".padStart(
+                                    2,
+                                    '0',
+                                )
+                            },
+                            style = BitnagilTheme.typography.body2Medium.copy(color = BitnagilTheme.colors.coolGray40),
                         )
 
                         Spacer(modifier = Modifier.weight(1f))
 
                         Image(
-                            painter = painterResource(R.drawable.ic_media_play,),
+                            painter = painterResource(R.drawable.ic_media_play),
                             contentDescription = null,
-                            modifier = Modifier.size(20.dp)
+                            modifier = Modifier.size(20.dp),
                         )
                     }
                 }
@@ -336,13 +343,13 @@ private fun WriteRoutineScreen(
             modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 14.dp),
             text = "등록하기",
             onClick = onClickRegister,
-            enabled = state.registerButtonEnabled
+            enabled = state.registerButtonEnabled,
         )
     }
 }
 
-private fun getSubRoutinePlaceHolder(index : Int): String {
-    return when(index) {
+private fun getSubRoutinePlaceHolder(index: Int): String {
+    return when (index) {
         0 -> "1. ex) 일어나자마자 이불 개기"
         1 -> "2. ex) 일어나서 찬물 마시기"
         2 -> "3. ex) 세수하기"
@@ -359,45 +366,45 @@ fun WriteRoutineScreenPreview() {
                 routineName = "이름",
                 subRoutines = listOf(
                     "1",
-                    "2"
+                    "2",
                 ),
                 repeatType = RepeatType.DAILY,
                 repeatDays = listOf(
                     SelectableDay(
                         day = Day.MON,
-                        selected = true
+                        selected = true,
                     ),
                     SelectableDay(
                         day = Day.TUE,
-                        selected = false
+                        selected = false,
                     ),
                     SelectableDay(
                         day = Day.WED,
-                        selected = false
+                        selected = false,
                     ),
                     SelectableDay(
                         day = Day.THU,
-                        selected = false
+                        selected = false,
                     ),
                     SelectableDay(
                         day = Day.FRI,
-                        selected = false
+                        selected = false,
                     ),
                     SelectableDay(
                         day = Day.SAT,
-                        selected = false
+                        selected = false,
                     ),
                     SelectableDay(
                         day = Day.SUN,
-                        selected = false
-                    )
+                        selected = false,
+                    ),
                 ),
                 periodWeek = null,
                 startTime = null,
                 selectAllTime = false,
                 loading = false,
                 showTimePickerBottomSheet = false,
-                writeRoutineType = WriteRoutineType.ADD
+                writeRoutineType = WriteRoutineType.ADD,
             ),
             setRoutineName = {},
             setSubRoutineName = { _, _ -> },
@@ -407,8 +414,7 @@ fun WriteRoutineScreenPreview() {
             selectAllTime = {},
             showTimePickerBottomSheet = {},
             onClickRegister = {},
-            removeSubRoutine = {}
+            removeSubRoutine = {},
         )
     }
-
 }

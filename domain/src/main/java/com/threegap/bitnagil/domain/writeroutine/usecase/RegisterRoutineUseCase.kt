@@ -6,7 +6,7 @@ import com.threegap.bitnagil.domain.writeroutine.repository.WriteRoutineReposito
 import javax.inject.Inject
 
 class RegisterRoutineUseCase @Inject constructor(
-    private val writeRoutineRepository: WriteRoutineRepository
+    private val writeRoutineRepository: WriteRoutineRepository,
 ) {
     suspend operator fun invoke(
         name: String,
@@ -18,7 +18,7 @@ class RegisterRoutineUseCase @Inject constructor(
             name = name,
             repeatDay = repeatDay,
             startTime = startTime,
-            subRoutines = subRoutines
+            subRoutines = subRoutines,
         )
     }
 }

@@ -15,5 +15,5 @@ data class EditRoutineRequest(
     @SerialName("executionTime")
     val executionTime: String,
     @SerialName("subRoutineInfos")
-    val subRoutineInfos: List<SubRoutineInfosDiffDto>
+    val subRoutineInfos: List<SubRoutineInfosDiffDto>,
 )

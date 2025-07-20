@@ -12,5 +12,5 @@ data class RegisterRoutineRequest(
     @SerialName("executionTime")
     val executionTime: String,
     @SerialName("subRoutineName")
-    val subRoutineName: List<String>
+    val subRoutineName: List<String>,
 )
