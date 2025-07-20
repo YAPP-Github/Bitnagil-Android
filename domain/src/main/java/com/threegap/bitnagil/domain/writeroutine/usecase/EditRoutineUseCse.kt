@@ -3,10 +3,12 @@ package com.threegap.bitnagil.domain.writeroutine.usecase
 import com.threegap.bitnagil.domain.writeroutine.model.RepeatDay
 import com.threegap.bitnagil.domain.writeroutine.model.SubRoutineDiff
 import com.threegap.bitnagil.domain.writeroutine.model.Time
-import kotlinx.coroutines.delay
+import com.threegap.bitnagil.domain.writeroutine.repository.WriteRoutineRepository
 import javax.inject.Inject
 
-class EditRoutineUseCse @Inject constructor(){
+class EditRoutineUseCse @Inject constructor(
+    private val writeRoutineRepository: WriteRoutineRepository
+){
     suspend operator fun invoke(
         routineId: String,
         name: String,
@@ -14,7 +16,12 @@ class EditRoutineUseCse @Inject constructor(){
         startTime: Time,
         subRoutines: List<SubRoutineDiff>,
     ): Result<Unit>  {
-        delay(2000L)
-        return Result.success(Unit)
+        return writeRoutineRepository.editRoutine(
+            routineId = routineId,
+            name = name,
+            repeatDay = repeatDay,
+            startTime = startTime,
+            subRoutines = subRoutines
+        )
     }
 }

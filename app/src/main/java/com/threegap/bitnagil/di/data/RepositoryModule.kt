@@ -2,8 +2,10 @@ package com.threegap.bitnagil.di.data
 
 import com.threegap.bitnagil.data.auth.repositoryimpl.AuthRepositoryImpl
 import com.threegap.bitnagil.data.onboarding.repositoryImpl.OnBoardingRepositoryImpl
+import com.threegap.bitnagil.data.writeroutine.repositoryImpl.WriteRoutineRepositoryImpl
 import com.threegap.bitnagil.domain.auth.repository.AuthRepository
 import com.threegap.bitnagil.domain.onboarding.repository.OnBoardingRepository
+import com.threegap.bitnagil.domain.writeroutine.repository.WriteRoutineRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -21,4 +23,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindOnBoardingRepository(onBoardingRepositoryImpl: OnBoardingRepositoryImpl): OnBoardingRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindWriteRoutineRepository(writeRoutineRepositoryImpl: WriteRoutineRepositoryImpl): WriteRoutineRepository
 }
