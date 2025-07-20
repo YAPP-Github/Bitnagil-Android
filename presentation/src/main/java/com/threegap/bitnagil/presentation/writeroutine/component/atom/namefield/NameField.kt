@@ -25,6 +25,7 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 fun NameField(
     value: String,
     onValueChange: (String) -> Unit,
+    onClickRemove: (() -> Unit)?,
     modifier: Modifier = Modifier,
     placeholder: String = ""
 ) {
@@ -52,9 +53,9 @@ fun NameField(
                     innerTextField()
                 }
 
-                if (value.isNotEmpty()) {
+                if (onClickRemove != null) {
                     IconButton(
-                        onClick = { onValueChange("") },
+                        onClick = onClickRemove,
                         modifier = Modifier.size(24.dp)
                     ) {
                         Icon(

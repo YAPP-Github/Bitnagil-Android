@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.bitnagil.android.compose.library)
     alias(libs.plugins.bitnagil.android.hilt)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {

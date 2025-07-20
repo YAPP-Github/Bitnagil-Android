@@ -68,5 +68,8 @@ data class WriteRoutineState(
     val registerButtonEnabled: Boolean
         get() = routineName.isNotEmpty() &&
             (repeatType == RepeatType.DAILY || (repeatType == RepeatType.DAY && repeatDays.any { it.selected })) &&
-            startTime != null
+            startTime != null && !loading
+
+    val addSubRoutineButtonEnabled: Boolean
+        get() = subRoutines.size < 3 && !loading
 }

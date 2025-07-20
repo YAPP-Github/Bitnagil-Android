@@ -3,15 +3,22 @@ package com.threegap.bitnagil.presentation.writeroutine
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.threegap.bitnagil.domain.writeroutine.usecase.EditRoutineUseCse
+import com.threegap.bitnagil.domain.writeroutine.usecase.GetChangedSubRoutinesUseCase
+import com.threegap.bitnagil.domain.writeroutine.usecase.GetRoutineUseCase
+import com.threegap.bitnagil.domain.writeroutine.usecase.RegisterRoutineUseCase
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
 import com.threegap.bitnagil.presentation.writeroutine.model.Day
 import com.threegap.bitnagil.presentation.writeroutine.model.RepeatType
+import com.threegap.bitnagil.presentation.writeroutine.model.SelectableDay
+import com.threegap.bitnagil.presentation.writeroutine.model.SubRoutine
 import com.threegap.bitnagil.presentation.writeroutine.model.Time
 import com.threegap.bitnagil.presentation.writeroutine.model.WriteRoutineType
 import com.threegap.bitnagil.presentation.writeroutine.model.mvi.WriteRoutineIntent
 import com.threegap.bitnagil.presentation.writeroutine.model.mvi.WriteRoutineSideEffect
 import com.threegap.bitnagil.presentation.writeroutine.model.mvi.WriteRoutineState
 import com.threegap.bitnagil.presentation.writeroutine.model.navarg.WriteRoutineScreenArg
+import com.threegap.bitnagil.domain.writeroutine.model.SubRoutine as DomainSubRoutine
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
@@ -20,10 +27,17 @@ import javax.inject.Inject
 @HiltViewModel
 class WriteRoutineViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    private val getChangedSubRoutinesUseCase: GetChangedSubRoutinesUseCase,
+    private val registerRoutineUseCase: RegisterRoutineUseCase,
+    private val editRoutineUseCase: EditRoutineUseCse,
+    private val getRoutineUseCase: GetRoutineUseCase
 ) : MviViewModel<WriteRoutineState, WriteRoutineSideEffect, WriteRoutineIntent>(
     initState = WriteRoutineState.Init,
     savedStateHandle = savedStateHandle,
 ) {
+    private var routineId: String? = null
+    private val oldSubRoutines: List<SubRoutine> = listOf()
+
     init {
         val navigationArg = try {
             savedStateHandle.toRoute<WriteRoutineScreenArg>()
@@ -41,15 +55,43 @@ class WriteRoutineViewModel @Inject constructor(
                     sendIntent(WriteRoutineIntent.SetWriteRoutineType(WriteRoutineType.ADD))
                 }
 
-                // routineId가 존재할 시 이에 해당하는 루틴 조회 후 반영
+                navigationArg.baseRoutineId?.let {
+                    routineId = it
+                    loadRoutine(it)
+                }
+
             }
             is WriteRoutineScreenArg.Edit -> {
                 viewModelScope.launch {
                     sendIntent(WriteRoutineIntent.SetWriteRoutineType(WriteRoutineType.EDIT))
                 }
 
-                // routineId 에 해당하는 루틴 조회 후 반영
+                navigationArg.routineId.also {
+                    routineId = it
+                    loadRoutine(it)
+                }
             }
+        }
+    }
+
+    private fun loadRoutine(routineId: String) {
+        viewModelScope.launch {
+            sendIntent(WriteRoutineIntent.GetRoutineLoading)
+            getRoutineUseCase(routineId).fold(
+                onSuccess = { routine ->
+                    sendIntent(
+                        WriteRoutineIntent.SetRoutine(
+                            name = routine.name,
+                            repeatDays = routine.repeatDays.map { Day.fromRepeatDay(it) },
+                            startTime = Time.fromDomainTime(routine.startTime),
+                            subRoutines = routine.subRoutines.map { it.name }
+                        )
+                    )
+                },
+                onFailure = {
+                    // 실패 케이스 처리 예정
+                }
+            )
         }
     }
 
@@ -65,7 +107,9 @@ class WriteRoutineViewModel @Inject constructor(
             }
             is WriteRoutineIntent.RemoveSubRoutine -> {
                 return state.copy(
-                    subRoutines = state.subRoutines.drop(intent.index)
+                    subRoutines = state.subRoutines.filterIndexed { index, _ ->
+                        index != intent.index
+                    }
                 )
             }
             WriteRoutineIntent.SelectAllTime -> {
@@ -132,6 +176,71 @@ class WriteRoutineViewModel @Inject constructor(
                     writeRoutineType = intent.writeRoutineType
                 )
             }
+
+            WriteRoutineIntent.EditRoutineFailure -> {
+                return state.copy(
+                    loading = false
+                )
+            }
+            WriteRoutineIntent.EditRoutineSuccess -> {
+                sendSideEffect(WriteRoutineSideEffect.MoveToPreviousScreen)
+
+                return state.copy(
+                    loading = false
+                )
+            }
+            WriteRoutineIntent.EditRoutineLoading -> {
+                return state.copy(
+                    loading = true
+                )
+            }
+            WriteRoutineIntent.RegisterRoutineFailure -> {
+                return state.copy(
+                    loading = false
+                )
+            }
+            WriteRoutineIntent.RegisterRoutineSuccess -> {
+                sendSideEffect(WriteRoutineSideEffect.MoveToPreviousScreen)
+
+                return state.copy(
+                    loading = false
+                )
+            }
+            WriteRoutineIntent.RegisterRoutineLoading -> {
+                return state.copy(
+                    loading = true
+                )
+            }
+
+            is WriteRoutineIntent.SetRoutine -> {
+                val selectedDaySet = intent.repeatDays.toSet()
+                val repeatDays = SelectableDay.defaultList.map {
+                    it.copy(
+                        selected = it.day in selectedDaySet
+                    )
+                }
+                val repeatType = if (repeatDays.none { it.selected }) {
+                    null
+                } else if (repeatDays.all { it.selected }) {
+                     RepeatType.DAILY
+                } else {
+                    RepeatType.DAY
+                }
+                return state.copy(
+                    routineName = intent.name,
+                    repeatDays = repeatDays,
+                    repeatType = repeatType,
+                    startTime = intent.startTime,
+                    subRoutines = intent.subRoutines,
+                    loading = false,
+                )
+            }
+
+            WriteRoutineIntent.GetRoutineLoading -> {
+                return state.copy(
+                    loading = true
+                )
+            }
         }
     }
 
@@ -151,6 +260,12 @@ class WriteRoutineViewModel @Inject constructor(
     fun addSubRoutine() {
         viewModelScope.launch {
             sendIntent(WriteRoutineIntent.AddSubRoutine)
+        }
+    }
+
+    fun removeSubRoutine(index: Int) {
+        viewModelScope.launch {
+            sendIntent(WriteRoutineIntent.RemoveSubRoutine(index))
         }
     }
 
@@ -188,6 +303,61 @@ class WriteRoutineViewModel @Inject constructor(
     fun hideTimePickerBottomSheet() {
         viewModelScope.launch {
             sendIntent(WriteRoutineIntent.HideTimePickerBottomSheet)
+        }
+    }
+
+    fun registerRoutine() {
+        viewModelScope.launch {
+            val currentState = stateFlow.value
+
+            when(currentState.writeRoutineType) {
+                WriteRoutineType.ADD -> {
+                    sendIntent(WriteRoutineIntent.RegisterRoutineLoading)
+                    val registerRoutineResult = registerRoutineUseCase(
+                        currentState.routineName,
+                        currentState.repeatDays
+                            .filter { it.selected }
+                            .map { it.day.toRepeatDay() },
+                        currentState.startTime!!.toDomainTime(),
+                        currentState.subRoutines
+                    )
+
+                    if (registerRoutineResult.isSuccess) {
+                        sendIntent(WriteRoutineIntent.RegisterRoutineSuccess)
+                    } else {
+                        sendIntent(WriteRoutineIntent.RegisterRoutineFailure)
+                    }
+                }
+                WriteRoutineType.EDIT -> {
+                    val subRoutineDiffs = getChangedSubRoutinesUseCase(
+                        oldSubRoutines = oldSubRoutines.mapIndexed { index, subRoutine ->
+                            DomainSubRoutine(
+                                id = subRoutine.id,
+                                name = subRoutine.name,
+                                sort = index + 1
+                            )
+                        },
+                        newSubRoutineNames = currentState.subRoutines
+                    )
+
+                    sendIntent(WriteRoutineIntent.EditRoutineLoading)
+                    val editRoutineResult = editRoutineUseCase(
+                        routineId = routineId!!,
+                        name = currentState.routineName,
+                        repeatDay = currentState.repeatDays
+                            .filter { it.selected }
+                            .map { it.day.toRepeatDay() },
+                        startTime = currentState.startTime!!.toDomainTime(),
+                        subRoutines = subRoutineDiffs
+                    )
+
+                    if (editRoutineResult.isSuccess) {
+                        sendIntent(WriteRoutineIntent.EditRoutineSuccess)
+                    } else {
+                        sendIntent(WriteRoutineIntent.EditRoutineFailure)
+                    }
+                }
+            }
         }
     }
 }

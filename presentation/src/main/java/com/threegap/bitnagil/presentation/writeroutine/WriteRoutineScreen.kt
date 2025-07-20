@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.textbutton.TextButton
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.namefield.NameField
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.selectcell.SelectCell
@@ -39,13 +40,23 @@ import com.threegap.bitnagil.presentation.writeroutine.model.RepeatType
 import com.threegap.bitnagil.presentation.writeroutine.model.SelectableDay
 import com.threegap.bitnagil.presentation.writeroutine.model.Time
 import com.threegap.bitnagil.presentation.writeroutine.model.WriteRoutineType
+import com.threegap.bitnagil.presentation.writeroutine.model.mvi.WriteRoutineSideEffect
 import com.threegap.bitnagil.presentation.writeroutine.model.mvi.WriteRoutineState
 
 @Composable
 fun WriteRoutineScreenContainer(
     viewModel: WriteRoutineViewModel = hiltViewModel(),
+    navigateToBack: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsState()
+
+    viewModel.sideEffectFlow.collectAsEffect { sideEffect ->
+        when(sideEffect) {
+            WriteRoutineSideEffect.MoveToPreviousScreen -> {
+                navigateToBack()
+            }
+        }
+    }
 
     if (state.showTimePickerBottomSheet) {
         TImePickerBottomSheet(
@@ -65,7 +76,9 @@ fun WriteRoutineScreenContainer(
         selectRepeatTime = viewModel::selectRepeatType,
         selectDay = viewModel::selectDay,
         selectAllTime = viewModel::selectAllTime,
-        showTimePickerBottomSheet = viewModel::showTimePickerBottomSheet
+        showTimePickerBottomSheet = viewModel::showTimePickerBottomSheet,
+        onClickRegister = viewModel::registerRoutine,
+        removeSubRoutine = viewModel::removeSubRoutine
     )
 }
 
@@ -79,6 +92,8 @@ private fun WriteRoutineScreen(
     selectDay: (Day) -> Unit,
     selectAllTime: () -> Unit,
     showTimePickerBottomSheet: () -> Unit,
+    onClickRegister: () -> Unit,
+    removeSubRoutine: (Int) -> Unit,
 ) {
     val scrollState = rememberScrollState()
 
@@ -138,7 +153,8 @@ private fun WriteRoutineScreen(
                 NameField(
                     value = state.routineName,
                     onValueChange = setRoutineName,
-                    placeholder = "ex) 아침에 개운하게 일어나기"
+                    placeholder = "ex) 아침에 개운하게 일어나기",
+                    onClickRemove = null
                 )
             }
 
@@ -163,6 +179,7 @@ private fun WriteRoutineScreen(
                 StrokeButton.Custom(
                     isSelected = false,
                     onClick = addSubRoutine,
+                    enabled = state.addSubRoutineButtonEnabled
                 ) {
                     Row(
                         modifier = Modifier.height(52.dp).fillMaxWidth().padding(start = 24.dp, end = 16.dp),
@@ -189,6 +206,10 @@ private fun WriteRoutineScreen(
                         value = subRoutine,
                         onValueChange = {
                             setSubRoutineName(index, it)
+                        },
+                        placeholder = getSubRoutinePlaceHolder(index),
+                        onClickRemove = {
+                            removeSubRoutine(index)
                         }
                     )
                 }
@@ -314,9 +335,18 @@ private fun WriteRoutineScreen(
         TextButton(
             modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 14.dp),
             text = "등록하기",
-            onClick = {},
+            onClick = onClickRegister,
             enabled = state.registerButtonEnabled
         )
+    }
+}
+
+private fun getSubRoutinePlaceHolder(index : Int): String {
+    return when(index) {
+        0 -> "1. ex) 일어나자마자 이불 개기"
+        1 -> "2. ex) 일어나서 찬물 마시기"
+        2 -> "3. ex) 세수하기"
+        else -> "세부 루틴을 작성해보세요!"
     }
 }
 
@@ -376,6 +406,8 @@ fun WriteRoutineScreenPreview() {
             selectDay = {},
             selectAllTime = {},
             showTimePickerBottomSheet = {},
+            onClickRegister = {},
+            removeSubRoutine = {}
         )
     }
 
