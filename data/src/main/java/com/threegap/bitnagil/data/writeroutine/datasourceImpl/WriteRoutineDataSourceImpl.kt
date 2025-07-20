@@ -1,22 +1,27 @@
 package com.threegap.bitnagil.data.writeroutine.datasourceImpl
 
+import com.threegap.bitnagil.data.common.safeApiCall
 import com.threegap.bitnagil.data.writeroutine.datasource.WriteRoutineDataSource
 import com.threegap.bitnagil.data.writeroutine.model.dto.RoutineDto
 import com.threegap.bitnagil.data.writeroutine.model.dto.SubRoutineDto
 import com.threegap.bitnagil.data.writeroutine.model.request.EditRoutineRequest
 import com.threegap.bitnagil.data.writeroutine.model.request.RegisterRoutineRequest
-import kotlinx.coroutines.delay
+import com.threegap.bitnagil.data.writeroutine.service.WriteRoutineService
 import javax.inject.Inject
 
-class WriteRoutineDataSourceImpl @Inject constructor(): WriteRoutineDataSource{
+class WriteRoutineDataSourceImpl @Inject constructor(
+    private val writeRoutineService: WriteRoutineService
+): WriteRoutineDataSource{
     override suspend fun registerRoutine(request: RegisterRoutineRequest): Result<Unit> {
-        delay(2000L)
-        return Result.success(Unit)
+        return safeApiCall {
+            writeRoutineService.postRoutine(request)
+        }
     }
 
     override suspend fun editRoutine(request: EditRoutineRequest): Result<Unit> {
-        delay(2000L)
-        return Result.success(Unit)
+        return safeApiCall {
+            writeRoutineService.patchRoutine(request)
+        }
     }
 
     override suspend fun getRoutine(routineId: String): Result<RoutineDto> {

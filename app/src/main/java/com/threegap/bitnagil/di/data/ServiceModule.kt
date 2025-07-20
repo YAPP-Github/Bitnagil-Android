@@ -2,6 +2,7 @@ package com.threegap.bitnagil.di.data
 
 import com.threegap.bitnagil.data.auth.service.AuthService
 import com.threegap.bitnagil.data.onboarding.service.OnBoardingService
+import com.threegap.bitnagil.data.writeroutine.service.WriteRoutineService
 import com.threegap.bitnagil.di.core.Auth
 import dagger.Module
 import dagger.Provides
@@ -23,4 +24,9 @@ object ServiceModule {
     @Singleton
     fun providerOnBoardingService(@Auth retrofit: Retrofit): OnBoardingService =
         retrofit.create(OnBoardingService::class.java)
+
+    @Provides
+    @Singleton
+    fun providerWriteRoutineService(@Auth retrofit: Retrofit): WriteRoutineService =
+        retrofit.create(WriteRoutineService::class.java)
 }
