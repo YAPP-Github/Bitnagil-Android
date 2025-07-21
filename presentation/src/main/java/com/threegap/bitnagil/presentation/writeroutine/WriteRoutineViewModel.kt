@@ -36,7 +36,7 @@ class WriteRoutineViewModel @Inject constructor(
     savedStateHandle = savedStateHandle,
 ) {
     private var routineId: String? = null
-    private val oldSubRoutines: List<SubRoutine> = listOf()
+    private var oldSubRoutines: List<SubRoutine> = listOf()
 
     init {
         val navigationArg = try {
@@ -78,6 +78,7 @@ class WriteRoutineViewModel @Inject constructor(
             sendIntent(WriteRoutineIntent.GetRoutineLoading)
             getRoutineUseCase(routineId).fold(
                 onSuccess = { routine ->
+                    oldSubRoutines = routine.subRoutines.map { SubRoutine.fromDomainSubRoutine(it) }
                     sendIntent(
                         WriteRoutineIntent.SetRoutine(
                             name = routine.name,

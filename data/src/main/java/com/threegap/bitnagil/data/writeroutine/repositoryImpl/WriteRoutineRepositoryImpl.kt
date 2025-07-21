@@ -18,7 +18,7 @@ class WriteRoutineRepositoryImpl @Inject constructor(
         val request = RegisterRoutineRequest(
             routineName = name,
             repeatDay = repeatDay.map { it.name },
-            executionTime = startTime.toString(),
+            executionTime = startTime.toFormattedString(),
             subRoutineName = subRoutines,
         )
         return writeRoutineDataSource.registerRoutine(request)
