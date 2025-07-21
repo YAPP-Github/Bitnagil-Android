@@ -22,7 +22,7 @@ import com.threegap.bitnagil.presentation.home.model.SubRoutineUiModel
 
 @Composable
 fun SubRoutinesItem(
-    subRoutineUiModels: List<SubRoutineUiModel>,
+    subRoutines: List<SubRoutineUiModel>,
     onSubRoutineToggle: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -40,7 +40,7 @@ fun SubRoutinesItem(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        subRoutineUiModels.forEach { subRoutine ->
+        subRoutines.forEach { subRoutine ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(11.dp),
@@ -80,7 +80,7 @@ fun SubRoutinesItem(
 @Composable
 private fun SubRoutinesItemPreview() {
     SubRoutinesItem(
-        subRoutineUiModels = listOf(
+        subRoutines = listOf(
             SubRoutineUiModel(subRoutineId = "uuid1", subRoutineName = "물 마시기", sortOrder = 1),
             SubRoutineUiModel(subRoutineId = "uuid2", subRoutineName = "스트레칭하기", sortOrder = 2),
             SubRoutineUiModel(subRoutineId = "uuid3", subRoutineName = "심호흡하기", sortOrder = 3),
