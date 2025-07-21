@@ -102,12 +102,12 @@ class WriteRoutineViewModel @Inject constructor(
         when (intent) {
             WriteRoutineIntent.AddSubRoutine -> {
                 return state.copy(
-                    subRoutines = state.subRoutines + "",
+                    subRoutineNames = state.subRoutineNames + "",
                 )
             }
             is WriteRoutineIntent.RemoveSubRoutine -> {
                 return state.copy(
-                    subRoutines = state.subRoutines.filterIndexed { index, _ ->
+                    subRoutineNames = state.subRoutineNames.filterIndexed { index, _ ->
                         index != intent.index
                     },
                 )
@@ -152,7 +152,7 @@ class WriteRoutineViewModel @Inject constructor(
             }
             is WriteRoutineIntent.SetSubRoutineName -> {
                 return state.copy(
-                    subRoutines = state.subRoutines.mapIndexed { index, subRoutine ->
+                    subRoutineNames = state.subRoutineNames.mapIndexed { index, subRoutine ->
                         if (index == intent.index) {
                             intent.name
                         } else {
@@ -231,7 +231,7 @@ class WriteRoutineViewModel @Inject constructor(
                     repeatDays = repeatDays,
                     repeatType = repeatType,
                     startTime = intent.startTime,
-                    subRoutines = intent.subRoutines,
+                    subRoutineNames = intent.subRoutines,
                     loading = false,
                 )
             }
@@ -320,7 +320,7 @@ class WriteRoutineViewModel @Inject constructor(
                             .filter { it.selected }
                             .map { it.day.toRepeatDay() },
                         startTime.toDomainTime(),
-                        currentState.subRoutines,
+                        currentState.subRoutineNames,
                     )
 
                     if (registerRoutineResult.isSuccess) {
@@ -340,7 +340,7 @@ class WriteRoutineViewModel @Inject constructor(
                                 sort = index + 1,
                             )
                         },
-                        newSubRoutineNames = currentState.subRoutines,
+                        newSubRoutineNames = currentState.subRoutineNames,
                     )
 
                     sendIntent(WriteRoutineIntent.EditRoutineLoading)

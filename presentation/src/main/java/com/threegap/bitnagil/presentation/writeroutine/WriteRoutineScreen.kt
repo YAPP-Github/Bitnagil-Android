@@ -200,10 +200,10 @@ private fun WriteRoutineScreen(
                     }
                 }
 
-                state.subRoutines.forEachIndexed { index, subRoutine ->
+                state.subRoutineNames.forEachIndexed { index, subRoutineName ->
                     Spacer(modifier = Modifier.height(10.dp))
                     NameField(
-                        value = subRoutine,
+                        value = subRoutineName,
                         onValueChange = {
                             setSubRoutineName(index, it)
                         },
@@ -364,7 +364,7 @@ fun WriteRoutineScreenPreview() {
         WriteRoutineScreen(
             state = WriteRoutineState(
                 routineName = "이름",
-                subRoutines = listOf(
+                subRoutineNames = listOf(
                     "1",
                     "2",
                 ),

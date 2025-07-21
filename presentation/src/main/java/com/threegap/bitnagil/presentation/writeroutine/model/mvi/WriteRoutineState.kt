@@ -11,7 +11,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class WriteRoutineState(
     val routineName: String,
-    val subRoutines: List<String>,
+    val subRoutineNames: List<String>,
     val repeatType: RepeatType?,
     val repeatDays: List<SelectableDay>,
     val periodWeek: Int?,
@@ -24,7 +24,7 @@ data class WriteRoutineState(
     companion object {
         val Init = WriteRoutineState(
             routineName = "",
-            subRoutines = emptyList(),
+            subRoutineNames = emptyList(),
             repeatType = null,
             repeatDays = listOf(
                 SelectableDay(
@@ -71,5 +71,5 @@ data class WriteRoutineState(
             startTime != null && !loading
 
     val addSubRoutineButtonEnabled: Boolean
-        get() = subRoutines.size < 3 && !loading
+        get() = subRoutineNames.size < 3 && !loading
 }
