@@ -48,7 +48,7 @@ fun MainNavHost(
                     navigator.navController.navigate(
                         Route.WebView(
                             title = "약관 동의",
-                            url = "https://wooded-damselfly-4cc.notion.site/22fa2c11608680668ed7e3227b69812a",
+                            url = "https://complex-wombat-99f.notion.site/2025-7-20-236f4587491d8071833adfaf8115bce2",
                         ),
                     )
                 },
@@ -56,7 +56,7 @@ fun MainNavHost(
                     navigator.navController.navigate(
                         Route.WebView(
                             title = "약관 동의",
-                            url = "https://wooded-damselfly-4cc.notion.site/22fa2c11608680668ed7e3227b69812a",
+                            url = "https://complex-wombat-99f.notion.site/2025-07-20-236f4587491d80308016eb810692d18b",
                         ),
                     )
                 },
