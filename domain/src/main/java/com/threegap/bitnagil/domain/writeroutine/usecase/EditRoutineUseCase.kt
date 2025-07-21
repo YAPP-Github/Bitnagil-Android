@@ -6,7 +6,7 @@ import com.threegap.bitnagil.domain.writeroutine.model.Time
 import com.threegap.bitnagil.domain.writeroutine.repository.WriteRoutineRepository
 import javax.inject.Inject
 
-class EditRoutineUseCse @Inject constructor(
+class EditRoutineUseCase @Inject constructor(
     private val writeRoutineRepository: WriteRoutineRepository,
 ) {
     suspend operator fun invoke(

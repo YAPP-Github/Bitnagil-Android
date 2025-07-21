@@ -3,7 +3,7 @@ package com.threegap.bitnagil.presentation.writeroutine
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.threegap.bitnagil.domain.writeroutine.usecase.EditRoutineUseCse
+import com.threegap.bitnagil.domain.writeroutine.usecase.EditRoutineUseCase
 import com.threegap.bitnagil.domain.writeroutine.usecase.GetChangedSubRoutinesUseCase
 import com.threegap.bitnagil.domain.writeroutine.usecase.GetRoutineUseCase
 import com.threegap.bitnagil.domain.writeroutine.usecase.RegisterRoutineUseCase
@@ -29,7 +29,7 @@ class WriteRoutineViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getChangedSubRoutinesUseCase: GetChangedSubRoutinesUseCase,
     private val registerRoutineUseCase: RegisterRoutineUseCase,
-    private val editRoutineUseCase: EditRoutineUseCse,
+    private val editRoutineUseCase: EditRoutineUseCase,
     private val getRoutineUseCase: GetRoutineUseCase,
 ) : MviViewModel<WriteRoutineState, WriteRoutineSideEffect, WriteRoutineIntent>(
     initState = WriteRoutineState.Init,

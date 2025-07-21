@@ -34,7 +34,7 @@ import com.threegap.bitnagil.presentation.writeroutine.component.atom.strokebutt
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.textbutton.TextButton
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.tooltipbutton.TooltipButton
 import com.threegap.bitnagil.presentation.writeroutine.component.block.labeledcheckbox.LabeledCheckBox
-import com.threegap.bitnagil.presentation.writeroutine.component.template.TImePickerBottomSheet
+import com.threegap.bitnagil.presentation.writeroutine.component.template.TimePickerBottomSheet
 import com.threegap.bitnagil.presentation.writeroutine.model.Day
 import com.threegap.bitnagil.presentation.writeroutine.model.RepeatType
 import com.threegap.bitnagil.presentation.writeroutine.model.SelectableDay
@@ -59,7 +59,7 @@ fun WriteRoutineScreenContainer(
     }
 
     if (state.showTimePickerBottomSheet) {
-        TImePickerBottomSheet(
+        TimePickerBottomSheet(
             modifier = Modifier.fillMaxWidth(),
             onTimeSelected = viewModel::setStartTime,
             hour = state.startTime?.hour ?: Time.Init.hour,

@@ -17,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 
@@ -60,8 +59,8 @@ fun NameField(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
-                            contentDescription = "텍스트 전체 삭제",
-                            tint = Color.Gray,
+                            contentDescription = "제거",
+                            tint = BitnagilTheme.colors.coolGray80,
                         )
                     }
                 }

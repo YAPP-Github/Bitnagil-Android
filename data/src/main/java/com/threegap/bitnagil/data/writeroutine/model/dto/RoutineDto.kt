@@ -21,16 +21,25 @@ data class RoutineDto(
     val subRoutineInfos: List<SubRoutineDto>,
 ) {
     fun toRoutine(): Routine {
+        val dividedTimeStrings = executionTime.split(":")
+        require(dividedTimeStrings.size >= 2) { "Invalid time format: $executionTime Expected format: HH:mm / HH:mm:ss" }
+
         val startTime = Time(
-            hour = executionTime.split(":")[0].toInt(),
-            minute = executionTime.split(":")[1].toInt(),
+            hour = dividedTimeStrings[0].toIntOrNull() ?: throw IllegalArgumentException("Invalid hour: ${dividedTimeStrings[0]}"),
+            minute = dividedTimeStrings[1].toIntOrNull() ?: throw IllegalArgumentException("Invalid minute: ${dividedTimeStrings[1]}"),
         )
 
         return Routine(
             id = routineId,
             name = routineName,
             subRoutines = subRoutineInfos.map { it.toSubRoutine() },
-            repeatDays = repeatDay.map { RepeatDay.valueOf(it) },
+            repeatDays = repeatDay.mapNotNull {
+                try {
+                    RepeatDay.valueOf(it)
+                } catch (e: IllegalArgumentException) {
+                    null
+                }
+            },
             startTime = startTime,
             endDate = Date(
                 year = 2099,

@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TImePickerBottomSheet(
+fun TimePickerBottomSheet(
     modifier: Modifier = Modifier,
     onTimeSelected: (Int, Int) -> Unit,
     hour: Int,

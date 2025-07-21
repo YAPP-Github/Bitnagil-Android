@@ -9,6 +9,11 @@ data class Time(
     val hour: Int,
     val minute: Int,
 ) : Parcelable {
+    init {
+        require(hour in 0..23) { "Hour must be in range 0..23, but was $hour" }
+        require(minute in 0..59) { "Minute must be in range 0..59, but was $minute" }
+    }
+
     companion object {
         val Init = Time(hour = 12, minute = 0)
         val AllDay = Time(hour = 23, minute = 59)
