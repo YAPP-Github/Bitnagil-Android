@@ -309,6 +309,8 @@ class WriteRoutineViewModel @Inject constructor(
         viewModelScope.launch {
             val currentState = stateFlow.value
 
+            val startTime = currentState.startTime ?: return@launch
+
             when (currentState.writeRoutineType) {
                 WriteRoutineType.ADD -> {
                     sendIntent(WriteRoutineIntent.RegisterRoutineLoading)
@@ -317,7 +319,7 @@ class WriteRoutineViewModel @Inject constructor(
                         currentState.repeatDays
                             .filter { it.selected }
                             .map { it.day.toRepeatDay() },
-                        currentState.startTime!!.toDomainTime(),
+                        startTime.toDomainTime(),
                         currentState.subRoutines,
                     )
 
@@ -328,6 +330,8 @@ class WriteRoutineViewModel @Inject constructor(
                     }
                 }
                 WriteRoutineType.EDIT -> {
+                    val currentRoutineId = routineId ?: return@launch
+
                     val subRoutineDiffs = getChangedSubRoutinesUseCase(
                         oldSubRoutines = oldSubRoutines.mapIndexed { index, subRoutine ->
                             DomainSubRoutine(
@@ -341,12 +345,12 @@ class WriteRoutineViewModel @Inject constructor(
 
                     sendIntent(WriteRoutineIntent.EditRoutineLoading)
                     val editRoutineResult = editRoutineUseCase(
-                        routineId = routineId!!,
+                        routineId = currentRoutineId,
                         name = currentState.routineName,
                         repeatDay = currentState.repeatDays
                             .filter { it.selected }
                             .map { it.day.toRepeatDay() },
-                        startTime = currentState.startTime!!.toDomainTime(),
+                        startTime = startTime.toDomainTime(),
                         subRoutines = subRoutineDiffs,
                     )
 
