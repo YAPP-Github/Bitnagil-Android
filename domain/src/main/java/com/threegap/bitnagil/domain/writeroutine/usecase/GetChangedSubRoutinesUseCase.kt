@@ -9,13 +9,37 @@ class GetChangedSubRoutinesUseCase @Inject constructor() {
         oldSubRoutines: List<SubRoutine>,
         newSubRoutineNames: List<String>,
     ): List<SubRoutineDiff> {
-        val oldSubRoutineMap = oldSubRoutines.associateBy { it.name }
+        val oldSubRoutineMap = oldSubRoutines.groupBy { it.name }.toMutableMap()
         val changedSubRoutines = mutableListOf<SubRoutineDiff>()
+
+        val newSubRoutineNameCountMap = newSubRoutineNames
+            .groupingBy { it }
+            .eachCount()
+            .toMutableMap()
+
+        for (oldSubRoutine in oldSubRoutines) {
+            val name = oldSubRoutine.name
+            val count = newSubRoutineNameCountMap[name] ?: 0
+
+            if (count > 0) {
+                newSubRoutineNameCountMap[name] = count - 1
+                continue
+            } else {
+                changedSubRoutines.add(
+                    SubRoutineDiff(
+                        id = oldSubRoutine.id,
+                        name = null,
+                        sort = null,
+                    ),
+                )
+            }
+        }
 
         for ((index, name) in newSubRoutineNames.withIndex()) {
             val sort = index + 1
 
-            val oldSubRoutine = oldSubRoutineMap[name]
+            val oldSubRoutinesWithSameName = oldSubRoutineMap[name]
+            val oldSubRoutine = oldSubRoutinesWithSameName?.firstOrNull()
             if (oldSubRoutine == null) {
                 changedSubRoutines.add(
                     SubRoutineDiff(
@@ -32,22 +56,9 @@ class GetChangedSubRoutinesUseCase @Inject constructor() {
                         sort = sort,
                     ),
                 )
-            }
-        }
-
-        val newSubRoutineNameSet = newSubRoutineNames.toSet()
-
-        for ((name, newSubRoutine) in oldSubRoutineMap) {
-            if (newSubRoutineNameSet.contains(name)) {
-                continue
+                oldSubRoutineMap[name] = oldSubRoutinesWithSameName.drop(1)
             } else {
-                changedSubRoutines.add(
-                    SubRoutineDiff(
-                        id = newSubRoutine.id,
-                        name = null,
-                        sort = null,
-                    ),
-                )
+                oldSubRoutineMap[name] = oldSubRoutinesWithSameName.drop(1)
             }
         }
 
