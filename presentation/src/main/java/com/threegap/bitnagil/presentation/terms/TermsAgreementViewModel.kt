@@ -66,6 +66,16 @@ class TermsAgreementViewModel @Inject constructor(
             }
         }
 
+        is TermsAgreementIntent.ShowTermsOfService -> {
+            sendSideEffect(TermsAgreementSideEffect.NavigateToTermsOfService)
+            null
+        }
+
+        is TermsAgreementIntent.ShowPrivacyPolicy -> {
+            sendSideEffect(TermsAgreementSideEffect.NavigateToPrivacyPolicy)
+            null
+        }
+
         is TermsAgreementIntent.SubmitSuccess -> {
             sendSideEffect(TermsAgreementSideEffect.NavigateToOnBoarding)
             state.copy(isLoading = false)

@@ -4,11 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import com.threegap.bitnagil.presentation.home.HomeScreen
 import com.threegap.bitnagil.presentation.intro.IntroScreenContainer
 import com.threegap.bitnagil.presentation.login.LoginScreenContainer
 import com.threegap.bitnagil.presentation.splash.SplashScreenContainer
 import com.threegap.bitnagil.presentation.terms.TermsAgreementScreenContainer
+import com.threegap.bitnagil.presentation.webview.BitnagilWebViewScreen
 
 @Composable
 fun MainNavHost(
@@ -42,6 +44,22 @@ fun MainNavHost(
 
         composable<Route.TermsAgreement> {
             TermsAgreementScreenContainer(
+                navigateToTermsOfService = {
+                    navigator.navController.navigate(
+                        Route.WebView(
+                            title = "약관 동의",
+                            url = "https://complex-wombat-99f.notion.site/2025-7-20-236f4587491d8071833adfaf8115bce2",
+                        ),
+                    )
+                },
+                navigateToPrivacyPolicy = {
+                    navigator.navController.navigate(
+                        Route.WebView(
+                            title = "약관 동의",
+                            url = "https://complex-wombat-99f.notion.site/2025-07-20-236f4587491d80308016eb810692d18b",
+                        ),
+                    )
+                },
                 navigateToOnBoarding = { },
                 navigateToBack = { navigator.navController.popBackStack() },
             )
@@ -49,6 +67,15 @@ fun MainNavHost(
 
         composable<Route.Home> {
             HomeScreen()
+        }
+
+        composable<Route.WebView> {
+            val webViewRoute = it.toRoute<Route.WebView>()
+            BitnagilWebViewScreen(
+                title = webViewRoute.title,
+                url = webViewRoute.url,
+                onBackClick = { navigator.navController.popBackStack() },
+            )
         }
     }
 }
