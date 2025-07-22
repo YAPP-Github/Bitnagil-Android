@@ -2,6 +2,7 @@ package com.threegap.bitnagil.presentation.webview
 
 import android.view.ViewGroup
 import android.webkit.WebResourceRequest
+import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.background
@@ -53,6 +54,8 @@ fun BitnagilWebViewScreen(
                 domStorageEnabled = true
                 allowFileAccess = false
                 allowContentAccess = false
+                mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
+                setSupportZoom(false)
             }
 
             layoutParams = ViewGroup.LayoutParams(
@@ -105,7 +108,7 @@ fun BitnagilWebViewScreen(
             modifier = Modifier.fillMaxSize(),
             factory = { webView },
             update = { view ->
-                if (view.url != url) {
+                if (view.url != url && url.isNotBlank()) {
                     view.loadUrl(url)
                 }
             },
