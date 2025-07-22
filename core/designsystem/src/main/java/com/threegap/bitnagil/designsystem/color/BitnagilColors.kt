@@ -29,6 +29,8 @@ data class BitnagilColors(
     val coolGray30: Color = CoolGray30,
     val coolGray20: Color = CoolGray20,
     val coolGray10: Color = CoolGray10,
+    val coolGray7: Color = CoolGray7,
+    val coolGray5: Color = CoolGray5,
     val navy900: Color = Navy900,
     val navy800: Color = Navy800,
     val navy700: Color = Navy700,
