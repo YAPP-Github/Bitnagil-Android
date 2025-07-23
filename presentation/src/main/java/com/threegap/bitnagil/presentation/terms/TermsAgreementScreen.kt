@@ -36,6 +36,8 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun TermsAgreementScreenContainer(
+    navigateToTermsOfService: () -> Unit,
+    navigateToPrivacyPolicy: () -> Unit,
     navigateToOnBoarding: () -> Unit,
     navigateToBack: () -> Unit,
     viewmodel: TermsAgreementViewModel = hiltViewModel(),
@@ -44,6 +46,14 @@ fun TermsAgreementScreenContainer(
 
     viewmodel.collectSideEffect { sideEffect ->
         when (sideEffect) {
+            is TermsAgreementSideEffect.NavigateToPrivacyPolicy -> {
+                navigateToPrivacyPolicy()
+            }
+
+            is TermsAgreementSideEffect.NavigateToTermsOfService -> {
+                navigateToTermsOfService()
+            }
+
             is TermsAgreementSideEffect.NavigateToOnBoarding -> {
                 navigateToOnBoarding()
             }
@@ -68,6 +78,12 @@ fun TermsAgreementScreenContainer(
         onToggleOverFourteen = {
             viewmodel.sendIntent(TermsAgreementIntent.ToggleOverFourteen(it))
         },
+        onShowTermsOfService = {
+            viewmodel.sendIntent(TermsAgreementIntent.ShowTermsOfService)
+        },
+        onShowPrivacyPolicy = {
+            viewmodel.sendIntent(TermsAgreementIntent.ShowPrivacyPolicy)
+        },
         onStartButtonClick = {
             viewmodel.submitTermsAgreement()
         },
@@ -84,6 +100,8 @@ private fun TermsAgreementScreen(
     onToggleTermsOfService: (Boolean) -> Unit,
     onTogglePrivacyPolicy: (Boolean) -> Unit,
     onToggleOverFourteen: (Boolean) -> Unit,
+    onShowTermsOfService: () -> Unit,
+    onShowPrivacyPolicy: () -> Unit,
     onStartButtonClick: () -> Unit,
     onBackButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -162,6 +180,7 @@ private fun TermsAgreementScreen(
                 onCheckedChange = { onToggleTermsOfService(!uiState.agreedTermsOfService) },
                 isChecked = uiState.agreedTermsOfService,
                 showMore = true,
+                onClickShowMore = onShowTermsOfService,
             )
 
             TermsAgreementItem(
@@ -169,6 +188,7 @@ private fun TermsAgreementScreen(
                 onCheckedChange = { onTogglePrivacyPolicy(!uiState.agreedPrivacyPolicy) },
                 isChecked = uiState.agreedPrivacyPolicy,
                 showMore = true,
+                onClickShowMore = onShowPrivacyPolicy,
             )
 
             TermsAgreementItem(
@@ -202,6 +222,8 @@ private fun TermsAgreementScreenPreview() {
         onToggleTermsOfService = {},
         onTogglePrivacyPolicy = {},
         onToggleOverFourteen = {},
+        onShowTermsOfService = {},
+        onShowPrivacyPolicy = {},
         onStartButtonClick = {},
         onBackButtonClick = {},
     )
