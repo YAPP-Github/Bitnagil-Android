@@ -42,8 +42,8 @@ fun MyPageScreenContainer(
         state = state,
         onClickSetting = navigateToSetting,
         onClickNotice = navigateToNotice,
-        onClickResetOnBoarding = navigateToQnA,
-        onClickQnA = navigateToOnBoarding,
+        onClickResetOnBoarding = navigateToOnBoarding,
+        onClickQnA = navigateToQnA,
     )
 }
 
