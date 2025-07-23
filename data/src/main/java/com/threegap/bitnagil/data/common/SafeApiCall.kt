@@ -24,7 +24,6 @@ internal suspend inline fun <T> safeApiCall(
         handleApiException(e)
     }
 
-
 internal suspend inline fun safeUnitApiCall(
     crossinline apiCall: suspend () -> BaseResponse<Unit>,
 ): Result<Unit> =
@@ -34,7 +33,6 @@ internal suspend inline fun safeUnitApiCall(
     } catch (e: Exception) {
         handleApiException(e)
     }
-
 
 private val json = Json { ignoreUnknownKeys = true }
 
@@ -56,7 +54,7 @@ private fun <T> handleApiException(e: Exception): Result<T> =
                 BitnagilError(
                     code = errorResponse?.code ?: "HTTP_${e.code()}",
                     message = errorResponse?.message ?: e.message(),
-                )
+                ),
             )
         }
 

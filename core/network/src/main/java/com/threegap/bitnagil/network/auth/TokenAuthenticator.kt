@@ -13,7 +13,7 @@ import okhttp3.Route
 class TokenAuthenticator(
     private val tokenProvider: TokenProvider,
     private val reissueService: ReissueService,
-    private val onTokenExpired: (() -> Unit)? = null
+    private val onTokenExpired: (() -> Unit)? = null,
 ) : Authenticator {
 
     private val authMutex = Mutex()
@@ -50,7 +50,7 @@ class TokenAuthenticator(
                 if (baseResponse.data != null && baseResponse.code == SUCCESS_CODE) {
                     tokenProvider.saveTokens(
                         accessToken = baseResponse.data.accessToken,
-                        refreshToken = baseResponse.data.refreshToken
+                        refreshToken = baseResponse.data.refreshToken,
                     )
                     buildRequestWithToken(response.request, baseResponse.data.accessToken)
                 } else {
@@ -61,7 +61,7 @@ class TokenAuthenticator(
             onFailure = {
                 handleTokenExpiration()
                 null
-            }
+            },
         )
     }
 

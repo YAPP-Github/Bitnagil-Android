@@ -79,7 +79,7 @@ object NetworkModule {
     fun provideTokenAuthenticator(
         tokenProvider: TokenProvider,
         reissueService: ReissueService,
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
     ): TokenAuthenticator = TokenAuthenticator(
         tokenProvider = tokenProvider,
         reissueService = reissueService,
@@ -90,7 +90,7 @@ object NetworkModule {
                     Intent.FLAG_ACTIVITY_CLEAR_TOP
             }
             context.startActivity(intent)
-        }
+        },
     )
 
     @Provides

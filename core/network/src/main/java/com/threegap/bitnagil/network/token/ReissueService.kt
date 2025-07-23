@@ -8,6 +8,6 @@ import retrofit2.http.POST
 interface ReissueService {
     @POST("/api/v1/auth/token/reissue")
     suspend fun reissueToken(
-        @Header("Refresh-Token") refreshToken: String
+        @Header("Refresh-Token") refreshToken: String,
     ): BaseResponse<AuthToken>
 }
