@@ -36,5 +36,4 @@ object ServiceModule {
     @Singleton
     fun provideReissueService(@NoneAuth retrofit: Retrofit): ReissueService =
         retrofit.create(ReissueService::class.java)
-
 }
