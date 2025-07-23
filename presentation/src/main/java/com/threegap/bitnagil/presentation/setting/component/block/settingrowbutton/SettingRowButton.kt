@@ -24,7 +24,7 @@ fun SettingRowButton(
             .height(48.dp)
             .clickable(onClick = onClick)
             .padding(start = 16.dp, end = 4.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text,
@@ -36,7 +36,7 @@ fun SettingRowButton(
             modifier = Modifier
                 .padding(end = 10.dp)
                 .size(36.dp)
-                .background(BitnagilTheme.colors.black)
+                .background(BitnagilTheme.colors.black),
         )
     }
 }

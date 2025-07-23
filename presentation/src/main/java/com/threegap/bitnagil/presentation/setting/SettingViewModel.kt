@@ -25,9 +25,9 @@ class SettingViewModel @Inject constructor(
 
     override suspend fun SimpleSyntax<SettingState, SettingSideEffect>.reduceState(
         intent: SettingIntent,
-        state: SettingState
+        state: SettingState,
     ): SettingState {
-        when(intent) {
+        when (intent) {
             is SettingIntent.LoadSettingSuccess -> {
                 return state.copy(
                     useServiceAlarm = intent.useServiceAlarm,
@@ -38,12 +38,12 @@ class SettingViewModel @Inject constructor(
             }
             SettingIntent.TogglePushAlarm -> {
                 return state.copy(
-                    usePushAlarm = !state.usePushAlarm
+                    usePushAlarm = !state.usePushAlarm,
                 )
             }
             SettingIntent.ToggleServiceAlarm -> {
                 return state.copy(
-                    useServiceAlarm = !state.useServiceAlarm
+                    useServiceAlarm = !state.useServiceAlarm,
                 )
             }
         }
@@ -54,7 +54,6 @@ class SettingViewModel @Inject constructor(
         setServiceAlarmJob?.cancel()
         setServiceAlarmJob = viewModelScope.launch {
             delay(1000L)
-
         }
     }
 

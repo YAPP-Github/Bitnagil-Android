@@ -59,12 +59,12 @@ private fun MyPageScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(color = BitnagilTheme.colors.white),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(
             modifier = Modifier
                 .height(54.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             Text(
                 "마이페이지",
@@ -89,13 +89,13 @@ private fun MyPageScreen(
             contentDescription = null,
             modifier = Modifier
                 .size(80.dp)
-                .clip(shape = CircleShape)
+                .clip(shape = CircleShape),
         )
 
         Text(
             state.name,
             style = BitnagilTheme.typography.title3SemiBold,
-            modifier = Modifier.padding(top = 12.dp)
+            modifier = Modifier.padding(top = 12.dp),
         )
 
         Spacer(modifier = Modifier.height(28.dp))
@@ -109,7 +109,7 @@ private fun MyPageScreen(
                 .height(48.dp)
                 .clickable(onClick = onClickResetOnBoarding)
                 .padding(start = 16.dp, end = 4.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 "내 목표 재설정",
@@ -121,7 +121,7 @@ private fun MyPageScreen(
                 modifier = Modifier
                     .padding(end = 10.dp)
                     .size(36.dp)
-                    .background(BitnagilTheme.colors.black)
+                    .background(BitnagilTheme.colors.black),
             )
         }
 
@@ -130,7 +130,7 @@ private fun MyPageScreen(
                 .height(48.dp)
                 .clickable(onClick = onClickNotice)
                 .padding(start = 16.dp, end = 4.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 "공지사항",
@@ -142,7 +142,7 @@ private fun MyPageScreen(
                 modifier = Modifier
                     .padding(end = 10.dp)
                     .size(36.dp)
-                    .background(BitnagilTheme.colors.black)
+                    .background(BitnagilTheme.colors.black),
             )
         }
 
@@ -151,7 +151,7 @@ private fun MyPageScreen(
                 .height(48.dp)
                 .clickable(onClick = onClickQnA)
                 .padding(start = 16.dp, end = 4.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 "자주 묻는 질문",
@@ -163,7 +163,7 @@ private fun MyPageScreen(
                 modifier = Modifier
                     .padding(end = 10.dp)
                     .size(36.dp)
-                    .background(BitnagilTheme.colors.black)
+                    .background(BitnagilTheme.colors.black),
             )
         }
     }

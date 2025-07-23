@@ -16,7 +16,7 @@ class MyPageViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : MviViewModel<MyPageState, MyPageSideEffect, MyPageIntent>(
     MyPageState.Init,
-    savedStateHandle
+    savedStateHandle,
 ) {
     init {
         loadMyPageInfo()
@@ -30,13 +30,13 @@ class MyPageViewModel @Inject constructor(
 
     override suspend fun SimpleSyntax<MyPageState, MyPageSideEffect>.reduceState(
         intent: MyPageIntent,
-        state: MyPageState
+        state: MyPageState,
     ): MyPageState {
-        when(intent) {
+        when (intent) {
             is MyPageIntent.LoadMyPageSuccess -> {
                 return state.copy(
                     name = intent.name,
-                    profileUrl = intent.profileUrl
+                    profileUrl = intent.profileUrl,
                 )
             }
         }

@@ -33,7 +33,7 @@ import com.threegap.bitnagil.presentation.setting.model.mvi.SettingState
 
 @Composable
 fun SettingScreenContainer(
-    viewModel: SettingViewModel = hiltViewModel()
+    viewModel: SettingViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsState()
 
@@ -41,7 +41,7 @@ fun SettingScreenContainer(
         state = state,
         toggleServiceAlarm = viewModel::toggleServiceAlarm,
         togglePushAlarm = viewModel::togglePushAlarm,
-        onClickUpdate = {}
+        onClickUpdate = {},
     )
 }
 
@@ -55,12 +55,12 @@ private fun SettingScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = BitnagilTheme.colors.white)
+            .background(color = BitnagilTheme.colors.white),
     ) {
         Box(
             modifier = Modifier
                 .height(54.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             Box(
                 modifier = Modifier
@@ -69,7 +69,6 @@ private fun SettingScreen(
                     .background(BitnagilTheme.colors.black)
                     .align(Alignment.CenterStart)
                     .clickable {
-
                     },
             )
 
@@ -78,14 +77,13 @@ private fun SettingScreen(
                 modifier = Modifier.align(Alignment.Center),
                 style = BitnagilTheme.typography.title3SemiBold,
             )
-
         }
 
         val scrollState = rememberScrollState()
         Column(
             modifier = Modifier
                 .weight(1f)
-                .verticalScroll(scrollState)
+                .verticalScroll(scrollState),
         ) {
             Spacer(modifier = Modifier.height(32.dp))
 
@@ -97,7 +95,7 @@ private fun SettingScreen(
                     .height(48.dp)
                     .padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text("서비스 이용 알림", style = BitnagilTheme.typography.body1Regular)
                 ToggleSwitch(checked = state.useServiceAlarm, onCheckedChange = { toggleServiceAlarm() })
@@ -109,7 +107,7 @@ private fun SettingScreen(
                     .height(48.dp)
                     .padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text("푸시알림", style = BitnagilTheme.typography.body1Regular)
                 ToggleSwitch(checked = state.usePushAlarm, onCheckedChange = { togglePushAlarm() })
@@ -129,7 +127,7 @@ private fun SettingScreen(
                     .height(48.dp)
                     .padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Row {
                     Text("버전 ", style = BitnagilTheme.typography.body1Regular)
@@ -159,7 +157,6 @@ private fun SettingScreen(
                         style = BitnagilTheme.typography.button2.copy(color = BitnagilTheme.colors.navy500),
                     )
                 }
-
             }
 
             SettingRowButton(text = "서비스 이용약관", onClick = {})
@@ -193,6 +190,6 @@ fun SettingScreenPreview() {
         ),
         toggleServiceAlarm = {},
         togglePushAlarm = {},
-        onClickUpdate = {}
+        onClickUpdate = {},
     )
 }

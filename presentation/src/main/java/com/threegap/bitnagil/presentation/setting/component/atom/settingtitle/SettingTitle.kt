@@ -15,6 +15,6 @@ fun SettingTitle(
     Text(
         title,
         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 3.dp),
-        style = BitnagilTheme.typography.caption1SemiBold.copy(color = BitnagilTheme.colors.coolGray50)
+        style = BitnagilTheme.typography.caption1SemiBold.copy(color = BitnagilTheme.colors.coolGray50),
     )
 }

@@ -20,14 +20,14 @@ fun ManualSwitchPreview() {
 
     Column(
         modifier = Modifier.padding(16.dp).width(100.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         // 켜진 상태
-        ToggleSwitch (
+        ToggleSwitch(
             checked = isChecked,
             onCheckedChange = { checked ->
                 isChecked = checked
-            }
+            },
         )
     }
 }
