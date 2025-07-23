@@ -6,6 +6,8 @@ import com.threegap.bitnagil.data.auth.datasourceimpl.AuthLocalDataSourceImpl
 import com.threegap.bitnagil.data.auth.datasourceimpl.AuthRemoteDataSourceImpl
 import com.threegap.bitnagil.data.onboarding.datasource.OnBoardingDataSource
 import com.threegap.bitnagil.data.onboarding.datasourceImpl.OnBoardingDataSourceImpl
+import com.threegap.bitnagil.data.writeroutine.datasource.WriteRoutineDataSource
+import com.threegap.bitnagil.data.writeroutine.datasourceImpl.WriteRoutineDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -27,4 +29,8 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindOnBoardingDataSource(onBoardingDataSourceImpl: OnBoardingDataSourceImpl): OnBoardingDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindWriteRoutineDataSource(writeRoutineDataSourceImpl: WriteRoutineDataSourceImpl): WriteRoutineDataSource
 }
