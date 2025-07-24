@@ -27,7 +27,6 @@ import com.threegap.bitnagil.domain.routine.model.DayOfWeek
 import com.threegap.bitnagil.domain.routine.model.DayOfWeek.Companion.formatRepeatDays
 import com.threegap.bitnagil.domain.routine.model.RoutineType
 import com.threegap.bitnagil.presentation.home.model.RoutineUiModel
-import com.threegap.bitnagil.presentation.home.model.RoutinesUiModel
 import com.threegap.bitnagil.presentation.home.model.SubRoutineUiModel
 import com.threegap.bitnagil.presentation.home.util.formatExecutionTime
 
@@ -71,7 +70,7 @@ private fun RoutineInfoContent(
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
                     text = "루틴 이름",
@@ -86,13 +85,13 @@ private fun RoutineInfoContent(
             }
 
             Box(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
                     text = "세부 루틴",
                     color = BitnagilTheme.colors.coolGray50,
                     style = BitnagilTheme.typography.body2Medium,
-                    modifier = Modifier.align(Alignment.TopStart)
+                    modifier = Modifier.align(Alignment.TopStart),
                 )
 
                 if (routine.subRoutines.isEmpty()) {
@@ -100,11 +99,11 @@ private fun RoutineInfoContent(
                         text = "세부루틴 없음",
                         color = BitnagilTheme.colors.navy500,
                         style = BitnagilTheme.typography.body2Medium,
-                        modifier = Modifier.align(Alignment.TopEnd)
+                        modifier = Modifier.align(Alignment.TopEnd),
                     )
                 } else {
                     Column(
-                        modifier = Modifier.align(Alignment.TopEnd)
+                        modifier = Modifier.align(Alignment.TopEnd),
                     ) {
                         routine.subRoutines.forEach { subRoutine ->
                             Text(
@@ -112,7 +111,7 @@ private fun RoutineInfoContent(
                                 color = BitnagilTheme.colors.coolGray10,
                                 style = BitnagilTheme.typography.body2SemiBold,
                                 textAlign = TextAlign.End,
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth(),
                             )
                         }
                     }
@@ -123,7 +122,7 @@ private fun RoutineInfoContent(
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(
                         text = "루틴 반복",
@@ -141,7 +140,7 @@ private fun RoutineInfoContent(
                     color = BitnagilTheme.colors.coolGray40,
                     style = BitnagilTheme.typography.caption1Medium,
                     textAlign = TextAlign.End,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
         }
@@ -164,7 +163,7 @@ private fun RoutineInfoContent(
                         color = BitnagilTheme.colors.navy500,
                         shape = RoundedCornerShape(12.dp),
                     )
-                    .clickable { onEdit() }
+                    .clickable { onEdit() },
             ) {
                 Text(
                     text = "수정하기",
@@ -187,7 +186,7 @@ private fun RoutineInfoContent(
                         color = BitnagilTheme.colors.white,
                         shape = RoundedCornerShape(12.dp),
                     )
-                    .clickable { onDelete() }
+                    .clickable { onDelete() },
             ) {
                 Text(
                     text = "삭제하기",
@@ -260,7 +259,7 @@ private fun RoutineInfoContentSinglePreview() {
             isModified = false,
             subRoutines = emptyList(),
             repeatDay = emptyList(),
-            routineType = RoutineType.ROUTINE
+            routineType = RoutineType.ROUTINE,
         ),
         onEdit = {},
         onDelete = {},

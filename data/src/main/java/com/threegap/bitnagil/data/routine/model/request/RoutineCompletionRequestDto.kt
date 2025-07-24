@@ -8,5 +8,5 @@ data class RoutineCompletionRequestDto(
     @SerialName("performedDate")
     val performedDate: String,
     @SerialName("routineCompletionInfos")
-    val routineCompletions: List<RoutineCompletionInfoDto>
+    val routineCompletions: List<RoutineCompletionInfoDto>,
 )

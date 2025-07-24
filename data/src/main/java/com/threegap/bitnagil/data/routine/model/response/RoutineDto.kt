@@ -22,5 +22,5 @@ data class RoutineDto(
     @SerialName("completeYn")
     val isCompleted: Boolean,
     @SerialName("routineType")
-    val routineType: String
+    val routineType: String,
 )

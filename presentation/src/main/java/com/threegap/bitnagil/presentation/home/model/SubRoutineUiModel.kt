@@ -13,7 +13,7 @@ data class SubRoutineUiModel(
     val sortOrder: Int,
     val isCompleted: Boolean = false,
     val isModified: Boolean = false,
-    val routineType: RoutineType
+    val routineType: RoutineType,
 ) : Parcelable
 
 fun SubRoutine.toUiModel(): SubRoutineUiModel =
@@ -24,5 +24,5 @@ fun SubRoutine.toUiModel(): SubRoutineUiModel =
         sortOrder = this.sortOrder,
         isCompleted = this.isCompleted,
         isModified = this.isModified,
-        routineType = this.routineType
+        routineType = this.routineType,
     )

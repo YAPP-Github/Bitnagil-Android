@@ -296,7 +296,7 @@ class HomeViewModel @Inject constructor(
 
     private fun updateRoutinesForDate(
         state: HomeState,
-        updateLogic: (MutableList<RoutineUiModel>) -> Boolean
+        updateLogic: (MutableList<RoutineUiModel>) -> Boolean,
     ): HomeState {
         val dateKey = state.selectedDate.toString()
         val routinesForDate = state.routines.routinesByDate[dateKey]?.toMutableList() ?: return state

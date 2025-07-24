@@ -29,8 +29,8 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.threegap.bitnagil.designsystem.BitnagilTheme
-import com.threegap.bitnagil.presentation.home.component.template.DeleteConfirmDialog
 import com.threegap.bitnagil.presentation.home.component.template.CollapsibleHomeHeader
+import com.threegap.bitnagil.presentation.home.component.template.DeleteConfirmDialog
 import com.threegap.bitnagil.presentation.home.component.template.RoutineDetailsBottomSheet
 import com.threegap.bitnagil.presentation.home.component.template.RoutineEmptyView
 import com.threegap.bitnagil.presentation.home.component.template.RoutineSection

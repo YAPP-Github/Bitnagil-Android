@@ -98,7 +98,7 @@ fun CollapsibleHomeHeader(
                 EmotionBallIcon(
                     modifier = Modifier
                         .padding(end = 18.dp, bottom = 42.dp)
-                        .align(Alignment.BottomEnd)
+                        .align(Alignment.BottomEnd),
                 )
             }
         }
@@ -155,7 +155,7 @@ private fun EmotionBallIcon(
     Icon(
         imageVector = Icons.Default.AccountBox,
         contentDescription = "감정구슬",
-        modifier = modifier.size(102.dp)
+        modifier = modifier.size(102.dp),
     )
 }
 

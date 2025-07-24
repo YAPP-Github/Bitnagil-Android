@@ -9,7 +9,7 @@ import com.threegap.bitnagil.data.routine.service.RoutineService
 import javax.inject.Inject
 
 class RoutineRemoteDataSourceImpl @Inject constructor(
-    private val routineService: RoutineService
+    private val routineService: RoutineService,
 ) : RoutineRemoteDataSource {
     override suspend fun fetchWeeklyRoutines(startDate: String, endDate: String): Result<RoutinesResponseDto> =
         safeApiCall {

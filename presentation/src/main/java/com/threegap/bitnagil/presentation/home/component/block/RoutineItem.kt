@@ -124,7 +124,7 @@ private fun RoutineItemPreview() {
                 ),
             ),
             repeatDay = emptyList(),
-            routineType = RoutineType.ROUTINE
+            routineType = RoutineType.ROUTINE,
         ),
         onRoutineToggle = { },
         onMoreClick = { },

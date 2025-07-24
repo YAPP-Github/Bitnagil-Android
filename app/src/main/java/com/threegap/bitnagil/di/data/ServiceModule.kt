@@ -32,7 +32,6 @@ object ServiceModule {
     fun provideRoutineService(@Auth retrofit: Retrofit): RoutineService =
         retrofit.create(RoutineService::class.java)
 
-
     @Provides
     @Singleton
     fun provideReissueService(@NoneAuth retrofit: Retrofit): ReissueService =

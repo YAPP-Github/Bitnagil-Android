@@ -3,8 +3,8 @@ package com.threegap.bitnagil.data.routine.mapper
 import com.threegap.bitnagil.data.routine.model.request.RoutineCompletionInfoDto
 import com.threegap.bitnagil.data.routine.model.request.RoutineCompletionRequestDto
 import com.threegap.bitnagil.data.routine.model.response.RoutineDto
-import com.threegap.bitnagil.data.routine.model.response.SubRoutineDto
 import com.threegap.bitnagil.data.routine.model.response.RoutinesResponseDto
+import com.threegap.bitnagil.data.routine.model.response.SubRoutineDto
 import com.threegap.bitnagil.domain.routine.model.DayOfWeek
 import com.threegap.bitnagil.domain.routine.model.Routine
 import com.threegap.bitnagil.domain.routine.model.RoutineCompletion
@@ -18,7 +18,7 @@ internal fun RoutinesResponseDto.toDomain() =
     Routines(
         routinesByDate = this.routines.mapValues { (_, routineDto) ->
             routineDto.map { it.toDomain() }
-        }
+        },
     )
 
 internal fun RoutineDto.toDomain() =
@@ -31,9 +31,8 @@ internal fun RoutineDto.toDomain() =
         isModified = this.isModified,
         isCompleted = this.isCompleted,
         repeatDay = this.repeatDay.map { DayOfWeek.fromString(it) },
-        routineType = RoutineType.fromString(this.routineType)
+        routineType = RoutineType.fromString(this.routineType),
     )
-
 
 internal fun SubRoutineDto.toDomain() =
     SubRoutine(
@@ -43,14 +42,14 @@ internal fun SubRoutineDto.toDomain() =
         isModified = this.isModified,
         sortOrder = this.sortOrder,
         isCompleted = this.isCompleted,
-        routineType = RoutineType.fromString(this.routineType)
+        routineType = RoutineType.fromString(this.routineType),
     )
 
 // toDto
 internal fun RoutineCompletion.toDto() =
     RoutineCompletionRequestDto(
         performedDate = this.performedDate,
-        routineCompletions = this.routineCompletions.map { it.toDto() }
+        routineCompletions = this.routineCompletions.map { it.toDto() },
     )
 
 internal fun RoutineCompletionInfo.toDto() =
@@ -58,5 +57,5 @@ internal fun RoutineCompletionInfo.toDto() =
         routineType = this.routineType.name,
         routineId = this.routineId,
         historySeq = this.historySeq,
-        isCompleted = this.isCompleted
+        isCompleted = this.isCompleted,
     )

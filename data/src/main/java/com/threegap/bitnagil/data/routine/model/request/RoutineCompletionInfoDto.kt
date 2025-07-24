@@ -12,5 +12,5 @@ data class RoutineCompletionInfoDto(
     @SerialName("historySeq")
     val historySeq: Int,
     @SerialName("completeYn")
-    val isCompleted: Boolean
+    val isCompleted: Boolean,
 )

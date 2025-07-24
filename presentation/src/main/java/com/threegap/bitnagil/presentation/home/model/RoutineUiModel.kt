@@ -29,5 +29,5 @@ fun Routine.toUiModel(): RoutineUiModel =
         subRoutines = this.subRoutines.map { it.toUiModel() },
         isModified = this.isModified,
         isCompleted = this.isCompleted,
-        routineType = this.routineType
+        routineType = this.routineType,
     )

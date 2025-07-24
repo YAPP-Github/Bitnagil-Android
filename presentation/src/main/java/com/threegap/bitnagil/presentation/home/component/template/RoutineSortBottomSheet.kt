@@ -56,7 +56,7 @@ private fun SortOption(
 ) {
     val sortOptions = listOf(
         "완료한 루틴 순" to RoutineSortType.COMPLETED_FIRST,
-        "미완료한 루틴 순" to RoutineSortType.INCOMPLETE_FIRST
+        "미완료한 루틴 순" to RoutineSortType.INCOMPLETE_FIRST,
     )
 
     Column(modifier = modifier) {
@@ -65,7 +65,7 @@ private fun SortOption(
                 text = text,
                 sortType = sortType,
                 isSelected = currentSortType == sortType,
-                onClick = onClick
+                onClick = onClick,
             )
 
             if (index < sortOptions.lastIndex) {
@@ -84,7 +84,7 @@ private fun SortOptionItem(
     sortType: RoutineSortType,
     isSelected: Boolean,
     onClick: (RoutineSortType) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,

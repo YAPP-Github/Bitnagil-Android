@@ -85,7 +85,7 @@ private fun rememberScrollBehavior(
     expandedHeaderHeight: Dp,
     collapsedHeaderHeight: Dp,
     collapseRange: Dp,
-    density: Density
+    density: Density,
 ): ScrollBehaviorState {
     val lazyListState = rememberLazyListState()
     var scrollOffset by remember { mutableFloatStateOf(0f) }
@@ -163,8 +163,6 @@ private fun rememberScrollBehavior(
 private fun isScrollAtTop(lazyListState: LazyListState): Boolean =
     lazyListState.firstVisibleItemIndex == 0 && lazyListState.firstVisibleItemScrollOffset == 0
 
-
 private const val EXPANDED_HEADER_RATIO = 238f / 800f
 private const val COLLAPSED_HEADER_RATIO = 65f / 800f
 private val SCROLL_BUFFER_DISTANCE = 30.dp
-

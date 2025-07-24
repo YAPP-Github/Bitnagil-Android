@@ -22,4 +22,3 @@ sealed class HomeIntent : MviIntent {
     data object HideRoutineDetailsBottomSheet : HomeIntent()
     data object HideDeleteConfirmDialog : HomeIntent()
 }
-

@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class RoutinesResponseDto(
     @SerialName("routines")
-    val routines: Map<String, List<RoutineDto>>
+    val routines: Map<String, List<RoutineDto>>,
 )

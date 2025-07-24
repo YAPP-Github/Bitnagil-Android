@@ -52,7 +52,7 @@ fun DeleteConfirmDialog(
                 text = "해당 루틴은\n반복 루틴으로 설정되어 있어요",
                 color = BitnagilTheme.colors.coolGray10,
                 style = BitnagilTheme.typography.body1SemiBold,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
 
             Spacer(modifier = Modifier.height(24.dp))

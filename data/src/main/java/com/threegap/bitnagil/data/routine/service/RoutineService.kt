@@ -14,16 +14,16 @@ interface RoutineService {
     @GET("/api/v1/routines")
     suspend fun fetchRoutines(
         @Query("startDate") startDate: String,
-        @Query("endDate") endDate: String
+        @Query("endDate") endDate: String,
     ): BaseResponse<RoutinesResponseDto>
 
     @POST("/api/v1/routines/completions")
     suspend fun routineCompletion(
-        @Body request: RoutineCompletionRequestDto
+        @Body request: RoutineCompletionRequestDto,
     ): BaseResponse<Unit>
 
     @DELETE("/api/v1/routines/{routineId}")
     suspend fun deleteRoutine(
-        @Path("routineId") routineId: String
+        @Path("routineId") routineId: String,
     ): BaseResponse<Unit>
 }
