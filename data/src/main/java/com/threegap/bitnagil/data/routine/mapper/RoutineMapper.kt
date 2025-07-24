@@ -1,10 +1,14 @@
 package com.threegap.bitnagil.data.routine.mapper
 
+import com.threegap.bitnagil.data.routine.model.request.RoutineCompletionInfoDto
+import com.threegap.bitnagil.data.routine.model.request.RoutineCompletionRequestDto
 import com.threegap.bitnagil.data.routine.model.response.RoutineDto
 import com.threegap.bitnagil.data.routine.model.response.SubRoutineDto
 import com.threegap.bitnagil.data.routine.model.response.RoutinesResponseDto
 import com.threegap.bitnagil.domain.routine.model.DayOfWeek
 import com.threegap.bitnagil.domain.routine.model.Routine
+import com.threegap.bitnagil.domain.routine.model.RoutineCompletion
+import com.threegap.bitnagil.domain.routine.model.RoutineCompletionInfo
 import com.threegap.bitnagil.domain.routine.model.RoutineType
 import com.threegap.bitnagil.domain.routine.model.Routines
 import com.threegap.bitnagil.domain.routine.model.SubRoutine
@@ -42,3 +46,17 @@ internal fun SubRoutineDto.toDomain() =
         routineType = RoutineType.fromString(this.routineType)
     )
 
+// toDto
+internal fun RoutineCompletion.toDto() =
+    RoutineCompletionRequestDto(
+        performedDate = this.performedDate,
+        routineCompletions = this.routineCompletions.map { it.toDto() }
+    )
+
+internal fun RoutineCompletionInfo.toDto() =
+    RoutineCompletionInfoDto(
+        routineType = this.routineType.name,
+        routineId = this.routineId,
+        historySeq = this.historySeq,
+        isCompleted = this.isCompleted
+    )
