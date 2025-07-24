@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.domain.routine.model.RoutineType
 import com.threegap.bitnagil.presentation.home.model.RoutineUiModel
 import com.threegap.bitnagil.presentation.home.model.SubRoutineUiModel
 
@@ -88,15 +89,42 @@ private fun RoutineItemPreview() {
     RoutineItem(
         routine = RoutineUiModel(
             routineId = "uuid1",
+            historySeq = 1,
             routineName = "개운하게 일어나기",
             executionTime = "20:30:00",
             isCompleted = false,
             isModified = false,
             subRoutines = listOf(
-                SubRoutineUiModel("uuid1", "물 마시기",1),
-                SubRoutineUiModel("uuid2", "스트레칭하기",2),
-                SubRoutineUiModel("uuid3", "심호흡하기",3),
+                SubRoutineUiModel(
+                    subRoutineId = "uuid1",
+                    historySeq = 1,
+                    subRoutineName = "물 마시기",
+                    sortOrder = 1,
+                    isCompleted = false,
+                    isModified = false,
+                    routineType = RoutineType.SUB_ROUTINE,
+                ),
+                SubRoutineUiModel(
+                    subRoutineId = "uuid2",
+                    historySeq = 1,
+                    subRoutineName = "스트레칭하기",
+                    sortOrder = 1,
+                    isCompleted = false,
+                    isModified = false,
+                    routineType = RoutineType.SUB_ROUTINE,
+                ),
+                SubRoutineUiModel(
+                    subRoutineId = "uuid3",
+                    historySeq = 1,
+                    subRoutineName = "심호흡하기",
+                    sortOrder = 1,
+                    isCompleted = false,
+                    isModified = false,
+                    routineType = RoutineType.SUB_ROUTINE,
+                ),
             ),
+            repeatDay = emptyList(),
+            routineType = RoutineType.ROUTINE
         ),
         onRoutineToggle = { },
         onMoreClick = { },
