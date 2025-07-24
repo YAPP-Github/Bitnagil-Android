@@ -17,4 +17,7 @@ class RoutineRepositoryImpl @Inject constructor(
 
     override suspend fun syncRoutineCompletion(routineCompletion: RoutineCompletion): Result<Unit> =
         routineRemoteDataSource.syncRoutineCompletion(routineCompletion.toDto())
+
+    override suspend fun deleteRoutine(routineId: String): Result<Unit> =
+        routineRemoteDataSource.deleteRoutine(routineId)
 }

@@ -4,8 +4,10 @@ import com.threegap.bitnagil.data.routine.model.request.RoutineCompletionRequest
 import com.threegap.bitnagil.data.routine.model.response.RoutinesResponseDto
 import com.threegap.bitnagil.network.model.BaseResponse
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface RoutineService {
@@ -18,5 +20,10 @@ interface RoutineService {
     @POST("/api/v1/routines/completions")
     suspend fun routineCompletion(
         @Body request: RoutineCompletionRequestDto
+    ): BaseResponse<Unit>
+
+    @DELETE("/api/v1/routines/{routineId}")
+    suspend fun deleteRoutine(
+        @Path("routineId") routineId: String
     ): BaseResponse<Unit>
 }

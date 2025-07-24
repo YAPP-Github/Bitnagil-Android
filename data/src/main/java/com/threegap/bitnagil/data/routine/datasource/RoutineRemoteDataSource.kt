@@ -7,4 +7,5 @@ import com.threegap.bitnagil.domain.routine.model.RoutineCompletion
 interface RoutineRemoteDataSource {
     suspend fun fetchWeeklyRoutines(startDate: String, endDate: String): Result<RoutinesResponseDto>
     suspend fun syncRoutineCompletion(routineCompletionRequestDto: RoutineCompletionRequestDto): Result<Unit>
+    suspend fun deleteRoutine(routineId: String): Result<Unit>
 }

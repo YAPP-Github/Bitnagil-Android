@@ -20,4 +20,9 @@ class RoutineRemoteDataSourceImpl @Inject constructor(
         safeUnitApiCall {
             routineService.routineCompletion(routineCompletionRequestDto)
         }
+
+    override suspend fun deleteRoutine(routineId: String): Result<Unit> =
+        safeUnitApiCall {
+            routineService.deleteRoutine(routineId)
+        }
 }
