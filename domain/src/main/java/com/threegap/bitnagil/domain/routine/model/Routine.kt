@@ -10,4 +10,7 @@ data class Routine(
     val isModified: Boolean,
     val isCompleted: Boolean,
     val routineType: RoutineType
-)
+) {
+    fun withSortedSubRoutines(): Routine =
+        copy(subRoutines = subRoutines.sortedBy { it.sortOrder })
+}
