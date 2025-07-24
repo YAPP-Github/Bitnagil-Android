@@ -25,8 +25,7 @@ fun LocalDate.formatDayOfMonth(): String =
 
 fun String.formatExecutionTime(): String =
     try {
-        val formattedTime = LocalTime.parse(this).format(executionTimeFormatter)
-        "$formattedTime 부터 시작"
+        LocalTime.parse(this).format(executionTimeFormatter)
     } catch (e: Exception) {
         "시간 미정"
     }
