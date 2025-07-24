@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.threegap.bitnagil.presentation.home.HomeScreen
+import com.threegap.bitnagil.presentation.home.HomeScreenContainer
 import com.threegap.bitnagil.presentation.intro.IntroScreenContainer
 import com.threegap.bitnagil.presentation.login.LoginScreenContainer
 import com.threegap.bitnagil.presentation.splash.SplashScreenContainer
@@ -66,7 +66,7 @@ fun MainNavHost(
         }
 
         composable<Route.Home> {
-            HomeScreen()
+            HomeScreenContainer()
         }
 
         composable<Route.WebView> {
