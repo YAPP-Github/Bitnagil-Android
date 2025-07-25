@@ -35,7 +35,7 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindRoutineDataSource(routineDataSourceImpl: RoutineRemoteDataSourceImpl): RoutineRemoteDataSource
-  
+
     @Binds
     @Singleton
     abstract fun bindWriteRoutineDataSource(writeRoutineDataSourceImpl: WriteRoutineDataSourceImpl): WriteRoutineDataSource
