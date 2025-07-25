@@ -46,7 +46,6 @@ class HomeViewModel @Inject constructor(
     init {
         observeWeekChanges()
         observeRoutineUpdates()
-        observeSideEffects()
         fetchWeeklyRoutines(container.stateFlow.value.currentWeeks)
     }
 
@@ -84,15 +83,11 @@ class HomeViewModel @Inject constructor(
             }
 
             is HomeIntent.OnRoutineCompletionToggle -> {
-                val updatedState = updateMainRoutine(state, intent.routineId, intent.isCompleted)
-                sendSideEffect(HomeSideEffect.ProcessRoutineToggle(state))
-                updatedState
+                updateMainRoutine(state, intent.routineId, intent.isCompleted)
             }
 
             is HomeIntent.OnSubRoutineCompletionToggle -> {
-                val updatedState = updateSubRoutine(state, intent.routineId, intent.subRoutineId, intent.isCompleted)
-                sendSideEffect(HomeSideEffect.ProcessRoutineToggle(state))
-                updatedState
+                updateSubRoutine(state, intent.routineId, intent.subRoutineId, intent.isCompleted)
             }
 
             is HomeIntent.OnSortTypeChange -> {
@@ -178,18 +173,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun observeSideEffects() {
-        viewModelScope.launch {
-            sideEffectFlow.collect { sideEffect ->
-                when (sideEffect) {
-                    is HomeSideEffect.ProcessRoutineToggle -> {
-                        handleRoutineToggle(sideEffect.originalState)
-                    }
-                }
-            }
-        }
-    }
-
     @OptIn(FlowPreview::class)
     private fun observeRoutineUpdates() {
         viewModelScope.launch {
@@ -220,7 +203,26 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun handleRoutineToggle(originalState: HomeState) {
+    fun toggleRoutineCompletion(routineId: String, isCompleted: Boolean) {
+        val originalState = container.stateFlow.value
+        sendIntent(HomeIntent.OnRoutineCompletionToggle(routineId, isCompleted))
+
+        val predictedUpdatedState = updateMainRoutine(originalState, routineId, isCompleted)
+        processRoutineToggleChanges(originalState, predictedUpdatedState)
+    }
+
+    fun toggleSubRoutineCompletion(routineId: String, subRoutineId: String, isCompleted: Boolean) {
+        val originalState = container.stateFlow.value
+        sendIntent(HomeIntent.OnSubRoutineCompletionToggle(routineId, subRoutineId, isCompleted))
+
+        val predictedUpdatedState = updateSubRoutine(originalState, routineId, subRoutineId, isCompleted)
+        processRoutineToggleChanges(originalState, predictedUpdatedState)
+    }
+
+    private fun processRoutineToggleChanges(
+        originalState: HomeState,
+        updatedState: HomeState,
+    ) {
         val selectedDate = originalState.selectedDate
         val dateKey = selectedDate.toString()
 
@@ -228,9 +230,8 @@ class HomeViewModel @Inject constructor(
             backupStatesByDate[dateKey] = originalState.routines
         }
 
-        val currentState = container.stateFlow.value
         val originalRoutines = backupStatesByDate[dateKey] ?: originalState.routines
-        val changes = calculateStateChanges(originalRoutines, currentState.routines, selectedDate)
+        val changes = calculateStateChanges(originalRoutines, updatedState.routines, selectedDate)
 
         if (changes.isNotEmpty()) {
             pendingChangesByDate[dateKey] = changes.toMutableList()

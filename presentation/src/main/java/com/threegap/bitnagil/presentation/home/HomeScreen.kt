@@ -106,10 +106,10 @@ fun HomeScreenContainer(
             viewModel.sendIntent(HomeIntent.OnNextWeekClick)
         },
         onRoutineCompletionToggle = { routineId, isCompleted ->
-            viewModel.sendIntent(HomeIntent.OnRoutineCompletionToggle(routineId, isCompleted))
+            viewModel.toggleRoutineCompletion(routineId, isCompleted)
         },
         onSubRoutineCompletionToggle = { routineId, subRoutineId, isCompleted ->
-            viewModel.sendIntent(HomeIntent.OnSubRoutineCompletionToggle(routineId, subRoutineId, isCompleted))
+            viewModel.toggleSubRoutineCompletion(routineId, subRoutineId, isCompleted)
         },
         onShowRoutineSortBottomSheet = {
             viewModel.sendIntent(HomeIntent.ShowRoutineSortBottomSheet)
