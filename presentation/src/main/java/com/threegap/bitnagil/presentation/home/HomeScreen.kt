@@ -82,11 +82,10 @@ fun HomeScreenContainer(
         if (uiState.showDeleteConfirmDialog) {
             DeleteConfirmDialog(
                 onDeleteToday = {
-                    viewModel.deleteRoutine(routine.routineId)
                     viewModel.sendIntent(HomeIntent.HideDeleteConfirmDialog)
                 },
                 onDeleteAll = {
-                    viewModel.sendIntent(HomeIntent.HideDeleteConfirmDialog)
+                    viewModel.deleteRoutine(routine.routineId)
                 },
                 onDismiss = {
                     viewModel.sendIntent(HomeIntent.HideDeleteConfirmDialog)
