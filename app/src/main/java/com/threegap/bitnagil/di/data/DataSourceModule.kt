@@ -8,6 +8,8 @@ import com.threegap.bitnagil.data.onboarding.datasource.OnBoardingDataSource
 import com.threegap.bitnagil.data.onboarding.datasourceImpl.OnBoardingDataSourceImpl
 import com.threegap.bitnagil.data.routine.datasource.RoutineRemoteDataSource
 import com.threegap.bitnagil.data.routine.datasourceImpl.RoutineRemoteDataSourceImpl
+import com.threegap.bitnagil.data.writeroutine.datasource.WriteRoutineDataSource
+import com.threegap.bitnagil.data.writeroutine.datasourceImpl.WriteRoutineDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -33,4 +35,8 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindRoutineDataSource(routineDataSourceImpl: RoutineRemoteDataSourceImpl): RoutineRemoteDataSource
+  
+    @Binds
+    @Singleton
+    abstract fun bindWriteRoutineDataSource(writeRoutineDataSourceImpl: WriteRoutineDataSourceImpl): WriteRoutineDataSource
 }
