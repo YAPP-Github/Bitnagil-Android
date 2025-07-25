@@ -14,6 +14,6 @@ interface EmotionService {
 
     @POST("/api/v1/emotion-marbles")
     suspend fun postEmotions(
-        @Body request: RegisterEmotionRequest
+        @Body request: RegisterEmotionRequest,
     ): BaseResponse<RegisterEmotionResponse>
 }

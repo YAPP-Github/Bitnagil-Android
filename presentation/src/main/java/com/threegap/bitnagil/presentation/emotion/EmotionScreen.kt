@@ -63,7 +63,7 @@ private fun EmotionScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(color = BitnagilTheme.colors.white),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(
             modifier = Modifier
@@ -86,7 +86,11 @@ private fun EmotionScreen(
 
         Spacer(modifier = Modifier.height(6.dp))
 
-        Text("감정구슬을 등록하면 루틴을 추천받아요!", style = BitnagilTheme.typography.subtitle1Regular.copy(color = BitnagilTheme.colors.navy300), textAlign = TextAlign.Center)
+        Text(
+            "감정구슬을 등록하면 루틴을 추천받아요!",
+            style = BitnagilTheme.typography.subtitle1Regular.copy(color = BitnagilTheme.colors.navy300),
+            textAlign = TextAlign.Center,
+        )
 
         Spacer(modifier = Modifier.height(64.dp))
 
@@ -94,18 +98,18 @@ private fun EmotionScreen(
             columns = GridCells.Fixed(3),
             modifier = Modifier.padding(horizontal = 40.dp).widthIn(300.dp),
             horizontalArrangement = Arrangement.spacedBy(32.dp),
-            verticalArrangement = Arrangement.spacedBy(32.dp)
+            verticalArrangement = Arrangement.spacedBy(32.dp),
         ) {
             items(state.emotions) { emotion ->
                 Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Image(
                         painter = painterResource(id = emotion.imageResourceId),
                         contentDescription = null,
                         modifier = Modifier.size(72.dp).clickable {
                             onClickEmotion(emotion)
-                        }
+                        },
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                     Text(emotion.emotionName, style = BitnagilTheme.typography.body1Regular.copy(color = BitnagilTheme.colors.coolGray20))
@@ -125,7 +129,7 @@ fun MyPageScreenPreview() {
                 isLoading = false,
             ),
             onClickEmotion = { _ -> },
-            onClickPreviousButton = {}
+            onClickPreviousButton = {},
         )
     }
 }

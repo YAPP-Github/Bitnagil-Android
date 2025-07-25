@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class RegisterEmotionRequest(
     @SerialName("emotionMarbleType")
-    val emotionMarbleType: String
+    val emotionMarbleType: String,
 )

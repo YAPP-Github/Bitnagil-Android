@@ -7,5 +7,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class RegisterEmotionResponse(
     @SerialName("recommendedRoutines")
-    val recommendedRoutines: List<EmotionRecommendedRoutineDto>
+    val recommendedRoutines: List<EmotionRecommendedRoutineDto>,
 )

@@ -5,9 +5,9 @@ import com.threegap.bitnagil.domain.emotion.repository.EmotionRepository
 import javax.inject.Inject
 
 class GetEmotionsUseCase @Inject constructor(
-    private val emotionRepository: EmotionRepository
+    private val emotionRepository: EmotionRepository,
 ) {
-    suspend operator fun invoke() : Result<List<Emotion>> {
+    suspend operator fun invoke(): Result<List<Emotion>> {
         return emotionRepository.getEmotions()
     }
 }

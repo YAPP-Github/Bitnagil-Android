@@ -22,7 +22,7 @@ class EmotionViewModel @Inject constructor(
     private val registerEmotionUseCase: RegisterEmotionUseCase,
 ) : MviViewModel<EmotionState, EmotionSideEffect, EmotionIntent>(
     savedStateHandle = savedStateHandle,
-    initState = EmotionState.Init
+    initState = EmotionState.Init,
 ) {
     init {
         loadEmotions()
@@ -33,7 +33,7 @@ class EmotionViewModel @Inject constructor(
             getEmotionsUseCase().fold(
                 onSuccess = { emotions ->
                     sendIntent(
-                        EmotionIntent.EmotionListLoadSuccess(emotions = emotions.map { Emotion.fromDomain(it) })
+                        EmotionIntent.EmotionListLoadSuccess(emotions = emotions.map { Emotion.fromDomain(it) }),
                     )
                 },
                 onFailure = {
@@ -44,7 +44,7 @@ class EmotionViewModel @Inject constructor(
     }
 
     override suspend fun SimpleSyntax<EmotionState, EmotionSideEffect>.reduceState(intent: EmotionIntent, state: EmotionState): EmotionState? {
-        when(intent) {
+        when (intent) {
             is EmotionIntent.EmotionListLoadSuccess -> {
                 return state.copy(
                     emotions = intent.emotions,
@@ -55,18 +55,27 @@ class EmotionViewModel @Inject constructor(
                 postSideEffect(EmotionSideEffect.NavigateToBack)
                 return null
             }
+            EmotionIntent.RegisterEmotionLoading -> {
+                return state.copy(
+                    isLoading = true,
+                )
+            }
         }
     }
 
     fun selectEmotion(emotion: Emotion) {
+        val isLoading = stateFlow.value.isLoading
+        if (isLoading) return
+
         viewModelScope.launch {
+            sendIntent(EmotionIntent.RegisterEmotionLoading)
             registerEmotionUseCase(emotion = emotion.toDomain()).fold(
                 onSuccess = {
                     sendIntent(EmotionIntent.RegisterEmotionSuccess)
                 },
                 onFailure = {
                     // todo 실패 케이스 정의되면 처리
-                }
+                },
             )
         }
     }

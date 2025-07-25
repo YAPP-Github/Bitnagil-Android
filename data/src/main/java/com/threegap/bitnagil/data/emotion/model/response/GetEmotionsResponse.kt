@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GetEmotionsResponse(
     @SerialName("emotionMarbleTypes")
-    val emotionMarbleTypes: List<String>
+    val emotionMarbleTypes: List<String>,
 )

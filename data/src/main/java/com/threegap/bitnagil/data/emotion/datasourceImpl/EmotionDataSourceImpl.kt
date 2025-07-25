@@ -9,7 +9,7 @@ import com.threegap.bitnagil.data.emotion.service.EmotionService
 import javax.inject.Inject
 
 class EmotionDataSourceImpl @Inject constructor(
-    private val emotionService: EmotionService
+    private val emotionService: EmotionService,
 ) : EmotionDataSource {
     override suspend fun getEmotions(): Result<GetEmotionsResponse> {
         return safeApiCall {

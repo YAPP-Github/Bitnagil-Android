@@ -6,12 +6,12 @@ import com.threegap.bitnagil.domain.emotion.repository.EmotionRepository
 import javax.inject.Inject
 
 class EmotionRepositoryImpl @Inject constructor(
-    private val emotionDataSource: EmotionDataSource
+    private val emotionDataSource: EmotionDataSource,
 ) : EmotionRepository {
     override suspend fun getEmotions(): Result<List<Emotion>> {
         return emotionDataSource.getEmotions().map { response ->
             response.emotionMarbleTypes.mapNotNull {
-                when(it) {
+                when (it) {
                     "CALM" -> Emotion.CALM
                     "VITALITY" -> Emotion.VITALITY
                     "LETHARGY" -> Emotion.LETHARGY
@@ -25,7 +25,7 @@ class EmotionRepositoryImpl @Inject constructor(
     }
 
     override suspend fun registerEmotion(emotion: Emotion): Result<Unit> {
-        val selectedEmotion = when(emotion) {
+        val selectedEmotion = when (emotion) {
             Emotion.CALM -> "CALM"
             Emotion.VITALITY -> "VITALITY"
             Emotion.LETHARGY -> "LETHARGY"
@@ -36,5 +36,4 @@ class EmotionRepositoryImpl @Inject constructor(
 
         return emotionDataSource.registerEmotion(selectedEmotion).map { _ -> }
     }
-
 }
