@@ -14,13 +14,16 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.presentation.home.model.RoutineSortType
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,7 +33,11 @@ fun RoutineSortBottomSheet(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val sheetState = rememberModalBottomSheetState()
+    val coroutineScope = rememberCoroutineScope()
+
     ModalBottomSheet(
+        sheetState = sheetState,
         onDismissRequest = onDismiss,
         containerColor = BitnagilTheme.colors.white,
         contentColor = BitnagilTheme.colors.white,
@@ -40,6 +47,13 @@ fun RoutineSortBottomSheet(
             currentSortType = currentSortType,
             onClick = { sortType ->
                 onSortTypeChange(sortType)
+                coroutineScope
+                    .launch { sheetState.hide() }
+                    .invokeOnCompletion {
+                        if (!sheetState.isVisible) {
+                            onDismiss()
+                        }
+                    }
             },
             modifier = Modifier
                 .padding(horizontal = 16.dp)
@@ -93,8 +107,10 @@ private fun SortOptionItem(
             .fillMaxWidth()
             .padding(vertical = 8.dp)
             .height(36.dp)
-            // todo: 리플효과 제거하기
-            .clickable { onClick(sortType) },
+            .clickable {
+                onClick(sortType)
+                // 짧은 지연 후 바텀시트 닫기 (선택적)
+            },
     ) {
         Text(
             text = text,

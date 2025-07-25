@@ -98,7 +98,6 @@ class HomeViewModel @Inject constructor(
                 }
                 state.copy(
                     currentSortType = newSortType,
-                    routineSortBottomSheetVisible = false,
                 )
             }
 
