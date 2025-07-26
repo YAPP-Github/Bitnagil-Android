@@ -34,6 +34,9 @@ import com.threegap.bitnagil.presentation.setting.model.mvi.SettingState
 @Composable
 fun SettingScreenContainer(
     viewModel: SettingViewModel = hiltViewModel(),
+    navigateToBack: () -> Unit,
+    navigateToTermsOfService: () -> Unit,
+    navigateToPrivacyPolicy: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsState()
 
@@ -42,6 +45,9 @@ fun SettingScreenContainer(
         toggleServiceAlarm = viewModel::toggleServiceAlarm,
         togglePushAlarm = viewModel::togglePushAlarm,
         onClickUpdate = {},
+        onClickBack = navigateToBack,
+        onClickTermsOfService = navigateToTermsOfService,
+        onClickPrivacyPolicy = navigateToPrivacyPolicy,
     )
 }
 
@@ -51,6 +57,9 @@ private fun SettingScreen(
     toggleServiceAlarm: () -> Unit,
     togglePushAlarm: () -> Unit,
     onClickUpdate: () -> Unit,
+    onClickBack: () -> Unit,
+    onClickTermsOfService: () -> Unit,
+    onClickPrivacyPolicy: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -68,8 +77,7 @@ private fun SettingScreen(
                     .size(36.dp)
                     .background(BitnagilTheme.colors.black)
                     .align(Alignment.CenterStart)
-                    .clickable {
-                    },
+                    .clickable(onClick = onClickBack),
             )
 
             Text(
@@ -159,9 +167,9 @@ private fun SettingScreen(
                 }
             }
 
-            SettingRowButton(text = "서비스 이용약관", onClick = {})
+            SettingRowButton(text = "서비스 이용약관", onClick = onClickTermsOfService)
 
-            SettingRowButton(text = "개인정보 처리방침", onClick = {})
+            SettingRowButton(text = "개인정보 처리방침", onClick = onClickPrivacyPolicy)
 
             Spacer(modifier = Modifier.height(6.dp))
 
@@ -191,5 +199,8 @@ fun SettingScreenPreview() {
         toggleServiceAlarm = {},
         togglePushAlarm = {},
         onClickUpdate = {},
+        onClickBack = {},
+        onClickPrivacyPolicy = {},
+        onClickTermsOfService = {},
     )
 }

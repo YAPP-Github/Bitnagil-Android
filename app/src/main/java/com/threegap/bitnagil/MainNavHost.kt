@@ -76,7 +76,9 @@ fun MainNavHost(
                         ),
                     )
                 },
-                navigateToOnBoarding = { },
+                navigateToOnBoarding = {
+                    navigator.navController.navigate(Route.OnBoarding)
+                },
                 navigateToBack = { navigator.navController.popBackStack() },
             )
         }
@@ -117,7 +119,27 @@ fun MainNavHost(
         }
 
         composable<Route.Setting> {
-            SettingScreenContainer()
+            SettingScreenContainer(
+                navigateToBack = {
+                    navigator.navController.popBackStack()
+                },
+                navigateToTermsOfService = {
+                    navigator.navController.navigate(
+                        Route.WebView(
+                            title = "약관 동의",
+                            url = "https://complex-wombat-99f.notion.site/2025-7-20-236f4587491d8071833adfaf8115bce2",
+                        ),
+                    )
+                },
+                navigateToPrivacyPolicy = {
+                    navigator.navController.navigate(
+                        Route.WebView(
+                            title = "약관 동의",
+                            url = "https://complex-wombat-99f.notion.site/2025-07-20-236f4587491d80308016eb810692d18b",
+                        ),
+                    )
+                },
+            )
         }
 
         composable<Route.OnBoarding> {

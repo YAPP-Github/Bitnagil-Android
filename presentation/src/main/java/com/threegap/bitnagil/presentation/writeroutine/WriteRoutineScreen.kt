@@ -79,6 +79,7 @@ fun WriteRoutineScreenContainer(
         showTimePickerBottomSheet = viewModel::showTimePickerBottomSheet,
         onClickRegister = viewModel::registerRoutine,
         removeSubRoutine = viewModel::removeSubRoutine,
+        onClickBack = navigateToBack
     )
 }
 
@@ -94,6 +95,7 @@ private fun WriteRoutineScreen(
     showTimePickerBottomSheet: () -> Unit,
     onClickRegister: () -> Unit,
     removeSubRoutine: (Int) -> Unit,
+    onClickBack: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
 
@@ -110,7 +112,7 @@ private fun WriteRoutineScreen(
                     .padding(start = 4.dp)
                     .align(alignment = Alignment.CenterStart)
                     .size(36.dp)
-                    .clickable { },
+                    .clickable(onClick = onClickBack),
                 contentAlignment = Alignment.Center,
             ) {
                 Image(
@@ -415,6 +417,7 @@ fun WriteRoutineScreenPreview() {
             showTimePickerBottomSheet = {},
             onClickRegister = {},
             removeSubRoutine = {},
+            onClickBack = {},
         )
     }
 }
