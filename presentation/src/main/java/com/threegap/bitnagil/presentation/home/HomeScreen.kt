@@ -45,6 +45,9 @@ import java.time.LocalDate
 @Composable
 fun HomeScreenContainer(
     viewModel: HomeViewModel = hiltViewModel(),
+    navigateToRegisterRoutine: () -> Unit,
+    navigateToEditRoutine: (String) -> Unit,
+    navigateToEmotion: () -> Unit,
 ) {
     val uiState by viewModel.stateFlow.collectAsStateWithLifecycle()
 
@@ -65,8 +68,7 @@ fun HomeScreenContainer(
             RoutineDetailsBottomSheet(
                 routine = routine,
                 onDismiss = { viewModel.sendIntent(HomeIntent.HideRoutineDetailsBottomSheet) },
-                // TODO: 수정 화면으로 네비게이션
-                onEdit = {},
+                onEdit = navigateToEditRoutine,
                 onDelete = {
                     if (routine.repeatDay.isEmpty()) {
                         viewModel.deleteRoutine(routine.routineId)
@@ -117,6 +119,8 @@ fun HomeScreenContainer(
         onShowRoutineDetailsBottomSheet = { routine ->
             viewModel.sendIntent(HomeIntent.ShowRoutineDetailsBottomSheet(routine))
         },
+        onRegisterRoutineClick = navigateToRegisterRoutine,
+        onRegisterEmotionClick = navigateToEmotion
     )
 }
 
@@ -130,6 +134,8 @@ private fun HomeScreen(
     onSubRoutineCompletionToggle: (String, String, Boolean) -> Unit,
     onShowRoutineSortBottomSheet: () -> Unit,
     onShowRoutineDetailsBottomSheet: (RoutineUiModel) -> Unit,
+    onRegisterRoutineClick: () -> Unit,
+    onRegisterEmotionClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val collapsibleHeaderState = rememberCollapsibleHeaderState()
@@ -177,8 +183,7 @@ private fun HomeScreen(
                 if (uiState.selectedDateRoutines.isEmpty()) {
                     item {
                         RoutineEmptyView(
-                            // todo: 루린 등록 화면으로 네비게이션
-                            onRegisterRoutineClick = {},
+                            onRegisterRoutineClick = onRegisterRoutineClick,
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(top = 62.dp),
@@ -242,7 +247,7 @@ private fun HomeScreen(
         CollapsibleHomeHeader(
             userName = "대현",
             collapsibleHeaderState = collapsibleHeaderState,
-            onEmotionRecordClick = {},
+            onEmotionRecordClick = onRegisterEmotionClick,
         )
     }
 }
@@ -259,5 +264,7 @@ private fun HomeScreenPreview() {
         onSubRoutineCompletionToggle = { _, _, _ -> },
         onShowRoutineSortBottomSheet = {},
         onShowRoutineDetailsBottomSheet = {},
+        onRegisterRoutineClick = {},
+        onRegisterEmotionClick = {}
     )
 }
