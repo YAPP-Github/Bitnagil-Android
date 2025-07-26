@@ -4,6 +4,8 @@ import com.threegap.bitnagil.data.auth.datasource.AuthLocalDataSource
 import com.threegap.bitnagil.data.auth.datasource.AuthRemoteDataSource
 import com.threegap.bitnagil.data.auth.datasourceimpl.AuthLocalDataSourceImpl
 import com.threegap.bitnagil.data.auth.datasourceimpl.AuthRemoteDataSourceImpl
+import com.threegap.bitnagil.data.emotion.datasource.EmotionDataSource
+import com.threegap.bitnagil.data.emotion.datasourceImpl.EmotionDataSourceImpl
 import com.threegap.bitnagil.data.onboarding.datasource.OnBoardingDataSource
 import com.threegap.bitnagil.data.onboarding.datasourceImpl.OnBoardingDataSourceImpl
 import com.threegap.bitnagil.data.writeroutine.datasource.WriteRoutineDataSource
@@ -29,6 +31,10 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindOnBoardingDataSource(onBoardingDataSourceImpl: OnBoardingDataSourceImpl): OnBoardingDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindEmotionDataSource(emotionDataSourceImpl: EmotionDataSourceImpl): EmotionDataSource
 
     @Binds
     @Singleton
