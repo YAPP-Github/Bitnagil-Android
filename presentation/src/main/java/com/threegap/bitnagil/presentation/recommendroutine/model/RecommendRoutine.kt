@@ -9,4 +9,5 @@ data class RecommendRoutine(
     val name: String,
     val description: String,
     val difficulty: RecommendRoutineDifficulty,
+    val id: String = "0",
 ) : Parcelable

@@ -20,7 +20,7 @@ fun HomeNavHost(
     navigateToOnBoarding: () -> Unit,
     navigateToNotice: () -> Unit,
     navigateToQnA: () -> Unit,
-    navigateToRegisterRoutine: () -> Unit,
+    navigateToRegisterRoutine: (String?) -> Unit,
     navigateToEditRoutine: (String) -> Unit,
     navigateToEmotion: () -> Unit,
 ) {
@@ -38,14 +38,19 @@ fun HomeNavHost(
             ) {
                 composable<HomeRoute.Home> {
                     HomeScreenContainer(
-                        navigateToRegisterRoutine = navigateToRegisterRoutine,
+                        navigateToRegisterRoutine = {
+                            navigateToRegisterRoutine(null)
+                        },
                         navigateToEditRoutine = navigateToEditRoutine,
                         navigateToEmotion = navigateToEmotion,
                     )
                 }
 
                 composable<HomeRoute.RecommendRoutine> {
-                    RecommendRoutineScreenContainer()
+                    RecommendRoutineScreenContainer(
+                        navigateToEmotion = navigateToEmotion,
+                        navigateToRegisterRoutine = navigateToRegisterRoutine
+                    )
                 }
 
                 composable<HomeRoute.MyPage> {

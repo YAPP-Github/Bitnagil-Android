@@ -95,11 +95,11 @@ fun MainNavHost(
                 navigateToQnA = {
 
                 },
-                navigateToRegisterRoutine = {
-                    navigator.navController.navigate(Route.WriteRoutine())
+                navigateToRegisterRoutine = { routineId ->
+                    navigator.navController.navigate(Route.WriteRoutine(routineId = routineId))
                 },
                 navigateToEditRoutine = { routineId ->
-                    navigator.navController.navigate(Route.WriteRoutine(routineId = routineId))
+                    navigator.navController.navigate(Route.WriteRoutine(routineId = routineId, isRegister = false))
                 },
                 navigateToEmotion = {
                     navigator.navController.navigate(Route.Emotion)
