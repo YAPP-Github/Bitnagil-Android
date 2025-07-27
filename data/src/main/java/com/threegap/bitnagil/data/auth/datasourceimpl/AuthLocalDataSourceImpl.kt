@@ -17,4 +17,9 @@ class AuthLocalDataSourceImpl @Inject constructor(
                 refreshToken = refreshToken,
             )
         }
+
+    override suspend fun clearAuthToken(): Result<Unit> =
+        kotlin.runCatching {
+            authTokenDataStore.clearAuthToken()
+        }
 }

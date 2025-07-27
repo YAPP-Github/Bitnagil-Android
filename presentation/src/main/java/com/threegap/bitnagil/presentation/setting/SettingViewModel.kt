@@ -58,7 +58,7 @@ class SettingViewModel @Inject constructor(
                 return state.copy(loading = true)
             }
             SettingIntent.LogoutFailure -> {
-                return state.copy(loading = true)
+                return state.copy(loading = false)
             }
             SettingIntent.WithdrawalSuccess -> {
                 sendSideEffect(SettingSideEffect.NavigateToLogin)
@@ -68,7 +68,7 @@ class SettingViewModel @Inject constructor(
                 return state.copy(loading = true)
             }
             SettingIntent.WithdrawalFailure -> {
-                return state.copy(loading = true)
+                return state.copy(loading = false)
             }
         }
     }
