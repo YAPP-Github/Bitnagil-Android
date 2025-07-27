@@ -39,13 +39,13 @@ fun SettingScreenContainer(
     navigateToBack: () -> Unit,
     navigateToTermsOfService: () -> Unit,
     navigateToPrivacyPolicy: () -> Unit,
-    navigateToLogin: () -> Unit,
+    navigateToIntro: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsState()
 
     viewModel.sideEffectFlow.collectAsEffect { sideEffect ->
         when (sideEffect) {
-            SettingSideEffect.NavigateToLogin -> navigateToLogin()
+            SettingSideEffect.NavigateToIntro -> navigateToIntro()
         }
     }
 

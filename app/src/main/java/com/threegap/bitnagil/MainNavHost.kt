@@ -137,8 +137,8 @@ fun MainNavHost(
                         ),
                     )
                 },
-                navigateToLogin = {
-                    navigator.navController.navigate(Route.Login) {
+                navigateToIntro = {
+                    navigator.navController.navigate(Route.Intro) {
                         popUpTo(0) {
                             inclusive = true
                         }
