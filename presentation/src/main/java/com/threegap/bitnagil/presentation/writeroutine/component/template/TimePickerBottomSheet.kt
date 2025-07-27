@@ -19,8 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
 import com.threegap.bitnagil.presentation.R
-import com.threegap.bitnagil.presentation.onboarding.component.atom.textbutton.TextButton
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -104,7 +104,7 @@ fun TimePickerBottomSheetContent(
             },
         )
 
-        TextButton(
+        BitnagilTextButton(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 14.dp),
             text = "저장",
             onClick = {

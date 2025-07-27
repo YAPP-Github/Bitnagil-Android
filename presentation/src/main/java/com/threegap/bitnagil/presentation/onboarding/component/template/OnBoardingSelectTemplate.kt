@@ -1,11 +1,7 @@
 package com.threegap.bitnagil.presentation.onboarding.component.template
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -22,6 +18,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.threegap.bitnagil.presentation.onboarding.component.atom.textbutton.TextButton
 import com.threegap.bitnagil.presentation.onboarding.component.block.selectbutton.OnBoardingSelectButton
+import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButtonColor
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingItem
 
 @Composable
@@ -72,7 +71,7 @@ fun OnBoardingSelectTemplate(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        TextButton(
+        BitnagilTextButton(
             text = "다음",
             onClick = onClickNextButton,
             enabled = nextButtonEnable,
@@ -81,23 +80,13 @@ fun OnBoardingSelectTemplate(
         onClickSkip?.let {
             Spacer(modifier = Modifier.height(10.dp))
 
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(54.dp)
-                    .clickable(
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() },
-                        onClick = onClickSkip,
-                    ),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    text = "건너뛰기",
-                    style = TextStyle(textDecoration = TextDecoration.Underline),
-                    textAlign = TextAlign.Center,
-                )
-            }
+            BitnagilTextButton(
+                text = "건너뛰기",
+                onClick = onClickSkip,
+                colors = BitnagilTextButtonColor.skip(),
+                textStyle = BitnagilTheme.typography.body2Regular,
+                textDecoration = TextDecoration.Underline
+            )
         }
     }
 }
