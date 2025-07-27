@@ -26,10 +26,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.component.block.BitnagilOptionButton
 import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.setting.component.atom.settingtitle.SettingTitle
 import com.threegap.bitnagil.presentation.setting.component.atom.toggleswitch.ToggleSwitch
-import com.threegap.bitnagil.presentation.setting.component.block.settingrowbutton.SettingRowButton
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingSideEffect
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingState
 
@@ -151,8 +151,16 @@ private fun SettingScreen(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Row {
-                    Text("버전 ", style = BitnagilTheme.typography.body1Regular)
-                    Text(state.version, style = BitnagilTheme.typography.body1SemiBold)
+                    Text(
+                        text = "버전 ",
+                        color = BitnagilTheme.colors.black,
+                        style = BitnagilTheme.typography.body1Regular
+                    )
+                    Text(
+                        text = state.version,
+                        color = BitnagilTheme.colors.black,
+                        style = BitnagilTheme.typography.body1SemiBold
+                    )
                 }
                 if (state.version == state.latestVersion) {
                     Text(
@@ -180,9 +188,19 @@ private fun SettingScreen(
                 }
             }
 
-            SettingRowButton(text = "서비스 이용약관", onClick = onClickTermsOfService)
+            Column(
+                modifier = Modifier.padding(start = 16.dp, end = 2.dp),
+            ) {
+                BitnagilOptionButton(
+                    title = "서비스 이용약관",
+                    onClick = onClickTermsOfService
+                )
 
-            SettingRowButton(text = "개인정보 처리방침", onClick = onClickPrivacyPolicy)
+                BitnagilOptionButton(
+                    title = "개인정보 처리방침",
+                    onClick = onClickPrivacyPolicy
+                )
+            }
 
             Spacer(modifier = Modifier.height(6.dp))
 
@@ -192,9 +210,19 @@ private fun SettingScreen(
 
             SettingTitle("계정")
 
-            SettingRowButton(text = "로그아웃", onClick = onClickLogout)
+            Column(
+                modifier = Modifier.padding(start = 16.dp, end = 2.dp),
+            ) {
+                BitnagilOptionButton(
+                    title = "로그아웃",
+                    onClick = onClickLogout
+                )
 
-            SettingRowButton(text = "탈퇴하기", onClick = onClickWithdrawal)
+                BitnagilOptionButton(
+                    title = "탈퇴하기",
+                    onClick = onClickWithdrawal
+                )
+            }
         }
     }
 }
