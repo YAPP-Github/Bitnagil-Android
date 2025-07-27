@@ -1,23 +1,17 @@
 package com.threegap.bitnagil.presentation.onboarding
 
-import android.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.component.block.BitnagilProgressTopBar
 import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
-import com.threegap.bitnagil.presentation.onboarding.component.atom.iconbutton.IconButton
-import com.threegap.bitnagil.presentation.onboarding.component.atom.progress.OnBoardingProgressBar
 import com.threegap.bitnagil.presentation.onboarding.component.template.OnBoardingAbstractTemplate
 import com.threegap.bitnagil.presentation.onboarding.component.template.OnBoardingSelectTemplate
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingPageInfo
@@ -69,22 +63,13 @@ private fun OnBoardingScreen(
     onClickSkip: () -> Unit,
 ) {
     Column(
-        modifier = Modifier.background(color = Color(0xFFF7F7F8)),
+        modifier = Modifier
+            .background(BitnagilTheme.colors.coolGray99),
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            IconButton(
-                modifier = Modifier.padding(start = 4.dp, top = 9.dp, bottom = 9.dp),
-                svgResourceId = R.drawable.ic_delete,
-                onClick = onClickPreviousInSelectOnBoarding,
-            )
-
-            OnBoardingProgressBar(
-                modifier = Modifier.padding(start = 12.dp, end = 18.5.dp),
-                progress = state.progress,
-            )
-        }
+        BitnagilProgressTopBar(
+            onBackClick = onClickPreviousInSelectOnBoarding,
+            progress = state.progress
+        )
 
         when (state) {
             is OnBoardingState.Idle -> {

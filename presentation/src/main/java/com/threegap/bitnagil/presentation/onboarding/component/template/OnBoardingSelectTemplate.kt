@@ -8,15 +8,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.threegap.bitnagil.presentation.onboarding.component.atom.textbutton.TextButton
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilSelectButton
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
@@ -34,18 +28,23 @@ fun OnBoardingSelectTemplate(
     onClickItem: (String) -> Unit,
     onClickSkip: (() -> Unit)? = null,
 ) {
-    val titleTextStyle = TextStyle(fontSize = 20.sp)
-    val subTextStyle = TextStyle(fontSize = 14.sp)
-
     Column(
         modifier = modifier.padding(start = 16.dp, end = 16.dp, bottom = 20.dp, top = 32.dp),
     ) {
-        Text(title, style = titleTextStyle)
+        Text(
+            text = title,
+            color = BitnagilTheme.colors.navy500,
+            style = BitnagilTheme.typography.title2Bold
+        )
 
         subText?.let {
             Spacer(modifier = Modifier.height(10.dp))
 
-            Text(subText, style = subTextStyle)
+            Text(
+                text = subText,
+                color = BitnagilTheme.colors.coolGray50,
+                style = BitnagilTheme.typography.body2Medium
+            )
         }
 
         Spacer(modifier = Modifier.height(28.dp))
