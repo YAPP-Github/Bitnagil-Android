@@ -19,7 +19,7 @@ class AuthLocalDataSourceImpl @Inject constructor(
         }
 
     override suspend fun clearAuthToken(): Result<Unit> =
-        kotlin.runCatching {
+        runCatching {
             authTokenDataStore.clearAuthToken()
         }
 }
