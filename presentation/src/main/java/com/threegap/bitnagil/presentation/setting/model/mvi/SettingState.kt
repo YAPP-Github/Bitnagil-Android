@@ -9,6 +9,7 @@ data class SettingState(
     val usePushAlarm: Boolean,
     val version: String,
     val latestVersion: String,
+    val loading: Boolean,
 ) : MviState {
     companion object {
         val Init = SettingState(
@@ -16,6 +17,7 @@ data class SettingState(
             usePushAlarm = false,
             version = "",
             latestVersion = "",
+            loading = false,
         )
     }
 }

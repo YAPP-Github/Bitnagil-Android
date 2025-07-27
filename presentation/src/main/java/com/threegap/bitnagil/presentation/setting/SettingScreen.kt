@@ -26,9 +26,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.setting.component.atom.settingtitle.SettingTitle
 import com.threegap.bitnagil.presentation.setting.component.atom.toggleswitch.ToggleSwitch
 import com.threegap.bitnagil.presentation.setting.component.block.settingrowbutton.SettingRowButton
+import com.threegap.bitnagil.presentation.setting.model.mvi.SettingSideEffect
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingState
 
 @Composable
@@ -37,8 +39,15 @@ fun SettingScreenContainer(
     navigateToBack: () -> Unit,
     navigateToTermsOfService: () -> Unit,
     navigateToPrivacyPolicy: () -> Unit,
+    navigateToLogin: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsState()
+
+    viewModel.sideEffectFlow.collectAsEffect { sideEffect ->
+        when (sideEffect) {
+            SettingSideEffect.NavigateToLogin -> navigateToLogin()
+        }
+    }
 
     SettingScreen(
         state = state,
@@ -48,6 +57,8 @@ fun SettingScreenContainer(
         onClickBack = navigateToBack,
         onClickTermsOfService = navigateToTermsOfService,
         onClickPrivacyPolicy = navigateToPrivacyPolicy,
+        onClickLogout = viewModel::logout,
+        onClickWithdrawal = viewModel::withdrawal
     )
 }
 
@@ -60,6 +71,8 @@ private fun SettingScreen(
     onClickBack: () -> Unit,
     onClickTermsOfService: () -> Unit,
     onClickPrivacyPolicy: () -> Unit,
+    onClickLogout: () -> Unit,
+    onClickWithdrawal: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -179,9 +192,9 @@ private fun SettingScreen(
 
             SettingTitle("계정")
 
-            SettingRowButton(text = "로그아웃", onClick = {})
+            SettingRowButton(text = "로그아웃", onClick = onClickLogout)
 
-            SettingRowButton(text = "탈퇴하기", onClick = {})
+            SettingRowButton(text = "탈퇴하기", onClick = onClickWithdrawal)
         }
     }
 }
@@ -195,6 +208,7 @@ fun SettingScreenPreview() {
             usePushAlarm = false,
             version = "1.0.1",
             latestVersion = "1.0.0",
+            loading = false
         ),
         toggleServiceAlarm = {},
         togglePushAlarm = {},
@@ -202,5 +216,7 @@ fun SettingScreenPreview() {
         onClickBack = {},
         onClickPrivacyPolicy = {},
         onClickTermsOfService = {},
+        onClickLogout = {},
+        onClickWithdrawal = {}
     )
 }

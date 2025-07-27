@@ -11,4 +11,8 @@ interface AuthRepository {
     suspend fun updateAuthToken(accessToken: String, refreshToken: String): Result<Unit>
 
     suspend fun submitAgreement(termsAgreement: TermsAgreement): Result<Unit>
+
+    suspend fun logout(): Result<Unit>
+
+    suspend fun withdrawal(): Result<Unit>
 }

@@ -27,4 +27,8 @@ class AuthRepositoryImpl @Inject constructor(
         authRemoteDataSource.submitAgreement(
             termsAgreement.toDto(),
         )
+
+    override suspend fun logout(): Result<Unit> = authRemoteDataSource.logout()
+
+    override suspend fun withdrawal(): Result<Unit> = authRemoteDataSource.withdrawal()
 }
