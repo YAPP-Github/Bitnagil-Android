@@ -1,15 +1,32 @@
 package com.threegap.bitnagil.navigation.home
 
-import kotlinx.serialization.Serializable
+import com.threegap.bitnagil.R
 
-@Serializable
-sealed class HomeRoute(val route: String) {
-    @Serializable
-    data object Home : HomeRoute("home/home")
+enum class HomeRoute(
+    val route: String,
+    val title: String,
+    val selectIconResourceId: Int,
+    val unSelectIconResourceId: Int,
+) {
+    Home(
+        route = "home/home",
+        title = "홈",
+        selectIconResourceId = R.drawable.ic_home_fill,
+        unSelectIconResourceId = R.drawable.ic_home_empty,
+    ),
 
-    @Serializable
-    data object RecommendRoutine : HomeRoute("home/recommend_routine")
+    RecommendRoutine(
+        route = "home/recommend_routine",
+        title = "추천 루틴",
+        selectIconResourceId = R.drawable.ic_recommend_fill,
+        unSelectIconResourceId = R.drawable.ic_recommend_empty,
+    ),
 
-    @Serializable
-    data object MyPage : HomeRoute("home/my_page")
+    MyPage(
+        route = "home/my_page",
+        title = "마이페이지",
+        selectIconResourceId = R.drawable.ic_mypage_fill,
+        unSelectIconResourceId = R.drawable.ic_mypage_empty,
+    ),
+    ;
 }

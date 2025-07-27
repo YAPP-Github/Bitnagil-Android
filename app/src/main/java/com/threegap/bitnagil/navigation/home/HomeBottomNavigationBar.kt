@@ -23,7 +23,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.threegap.bitnagil.R
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 
 @Composable
@@ -39,44 +38,20 @@ fun HomeBottomNavigationBar(
             .padding(horizontal = 16.dp, vertical = 7.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        HomeBottomNavigationItem(
-            modifier = Modifier.weight(1f),
-            selectIconResourceId = R.drawable.ic_home_fill,
-            unSelectIconResourceId = R.drawable.ic_home_empty,
-            title = "홈",
-            onClick = {
-                navController.navigate(HomeRoute.Home.route) {
-                    popUpTo(0) { inclusive = true }
-                }
-            },
-            selected = navBackStackEntry?.destination?.route == HomeRoute.Home.route,
-        )
-
-        HomeBottomNavigationItem(
-            modifier = Modifier.weight(1f),
-            selectIconResourceId = R.drawable.ic_recommend_fill,
-            unSelectIconResourceId = R.drawable.ic_recommend_empty,
-            title = "추천 루틴",
-            onClick = {
-                navController.navigate(HomeRoute.RecommendRoutine.route) {
-                    popUpTo(0) { inclusive = true }
-                }
-            },
-            selected = navBackStackEntry?.destination?.route == HomeRoute.RecommendRoutine.route,
-        )
-
-        HomeBottomNavigationItem(
-            modifier = Modifier.weight(1f),
-            selectIconResourceId = R.drawable.ic_mypage_fill,
-            unSelectIconResourceId = R.drawable.ic_mypage_empty,
-            title = "마이페이지",
-            onClick = {
-                navController.navigate(HomeRoute.MyPage.route) {
-                    popUpTo(0) { inclusive = true }
-                }
-            },
-            selected = navBackStackEntry?.destination?.route == HomeRoute.MyPage.route,
-        )
+        HomeRoute.entries.map { homeRoute ->
+            HomeBottomNavigationItem(
+                modifier = Modifier.weight(1f),
+                selectIconResourceId = homeRoute.selectIconResourceId,
+                unSelectIconResourceId = homeRoute.unSelectIconResourceId,
+                title = homeRoute.title,
+                onClick = {
+                    navController.navigate(homeRoute.route) {
+                        popUpTo(0) { inclusive = true }
+                    }
+                },
+                selected = navBackStackEntry?.destination?.route == homeRoute.route,
+            )
+        }
     }
 }
 
