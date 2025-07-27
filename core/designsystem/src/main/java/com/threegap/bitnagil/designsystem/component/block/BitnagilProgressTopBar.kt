@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilProgressBar
+import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 
 @Composable
 fun BitnagilProgressTopBar(
@@ -30,8 +31,7 @@ fun BitnagilProgressTopBar(
     ) {
         BitnagilIcon(
             id = R.drawable.ic_back_arrow_36,
-            onClick = onBackClick,
-            modifier = Modifier
+            modifier = Modifier.clickableWithoutRipple(onClick = onBackClick)
         )
 
         BitnagilProgressBar(

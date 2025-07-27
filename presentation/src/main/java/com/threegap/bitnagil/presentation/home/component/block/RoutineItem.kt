@@ -63,7 +63,7 @@ fun RoutineItem(
 
         BitnagilIcon(
             id = R.drawable.ic_see_more,
-            onClick = onMoreClick,
+            modifier = Modifier.clickableWithoutRipple(onClick = onMoreClick),
         )
     }
 }
