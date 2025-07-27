@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -28,6 +26,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.R
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
+import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.emotion.model.Emotion
 import com.threegap.bitnagil.presentation.emotion.model.mvi.EmotionSideEffect
@@ -69,20 +70,24 @@ private fun EmotionScreen(
             modifier = Modifier
                 .height(54.dp)
                 .fillMaxWidth(),
+            contentAlignment = Alignment.CenterStart
         ) {
             Box(
                 modifier = Modifier
-                    .padding(start = 2.dp)
-                    .size(48.dp)
-                    .background(BitnagilTheme.colors.black)
-                    .align(Alignment.CenterStart)
-                    .clickable(onClick = onClickPreviousButton),
-            )
+                    .clickableWithoutRipple(onClick = onClickPreviousButton)
+                    .padding(6.dp),
+            ) {
+                BitnagilIcon(id = R.drawable.ic_back_arrow_36)
+            }
         }
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        Text("오늘의 감정구슬을 골라보세요", style = BitnagilTheme.typography.title2Bold.copy(color = BitnagilTheme.colors.navy500), textAlign = TextAlign.Center)
+        Text(
+            "오늘의 감정구슬을 골라보세요",
+            style = BitnagilTheme.typography.title2Bold.copy(color = BitnagilTheme.colors.navy500),
+            textAlign = TextAlign.Center
+        )
 
         Spacer(modifier = Modifier.height(6.dp))
 
@@ -96,23 +101,24 @@ private fun EmotionScreen(
 
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),
-            modifier = Modifier.padding(horizontal = 40.dp).widthIn(300.dp),
-            horizontalArrangement = Arrangement.spacedBy(32.dp),
-            verticalArrangement = Arrangement.spacedBy(32.dp),
+            modifier = Modifier.padding(horizontal = 24.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(28.dp),
         ) {
             items(state.emotions) { emotion ->
                 Column(
+                    modifier = Modifier
+                        .clickable { onClickEmotion(emotion) },
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Image(
                         painter = painterResource(id = emotion.imageResourceId),
                         contentDescription = null,
-                        modifier = Modifier.size(72.dp).clickable {
-                            onClickEmotion(emotion)
-                        },
                     )
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Text(emotion.emotionName, style = BitnagilTheme.typography.body1Regular.copy(color = BitnagilTheme.colors.coolGray20))
+                    Text(
+                        text = emotion.emotionName,
+                        style = BitnagilTheme.typography.body1Regular.copy(color = BitnagilTheme.colors.coolGray20)
+                    )
                 }
             }
         }
