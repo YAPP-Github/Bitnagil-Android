@@ -27,4 +27,16 @@ class AuthRepositoryImpl @Inject constructor(
         authRemoteDataSource.submitAgreement(
             termsAgreement.toDto(),
         )
+
+    override suspend fun logout(): Result<Unit> {
+        return authRemoteDataSource.logout().also {
+            if (it.isSuccess) authLocalDataSource.clearAuthToken()
+        }
+    }
+
+    override suspend fun withdrawal(): Result<Unit> {
+        return authRemoteDataSource.withdrawal().also {
+            if (it.isSuccess) authLocalDataSource.clearAuthToken()
+        }
+    }
 }

@@ -21,4 +21,10 @@ interface AuthService {
     suspend fun submitAgreement(
         @Body termsAgreementRequestDto: TermsAgreementRequestDto,
     ): BaseResponse<Unit>
+
+    @POST("/api/v1/auth/withdrawal")
+    suspend fun postWithdrawal(): BaseResponse<Unit>
+
+    @POST("/api/v1/auth/logout")
+    suspend fun postLogout(): BaseResponse<Unit>
 }

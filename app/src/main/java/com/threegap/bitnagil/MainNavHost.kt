@@ -5,12 +5,16 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.threegap.bitnagil.presentation.home.HomeScreenContainer
+import com.threegap.bitnagil.navigation.home.HomeNavHost
+import com.threegap.bitnagil.presentation.emotion.EmotionScreenContainer
 import com.threegap.bitnagil.presentation.intro.IntroScreenContainer
 import com.threegap.bitnagil.presentation.login.LoginScreenContainer
+import com.threegap.bitnagil.presentation.onboarding.OnBoardingScreenContainer
+import com.threegap.bitnagil.presentation.setting.SettingScreenContainer
 import com.threegap.bitnagil.presentation.splash.SplashScreenContainer
 import com.threegap.bitnagil.presentation.terms.TermsAgreementScreenContainer
 import com.threegap.bitnagil.presentation.webview.BitnagilWebViewScreen
+import com.threegap.bitnagil.presentation.writeroutine.WriteRoutineScreenContainer
 
 @Composable
 fun MainNavHost(
@@ -25,7 +29,13 @@ fun MainNavHost(
         composable<Route.Splash> {
             SplashScreenContainer(
                 navigateToIntro = { navigator.navController.navigate(Route.Intro) },
-                navigateToHome = { navigator.navController.navigate(Route.Home) },
+                navigateToHome = {
+                    navigator.navController.navigate(Route.Home) {
+                        popUpTo(navigator.navController.graph.startDestinationId) {
+                            inclusive = true
+                        }
+                    }
+                },
             )
         }
 
@@ -37,7 +47,13 @@ fun MainNavHost(
 
         composable<Route.Login> {
             LoginScreenContainer(
-                navigateToHome = { navigator.navController.navigate(Route.Home) },
+                navigateToHome = {
+                    navigator.navController.navigate(Route.Home) {
+                        popUpTo(navigator.navController.graph.startDestinationId) {
+                            inclusive = true
+                        }
+                    }
+                },
                 navigateToTermsAgreement = { navigator.navController.navigate(Route.TermsAgreement) },
             )
         }
@@ -60,13 +76,35 @@ fun MainNavHost(
                         ),
                     )
                 },
-                navigateToOnBoarding = { },
+                navigateToOnBoarding = {
+                    navigator.navController.navigate(Route.OnBoarding)
+                },
                 navigateToBack = { navigator.navController.popBackStack() },
             )
         }
 
         composable<Route.Home> {
-            HomeScreenContainer()
+            HomeNavHost(
+                navigateToSetting = {
+                    navigator.navController.navigate(Route.Setting)
+                },
+                navigateToOnBoarding = {
+                    navigator.navController.navigate(Route.OnBoarding)
+                },
+                navigateToNotice = {
+                },
+                navigateToQnA = {
+                },
+                navigateToRegisterRoutine = { routineId ->
+                    navigator.navController.navigate(Route.WriteRoutine(routineId = routineId))
+                },
+                navigateToEditRoutine = { routineId ->
+                    navigator.navController.navigate(Route.WriteRoutine(routineId = routineId, isRegister = false))
+                },
+                navigateToEmotion = {
+                    navigator.navController.navigate(Route.Emotion)
+                },
+            )
         }
 
         composable<Route.WebView> {
@@ -75,6 +113,68 @@ fun MainNavHost(
                 title = webViewRoute.title,
                 url = webViewRoute.url,
                 onBackClick = { navigator.navController.popBackStack() },
+            )
+        }
+
+        composable<Route.Setting> {
+            SettingScreenContainer(
+                navigateToBack = {
+                    navigator.navController.popBackStack()
+                },
+                navigateToTermsOfService = {
+                    navigator.navController.navigate(
+                        Route.WebView(
+                            title = "약관 동의",
+                            url = "https://complex-wombat-99f.notion.site/2025-7-20-236f4587491d8071833adfaf8115bce2",
+                        ),
+                    )
+                },
+                navigateToPrivacyPolicy = {
+                    navigator.navController.navigate(
+                        Route.WebView(
+                            title = "약관 동의",
+                            url = "https://complex-wombat-99f.notion.site/2025-07-20-236f4587491d80308016eb810692d18b",
+                        ),
+                    )
+                },
+                navigateToIntro = {
+                    navigator.navController.navigate(Route.Intro) {
+                        popUpTo(0) {
+                            inclusive = true
+                        }
+                    }
+                },
+            )
+        }
+
+        composable<Route.OnBoarding> {
+            OnBoardingScreenContainer(
+                navigateToHome = {
+                    navigator.navController.navigate(Route.Home) {
+                        popUpTo(navigator.navController.graph.startDestinationId) {
+                            inclusive = true
+                        }
+                    }
+                },
+                navigateToBack = {
+                    navigator.navController.popBackStack()
+                },
+            )
+        }
+
+        composable<Route.WriteRoutine> {
+            WriteRoutineScreenContainer(
+                navigateToBack = {
+                    navigator.navController.popBackStack()
+                },
+            )
+        }
+
+        composable<Route.Emotion> {
+            EmotionScreenContainer(
+                navigateToBack = {
+                    navigator.navController.popBackStack()
+                },
             )
         }
     }

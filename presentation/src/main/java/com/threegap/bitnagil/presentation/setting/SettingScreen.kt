@@ -26,22 +26,39 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.setting.component.atom.settingtitle.SettingTitle
 import com.threegap.bitnagil.presentation.setting.component.atom.toggleswitch.ToggleSwitch
 import com.threegap.bitnagil.presentation.setting.component.block.settingrowbutton.SettingRowButton
+import com.threegap.bitnagil.presentation.setting.model.mvi.SettingSideEffect
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingState
 
 @Composable
 fun SettingScreenContainer(
     viewModel: SettingViewModel = hiltViewModel(),
+    navigateToBack: () -> Unit,
+    navigateToTermsOfService: () -> Unit,
+    navigateToPrivacyPolicy: () -> Unit,
+    navigateToIntro: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsState()
+
+    viewModel.sideEffectFlow.collectAsEffect { sideEffect ->
+        when (sideEffect) {
+            SettingSideEffect.NavigateToIntro -> navigateToIntro()
+        }
+    }
 
     SettingScreen(
         state = state,
         toggleServiceAlarm = viewModel::toggleServiceAlarm,
         togglePushAlarm = viewModel::togglePushAlarm,
         onClickUpdate = {},
+        onClickBack = navigateToBack,
+        onClickTermsOfService = navigateToTermsOfService,
+        onClickPrivacyPolicy = navigateToPrivacyPolicy,
+        onClickLogout = viewModel::logout,
+        onClickWithdrawal = viewModel::withdrawal,
     )
 }
 
@@ -51,6 +68,11 @@ private fun SettingScreen(
     toggleServiceAlarm: () -> Unit,
     togglePushAlarm: () -> Unit,
     onClickUpdate: () -> Unit,
+    onClickBack: () -> Unit,
+    onClickTermsOfService: () -> Unit,
+    onClickPrivacyPolicy: () -> Unit,
+    onClickLogout: () -> Unit,
+    onClickWithdrawal: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -68,8 +90,7 @@ private fun SettingScreen(
                     .size(36.dp)
                     .background(BitnagilTheme.colors.black)
                     .align(Alignment.CenterStart)
-                    .clickable {
-                    },
+                    .clickable(onClick = onClickBack),
             )
 
             Text(
@@ -159,9 +180,9 @@ private fun SettingScreen(
                 }
             }
 
-            SettingRowButton(text = "서비스 이용약관", onClick = {})
+            SettingRowButton(text = "서비스 이용약관", onClick = onClickTermsOfService)
 
-            SettingRowButton(text = "개인정보 처리방침", onClick = {})
+            SettingRowButton(text = "개인정보 처리방침", onClick = onClickPrivacyPolicy)
 
             Spacer(modifier = Modifier.height(6.dp))
 
@@ -171,9 +192,9 @@ private fun SettingScreen(
 
             SettingTitle("계정")
 
-            SettingRowButton(text = "로그아웃", onClick = {})
+            SettingRowButton(text = "로그아웃", onClick = onClickLogout)
 
-            SettingRowButton(text = "탈퇴하기", onClick = {})
+            SettingRowButton(text = "탈퇴하기", onClick = onClickWithdrawal)
         }
     }
 }
@@ -187,9 +208,15 @@ fun SettingScreenPreview() {
             usePushAlarm = false,
             version = "1.0.1",
             latestVersion = "1.0.0",
+            loading = false,
         ),
         toggleServiceAlarm = {},
         togglePushAlarm = {},
         onClickUpdate = {},
+        onClickBack = {},
+        onClickPrivacyPolicy = {},
+        onClickTermsOfService = {},
+        onClickLogout = {},
+        onClickWithdrawal = {},
     )
 }

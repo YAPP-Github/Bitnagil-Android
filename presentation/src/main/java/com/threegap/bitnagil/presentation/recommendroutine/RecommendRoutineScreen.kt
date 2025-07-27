@@ -42,6 +42,8 @@ import com.threegap.bitnagil.presentation.recommendroutine.type.RecommendRoutine
 @Composable
 fun RecommendRoutineScreenContainer(
     viewmodel: RecommendRoutineViewModel = hiltViewModel(),
+    navigateToEmotion: () -> Unit,
+    navigateToRegisterRoutine: (String?) -> Unit,
 ) {
     val uiState by viewmodel.container.stateFlow.collectAsStateWithLifecycle()
 
@@ -59,6 +61,8 @@ fun RecommendRoutineScreenContainer(
         onHideDifficultyBottomSheet = {
             viewmodel.sendIntent(RecommendRoutineIntent.HideDifficultyBottomSheet)
         },
+        onRecommendRoutineByEmotionClick = navigateToEmotion,
+        onRegisterRoutineClick = navigateToRegisterRoutine,
     )
 }
 
@@ -69,6 +73,8 @@ private fun RecommendRoutineScreen(
     onDifficultySelected: (RecommendRoutineDifficulty?) -> Unit,
     onShowDifficultyBottomSheet: () -> Unit,
     onHideDifficultyBottomSheet: () -> Unit,
+    onRecommendRoutineByEmotionClick: () -> Unit,
+    onRegisterRoutineClick: (String) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -165,7 +171,7 @@ private fun RecommendRoutineScreen(
                 if (uiState.isDefaultCategory) {
                     item {
                         EmotionRecommendRoutineButton(
-                            onClick = {},
+                            onClick = onRecommendRoutineByEmotionClick,
                         )
                     }
                 }
@@ -176,7 +182,7 @@ private fun RecommendRoutineScreen(
                     RecommendRoutineItem(
                         routineName = routine.name,
                         routineDescription = routine.description,
-                        onAddRoutineClick = {},
+                        onAddRoutineClick = { onRegisterRoutineClick(routine.id) },
                     )
                 }
             }
@@ -203,5 +209,7 @@ private fun RoutineRecommendScreenPreview() {
         onDifficultySelected = {},
         onShowDifficultyBottomSheet = {},
         onHideDifficultyBottomSheet = {},
+        onRecommendRoutineByEmotionClick = {},
+        onRegisterRoutineClick = {},
     )
 }

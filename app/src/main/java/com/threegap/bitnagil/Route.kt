@@ -24,4 +24,19 @@ sealed interface Route {
         val title: String,
         val url: String,
     ) : Route
+
+    @Serializable
+    data object Setting : Route
+
+    @Serializable
+    data object OnBoarding : Route
+
+    @Serializable
+    data class WriteRoutine(
+        val routineId: String? = null,
+        val isRegister: Boolean = true,
+    ) : Route
+
+    @Serializable
+    data object Emotion : Route
 }
