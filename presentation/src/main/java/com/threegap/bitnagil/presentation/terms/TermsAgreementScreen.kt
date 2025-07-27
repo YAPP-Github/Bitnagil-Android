@@ -28,7 +28,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.presentation.terms.component.TermsAgreementItem
+import com.threegap.bitnagil.presentation.terms.component.ToggleAllAgreementsItem
 import com.threegap.bitnagil.presentation.terms.model.TermsAgreementIntent
 import com.threegap.bitnagil.presentation.terms.model.TermsAgreementSideEffect
 import com.threegap.bitnagil.presentation.terms.model.TermsAgreementState
@@ -109,7 +111,7 @@ private fun TermsAgreementScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(BitnagilTheme.colors.white),
     ) {
         Box(
             modifier = Modifier
@@ -135,45 +137,23 @@ private fun TermsAgreementScreen(
 
         Column(
             modifier = Modifier
-                .padding(
-                    top = 48.dp,
-                )
+                .padding(top = 48.dp)
                 .padding(horizontal = 16.dp),
         ) {
             Text(
                 text = "빛나길 이용을 위해\n필수 약관에 동의해 주세요.",
+                color = BitnagilTheme.colors.navy500,
+                style = BitnagilTheme.typography.title2Bold
             )
 
-            Spacer(
-                modifier = Modifier.height(28.dp),
+            Spacer(modifier = Modifier.height(28.dp))
+
+            ToggleAllAgreementsItem(
+                isAllAgreed = uiState.isAllAgreed,
+                onToggleAllAgreements = onToggleAllAgreements
             )
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp)
-                    .background(
-                        color = Color.LightGray,
-                        shape = RoundedCornerShape(10.dp),
-                    )
-                    .clickable { onToggleAllAgreements(!uiState.isAllAgreed) }
-                    .padding(
-                        vertical = 12.dp,
-                        horizontal = 16.dp,
-                    ),
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Check,
-                    contentDescription = null,
-                    tint = if (uiState.isAllAgreed) Color.Black else Color.Gray,
-                    modifier = Modifier.size(24.dp),
-                )
-                Text(
-                    text = "전체동의",
-                )
-            }
+            Spacer(modifier = Modifier.height(8.dp))
 
             TermsAgreementItem(
                 title = "(필수) 서비스 이용약관 동의",
