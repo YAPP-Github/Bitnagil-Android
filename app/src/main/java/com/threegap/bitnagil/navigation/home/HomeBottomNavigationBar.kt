@@ -14,9 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -24,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.threegap.bitnagil.R
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 
@@ -31,7 +30,7 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 fun HomeBottomNavigationBar(
     navController: NavController,
 ) {
-    var currentSelectedRoute : HomeRoute by remember { mutableStateOf(HomeRoute.Home) }
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
 
     Row(
         modifier = Modifier
@@ -46,12 +45,11 @@ fun HomeBottomNavigationBar(
             unSelectIconResourceId = R.drawable.ic_home_empty,
             title = "홈",
             onClick = {
-                navController.navigate(HomeRoute.Home) {
-                    currentSelectedRoute = HomeRoute.Home
-                    popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                navController.navigate(HomeRoute.Home.route) {
+                    popUpTo(0) { inclusive = true }
                 }
             },
-            selected = currentSelectedRoute == HomeRoute.Home
+            selected = navBackStackEntry?.destination?.route == HomeRoute.Home.route
         )
 
         HomeBottomNavigationItem(
@@ -60,12 +58,11 @@ fun HomeBottomNavigationBar(
             unSelectIconResourceId = R.drawable.ic_recommend_empty,
             title = "추천 루틴",
             onClick = {
-                navController.navigate(HomeRoute.RecommendRoutine) {
-                    currentSelectedRoute = HomeRoute.RecommendRoutine
-                    popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                navController.navigate(HomeRoute.RecommendRoutine.route) {
+                    popUpTo(0) { inclusive = true }
                 }
             },
-            selected = currentSelectedRoute == HomeRoute.RecommendRoutine
+            selected = navBackStackEntry?.destination?.route == HomeRoute.RecommendRoutine.route
         )
 
         HomeBottomNavigationItem(
@@ -74,12 +71,11 @@ fun HomeBottomNavigationBar(
             unSelectIconResourceId = R.drawable.ic_mypage_empty,
             title = "마이페이지",
             onClick = {
-                navController.navigate(HomeRoute.MyPage) {
-                    currentSelectedRoute = HomeRoute.MyPage
-                    popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                navController.navigate(HomeRoute.MyPage.route) {
+                    popUpTo(0) { inclusive = true }
                 }
             },
-            selected = currentSelectedRoute == HomeRoute.MyPage
+            selected = navBackStackEntry?.destination?.route == HomeRoute.MyPage.route
         )
     }
 }

@@ -3,13 +3,13 @@ package com.threegap.bitnagil.navigation.home
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed interface HomeRoute {
+sealed class HomeRoute(val route: String) {
     @Serializable
-    data object Home : HomeRoute
+    data object Home : HomeRoute("home/home")
 
     @Serializable
-    data object RecommendRoutine : HomeRoute
+    data object RecommendRoutine : HomeRoute("home/recommend_routine")
 
     @Serializable
-    data object MyPage : HomeRoute
+    data object MyPage : HomeRoute("home/my_page")
 }

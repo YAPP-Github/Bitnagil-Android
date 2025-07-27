@@ -8,7 +8,7 @@ import androidx.navigation.compose.rememberNavController
 class HomeNavigator(
     val navController: NavHostController,
 ) {
-    val startDestination = HomeRoute.Home
+    val startDestination = HomeRoute.Home.route
 }
 @Composable
 fun rememberHomeNavigator(navController: NavHostController = rememberNavController()): HomeNavigator =
