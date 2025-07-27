@@ -120,7 +120,7 @@ fun HomeScreenContainer(
             viewModel.sendIntent(HomeIntent.ShowRoutineDetailsBottomSheet(routine))
         },
         onRegisterRoutineClick = navigateToRegisterRoutine,
-        onRegisterEmotionClick = navigateToEmotion
+        onRegisterEmotionClick = navigateToEmotion,
     )
 }
 
@@ -265,6 +265,6 @@ private fun HomeScreenPreview() {
         onShowRoutineSortBottomSheet = {},
         onShowRoutineDetailsBottomSheet = {},
         onRegisterRoutineClick = {},
-        onRegisterEmotionClick = {}
+        onRegisterEmotionClick = {},
     )
 }

@@ -10,6 +10,7 @@ class HomeNavigator(
 ) {
     val startDestination = HomeRoute.Home.route
 }
+
 @Composable
 fun rememberHomeNavigator(navController: NavHostController = rememberNavController()): HomeNavigator =
     remember(navController) {

@@ -12,10 +12,10 @@ sealed class SettingIntent : MviIntent {
 
     data object ToggleServiceAlarm : SettingIntent()
     data object TogglePushAlarm : SettingIntent()
-    data object LogoutLoading: SettingIntent()
-    data object LogoutSuccess: SettingIntent()
-    data object LogoutFailure: SettingIntent()
-    data object WithdrawalLoading: SettingIntent()
-    data object WithdrawalSuccess: SettingIntent()
-    data object WithdrawalFailure: SettingIntent()
+    data object LogoutLoading : SettingIntent()
+    data object LogoutSuccess : SettingIntent()
+    data object LogoutFailure : SettingIntent()
+    data object WithdrawalLoading : SettingIntent()
+    data object WithdrawalSuccess : SettingIntent()
+    data object WithdrawalFailure : SettingIntent()
 }

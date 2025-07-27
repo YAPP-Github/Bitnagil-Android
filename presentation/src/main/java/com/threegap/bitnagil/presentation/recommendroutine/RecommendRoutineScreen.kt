@@ -210,6 +210,6 @@ private fun RoutineRecommendScreenPreview() {
         onShowDifficultyBottomSheet = {},
         onHideDifficultyBottomSheet = {},
         onRecommendRoutineByEmotionClick = {},
-        onRegisterRoutineClick = {}
+        onRegisterRoutineClick = {},
     )
 }

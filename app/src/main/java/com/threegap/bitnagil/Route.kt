@@ -29,14 +29,14 @@ sealed interface Route {
     data object Setting : Route
 
     @Serializable
-    data object OnBoarding: Route
+    data object OnBoarding : Route
 
     @Serializable
     data class WriteRoutine(
         val routineId: String? = null,
         val isRegister: Boolean = true,
-    ): Route
+    ) : Route
 
     @Serializable
-    data object Emotion: Route
+    data object Emotion : Route
 }

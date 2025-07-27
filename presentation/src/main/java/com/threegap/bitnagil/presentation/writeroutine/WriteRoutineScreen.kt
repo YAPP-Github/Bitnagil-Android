@@ -79,7 +79,7 @@ fun WriteRoutineScreenContainer(
         showTimePickerBottomSheet = viewModel::showTimePickerBottomSheet,
         onClickRegister = viewModel::registerRoutine,
         removeSubRoutine = viewModel::removeSubRoutine,
-        onClickBack = navigateToBack
+        onClickBack = navigateToBack,
     )
 }
 

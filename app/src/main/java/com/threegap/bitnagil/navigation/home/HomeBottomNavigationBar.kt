@@ -37,7 +37,7 @@ fun HomeBottomNavigationBar(
             .fillMaxWidth()
             .background(color = BitnagilTheme.colors.white)
             .padding(horizontal = 16.dp, vertical = 7.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         HomeBottomNavigationItem(
             modifier = Modifier.weight(1f),
@@ -49,7 +49,7 @@ fun HomeBottomNavigationBar(
                     popUpTo(0) { inclusive = true }
                 }
             },
-            selected = navBackStackEntry?.destination?.route == HomeRoute.Home.route
+            selected = navBackStackEntry?.destination?.route == HomeRoute.Home.route,
         )
 
         HomeBottomNavigationItem(
@@ -62,7 +62,7 @@ fun HomeBottomNavigationBar(
                     popUpTo(0) { inclusive = true }
                 }
             },
-            selected = navBackStackEntry?.destination?.route == HomeRoute.RecommendRoutine.route
+            selected = navBackStackEntry?.destination?.route == HomeRoute.RecommendRoutine.route,
         )
 
         HomeBottomNavigationItem(
@@ -75,7 +75,7 @@ fun HomeBottomNavigationBar(
                     popUpTo(0) { inclusive = true }
                 }
             },
-            selected = navBackStackEntry?.destination?.route == HomeRoute.MyPage.route
+            selected = navBackStackEntry?.destination?.route == HomeRoute.MyPage.route,
         )
     }
 }
@@ -105,19 +105,19 @@ private fun HomeBottomNavigationItem(
             interactionSource = interactionSource,
             indication = null,
         ),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Image(
             painter = painterResource(id = iconResourceId),
             contentDescription = title,
             modifier = Modifier.padding(4.dp).size(24.dp),
-            colorFilter = ColorFilter.tint(color = contentTintColor)
+            colorFilter = ColorFilter.tint(color = contentTintColor),
         )
 
         Text(
             text = title,
             style = BitnagilTheme.typography.caption2Medium,
-            color = contentTintColor
+            color = contentTintColor,
         )
     }
 }

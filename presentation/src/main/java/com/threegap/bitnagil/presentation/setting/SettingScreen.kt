@@ -58,7 +58,7 @@ fun SettingScreenContainer(
         onClickTermsOfService = navigateToTermsOfService,
         onClickPrivacyPolicy = navigateToPrivacyPolicy,
         onClickLogout = viewModel::logout,
-        onClickWithdrawal = viewModel::withdrawal
+        onClickWithdrawal = viewModel::withdrawal,
     )
 }
 
@@ -208,7 +208,7 @@ fun SettingScreenPreview() {
             usePushAlarm = false,
             version = "1.0.1",
             latestVersion = "1.0.0",
-            loading = false
+            loading = false,
         ),
         toggleServiceAlarm = {},
         togglePushAlarm = {},
@@ -217,6 +217,6 @@ fun SettingScreenPreview() {
         onClickPrivacyPolicy = {},
         onClickTermsOfService = {},
         onClickLogout = {},
-        onClickWithdrawal = {}
+        onClickWithdrawal = {},
     )
 }

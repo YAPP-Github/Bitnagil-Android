@@ -92,10 +92,8 @@ fun MainNavHost(
                     navigator.navController.navigate(Route.OnBoarding)
                 },
                 navigateToNotice = {
-
                 },
                 navigateToQnA = {
-
                 },
                 navigateToRegisterRoutine = { routineId ->
                     navigator.navController.navigate(Route.WriteRoutine(routineId = routineId))
@@ -105,7 +103,7 @@ fun MainNavHost(
                 },
                 navigateToEmotion = {
                     navigator.navController.navigate(Route.Emotion)
-                }
+                },
             )
         }
 
@@ -145,7 +143,7 @@ fun MainNavHost(
                             inclusive = true
                         }
                     }
-                }
+                },
             )
         }
 

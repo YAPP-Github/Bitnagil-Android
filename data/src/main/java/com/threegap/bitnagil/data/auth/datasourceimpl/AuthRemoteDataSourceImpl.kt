@@ -27,10 +27,8 @@ class AuthRemoteDataSourceImpl @Inject constructor(
             authService.postLogout()
         }
 
-
     override suspend fun withdrawal(): Result<Unit> =
         safeUnitApiCall {
             authService.postWithdrawal()
         }
-
 }
