@@ -17,8 +17,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.threegap.bitnagil.presentation.onboarding.component.atom.textbutton.TextButton
-import com.threegap.bitnagil.presentation.onboarding.component.block.selectbutton.OnBoardingSelectButton
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilSelectButton
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButtonColor
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingItem
@@ -57,14 +57,14 @@ fun OnBoardingSelectTemplate(
                 .verticalScroll(state = scrollState),
         ) {
             for (item in items) {
-                OnBoardingSelectButton(
-                    modifier = Modifier.padding(bottom = 12.dp),
+                BitnagilSelectButton(
                     title = item.title,
                     description = item.description,
                     onClick = {
                         onClickItem(item.id)
                     },
                     selected = item.selected,
+                    modifier = Modifier.padding(bottom = 12.dp),
                 )
             }
         }
