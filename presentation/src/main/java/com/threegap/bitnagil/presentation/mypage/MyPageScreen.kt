@@ -97,7 +97,6 @@ private fun MyPageScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-
         BitnagilOptionButton(
             title = "내 목표 재설정",
             onClick = onClickResetOnBoarding,
