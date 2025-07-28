@@ -16,12 +16,12 @@ import com.threegap.bitnagil.designsystem.R
 fun BitnagilIcon(
     @DrawableRes id: Int,
     modifier: Modifier = Modifier,
-    tint: Color = BitnagilTheme.colors.black,
+    tint: Color? = BitnagilTheme.colors.black,
 ) {
     Image(
         imageVector = ImageVector.vectorResource(id),
         contentDescription = null,
-        colorFilter = ColorFilter.tint(tint),
+        colorFilter = tint?.let { ColorFilter.tint(it) },
         modifier = modifier
     )
 }
