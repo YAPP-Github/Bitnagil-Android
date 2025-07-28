@@ -1,7 +1,6 @@
 package com.threegap.bitnagil.presentation.recommendroutine
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,9 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,7 +25,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.R
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
+import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.recommendroutine.component.atom.RecommendCategoryChip
 import com.threegap.bitnagil.presentation.recommendroutine.component.block.EmotionRecommendRoutineButton
 import com.threegap.bitnagil.presentation.recommendroutine.component.block.RecommendRoutineItem
@@ -125,10 +124,7 @@ private fun RecommendRoutineScreen(
                 horizontalArrangement = Arrangement.spacedBy(5.dp),
                 modifier = Modifier
                     .fillMaxHeight()
-                    // todo: 리플효과 제거하기
-                    .clickable {
-                        onShowDifficultyBottomSheet()
-                    },
+                    .clickableWithoutRipple { onShowDifficultyBottomSheet() },
             ) {
                 Text(
                     text = uiState.selectedDifficulty?.displayName ?: "난이도 선택",
@@ -137,10 +133,9 @@ private fun RecommendRoutineScreen(
                     modifier = Modifier.padding(start = 10.dp),
                 )
 
-                // todo: 아이콘 변경하기
-                Icon(
-                    imageVector = Icons.Default.KeyboardArrowDown,
-                    contentDescription = null,
+                BitnagilIcon(
+                    id = R.drawable.ic_down_arrow,
+                    tint = BitnagilTheme.colors.coolGray60,
                     modifier = Modifier
                         .padding(end = 13.dp)
                         .size(16.dp),
