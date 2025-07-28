@@ -3,7 +3,6 @@ package com.threegap.bitnagil.presentation.setting
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -27,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.component.block.BitnagilOptionButton
+import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.setting.component.atom.settingtitle.SettingTitle
 import com.threegap.bitnagil.presentation.setting.component.atom.toggleswitch.ToggleSwitch
@@ -79,26 +78,11 @@ private fun SettingScreen(
             .fillMaxSize()
             .background(color = BitnagilTheme.colors.white),
     ) {
-        Box(
-            modifier = Modifier
-                .height(54.dp)
-                .fillMaxWidth(),
-        ) {
-            Box(
-                modifier = Modifier
-                    .padding(start = 10.dp)
-                    .size(36.dp)
-                    .background(BitnagilTheme.colors.black)
-                    .align(Alignment.CenterStart)
-                    .clickable(onClick = onClickBack),
-            )
-
-            Text(
-                "설정",
-                modifier = Modifier.align(Alignment.Center),
-                style = BitnagilTheme.typography.title3SemiBold,
-            )
-        }
+        BitnagilTopBar(
+            title = "설정",
+            showBackButton = true,
+            onBackClick = onClickBack
+        )
 
         val scrollState = rememberScrollState()
         Column(

@@ -4,11 +4,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -26,9 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
-import com.threegap.bitnagil.designsystem.R
-import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
-import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
+import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.emotion.model.Emotion
 import com.threegap.bitnagil.presentation.emotion.model.mvi.EmotionSideEffect
@@ -66,20 +62,10 @@ private fun EmotionScreen(
             .background(color = BitnagilTheme.colors.white),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Box(
-            modifier = Modifier
-                .height(54.dp)
-                .fillMaxWidth(),
-            contentAlignment = Alignment.CenterStart
-        ) {
-            Box(
-                modifier = Modifier
-                    .clickableWithoutRipple(onClick = onClickPreviousButton)
-                    .padding(6.dp),
-            ) {
-                BitnagilIcon(id = R.drawable.ic_back_arrow_36)
-            }
-        }
+        BitnagilTopBar(
+            showBackButton = true,
+            onBackClick = onClickPreviousButton
+        )
 
         Spacer(modifier = Modifier.height(32.dp))
 

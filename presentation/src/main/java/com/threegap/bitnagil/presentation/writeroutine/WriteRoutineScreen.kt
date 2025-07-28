@@ -25,6 +25,7 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
+import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.namefield.NameField
@@ -100,27 +101,11 @@ private fun WriteRoutineScreen(
     Column(
         modifier = Modifier.fillMaxSize().background(color = BitnagilTheme.colors.white),
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(54.dp),
-        ) {
-            BitnagilIcon(
-                id = R.drawable.ic_back_arrow_36,
-                modifier = Modifier
-                    .padding(start = 4.dp)
-                    .clickableWithoutRipple(onClick = onClickBack)
-                    .align(alignment = Alignment.CenterStart)
-            )
-
-
-            Text(
-                if (state.writeRoutineType == WriteRoutineType.ADD) "루틴 등록" else "루틴 수정",
-                modifier = Modifier.align(alignment = Alignment.Center),
-                color = BitnagilTheme.colors.coolGray10,
-                style = BitnagilTheme.typography.title3SemiBold,
-            )
-        }
+        BitnagilTopBar(
+            title = if (state.writeRoutineType == WriteRoutineType.ADD) "루틴 등록" else "루틴 수정",
+            showBackButton = true,
+            onBackClick = onClickBack
+        )
 
         Column(
             modifier = Modifier

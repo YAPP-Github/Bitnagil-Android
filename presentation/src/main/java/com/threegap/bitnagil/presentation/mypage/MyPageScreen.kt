@@ -25,7 +25,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.R
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.component.block.BitnagilOptionButton
+import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
+import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.mypage.model.MyPageState
 
 @Composable
@@ -61,26 +65,17 @@ private fun MyPageScreen(
             .background(color = BitnagilTheme.colors.white),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Box(
-            modifier = Modifier
-                .height(54.dp)
-                .fillMaxWidth(),
-        ) {
-            Text(
-                "마이페이지",
-                modifier = Modifier.align(Alignment.Center),
-                style = BitnagilTheme.typography.title3SemiBold,
-            )
-
-            Box(
-                modifier = Modifier
-                    .padding(end = 10.dp)
-                    .size(36.dp)
-                    .background(BitnagilTheme.colors.black)
-                    .align(Alignment.CenterEnd)
-                    .clickable(onClick = onClickSetting),
-            )
-        }
+        BitnagilTopBar(
+            title = "마이페이지",
+            actions = {
+                BitnagilIcon(
+                    id = R.drawable.ic_setting,
+                    modifier = Modifier
+                        .clickableWithoutRipple(onClick = onClickSetting)
+                        .padding(6.dp)
+                )
+            }
+        )
 
         Spacer(modifier = Modifier.height(32.dp))
 
