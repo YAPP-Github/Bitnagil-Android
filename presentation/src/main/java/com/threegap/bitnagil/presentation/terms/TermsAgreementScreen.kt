@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.presentation.terms.component.TermsAgreementItem
 import com.threegap.bitnagil.presentation.terms.component.ToggleAllAgreementsItem
@@ -108,10 +108,10 @@ private fun TermsAgreementScreen(
             onBackClick = onBackButtonClick
         )
 
+        Spacer(modifier = Modifier.height(48.dp))
+
         Column(
-            modifier = Modifier
-                .padding(top = 48.dp)
-                .padding(horizontal = 16.dp),
+            modifier = Modifier.padding(horizontal = 16.dp),
         ) {
             Text(
                 text = "빛나길 이용을 위해\n필수 약관에 동의해 주세요.",
@@ -151,18 +151,17 @@ private fun TermsAgreementScreen(
             )
         }
 
-        Button(
+        Spacer(modifier = Modifier.weight(1f))
+
+        BitnagilTextButton(
+            text = "시작하기",
             onClick = onStartButtonClick,
             enabled = uiState.submitEnabled,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(
-                    horizontal = 16.dp,
-                    vertical = 16.dp,
-                ),
-        ) {
-            Text("시작하기")
-        }
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 20.dp)
+        )
     }
 }
 
