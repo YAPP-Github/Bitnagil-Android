@@ -64,7 +64,7 @@ private fun EmotionScreen(
     ) {
         BitnagilTopBar(
             showBackButton = true,
-            onBackClick = onClickPreviousButton
+            onBackClick = onClickPreviousButton,
         )
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -72,7 +72,7 @@ private fun EmotionScreen(
         Text(
             "오늘의 감정구슬을 골라보세요",
             style = BitnagilTheme.typography.title2Bold.copy(color = BitnagilTheme.colors.navy500),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
 
         Spacer(modifier = Modifier.height(6.dp))
@@ -103,7 +103,7 @@ private fun EmotionScreen(
                     )
                     Text(
                         text = emotion.emotionName,
-                        style = BitnagilTheme.typography.body1Regular.copy(color = BitnagilTheme.colors.coolGray20)
+                        style = BitnagilTheme.typography.body1Regular.copy(color = BitnagilTheme.colors.coolGray20),
                     )
                 }
             }

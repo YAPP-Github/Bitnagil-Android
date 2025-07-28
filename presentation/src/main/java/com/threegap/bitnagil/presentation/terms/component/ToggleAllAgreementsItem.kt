@@ -27,7 +27,7 @@ import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 fun ToggleAllAgreementsItem(
     isAllAgreed: Boolean,
     onToggleAllAgreements: (Boolean) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val backgroundColor = if (isAllAgreed) BitnagilTheme.colors.lightBlue75 else BitnagilTheme.colors.coolGray99
     val iconColor = if (isAllAgreed) BitnagilTheme.colors.navy500 else BitnagilTheme.colors.navy100
@@ -57,7 +57,7 @@ fun ToggleAllAgreementsItem(
         Text(
             text = "전체동의",
             color = textColor,
-            style = BitnagilTheme.typography.subtitle1SemiBold
+            style = BitnagilTheme.typography.subtitle1SemiBold,
         )
     }
 }
@@ -71,6 +71,6 @@ private fun ToggleAllAgreementsItemPreview() {
         isAllAgreed = isAllAgreed,
         onToggleAllAgreements = {
             isAllAgreed = !isAllAgreed
-        }
+        },
     )
 }

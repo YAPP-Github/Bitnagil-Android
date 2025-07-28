@@ -22,7 +22,7 @@ fun BitnagilIcon(
         imageVector = ImageVector.vectorResource(id),
         contentDescription = null,
         colorFilter = tint?.let { ColorFilter.tint(it) },
-        modifier = modifier
+        modifier = modifier,
     )
 }
 

@@ -55,7 +55,7 @@ fun TermsAgreementItem(
             Text(
                 text = title,
                 color = BitnagilTheme.colors.coolGray50,
-                style = BitnagilTheme.typography.body2Medium
+                style = BitnagilTheme.typography.body2Medium,
             )
         }
 

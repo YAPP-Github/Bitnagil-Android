@@ -1,7 +1,6 @@
 package com.threegap.bitnagil.presentation.writeroutine.component.atom.strokebutton
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape

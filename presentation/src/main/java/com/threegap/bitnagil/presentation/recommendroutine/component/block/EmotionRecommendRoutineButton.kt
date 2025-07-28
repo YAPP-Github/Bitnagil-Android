@@ -14,8 +14,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 
@@ -49,7 +49,7 @@ fun EmotionRecommendRoutineButton(
             tint = BitnagilTheme.colors.navy400,
             modifier = Modifier
                 .padding(end = 10.dp)
-                .size(20.dp)
+                .size(20.dp),
         )
 
         Text(

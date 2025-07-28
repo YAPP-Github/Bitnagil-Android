@@ -22,7 +22,7 @@ import com.threegap.bitnagil.presentation.home.model.EmotionBallType
 fun EmotionBall(
     emotionType: EmotionBallType?,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     if (emotionType != null) {
         Image(
@@ -37,7 +37,7 @@ fun EmotionBall(
                     elevation = 24.dp,
                     shape = CircleShape,
                     ambientColor = emotionType.ambientColor,
-                    spotColor = emotionType.spotColor
+                    spotColor = emotionType.spotColor,
                 ),
         )
     } else {
@@ -47,7 +47,7 @@ fun EmotionBall(
             modifier = modifier
                 .size(172.dp)
                 .clickableWithoutRipple { onClick() }
-                .fillMaxSize()
+                .fillMaxSize(),
         )
     }
 }
@@ -57,11 +57,11 @@ fun EmotionBall(
 private fun EmotionBallDefaultPreview() {
     Column(
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         EmotionBall(
             emotionType = null,
-            onClick = {}
+            onClick = {},
         )
     }
 }
@@ -71,11 +71,11 @@ private fun EmotionBallDefaultPreview() {
 private fun EmotionBallCalmPreview() {
     Column(
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         EmotionBall(
             emotionType = EmotionBallType.CALM,
-            onClick = {}
+            onClick = {},
         )
     }
 }
@@ -85,11 +85,11 @@ private fun EmotionBallCalmPreview() {
 private fun EmotionBallVitalityPreview() {
     Column(
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         EmotionBall(
             emotionType = EmotionBallType.VITALITY,
-            onClick = {}
+            onClick = {},
         )
     }
 }
@@ -99,11 +99,11 @@ private fun EmotionBallVitalityPreview() {
 private fun EmotionBallLethargyPreview() {
     Column(
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         EmotionBall(
             emotionType = EmotionBallType.LETHARGY,
-            onClick = {}
+            onClick = {},
         )
     }
 }
@@ -113,11 +113,11 @@ private fun EmotionBallLethargyPreview() {
 private fun EmotionBallAnxietyPreview() {
     Column(
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         EmotionBall(
             emotionType = EmotionBallType.ANXIETY,
-            onClick = {}
+            onClick = {},
         )
     }
 }
@@ -127,11 +127,11 @@ private fun EmotionBallAnxietyPreview() {
 private fun EmotionBallSatisfactionPreview() {
     Column(
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         EmotionBall(
             emotionType = EmotionBallType.SATISFACTION,
-            onClick = {}
+            onClick = {},
         )
     }
 }
@@ -141,11 +141,11 @@ private fun EmotionBallSatisfactionPreview() {
 private fun EmotionBallFatiguePreview() {
     Column(
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         EmotionBall(
             emotionType = EmotionBallType.FATIGUE,
-            onClick = {}
+            onClick = {},
         )
     }
 }

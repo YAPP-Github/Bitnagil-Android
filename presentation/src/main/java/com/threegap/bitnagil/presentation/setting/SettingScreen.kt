@@ -81,7 +81,7 @@ private fun SettingScreen(
         BitnagilTopBar(
             title = "설정",
             showBackButton = true,
-            onBackClick = onClickBack
+            onBackClick = onClickBack,
         )
 
         val scrollState = rememberScrollState()
@@ -138,12 +138,12 @@ private fun SettingScreen(
                     Text(
                         text = "버전 ",
                         color = BitnagilTheme.colors.black,
-                        style = BitnagilTheme.typography.body1Regular
+                        style = BitnagilTheme.typography.body1Regular,
                     )
                     Text(
                         text = state.version,
                         color = BitnagilTheme.colors.black,
-                        style = BitnagilTheme.typography.body1SemiBold
+                        style = BitnagilTheme.typography.body1SemiBold,
                     )
                 }
                 if (state.version == state.latestVersion) {
@@ -177,12 +177,12 @@ private fun SettingScreen(
             ) {
                 BitnagilOptionButton(
                     title = "서비스 이용약관",
-                    onClick = onClickTermsOfService
+                    onClick = onClickTermsOfService,
                 )
 
                 BitnagilOptionButton(
                     title = "개인정보 처리방침",
-                    onClick = onClickPrivacyPolicy
+                    onClick = onClickPrivacyPolicy,
                 )
             }
 
@@ -199,12 +199,12 @@ private fun SettingScreen(
             ) {
                 BitnagilOptionButton(
                     title = "로그아웃",
-                    onClick = onClickLogout
+                    onClick = onClickLogout,
                 )
 
                 BitnagilOptionButton(
                     title = "탈퇴하기",
-                    onClick = onClickWithdrawal
+                    onClick = onClickWithdrawal,
                 )
             }
         }

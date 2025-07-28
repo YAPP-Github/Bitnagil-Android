@@ -62,7 +62,7 @@ fun RecommendRoutineItem(
         BitnagilIcon(
             id = R.drawable.ic_plus,
             tint = BitnagilTheme.colors.navy400,
-            modifier = Modifier.size(32.dp)
+            modifier = Modifier.size(32.dp),
         )
     }
 }

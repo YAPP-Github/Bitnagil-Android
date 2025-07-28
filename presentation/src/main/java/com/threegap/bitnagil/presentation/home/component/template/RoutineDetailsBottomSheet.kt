@@ -255,7 +255,6 @@ private fun RoutineInfoContent(
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 private fun RoutineInfoContentPreview() {

@@ -1,7 +1,6 @@
 package com.threegap.bitnagil.presentation.writeroutine.component.atom.selectcell
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape

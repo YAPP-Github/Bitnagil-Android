@@ -8,10 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,7 +26,6 @@ import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.home.component.atom.EmotionBall
 import com.threegap.bitnagil.presentation.home.component.block.SpeechBubbleTooltip
-import com.threegap.bitnagil.presentation.home.model.EmotionBallType
 import com.threegap.bitnagil.presentation.home.util.CollapsibleHeaderState
 import com.threegap.bitnagil.presentation.home.util.rememberCollapsibleHeaderState
 
@@ -131,7 +126,7 @@ private fun GreetingMessage(
             BitnagilIcon(
                 id = com.threegap.bitnagil.designsystem.R.drawable.ic_tooltip,
                 tint = null,
-                modifier = Modifier.clickableWithoutRipple { onInfoClick() }
+                modifier = Modifier.clickableWithoutRipple { onInfoClick() },
             )
 
             if (showTooltip) {

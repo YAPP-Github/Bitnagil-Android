@@ -38,7 +38,7 @@ fun BitnagilProgressBar(
     val animatedProgress by animateFloatAsState(
         targetValue = progress.coerceIn(0f, 1f),
         label = "ProgressBarAnimation",
-        animationSpec = tween(durationMillis = 300, easing = FastOutSlowInEasing)
+        animationSpec = tween(durationMillis = 300, easing = FastOutSlowInEasing),
     )
 
     Canvas(
@@ -77,14 +77,14 @@ fun BitnagilProgressBar(
 data class BitnagilProgressBarColor(
     val gradientStartColor: Color,
     val gradientEndColor: Color,
-    val backgroundColor: Color
+    val backgroundColor: Color,
 ) {
     companion object {
         @Composable
         fun default(): BitnagilProgressBarColor = BitnagilProgressBarColor(
             gradientStartColor = BitnagilTheme.colors.progressBarGradientStartColor,
             gradientEndColor = BitnagilTheme.colors.progressBarGradientEndColor,
-            backgroundColor = BitnagilTheme.colors.white
+            backgroundColor = BitnagilTheme.colors.white,
         )
     }
 }
@@ -97,7 +97,7 @@ private fun BitnagilProgressBarPreview() {
     Column {
         BitnagilProgressBar(
             progress = progress,
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(8.dp),
         )
 
         Row(

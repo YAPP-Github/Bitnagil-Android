@@ -93,7 +93,7 @@ fun HomeNavHost(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(BitnagilTheme.colors.black.copy(alpha = 0.7f))
-                        .clickableWithoutRipple { showFloatingOverlay = false }
+                        .clickableWithoutRipple { showFloatingOverlay = false },
                 )
             }
 
@@ -102,20 +102,20 @@ fun HomeNavHost(
                     FloatingActionItem(
                         icon = R.drawable.ic_report,
                         text = "제보하기",
-                        onClick = {}
+                        onClick = {},
                     ),
                     FloatingActionItem(
                         icon = R.drawable.ic_add_routine,
                         text = "루틴 등록",
-                        onClick = { navigateToRegisterRoutine(null) }
-                    )
+                        onClick = { navigateToRegisterRoutine(null) },
+                    ),
                 ),
                 isExpanded = showFloatingOverlay,
                 onToggle = { expanded -> showFloatingOverlay = expanded },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(16.dp)
-                    .padding(bottom = 80.dp)
+                    .padding(bottom = 80.dp),
             )
         }
     }

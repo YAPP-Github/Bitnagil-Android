@@ -68,7 +68,7 @@ private fun OnBoardingScreen(
     ) {
         BitnagilProgressTopBar(
             onBackClick = onClickPreviousInSelectOnBoarding,
-            progress = state.progress
+            progress = state.progress,
         )
 
         when (state) {

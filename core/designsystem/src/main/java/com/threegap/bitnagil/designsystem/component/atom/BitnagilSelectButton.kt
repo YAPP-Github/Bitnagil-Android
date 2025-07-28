@@ -35,7 +35,7 @@ fun BitnagilSelectButton(
     description: String? = null,
     selected: Boolean = false,
     colors: BitnagilSelectButtonColor = BitnagilSelectButtonColor.default(),
-    shape: Shape = RoundedCornerShape(12.dp)
+    shape: Shape = RoundedCornerShape(12.dp),
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
@@ -75,7 +75,7 @@ fun BitnagilSelectButton(
                 BitnagilTheme.typography.body1Regular
             } else {
                 BitnagilTheme.typography.subtitle1SemiBold
-            }
+            },
         )
 
         description?.let {
@@ -83,7 +83,7 @@ fun BitnagilSelectButton(
             Text(
                 text = description,
                 color = contentColor,
-                style = BitnagilTheme.typography.body2Regular
+                style = BitnagilTheme.typography.body2Regular,
             )
         }
     }

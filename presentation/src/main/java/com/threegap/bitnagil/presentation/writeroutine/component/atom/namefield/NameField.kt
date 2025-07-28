@@ -52,7 +52,7 @@ fun NameField(
 
                 if (onClickRemove != null) {
                     Box(
-                        modifier = Modifier.clickableWithoutRipple(onClick = onClickRemove)
+                        modifier = Modifier.clickableWithoutRipple(onClick = onClickRemove),
                     ) {
                         BitnagilIcon(
                             id = R.drawable.ic_close,

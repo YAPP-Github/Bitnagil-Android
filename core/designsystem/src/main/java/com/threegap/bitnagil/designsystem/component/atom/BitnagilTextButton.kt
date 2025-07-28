@@ -77,7 +77,7 @@ fun BitnagilTextButton(
             text = text,
             color = textColor,
             style = textStyle,
-            textDecoration = textDecoration
+            textDecoration = textDecoration,
         )
     }
 }
@@ -138,8 +138,7 @@ private fun BitnagilTextButtonPreview() {
             onClick = {},
             colors = BitnagilTextButtonColor.skip(),
             textStyle = BitnagilTheme.typography.body2Regular,
-            textDecoration = TextDecoration.Underline
+            textDecoration = TextDecoration.Underline,
         )
     }
 }
-

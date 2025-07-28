@@ -11,7 +11,7 @@ fun Modifier.clickableWithoutRipple(
     enabled: Boolean = true,
     onClickLabel: String? = null,
     role: Role? = null,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) = composed {
     clickable(
         indication = null,
@@ -19,6 +19,6 @@ fun Modifier.clickableWithoutRipple(
         enabled = enabled,
         onClickLabel = onClickLabel,
         role = role,
-        onClick = onClick
+        onClick = onClick,
     )
 }

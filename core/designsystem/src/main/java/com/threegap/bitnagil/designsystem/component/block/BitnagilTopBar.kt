@@ -30,7 +30,7 @@ fun BitnagilTopBar(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(54.dp)
+            .height(54.dp),
     ) {
         if (showBackButton) {
             Box(
@@ -50,7 +50,7 @@ fun BitnagilTopBar(
                 text = title,
                 color = BitnagilTheme.colors.coolGray10,
                 style = BitnagilTheme.typography.title3SemiBold,
-                modifier = Modifier.align(Alignment.Center)
+                modifier = Modifier.align(Alignment.Center),
             )
         }
 
@@ -58,7 +58,7 @@ fun BitnagilTopBar(
             modifier = Modifier
                 .align(Alignment.CenterEnd)
                 .padding(end = 10.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             actions()
         }
@@ -76,7 +76,7 @@ private fun Preview() {
         BitnagilTopBar(
             title = "설정",
             showBackButton = true,
-            onBackClick = {}
+            onBackClick = {},
         )
 
         HorizontalDivider()
@@ -86,9 +86,9 @@ private fun Preview() {
             actions = {
                 BitnagilIcon(
                     id = R.drawable.ic_setting,
-                    modifier = Modifier.padding(6.dp)
+                    modifier = Modifier.padding(6.dp),
                 )
-            }
+            },
         )
     }
 }

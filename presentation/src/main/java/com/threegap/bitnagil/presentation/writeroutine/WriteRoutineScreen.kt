@@ -1,7 +1,6 @@
 package com.threegap.bitnagil.presentation.writeroutine
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,7 +25,6 @@ import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
-import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.namefield.NameField
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.selectcell.SelectCell
@@ -104,7 +102,7 @@ private fun WriteRoutineScreen(
         BitnagilTopBar(
             title = if (state.writeRoutineType == WriteRoutineType.ADD) "루틴 등록" else "루틴 수정",
             showBackButton = true,
-            onBackClick = onClickBack
+            onBackClick = onClickBack,
         )
 
         Column(

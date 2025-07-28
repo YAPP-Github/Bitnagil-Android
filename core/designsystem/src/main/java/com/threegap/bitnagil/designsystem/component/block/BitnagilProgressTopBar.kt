@@ -19,7 +19,7 @@ import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 fun BitnagilProgressTopBar(
     progress: Float,
     onBackClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
@@ -27,16 +27,16 @@ fun BitnagilProgressTopBar(
             .height(54.dp)
             .padding(start = 4.dp, end = 18.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         BitnagilIcon(
             id = R.drawable.ic_back_arrow_36,
-            modifier = Modifier.clickableWithoutRipple(onClick = onBackClick)
+            modifier = Modifier.clickableWithoutRipple(onClick = onBackClick),
         )
 
         BitnagilProgressBar(
             progress = progress,
-            modifier = Modifier
+            modifier = Modifier,
         )
     }
 }
@@ -46,6 +46,6 @@ fun BitnagilProgressTopBar(
 private fun BitnagilProgressTopBarPreview() {
     BitnagilProgressTopBar(
         progress = 0.5f,
-        onBackClick = {}
+        onBackClick = {},
     )
 }

@@ -46,16 +46,16 @@ fun BitnagilFloatingButton(
         modifier = modifier
             .background(
                 color = BitnagilTheme.colors.navy500,
-                shape = CircleShape
+                shape = CircleShape,
             )
             .size(52.dp)
-            .clickableWithoutRipple { onClick() }
+            .clickableWithoutRipple { onClick() },
     ) {
         Image(
             imageVector = ImageVector.vectorResource(id),
             contentDescription = null,
             colorFilter = ColorFilter.tint(BitnagilTheme.colors.white),
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(24.dp),
         )
     }
 }
@@ -74,25 +74,25 @@ fun BitnagilFloatingActionMenu(
             visible = isExpanded && actions.isNotEmpty(),
             enter = slideInVertically(
                 initialOffsetY = { it / 2 },
-                animationSpec = tween(durationMillis = 300)
+                animationSpec = tween(durationMillis = 300),
             ) + fadeIn(
-                animationSpec = tween(durationMillis = 300)
+                animationSpec = tween(durationMillis = 300),
             ) + scaleIn(
                 initialScale = 0.8f,
-                animationSpec = tween(durationMillis = 300)
+                animationSpec = tween(durationMillis = 300),
             ),
             exit = slideOutVertically(
                 targetOffsetY = { it / 2 },
-                animationSpec = tween(durationMillis = 200)
+                animationSpec = tween(durationMillis = 200),
             ) + fadeOut(
-                animationSpec = tween(durationMillis = 200)
+                animationSpec = tween(durationMillis = 200),
             ) + scaleOut(
                 targetScale = 0.8f,
-                animationSpec = tween(durationMillis = 200)
+                animationSpec = tween(durationMillis = 200),
             ),
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(bottom = 67.dp)
+                .padding(bottom = 67.dp),
         ) {
             Column(
                 modifier = Modifier
@@ -103,7 +103,7 @@ fun BitnagilFloatingActionMenu(
             ) {
                 Column(
                     modifier = Modifier.padding(vertical = 16.dp, horizontal = 22.dp),
-                    verticalArrangement = Arrangement.spacedBy(24.dp)
+                    verticalArrangement = Arrangement.spacedBy(24.dp),
                 ) {
                     actions.forEach { action ->
                         FloatingActionMenuItem(
@@ -112,7 +112,7 @@ fun BitnagilFloatingActionMenu(
                             onClick = {
                                 action.onClick()
                                 onToggle(false)
-                            }
+                            },
                         )
                     }
                 }
@@ -120,7 +120,7 @@ fun BitnagilFloatingActionMenu(
         }
 
         Box(
-            modifier = Modifier.align(Alignment.BottomEnd)
+            modifier = Modifier.align(Alignment.BottomEnd),
         ) {
             BitnagilFloatingButton(
                 id = if (isExpanded) activeIcon else defaultIcon,
@@ -133,7 +133,7 @@ fun BitnagilFloatingActionMenu(
 data class FloatingActionItem(
     @DrawableRes val icon: Int,
     val text: String,
-    val onClick: () -> Unit
+    val onClick: () -> Unit,
 )
 
 @Composable
@@ -141,12 +141,12 @@ private fun FloatingActionMenuItem(
     @DrawableRes icon: Int,
     text: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val scale by animateFloatAsState(
         targetValue = 1f,
         animationSpec = tween(durationMillis = 200),
-        label = "menu_item_scale"
+        label = "menu_item_scale",
     )
 
     Row(
@@ -154,7 +154,7 @@ private fun FloatingActionMenuItem(
         horizontalArrangement = Arrangement.spacedBy(14.dp),
         modifier = modifier
             .scale(scale)
-            .clickableWithoutRipple { onClick() }
+            .clickableWithoutRipple { onClick() },
     ) {
         BitnagilIcon(
             id = icon,
@@ -164,7 +164,7 @@ private fun FloatingActionMenuItem(
         Text(
             text = text,
             style = BitnagilTheme.typography.subtitle1Medium,
-            color = BitnagilTheme.colors.navy500
+            color = BitnagilTheme.colors.navy500,
         )
     }
 }
@@ -175,7 +175,7 @@ private fun BitnagilFloatingButtonPreview() {
     Column {
         BitnagilFloatingButton(
             id = R.drawable.ic_plus,
-            onClick = {}
+            onClick = {},
         )
 
         BitnagilFloatingActionMenu(
@@ -183,16 +183,16 @@ private fun BitnagilFloatingButtonPreview() {
                 FloatingActionItem(
                     icon = R.drawable.ic_report,
                     text = "제보하기",
-                    onClick = {}
+                    onClick = {},
                 ),
                 FloatingActionItem(
                     icon = R.drawable.ic_add_routine,
                     text = "루틴 등록",
-                    onClick = {}
-                )
+                    onClick = {},
+                ),
             ),
             isExpanded = true,
-            onToggle = {}
+            onToggle = {},
         )
     }
 }

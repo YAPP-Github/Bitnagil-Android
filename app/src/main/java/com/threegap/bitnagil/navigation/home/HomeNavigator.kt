@@ -21,7 +21,6 @@ class HomeNavigator(
         val currentRoute = getCurrentRoute()
         return currentRoute == HomeRoute.Home.route || currentRoute == HomeRoute.RecommendRoutine.route
     }
-
 }
 
 @Composable

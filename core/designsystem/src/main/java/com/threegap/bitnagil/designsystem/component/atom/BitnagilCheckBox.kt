@@ -29,15 +29,15 @@ fun BitnagilCheckBox(
         modifier = modifier
             .background(
                 color = BitnagilTheme.colors.white,
-                shape = RoundedCornerShape(6.dp)
+                shape = RoundedCornerShape(6.dp),
             ),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Image(
             imageVector = ImageVector.vectorResource(R.drawable.ic_check),
             contentDescription = null,
             colorFilter = ColorFilter.tint(iconColor),
-            modifier = modifier.size(24.dp)
+            modifier = modifier.size(24.dp),
         )
     }
 }

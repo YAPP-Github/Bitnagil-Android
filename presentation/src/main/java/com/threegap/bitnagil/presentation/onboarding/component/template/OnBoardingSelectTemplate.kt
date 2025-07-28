@@ -34,7 +34,7 @@ fun OnBoardingSelectTemplate(
         Text(
             text = title,
             color = BitnagilTheme.colors.navy500,
-            style = BitnagilTheme.typography.title2Bold
+            style = BitnagilTheme.typography.title2Bold,
         )
 
         subText?.let {
@@ -43,7 +43,7 @@ fun OnBoardingSelectTemplate(
             Text(
                 text = subText,
                 color = BitnagilTheme.colors.coolGray50,
-                style = BitnagilTheme.typography.body2Medium
+                style = BitnagilTheme.typography.body2Medium,
             )
         }
 
@@ -84,7 +84,7 @@ fun OnBoardingSelectTemplate(
                 onClick = onClickSkip,
                 colors = BitnagilTextButtonColor.skip(),
                 textStyle = BitnagilTheme.typography.body2Regular,
-                textDecoration = TextDecoration.Underline
+                textDecoration = TextDecoration.Underline,
             )
         }
     }

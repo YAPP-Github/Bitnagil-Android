@@ -65,7 +65,7 @@ fun WeeklyDatePicker(
                     modifier = Modifier
                         .clickableWithoutRipple(onClick = onPreviousWeekClick)
                         .padding(14.dp),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Center,
                 ) {
                     BitnagilIcon(
                         id = R.drawable.ic_back_arrow_20,
@@ -77,7 +77,7 @@ fun WeeklyDatePicker(
                     modifier = Modifier
                         .clickableWithoutRipple(onClick = onNextWeekClick)
                         .padding(14.dp),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Center,
                 ) {
                     BitnagilIcon(
                         id = R.drawable.ic_right_arrow_20,

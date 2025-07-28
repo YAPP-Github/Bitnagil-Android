@@ -19,26 +19,26 @@ import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 fun BitnagilOptionButton(
     title: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
             .height(48.dp)
             .clickableWithoutRipple(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Text(
             text = title,
             color = BitnagilTheme.colors.black,
             style = BitnagilTheme.typography.body1Regular,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         )
 
         BitnagilIcon(
             id = R.drawable.ic_right_arrow_20,
             tint = BitnagilTheme.colors.black,
-            modifier = Modifier.padding(10.dp)
+            modifier = Modifier.padding(10.dp),
         )
     }
 }
@@ -48,6 +48,6 @@ fun BitnagilOptionButton(
 private fun BitnagilOptionButtonPreview() {
     BitnagilOptionButton(
         title = "공지사항",
-        onClick = {}
+        onClick = {},
     )
 }

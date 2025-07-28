@@ -105,7 +105,7 @@ private fun TermsAgreementScreen(
         BitnagilTopBar(
             title = "약관 동의",
             showBackButton = true,
-            onBackClick = onBackButtonClick
+            onBackClick = onBackButtonClick,
         )
 
         Spacer(modifier = Modifier.height(48.dp))
@@ -116,14 +116,14 @@ private fun TermsAgreementScreen(
             Text(
                 text = "빛나길 이용을 위해\n필수 약관에 동의해 주세요.",
                 color = BitnagilTheme.colors.navy500,
-                style = BitnagilTheme.typography.title2Bold
+                style = BitnagilTheme.typography.title2Bold,
             )
 
             Spacer(modifier = Modifier.height(28.dp))
 
             ToggleAllAgreementsItem(
                 isAllAgreed = uiState.isAllAgreed,
-                onToggleAllAgreements = onToggleAllAgreements
+                onToggleAllAgreements = onToggleAllAgreements,
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -160,7 +160,7 @@ private fun TermsAgreementScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .padding(bottom = 20.dp)
+                .padding(bottom = 20.dp),
         )
     }
 }
