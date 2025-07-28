@@ -2,7 +2,6 @@ package com.threegap.bitnagil.presentation.home.component.template
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +22,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.R
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
+import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.domain.routine.model.DayOfWeek
 import com.threegap.bitnagil.domain.routine.model.DayOfWeek.Companion.formatRepeatDays
 import com.threegap.bitnagil.domain.routine.model.RoutineType
@@ -70,13 +72,25 @@ private fun RoutineInfoContent(
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(28.dp),
             ) {
-                Text(
-                    text = "루틴 이름",
-                    color = BitnagilTheme.colors.coolGray50,
-                    style = BitnagilTheme.typography.body2Medium,
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                ) {
+                    BitnagilIcon(
+                        id = R.drawable.ic_name_routine,
+                        tint = BitnagilTheme.colors.coolGray50,
+                    )
+
+                    Text(
+                        text = "루틴 이름",
+                        color = BitnagilTheme.colors.coolGray50,
+                        style = BitnagilTheme.typography.body2Medium,
+                    )
+                }
                 Text(
                     text = routine.routineName,
                     color = BitnagilTheme.colors.coolGray10,
@@ -87,19 +101,29 @@ private fun RoutineInfoContent(
             Box(
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Text(
-                    text = "세부 루틴",
-                    color = BitnagilTheme.colors.coolGray50,
-                    style = BitnagilTheme.typography.body2Medium,
+                Row(
                     modifier = Modifier.align(Alignment.TopStart),
-                )
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                ) {
+                    BitnagilIcon(
+                        id = R.drawable.ic_detail_routine,
+                        tint = BitnagilTheme.colors.coolGray50,
+                    )
+
+                    Text(
+                        text = "세부 루틴",
+                        color = BitnagilTheme.colors.coolGray50,
+                        style = BitnagilTheme.typography.body2Medium,
+                    )
+                }
 
                 if (routine.subRoutines.isEmpty()) {
                     Text(
                         text = "세부루틴 없음",
-                        color = BitnagilTheme.colors.navy500,
-                        style = BitnagilTheme.typography.body2Medium,
-                        modifier = Modifier.align(Alignment.TopEnd),
+                        color = BitnagilTheme.colors.coolGray10,
+                        style = BitnagilTheme.typography.body2SemiBold,
+                        modifier = Modifier.align(Alignment.CenterEnd),
                     )
                 } else {
                     Column(
@@ -111,7 +135,9 @@ private fun RoutineInfoContent(
                                 color = BitnagilTheme.colors.coolGray10,
                                 style = BitnagilTheme.typography.body2SemiBold,
                                 textAlign = TextAlign.End,
-                                modifier = Modifier.fillMaxWidth(),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 4.dp),
                             )
                         }
                     }
@@ -122,13 +148,26 @@ private fun RoutineInfoContent(
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(28.dp),
                 ) {
-                    Text(
-                        text = "루틴 반복",
-                        color = BitnagilTheme.colors.coolGray50,
-                        style = BitnagilTheme.typography.body2Medium,
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    ) {
+                        BitnagilIcon(
+                            id = R.drawable.ic_rotate,
+                            tint = BitnagilTheme.colors.coolGray50,
+                        )
+
+                        Text(
+                            text = "루틴 반복",
+                            color = BitnagilTheme.colors.coolGray50,
+                            style = BitnagilTheme.typography.body2Medium,
+                        )
+                    }
+
                     Text(
                         text = routine.repeatDay.formatRepeatDays(),
                         color = BitnagilTheme.colors.coolGray10,
@@ -163,13 +202,22 @@ private fun RoutineInfoContent(
                         color = BitnagilTheme.colors.navy500,
                         shape = RoundedCornerShape(12.dp),
                     )
-                    .clickable { onEdit() },
+                    .clickableWithoutRipple { onEdit() },
             ) {
-                Text(
-                    text = "수정하기",
-                    color = BitnagilTheme.colors.white,
-                    style = BitnagilTheme.typography.body2Medium,
-                )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    BitnagilIcon(
+                        id = com.threegap.bitnagil.designsystem.R.drawable.ic_edit,
+                        tint = BitnagilTheme.colors.white,
+                    )
+                    Text(
+                        text = "수정하기",
+                        color = BitnagilTheme.colors.white,
+                        style = BitnagilTheme.typography.subtitle1SemiBold,
+                    )
+                }
             }
 
             Box(
@@ -186,17 +234,27 @@ private fun RoutineInfoContent(
                         color = BitnagilTheme.colors.white,
                         shape = RoundedCornerShape(12.dp),
                     )
-                    .clickable { onDelete() },
+                    .clickableWithoutRipple { onDelete() },
             ) {
-                Text(
-                    text = "삭제하기",
-                    color = BitnagilTheme.colors.navy500,
-                    style = BitnagilTheme.typography.body2Medium,
-                )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    BitnagilIcon(
+                        id = com.threegap.bitnagil.designsystem.R.drawable.ic_trash,
+                        tint = BitnagilTheme.colors.navy500,
+                    )
+                    Text(
+                        text = "삭제하기",
+                        color = BitnagilTheme.colors.navy500,
+                        style = BitnagilTheme.typography.subtitle1SemiBold,
+                    )
+                }
             }
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable

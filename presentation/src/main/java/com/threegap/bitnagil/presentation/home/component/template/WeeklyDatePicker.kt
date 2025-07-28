@@ -1,7 +1,6 @@
 package com.threegap.bitnagil.presentation.home.component.template
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,10 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,6 +21,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.R
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
+import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.home.util.formatDayOfMonth
 import com.threegap.bitnagil.presentation.home.util.formatDayOfWeekShort
 import com.threegap.bitnagil.presentation.home.util.formatMonthYear
@@ -63,26 +61,29 @@ fun WeeklyDatePicker(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                // todo: 아이콘 변경하기
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                    contentDescription = null,
+                Box(
                     modifier = Modifier
-                        // todo: 리플효과 제거하기
-                        .clickable { onPreviousWeekClick() }
-                        .padding(14.dp)
-                        .size(20.dp),
-                )
-                // todo: 아이콘 변경하기
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                    contentDescription = null,
+                        .clickableWithoutRipple(onClick = onPreviousWeekClick)
+                        .padding(14.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    BitnagilIcon(
+                        id = R.drawable.ic_back_arrow_20,
+                        tint = BitnagilTheme.colors.black,
+                    )
+                }
+
+                Box(
                     modifier = Modifier
-                        // todo: 리플효과 제거하기
-                        .clickable { onNextWeekClick() }
-                        .padding(14.dp)
-                        .size(20.dp),
-                )
+                        .clickableWithoutRipple(onClick = onNextWeekClick)
+                        .padding(14.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    BitnagilIcon(
+                        id = R.drawable.ic_right_arrow_20,
+                        tint = BitnagilTheme.colors.black,
+                    )
+                }
             }
         }
 
@@ -118,9 +119,7 @@ private fun DateItem(
     Column(
         verticalArrangement = Arrangement.spacedBy(7.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            // todo: 리플효과 제거하기
-            .clickable { onDateClick() },
+        modifier = Modifier.clickableWithoutRipple { onDateClick() },
     ) {
         Text(
             text = if (!isToday) date.formatDayOfWeekShort() else "오늘",
