@@ -2,7 +2,6 @@ package com.threegap.bitnagil.presentation.writeroutine.component.block.labeledc
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +14,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.R
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
+import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 
 @Composable
 fun LabeledCheckBox(
@@ -24,7 +26,7 @@ fun LabeledCheckBox(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier.clickable(onClick = onClick),
+        modifier = modifier.clickableWithoutRipple(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
@@ -39,7 +41,15 @@ fun LabeledCheckBox(
                     shape = RoundedCornerShape(4.dp),
                     color = if (checked) BitnagilTheme.colors.navy500 else BitnagilTheme.colors.coolGray95,
                 ),
-        )
+            contentAlignment = Alignment.Center,
+        ) {
+            if (checked) {
+                BitnagilIcon(
+                    id = R.drawable.ic_check,
+                    tint = BitnagilTheme.colors.white,
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.width(6.dp))
 

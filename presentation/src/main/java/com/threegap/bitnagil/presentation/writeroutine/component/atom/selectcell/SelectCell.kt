@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 
 @Composable
 fun SelectCell(
@@ -27,9 +28,13 @@ fun SelectCell(
                 color = if (selected) BitnagilTheme.colors.lightBlue100 else Color.Transparent,
                 shape = RoundedCornerShape(12.dp),
             )
-            .clickable(onClick = onClick),
+            .clickableWithoutRipple(onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
-        Text(text, style = BitnagilTheme.typography.body2Medium)
+        Text(
+            text = text,
+            color = BitnagilTheme.colors.navy400,
+            style = BitnagilTheme.typography.body2Medium,
+        )
     }
 }
