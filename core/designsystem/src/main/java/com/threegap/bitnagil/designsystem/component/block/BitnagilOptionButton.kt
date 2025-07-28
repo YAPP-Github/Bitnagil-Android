@@ -24,7 +24,8 @@ fun BitnagilOptionButton(
     Row(
         modifier = modifier
             .height(48.dp)
-            .clickableWithoutRipple(onClick = onClick),
+            .clickableWithoutRipple(onClick = onClick)
+            .padding(start = 16.dp, end = 2.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {

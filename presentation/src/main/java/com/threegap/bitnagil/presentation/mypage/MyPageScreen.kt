@@ -97,24 +97,21 @@ private fun MyPageScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Column(
-            modifier = Modifier.padding(start = 16.dp, end = 2.dp),
-        ) {
-            BitnagilOptionButton(
-                title = "내 목표 재설정",
-                onClick = onClickResetOnBoarding,
-            )
 
-            BitnagilOptionButton(
-                title = "공지사항",
-                onClick = onClickNotice,
-            )
+        BitnagilOptionButton(
+            title = "내 목표 재설정",
+            onClick = onClickResetOnBoarding,
+        )
 
-            BitnagilOptionButton(
-                title = "자주 묻는 질문",
-                onClick = onClickQnA,
-            )
-        }
+        BitnagilOptionButton(
+            title = "공지사항",
+            onClick = onClickNotice,
+        )
+
+        BitnagilOptionButton(
+            title = "자주 묻는 질문",
+            onClick = onClickQnA,
+        )
     }
 }
 

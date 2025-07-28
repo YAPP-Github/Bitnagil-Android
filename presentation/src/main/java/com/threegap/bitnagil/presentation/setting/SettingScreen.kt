@@ -172,19 +172,15 @@ private fun SettingScreen(
                 }
             }
 
-            Column(
-                modifier = Modifier.padding(start = 16.dp, end = 2.dp),
-            ) {
-                BitnagilOptionButton(
-                    title = "서비스 이용약관",
-                    onClick = onClickTermsOfService,
-                )
+            BitnagilOptionButton(
+                title = "서비스 이용약관",
+                onClick = onClickTermsOfService,
+            )
 
-                BitnagilOptionButton(
-                    title = "개인정보 처리방침",
-                    onClick = onClickPrivacyPolicy,
-                )
-            }
+            BitnagilOptionButton(
+                title = "개인정보 처리방침",
+                onClick = onClickPrivacyPolicy,
+            )
 
             Spacer(modifier = Modifier.height(6.dp))
 
@@ -194,19 +190,15 @@ private fun SettingScreen(
 
             SettingTitle("계정")
 
-            Column(
-                modifier = Modifier.padding(start = 16.dp, end = 2.dp),
-            ) {
-                BitnagilOptionButton(
-                    title = "로그아웃",
-                    onClick = onClickLogout,
-                )
+            BitnagilOptionButton(
+                title = "로그아웃",
+                onClick = onClickLogout,
+            )
 
-                BitnagilOptionButton(
-                    title = "탈퇴하기",
-                    onClick = onClickWithdrawal,
-                )
-            }
+            BitnagilOptionButton(
+                title = "탈퇴하기",
+                onClick = onClickWithdrawal,
+            )
         }
     }
 }
