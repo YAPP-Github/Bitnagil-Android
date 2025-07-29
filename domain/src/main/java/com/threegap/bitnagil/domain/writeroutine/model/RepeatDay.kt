@@ -7,5 +7,6 @@ enum class RepeatDay(val fullName: String) {
     THU(fullName = "THURSDAY"),
     FRI(fullName = "FRIDAY"),
     SAT(fullName = "SATURDAY"),
-    SUN(fullName = "SUNDAY");
+    SUN(fullName = "SUNDAY"),
+    ;
 }

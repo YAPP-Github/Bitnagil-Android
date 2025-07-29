@@ -348,9 +348,10 @@ class WriteRoutineViewModel @AssistedInject constructor(
                     RepeatDay.SUN,
                 )
 
-                RepeatType.DAY -> currentState.repeatDays
-                    .filter { it.selected }
-                    .map { it.day.toRepeatDay() }
+                RepeatType.DAY ->
+                    currentState.repeatDays
+                        .filter { it.selected }
+                        .map { it.day.toRepeatDay() }
 
                 null -> return@launch
             }

@@ -15,7 +15,9 @@ class RecommendRoutineRepositoryImpl @Inject constructor(
             .map { it.toDomain() }
 
     override suspend fun getRecommendRoutine(recommendRoutineId: String): Result<RecommendRoutine> {
-        val recommendRoutineIdInt = recommendRoutineId.toIntOrNull() ?: return Result.failure(IllegalArgumentException("recommendRoutineId is not a valid integer"))
+        val recommendRoutineIdInt = recommendRoutineId.toIntOrNull() ?: return Result.failure(
+            IllegalArgumentException("recommendRoutineId is not a valid integer"),
+        )
 
         return recommendRoutineDataSource.getRecommendRoutine(recommendRoutineIdInt)
             .map { it.toDomain() }

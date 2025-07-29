@@ -7,6 +7,6 @@ import javax.inject.Inject
 class GetRoutineUseCase @Inject constructor(
     private val routineRepository: RoutineRepository,
 ) {
-    suspend operator fun invoke(routineId: String) :Result<Routine> =
+    suspend operator fun invoke(routineId: String): Result<Routine> =
         routineRepository.getRoutine(routineId)
 }
