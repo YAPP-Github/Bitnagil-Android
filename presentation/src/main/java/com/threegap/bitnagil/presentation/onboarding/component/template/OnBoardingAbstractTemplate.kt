@@ -1,21 +1,25 @@
 package com.threegap.bitnagil.presentation.onboarding.component.template
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingAbstractTextItem
 
 @Composable
@@ -50,15 +54,23 @@ fun OnBoardingAbstractTemplate(
             OnBoardingAbstractText(onBoardingAbstractTextList = onBoardingAbstractTextItemList)
         }
 
-        Spacer(modifier = Modifier.height(36.dp))
+        Spacer(modifier = Modifier.height(83.dp))
 
-        // todo: 그래픽 작업 추가하기
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
-                .background(color = Color(0xFFC2C4C8)),
-        )
+                .weight(1f),
+            contentAlignment = Alignment.TopCenter,
+        ) {
+            Image(
+                painter = painterResource(R.drawable.onboarding_character),
+                contentDescription = null,
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .padding(horizontal = 15.dp)
+                    .aspectRatio(295f / 280f),
+            )
+        }
     }
 }
 
