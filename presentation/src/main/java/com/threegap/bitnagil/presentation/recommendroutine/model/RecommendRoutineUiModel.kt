@@ -1,8 +1,8 @@
 package com.threegap.bitnagil.presentation.recommendroutine.model
 
 import android.os.Parcelable
-import com.threegap.bitnagil.domain.recommendroutine.model.RecommendRoutine
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendLevel
+import com.threegap.bitnagil.domain.recommendroutine.model.RecommendRoutine
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
