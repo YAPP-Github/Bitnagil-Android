@@ -1,7 +1,7 @@
 package com.threegap.bitnagil.data.recommendroutine.model.response
 
-import com.threegap.bitnagil.domain.recommendroutine.model.RecommendRoutine
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendLevel
+import com.threegap.bitnagil.domain.recommendroutine.model.RecommendRoutine
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
