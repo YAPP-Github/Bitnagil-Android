@@ -29,14 +29,13 @@ import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
+import com.threegap.bitnagil.domain.recommendroutine.model.RecommendCategory
 import com.threegap.bitnagil.presentation.recommendroutine.component.atom.RecommendCategoryChip
 import com.threegap.bitnagil.presentation.recommendroutine.component.block.EmotionRecommendRoutineButton
 import com.threegap.bitnagil.presentation.recommendroutine.component.block.RecommendRoutineItem
-import com.threegap.bitnagil.presentation.recommendroutine.component.template.RoutineDifficultyBottomSheet
+import com.threegap.bitnagil.presentation.recommendroutine.component.template.RecommendLevelBottomSheet
 import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutineIntent
 import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutineState
-import com.threegap.bitnagil.presentation.recommendroutine.type.RecommendRoutineCategory
-import com.threegap.bitnagil.presentation.recommendroutine.type.RecommendRoutineDifficulty
 
 @Composable
 fun RecommendRoutineScreenContainer(
@@ -46,19 +45,25 @@ fun RecommendRoutineScreenContainer(
 ) {
     val uiState by viewmodel.container.stateFlow.collectAsStateWithLifecycle()
 
+    if (uiState.recommendLevelBottomSheetVisible) {
+        RecommendLevelBottomSheet(
+            selectedRecommendLevel = uiState.selectedRecommendLevel,
+            onRecommendLevelSelected = { selectedLevel ->
+                viewmodel.sendIntent(RecommendRoutineIntent.OnRecommendLevelSelected(selectedLevel))
+            },
+            onDismiss = {
+                viewmodel.sendIntent(RecommendRoutineIntent.HideRecommendLevelBottomSheet)
+            },
+        )
+    }
+
     RecommendRoutineScreen(
         uiState = uiState,
         onCategorySelected = { category ->
             viewmodel.sendIntent(RecommendRoutineIntent.OnCategorySelected(category))
         },
-        onDifficultySelected = { difficulty ->
-            viewmodel.sendIntent(RecommendRoutineIntent.OnDifficultySelected(difficulty))
-        },
         onShowDifficultyBottomSheet = {
-            viewmodel.sendIntent(RecommendRoutineIntent.ShowDifficultyBottomSheet)
-        },
-        onHideDifficultyBottomSheet = {
-            viewmodel.sendIntent(RecommendRoutineIntent.HideDifficultyBottomSheet)
+            viewmodel.sendIntent(RecommendRoutineIntent.ShowRecommendLevelBottomSheet)
         },
         onRecommendRoutineByEmotionClick = navigateToEmotion,
         onRegisterRoutineClick = navigateToRegisterRoutine,
@@ -68,10 +73,8 @@ fun RecommendRoutineScreenContainer(
 @Composable
 private fun RecommendRoutineScreen(
     uiState: RecommendRoutineState,
-    onCategorySelected: (RecommendRoutineCategory) -> Unit,
-    onDifficultySelected: (RecommendRoutineDifficulty?) -> Unit,
+    onCategorySelected: (RecommendCategory) -> Unit,
     onShowDifficultyBottomSheet: () -> Unit,
-    onHideDifficultyBottomSheet: () -> Unit,
     onRecommendRoutineByEmotionClick: () -> Unit,
     onRegisterRoutineClick: (String) -> Unit,
 ) {
@@ -89,7 +92,7 @@ private fun RecommendRoutineScreen(
             contentPadding = PaddingValues(horizontal = 16.dp),
         ) {
             items(
-                items = RecommendRoutineCategory.entries,
+                items = RecommendCategory.entries.filter { it.isVisible },
                 key = { it.name },
             ) { category ->
                 RecommendCategoryChip(
@@ -127,7 +130,7 @@ private fun RecommendRoutineScreen(
                     .clickableWithoutRipple { onShowDifficultyBottomSheet() },
             ) {
                 Text(
-                    text = uiState.selectedDifficulty?.displayName ?: "난이도 선택",
+                    text = uiState.selectedRecommendLevel?.displayName ?: "난이도 선택",
                     color = BitnagilTheme.colors.coolGray60,
                     style = BitnagilTheme.typography.body2Medium,
                     modifier = Modifier.padding(start = 10.dp),
@@ -151,7 +154,7 @@ private fun RecommendRoutineScreen(
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                if (uiState.isDefaultCategory) {
+                if (uiState.isDefaultCategory && uiState.emotionMarbleType == null) {
                     item {
                         EmotionRecommendRoutineButton(
                             onClick = onRecommendRoutineByEmotionClick,
@@ -160,25 +163,15 @@ private fun RecommendRoutineScreen(
                 }
                 items(
                     items = uiState.currentRoutines,
-                    key = { "${uiState.selectedCategory.name}_${it.name}" },
+                    key = { "${it.id}_${it.name}" },
                 ) { routine ->
                     RecommendRoutineItem(
                         routineName = routine.name,
                         routineDescription = routine.description,
-                        onAddRoutineClick = { onRegisterRoutineClick(routine.id) },
+                        onAddRoutineClick = { onRegisterRoutineClick(routine.id.toString()) },
                     )
                 }
             }
-        }
-
-        if (uiState.showDifficultyBottomSheet) {
-            RoutineDifficultyBottomSheet(
-                selectedDifficulty = uiState.selectedDifficulty,
-                onDifficultySelected = { difficulty ->
-                    onDifficultySelected(difficulty)
-                },
-                onDismiss = onHideDifficultyBottomSheet,
-            )
         }
     }
 }
@@ -189,9 +182,7 @@ private fun RoutineRecommendScreenPreview() {
     RecommendRoutineScreen(
         uiState = RecommendRoutineState(),
         onCategorySelected = {},
-        onDifficultySelected = {},
         onShowDifficultyBottomSheet = {},
-        onHideDifficultyBottomSheet = {},
         onRecommendRoutineByEmotionClick = {},
         onRegisterRoutineClick = {},
     )
