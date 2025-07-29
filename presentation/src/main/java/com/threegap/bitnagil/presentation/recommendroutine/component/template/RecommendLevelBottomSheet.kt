@@ -7,7 +7,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -16,17 +18,22 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
-import com.threegap.bitnagil.presentation.recommendroutine.type.RecommendRoutineDifficulty
+import com.threegap.bitnagil.domain.recommendroutine.model.RecommendLevel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RoutineDifficultyBottomSheet(
-    selectedDifficulty: RecommendRoutineDifficulty?,
-    onDifficultySelected: (RecommendRoutineDifficulty?) -> Unit,
+fun RecommendLevelBottomSheet(
+    selectedRecommendLevel: RecommendLevel?,
+    onRecommendLevelSelected: (RecommendLevel?) -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val sheetState = rememberModalBottomSheetState()
+    val coroutineScope = rememberCoroutineScope()
+
     ModalBottomSheet(
+        sheetState = sheetState,
         onDismissRequest = onDismiss,
         containerColor = BitnagilTheme.colors.white,
         contentColor = BitnagilTheme.colors.white,
@@ -38,17 +45,24 @@ fun RoutineDifficultyBottomSheet(
                 horizontal = 16.dp,
             ),
         ) {
-            RecommendRoutineDifficulty.entries.forEachIndexed { index, difficulty ->
-                DifficultyOption(
-                    optionText = difficulty.displayName,
-                    isSelected = selectedDifficulty == difficulty,
+            RecommendLevel.entries.forEachIndexed { index, recommendLevel ->
+                LevelOption(
+                    optionText = recommendLevel.displayName,
+                    isSelected = selectedRecommendLevel == recommendLevel,
                     onClick = {
-                        val newDifficulty = if (selectedDifficulty == difficulty) null else difficulty
-                        onDifficultySelected(newDifficulty)
+                        val newLevel = if (selectedRecommendLevel == recommendLevel) null else recommendLevel
+                        onRecommendLevelSelected(newLevel)
+                        coroutineScope
+                            .launch { sheetState.hide() }
+                            .invokeOnCompletion {
+                                if (!sheetState.isVisible) {
+                                    onDismiss()
+                                }
+                            }
                     },
                 )
 
-                if (index < RecommendRoutineDifficulty.entries.size - 1) {
+                if (index < RecommendLevel.entries.size - 1) {
                     HorizontalDivider(
                         color = BitnagilTheme.colors.coolGray97,
                         modifier = Modifier.padding(vertical = 8.dp),
@@ -60,7 +74,7 @@ fun RoutineDifficultyBottomSheet(
 }
 
 @Composable
-private fun DifficultyOption(
+private fun LevelOption(
     optionText: String,
     isSelected: Boolean,
     onClick: () -> Unit,
@@ -90,18 +104,18 @@ private fun DifficultyOption(
 
 @Preview
 @Composable
-private fun RoutineDifficultyBottomSheetPreview() {
-    RoutineDifficultyBottomSheet(
-        selectedDifficulty = null,
-        onDifficultySelected = {},
+private fun RecommendLevelBottomSheetPreview() {
+    RecommendLevelBottomSheet(
+        selectedRecommendLevel = null,
+        onRecommendLevelSelected = {},
         onDismiss = {},
     )
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun DifficultyOptionPreview() {
-    DifficultyOption(
+private fun LevelOptionPreview() {
+    LevelOption(
         optionText = "가볍게 할 수 있어요",
         isSelected = true,
         onClick = {},
