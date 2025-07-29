@@ -18,7 +18,7 @@ class AuthRemoteDataSourceImpl @Inject constructor(
         }
 
     override suspend fun submitAgreement(termsAgreementRequestDto: TermsAgreementRequestDto): Result<Unit> =
-        safeApiCall {
+        safeUnitApiCall {
             authService.submitAgreement(termsAgreementRequestDto)
         }
 

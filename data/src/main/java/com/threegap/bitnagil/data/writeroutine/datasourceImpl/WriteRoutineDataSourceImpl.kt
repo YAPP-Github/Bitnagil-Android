@@ -1,6 +1,6 @@
 package com.threegap.bitnagil.data.writeroutine.datasourceImpl
 
-import com.threegap.bitnagil.data.common.safeApiCall
+import com.threegap.bitnagil.data.common.safeUnitApiCall
 import com.threegap.bitnagil.data.writeroutine.datasource.WriteRoutineDataSource
 import com.threegap.bitnagil.data.writeroutine.model.dto.RoutineDto
 import com.threegap.bitnagil.data.writeroutine.model.dto.SubRoutineDto
@@ -13,13 +13,13 @@ class WriteRoutineDataSourceImpl @Inject constructor(
     private val writeRoutineService: WriteRoutineService,
 ) : WriteRoutineDataSource {
     override suspend fun registerRoutine(request: RegisterRoutineRequest): Result<Unit> {
-        return safeApiCall {
+        return safeUnitApiCall {
             writeRoutineService.postRoutine(request)
         }
     }
 
     override suspend fun editRoutine(request: EditRoutineRequest): Result<Unit> {
-        return safeApiCall {
+        return safeUnitApiCall {
             writeRoutineService.patchRoutine(request)
         }
     }

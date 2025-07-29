@@ -10,8 +10,8 @@ class EmotionRepositoryImpl @Inject constructor(
 ) : EmotionRepository {
     override suspend fun getEmotions(): Result<List<Emotion>> {
         return emotionDataSource.getEmotions().map { response ->
-            response.emotionMarbleTypes.mapNotNull {
-                when (it) {
+            response.mapNotNull {
+                when (it.emotionMarbleType) {
                     "CALM" -> Emotion.CALM
                     "VITALITY" -> Emotion.VITALITY
                     "LETHARGY" -> Emotion.LETHARGY

@@ -17,19 +17,19 @@ data class OnBoardingItemDto(
 
     companion object {
         val Morning = OnBoardingItemDto(
-            id = "MORNING",
+            id = "08:00:00",
             title = "아침을 잘 시작하고 싶어요",
             description = null,
         )
 
         val Evening = OnBoardingItemDto(
-            id = "EVENING",
+            id = "20:00:00",
             title = "저녁을 편안하게 마무리하고 싶어요",
             description = null,
         )
 
         val Nothing = OnBoardingItemDto(
-            id = "NOTHING",
+            id = "00:00:00",
             title = "언제든 상관 없어요",
             description = null,
         )

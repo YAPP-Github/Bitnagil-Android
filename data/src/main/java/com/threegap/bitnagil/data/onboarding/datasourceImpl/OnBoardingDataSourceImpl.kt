@@ -1,6 +1,7 @@
 package com.threegap.bitnagil.data.onboarding.datasourceImpl
 
 import com.threegap.bitnagil.data.common.safeApiCall
+import com.threegap.bitnagil.data.common.safeUnitApiCall
 import com.threegap.bitnagil.data.onboarding.datasource.OnBoardingDataSource
 import com.threegap.bitnagil.data.onboarding.model.dto.OnBoardingAbstractDto
 import com.threegap.bitnagil.data.onboarding.model.dto.OnBoardingAbstractTextDto
@@ -51,7 +52,7 @@ class OnBoardingDataSourceImpl @Inject constructor(
 
     override suspend fun registerRecommendRoutineList(selectedRecommendRoutineIds: List<Int>): Result<Unit> {
         val registerRecommendRoutineListRequest = RegisterOnBoardingRecommendRoutinesRequest(recommendedRoutineIds = selectedRecommendRoutineIds)
-        return safeApiCall {
+        return safeUnitApiCall {
             onBoardingService.postOnBoardingRoutines(registerRecommendRoutineListRequest)
         }
     }

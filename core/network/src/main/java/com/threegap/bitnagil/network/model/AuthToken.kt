@@ -9,6 +9,4 @@ data class AuthToken(
     val accessToken: String,
     @SerialName("refreshToken")
     val refreshToken: String,
-    @SerialName("role") // todo: 제거 예정
-    val role: String,
 )

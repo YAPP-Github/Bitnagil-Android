@@ -9,8 +9,8 @@ data class EmotionRecommendedRoutineDto(
     val recommendedRoutineId: Int,
     @SerialName("recommendedRoutineName")
     val recommendedRoutineName: String,
-    @SerialName("routineDescription")
-    val routineDescription: String,
-    @SerialName("recommendedSubRoutines")
-    val recommendedSubRoutines: List<EmotionRecommendedSubRoutineDto>,
+    @SerialName("recommendedRoutineDescription")
+    val recommendedRoutineDescription: String,
+    @SerialName("recommendedSubRoutineSearchResult")
+    val recommendedSubRoutineSearchResult: List<EmotionRecommendedSubRoutineDto>,
 )

@@ -3,6 +3,7 @@ package com.threegap.bitnagil.presentation.writeroutine
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.threegap.bitnagil.domain.writeroutine.model.RepeatDay
 import com.threegap.bitnagil.domain.writeroutine.usecase.EditRoutineUseCase
 import com.threegap.bitnagil.domain.writeroutine.usecase.GetChangedSubRoutinesUseCase
 import com.threegap.bitnagil.domain.writeroutine.usecase.GetRoutineUseCase
@@ -311,14 +312,30 @@ class WriteRoutineViewModel @Inject constructor(
 
             val startTime = currentState.startTime ?: return@launch
 
+            val repeatDay = when (currentState.repeatType) {
+                RepeatType.DAILY -> listOf(
+                    RepeatDay.MON,
+                    RepeatDay.TUE,
+                    RepeatDay.WED,
+                    RepeatDay.THU,
+                    RepeatDay.FRI,
+                    RepeatDay.SAT,
+                    RepeatDay.SUN,
+                )
+
+                RepeatType.DAY -> currentState.repeatDays
+                    .filter { it.selected }
+                    .map { it.day.toRepeatDay() }
+
+                null -> return@launch
+            }
+
             when (currentState.writeRoutineType) {
                 WriteRoutineType.ADD -> {
                     sendIntent(WriteRoutineIntent.RegisterRoutineLoading)
                     val registerRoutineResult = registerRoutineUseCase(
                         currentState.routineName,
-                        currentState.repeatDays
-                            .filter { it.selected }
-                            .map { it.day.toRepeatDay() },
+                        repeatDay,
                         startTime.toDomainTime(),
                         currentState.subRoutineNames,
                     )
@@ -347,9 +364,7 @@ class WriteRoutineViewModel @Inject constructor(
                     val editRoutineResult = editRoutineUseCase(
                         routineId = currentRoutineId,
                         name = currentState.routineName,
-                        repeatDay = currentState.repeatDays
-                            .filter { it.selected }
-                            .map { it.day.toRepeatDay() },
+                        repeatDay,
                         startTime = startTime.toDomainTime(),
                         subRoutines = subRoutineDiffs,
                     )

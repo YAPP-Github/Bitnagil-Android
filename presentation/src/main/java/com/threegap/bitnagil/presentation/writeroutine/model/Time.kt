@@ -16,7 +16,7 @@ data class Time(
 
     companion object {
         val Init = Time(hour = 12, minute = 0)
-        val AllDay = Time(hour = 23, minute = 59)
+        val AllDay = Time(hour = 0, minute = 0)
 
         fun fromDomainTime(time: DomainTime): Time {
             return Time(hour = time.hour, minute = time.minute)
