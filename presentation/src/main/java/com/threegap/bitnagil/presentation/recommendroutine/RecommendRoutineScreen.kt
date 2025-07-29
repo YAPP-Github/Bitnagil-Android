@@ -41,7 +41,7 @@ import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutin
 fun RecommendRoutineScreenContainer(
     viewmodel: RecommendRoutineViewModel = hiltViewModel(),
     navigateToEmotion: () -> Unit,
-    navigateToRegisterRoutine: (Int?) -> Unit,
+    navigateToRegisterRoutine: (String?) -> Unit,
 ) {
     val uiState by viewmodel.container.stateFlow.collectAsStateWithLifecycle()
 
@@ -76,7 +76,7 @@ private fun RecommendRoutineScreen(
     onCategorySelected: (RecommendCategory) -> Unit,
     onShowDifficultyBottomSheet: () -> Unit,
     onRecommendRoutineByEmotionClick: () -> Unit,
-    onRegisterRoutineClick: (Int) -> Unit,
+    onRegisterRoutineClick: (String) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -168,7 +168,7 @@ private fun RecommendRoutineScreen(
                     RecommendRoutineItem(
                         routineName = routine.name,
                         routineDescription = routine.description,
-                        onAddRoutineClick = { onRegisterRoutineClick(routine.id) },
+                        onAddRoutineClick = { onRegisterRoutineClick(routine.id.toString()) },
                     )
                 }
             }
