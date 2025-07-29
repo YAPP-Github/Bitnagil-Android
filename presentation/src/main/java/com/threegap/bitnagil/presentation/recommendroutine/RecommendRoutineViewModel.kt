@@ -1,20 +1,27 @@
 package com.threegap.bitnagil.presentation.recommendroutine
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
+import com.threegap.bitnagil.domain.recommendroutine.model.RecommendCategory
+import com.threegap.bitnagil.domain.recommendroutine.model.RecommendLevel
+import com.threegap.bitnagil.domain.recommendroutine.usecase.FetchRecommendRoutinesUseCase
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
-import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutine
 import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutineIntent
 import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutineSideEffect
 import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutineState
-import com.threegap.bitnagil.presentation.recommendroutine.type.RecommendRoutineCategory
-import com.threegap.bitnagil.presentation.recommendroutine.type.RecommendRoutineDifficulty
+import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutineUiModel
+import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutinesUiModel
+import com.threegap.bitnagil.presentation.recommendroutine.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
 import javax.inject.Inject
 
 @HiltViewModel
 class RecommendRoutineViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
+    private val fetchRecommendRoutinesUseCase: FetchRecommendRoutinesUseCase,
 ) : MviViewModel<RecommendRoutineState, RecommendRoutineSideEffect, RecommendRoutineIntent>(
     initState = RecommendRoutineState(),
     savedStateHandle = savedStateHandle,
@@ -24,95 +31,78 @@ class RecommendRoutineViewModel @Inject constructor(
         loadRecommendRoutines()
     }
 
+    private var recommendRoutines: RecommendRoutinesUiModel = RecommendRoutinesUiModel()
+
     override suspend fun SimpleSyntax<RecommendRoutineState, RecommendRoutineSideEffect>.reduceState(
         intent: RecommendRoutineIntent,
         state: RecommendRoutineState,
     ): RecommendRoutineState? = when (intent) {
-        is RecommendRoutineIntent.SetLoading -> {
+        is RecommendRoutineIntent.UpdateLoading -> {
             state.copy(isLoading = intent.isLoading)
         }
 
         is RecommendRoutineIntent.LoadRecommendRoutines -> {
             state.copy(
                 isLoading = false,
-                recommendRoutines = intent.recommendRoutines,
+                currentRoutines = getCurrentRoutines(state.selectedCategory, state.selectedRecommendLevel),
+                emotionMarbleType = recommendRoutines.emotionMarbleType,
             )
         }
 
-        is RecommendRoutineIntent.OnCategorySelected -> state.copy(
-            selectedCategory = intent.category,
-        )
-
-        is RecommendRoutineIntent.ShowDifficultyBottomSheet -> {
-            state.copy(showDifficultyBottomSheet = true)
+        is RecommendRoutineIntent.OnCategorySelected -> {
+            state.copy(
+                selectedCategory = intent.category,
+                currentRoutines = getCurrentRoutines(intent.category, state.selectedRecommendLevel),
+            )
         }
 
-        is RecommendRoutineIntent.HideDifficultyBottomSheet -> {
-            state.copy(showDifficultyBottomSheet = false)
+        is RecommendRoutineIntent.ShowRecommendLevelBottomSheet -> {
+            state.copy(recommendLevelBottomSheetVisible = true)
         }
 
-        is RecommendRoutineIntent.OnDifficultySelected -> state.copy(
-            selectedDifficulty = intent.difficulty,
-            showDifficultyBottomSheet = false,
-        )
+        is RecommendRoutineIntent.HideRecommendLevelBottomSheet -> {
+            state.copy(recommendLevelBottomSheetVisible = false)
+        }
 
-        RecommendRoutineIntent.ClearDifficultyFilter -> state.copy(
-            selectedDifficulty = null,
-        )
+        is RecommendRoutineIntent.OnRecommendLevelSelected -> {
+            state.copy(
+                selectedRecommendLevel = intent.recommendLevel,
+                currentRoutines = getCurrentRoutines(state.selectedCategory, intent.recommendLevel),
+            )
+        }
+
+        RecommendRoutineIntent.ClearRecommendLevelFilter -> {
+            state.copy(
+                selectedRecommendLevel = null,
+                currentRoutines = getCurrentRoutines(state.selectedCategory, null),
+            )
+        }
+    }
+
+    private fun getCurrentRoutines(
+        category: RecommendCategory,
+        level: RecommendLevel?,
+    ): List<RecommendRoutineUiModel> {
+        val routines = recommendRoutines.recommendRoutinesByCategory[category] ?: emptyList()
+        return if (level != null) {
+            routines.filter { it.level == level }
+        } else {
+            routines
+        }
     }
 
     private fun loadRecommendRoutines() {
-        sendIntent(RecommendRoutineIntent.SetLoading(true))
-        try {
-            val recommendRoutines = generateDummyRecommendRoutine()
-            sendIntent(RecommendRoutineIntent.LoadRecommendRoutines(recommendRoutines))
-        } catch (e: Exception) {
-            sendIntent(RecommendRoutineIntent.SetLoading(false))
-            // todo: 실제 api 연결에서는 예외처리
+        sendIntent(RecommendRoutineIntent.UpdateLoading(true))
+        viewModelScope.launch {
+            fetchRecommendRoutinesUseCase().fold(
+                onSuccess = {
+                    recommendRoutines = it.toUiModel()
+                    sendIntent(RecommendRoutineIntent.LoadRecommendRoutines)
+                },
+                onFailure = {
+                    sendIntent(RecommendRoutineIntent.UpdateLoading(false))
+                },
+            )
         }
-    }
-
-    private fun generateDummyRecommendRoutine(): Map<RecommendRoutineCategory, List<RecommendRoutine>> {
-        return mapOf(
-            RecommendRoutineCategory.CUSTOM_RECOMMEND to listOf(
-                RecommendRoutine("추천 루틴", "추천 루틴임", RecommendRoutineDifficulty.EASY),
-                RecommendRoutine("추천 루틴22", "추천 루틴임22", RecommendRoutineDifficulty.NORMAL),
-                RecommendRoutine("추천 루틴33", "추천 루틴임33", RecommendRoutineDifficulty.NORMAL),
-            ),
-            RecommendRoutineCategory.GO_OUT to listOf(
-                RecommendRoutine("나가는 루틴", "밖으로 나가보자고", RecommendRoutineDifficulty.EASY),
-                RecommendRoutine("나가는 루틴22", "밖으로 나가보자고", RecommendRoutineDifficulty.NORMAL),
-                RecommendRoutine("나가는 루틴33", "밖으로 나가보자고", RecommendRoutineDifficulty.HARD),
-                RecommendRoutine("나가는 루틴44", "밖으로 나가보자고", RecommendRoutineDifficulty.EASY),
-                RecommendRoutine("나가는 루틴55", "밖으로 나가보자고", RecommendRoutineDifficulty.NORMAL),
-                RecommendRoutine("나가는 루틴66", "밖으로 나가보자고", RecommendRoutineDifficulty.HARD),
-                RecommendRoutine("나가는 루틴77", "밖으로 나가보자고", RecommendRoutineDifficulty.EASY),
-                RecommendRoutine("나가는 루틴88", "밖으로 나가보자고", RecommendRoutineDifficulty.NORMAL),
-            ),
-            RecommendRoutineCategory.WAKE_UP to listOf(
-                RecommendRoutine("깨어나요 루틴", "깨어나요 루틴임", RecommendRoutineDifficulty.EASY),
-                RecommendRoutine("깨어나요 루틴22", "깨어나요 루틴임22", RecommendRoutineDifficulty.NORMAL),
-                RecommendRoutine("깨어나요 루틴33", "깨어나요 루틴임33", RecommendRoutineDifficulty.HARD),
-                RecommendRoutine("깨어나요 루틴44", "깨어나요 루틴임44", RecommendRoutineDifficulty.EASY),
-                RecommendRoutine("깨어나요 루틴55", "깨어나요 루틴임55", RecommendRoutineDifficulty.NORMAL),
-            ),
-            RecommendRoutineCategory.CONNECT to listOf(
-                RecommendRoutine("연결해요 루틴", "연결하는 루틴임", RecommendRoutineDifficulty.EASY),
-                RecommendRoutine("연결해요 루틴22", "연결하는 루틴임22", RecommendRoutineDifficulty.NORMAL),
-                RecommendRoutine("연결해요 루틴33", "연결하는 루틴임33", RecommendRoutineDifficulty.HARD),
-            ),
-            RecommendRoutineCategory.TAKE_REST to listOf(
-                RecommendRoutine("쉬어가요 루틴", "쉬어가요 루틴임", RecommendRoutineDifficulty.EASY),
-                RecommendRoutine("쉬어가요 루틴22", "쉬어가요 루틴임22", RecommendRoutineDifficulty.EASY),
-                RecommendRoutine("쉬어가요 루틴33", "쉬어가요 루틴임33", RecommendRoutineDifficulty.NORMAL),
-                RecommendRoutine("쉬어가요 루틴44", "쉬어가요 루틴임44", RecommendRoutineDifficulty.HARD),
-            ),
-            RecommendRoutineCategory.GROW to listOf(
-                RecommendRoutine("성장해요 루틴", "성장해요 루틴임", RecommendRoutineDifficulty.NORMAL),
-                RecommendRoutine("성장해요 루틴22", "성장해요 루틴임22", RecommendRoutineDifficulty.HARD),
-                RecommendRoutine("성장해요 루틴33", "성장해요 루틴임33", RecommendRoutineDifficulty.NORMAL),
-                RecommendRoutine("성장해요 루틴44", "성장해요 루틴임44", RecommendRoutineDifficulty.HARD),
-            ),
-        )
     }
 }
