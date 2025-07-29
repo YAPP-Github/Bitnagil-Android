@@ -9,6 +9,7 @@ import java.time.LocalDate
 data class HomeState(
     val isLoading: Boolean = false,
     val userNickname: String = "",
+    val myEmotion: EmotionBallType? = null,
     val selectedDate: LocalDate = LocalDate.now(),
     val currentWeeks: List<LocalDate> = LocalDate.now().getCurrentWeekDays(),
     val routines: RoutinesUiModel = RoutinesUiModel(),

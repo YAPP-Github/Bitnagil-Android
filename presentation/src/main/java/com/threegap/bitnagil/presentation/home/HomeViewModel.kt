@@ -3,6 +3,7 @@ package com.threegap.bitnagil.presentation.home
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.threegap.bitnagil.domain.emotion.usecase.GetMyEmotionUseCase
 import com.threegap.bitnagil.domain.routine.model.RoutineCompletion
 import com.threegap.bitnagil.domain.routine.model.RoutineCompletionInfo
 import com.threegap.bitnagil.domain.routine.usecase.DeleteRoutineByDayUseCase
@@ -11,6 +12,7 @@ import com.threegap.bitnagil.domain.routine.usecase.FetchWeeklyRoutinesUseCase
 import com.threegap.bitnagil.domain.routine.usecase.RoutineCompletionUseCase
 import com.threegap.bitnagil.domain.user.usecase.FetchUserProfileUseCase
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
+import com.threegap.bitnagil.presentation.home.model.EmotionBallType
 import com.threegap.bitnagil.presentation.home.model.HomeIntent
 import com.threegap.bitnagil.presentation.home.model.HomeSideEffect
 import com.threegap.bitnagil.presentation.home.model.HomeState
@@ -37,6 +39,7 @@ class HomeViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val fetchWeeklyRoutinesUseCase: FetchWeeklyRoutinesUseCase,
     private val fetchUserProfileUseCase: FetchUserProfileUseCase,
+    private val getMyEmotionUseCase: GetMyEmotionUseCase,
     private val routineCompletionUseCase: RoutineCompletionUseCase,
     private val deleteRoutineUseCase: DeleteRoutineUseCase,
     private val deleteRoutineByDayUseCase: DeleteRoutineByDayUseCase,
@@ -53,6 +56,7 @@ class HomeViewModel @Inject constructor(
         observeRoutineUpdates()
         fetchWeeklyRoutines(container.stateFlow.value.currentWeeks)
         fetchUserProfile()
+        getMyEmotion(container.stateFlow.value.selectedDate)
     }
 
     override suspend fun SimpleSyntax<HomeState, HomeSideEffect>.reduceState(
@@ -188,6 +192,10 @@ class HomeViewModel @Inject constructor(
             }
 
             is HomeIntent.ConfirmRoutineByDayDeletion -> null
+
+            is HomeIntent.LoadMyEmotion -> {
+                state.copy(myEmotion = intent.emotion)
+            }
         }
         return newState
     }
@@ -246,6 +254,23 @@ class HomeViewModel @Inject constructor(
                 },
                 onFailure = { error ->
                     Log.e("HomeViewModel", "루틴 가져오기 실패: ${error.message}")
+                    sendIntent(HomeIntent.UpdateLoading(false))
+                },
+            )
+        }
+    }
+
+    private fun getMyEmotion(currentDate: LocalDate) {
+        sendIntent(HomeIntent.UpdateLoading(true))
+        viewModelScope.launch {
+            getMyEmotionUseCase(currentDate.toString()).fold(
+                onSuccess = { emotion ->
+                    val ballType = EmotionBallType.fromDomainEmotion(emotion.emotionMarbleType)
+                    sendIntent(HomeIntent.LoadMyEmotion(ballType))
+                    sendIntent(HomeIntent.UpdateLoading(false))
+                },
+                onFailure = { error ->
+                    Log.e("HomeViewModel", "나의 감정 실패: ${error.message}")
                     sendIntent(HomeIntent.UpdateLoading(false))
                 },
             )
