@@ -240,7 +240,7 @@ private fun HomeScreen(
         }
 
         CollapsibleHomeHeader(
-            userName = "대현",
+            userName = uiState.userNickname,
             collapsibleHeaderState = collapsibleHeaderState,
             onEmotionRecordClick = onRegisterEmotionClick,
         )

@@ -8,6 +8,7 @@ import java.time.LocalDate
 @Parcelize
 data class HomeState(
     val isLoading: Boolean = false,
+    val userNickname: String = "",
     val selectedDate: LocalDate = LocalDate.now(),
     val currentWeeks: List<LocalDate> = LocalDate.now().getCurrentWeekDays(),
     val routines: RoutinesUiModel = RoutinesUiModel(),

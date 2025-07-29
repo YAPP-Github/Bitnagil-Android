@@ -9,6 +9,7 @@ import com.threegap.bitnagil.domain.routine.usecase.DeleteRoutineByDayUseCase
 import com.threegap.bitnagil.domain.routine.usecase.DeleteRoutineUseCase
 import com.threegap.bitnagil.domain.routine.usecase.FetchWeeklyRoutinesUseCase
 import com.threegap.bitnagil.domain.routine.usecase.RoutineCompletionUseCase
+import com.threegap.bitnagil.domain.user.usecase.FetchUserProfileUseCase
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
 import com.threegap.bitnagil.presentation.home.model.HomeIntent
 import com.threegap.bitnagil.presentation.home.model.HomeSideEffect
@@ -35,6 +36,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val fetchWeeklyRoutinesUseCase: FetchWeeklyRoutinesUseCase,
+    private val fetchUserProfileUseCase: FetchUserProfileUseCase,
     private val routineCompletionUseCase: RoutineCompletionUseCase,
     private val deleteRoutineUseCase: DeleteRoutineUseCase,
     private val deleteRoutineByDayUseCase: DeleteRoutineByDayUseCase,
@@ -50,6 +52,7 @@ class HomeViewModel @Inject constructor(
         observeWeekChanges()
         observeRoutineUpdates()
         fetchWeeklyRoutines(container.stateFlow.value.currentWeeks)
+        fetchUserProfile()
     }
 
     override suspend fun SimpleSyntax<HomeState, HomeSideEffect>.reduceState(
@@ -59,6 +62,10 @@ class HomeViewModel @Inject constructor(
         val newState = when (intent) {
             is HomeIntent.UpdateLoading -> {
                 state.copy(isLoading = intent.isLoading)
+            }
+
+            is HomeIntent.LoadUserProfile -> {
+                state.copy(userNickname = intent.nickname)
             }
 
             is HomeIntent.LoadWeeklyRoutines -> {
@@ -207,6 +214,22 @@ class HomeViewModel @Inject constructor(
                 .collect { date ->
                     syncRoutineChangesForDate(date)
                 }
+        }
+    }
+
+    private fun fetchUserProfile() {
+        sendIntent(HomeIntent.UpdateLoading(true))
+        viewModelScope.launch {
+            fetchUserProfileUseCase().fold(
+                onSuccess = {
+                    sendIntent(HomeIntent.LoadUserProfile(it.nickname))
+                    sendIntent(HomeIntent.UpdateLoading(false))
+                },
+                onFailure = { error ->
+                    Log.e("HomeViewModel", "유저 정보 가져오기 실패: ${error.message}")
+                    sendIntent(HomeIntent.UpdateLoading(false))
+                },
+            )
         }
     }
 

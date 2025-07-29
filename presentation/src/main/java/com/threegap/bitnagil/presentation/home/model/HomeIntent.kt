@@ -5,6 +5,7 @@ import java.time.LocalDate
 
 sealed class HomeIntent : MviIntent {
     data class UpdateLoading(val isLoading: Boolean) : HomeIntent()
+    data class LoadUserProfile(val nickname: String) : HomeIntent()
     data class LoadWeeklyRoutines(val routines: RoutinesUiModel) : HomeIntent()
     data class OnDateSelect(val date: LocalDate) : HomeIntent()
     data class OnRoutineCompletionToggle(val routineId: String, val isCompleted: Boolean) : HomeIntent()
