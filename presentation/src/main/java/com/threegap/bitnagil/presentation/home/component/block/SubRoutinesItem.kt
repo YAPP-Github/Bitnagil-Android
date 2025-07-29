@@ -86,6 +86,7 @@ private fun SubRoutinesItemPreview() {
                 historySeq = 1,
                 subRoutineName = "물 마시기",
                 sortOrder = 1,
+                routineCompletionId = 1,
                 isCompleted = false,
                 isModified = false,
                 routineType = RoutineType.SUB_ROUTINE,
@@ -95,6 +96,7 @@ private fun SubRoutinesItemPreview() {
                 historySeq = 1,
                 subRoutineName = "스트레칭하기",
                 sortOrder = 1,
+                routineCompletionId = 1,
                 isCompleted = false,
                 isModified = false,
                 routineType = RoutineType.SUB_ROUTINE,
@@ -104,6 +106,7 @@ private fun SubRoutinesItemPreview() {
                 historySeq = 1,
                 subRoutineName = "심호흡하기",
                 sortOrder = 1,
+                routineCompletionId = 1,
                 isCompleted = false,
                 isModified = false,
                 routineType = RoutineType.SUB_ROUTINE,
@@ -112,3 +115,4 @@ private fun SubRoutinesItemPreview() {
         onSubRoutineToggle = { _, _ -> },
     )
 }
+
