@@ -1,6 +1,5 @@
 package com.threegap.bitnagil.presentation.recommendroutine
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendCategory
