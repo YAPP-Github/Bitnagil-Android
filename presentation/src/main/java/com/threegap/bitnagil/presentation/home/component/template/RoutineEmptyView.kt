@@ -1,7 +1,6 @@
 package com.threegap.bitnagil.presentation.home.component.template
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 
 @Composable
 fun RoutineEmptyView(
@@ -46,10 +46,7 @@ fun RoutineEmptyView(
                     color = BitnagilTheme.colors.navy50,
                     shape = RoundedCornerShape(100.dp),
                 )
-                // todo: 리플효과 제거하기
-                .clickable {
-                    onRegisterRoutineClick()
-                }
+                .clickableWithoutRipple { onRegisterRoutineClick() }
                 .padding(
                     vertical = 8.dp,
                     horizontal = 10.dp,

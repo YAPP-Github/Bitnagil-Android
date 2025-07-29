@@ -1,7 +1,6 @@
 package com.threegap.bitnagil.presentation.writeroutine.component.atom.strokebutton
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 
 class StrokeButton {
     companion object {
@@ -77,11 +77,11 @@ private fun StrokeButtonFrame(
         modifier = modifier
             .clip(RoundedCornerShape(12.dp))
             .border(
-                width = 1.5.dp,
+                width = 1.dp,
                 color = borderColor,
                 shape = RoundedCornerShape(12.dp),
             )
-            .clickable(enabled = enabled, onClick = onClick),
+            .clickableWithoutRipple(enabled = enabled, onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
         content()

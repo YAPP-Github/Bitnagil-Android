@@ -1,7 +1,6 @@
 package com.threegap.bitnagil.presentation.home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,19 +8,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,6 +23,9 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.R
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
+import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.home.component.template.CollapsibleHomeHeader
 import com.threegap.bitnagil.presentation.home.component.template.DeleteConfirmDialog
 import com.threegap.bitnagil.presentation.home.component.template.RoutineDetailsBottomSheet
@@ -146,8 +143,8 @@ private fun HomeScreen(
             .background(
                 brush = Brush.linearGradient(
                     colors = listOf(
-                        Color(0xFFFFEADF),
-                        BitnagilTheme.colors.lightBlue75,
+                        BitnagilTheme.colors.homeGradientStartColor,
+                        BitnagilTheme.colors.homeGradientEndColor,
                     ),
                     start = Offset(0f, 0f),
                     end = Offset(collapsibleHeaderState.screenHeight.value, collapsibleHeaderState.screenWidth.value * 2),
@@ -221,16 +218,13 @@ private fun HomeScreen(
                                 )
 
                                 if (index == 0) {
-                                    // todo: 아이콘 변경하기
-                                    Icon(
-                                        imageVector = Icons.Default.Menu,
-                                        contentDescription = null,
+                                    BitnagilIcon(
+                                        id = R.drawable.ic_arrow_down_up,
+                                        tint = BitnagilTheme.colors.navy200,
                                         modifier = Modifier
                                             .align(Alignment.TopEnd)
                                             .padding(end = 4.dp)
-                                            .clickable { onShowRoutineSortBottomSheet() }
-                                            .padding(8.dp)
-                                            .size(24.dp)
+                                            .clickableWithoutRipple { onShowRoutineSortBottomSheet() }
                                             .zIndex(1f),
                                     )
                                 }

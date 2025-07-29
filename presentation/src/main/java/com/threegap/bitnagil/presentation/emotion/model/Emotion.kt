@@ -1,18 +1,18 @@
 package com.threegap.bitnagil.presentation.emotion.model
 
+import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.domain.emotion.model.Emotion as DomainEmotion
 
 enum class Emotion(
     val emotionName: String,
     val imageResourceId: Int,
 ) {
-    // todo - 이미지 리소스 전달받은 후 해당 이미지로 수정
-    CALM(emotionName = "평온함", imageResourceId = android.R.drawable.ic_menu_report_image),
-    VITALITY(emotionName = "활기참", imageResourceId = android.R.drawable.ic_menu_report_image),
-    LETHARGY(emotionName = "무기력함", imageResourceId = android.R.drawable.ic_menu_report_image),
-    ANXIETY(emotionName = "불안함", imageResourceId = android.R.drawable.ic_menu_report_image),
-    SATISFACTION(emotionName = "만족함", imageResourceId = android.R.drawable.ic_menu_report_image),
-    FATIGUE(emotionName = "피로함", imageResourceId = android.R.drawable.ic_menu_report_image),
+    CALM(emotionName = "평온함", imageResourceId = R.drawable.calm),
+    VITALITY(emotionName = "활기참", imageResourceId = R.drawable.vitality),
+    LETHARGY(emotionName = "무기력함", imageResourceId = R.drawable.lethargy),
+    ANXIETY(emotionName = "불안함", imageResourceId = R.drawable.anxiety),
+    SATISFACTION(emotionName = "만족함", imageResourceId = R.drawable.satisfaction),
+    FATIGUE(emotionName = "피로함", imageResourceId = R.drawable.fatigue),
     ;
 
     companion object {

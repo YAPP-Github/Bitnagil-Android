@@ -1,10 +1,6 @@
 package com.threegap.bitnagil.presentation.writeroutine
 
-import android.R
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -22,16 +17,18 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.R
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
+import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.namefield.NameField
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.selectcell.SelectCell
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.strokebutton.StrokeButton
-import com.threegap.bitnagil.presentation.writeroutine.component.atom.textbutton.TextButton
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.tooltipbutton.TooltipButton
 import com.threegap.bitnagil.presentation.writeroutine.component.block.labeledcheckbox.LabeledCheckBox
 import com.threegap.bitnagil.presentation.writeroutine.component.template.TimePickerBottomSheet
@@ -102,32 +99,11 @@ private fun WriteRoutineScreen(
     Column(
         modifier = Modifier.fillMaxSize().background(color = BitnagilTheme.colors.white),
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(54.dp),
-        ) {
-            Box(
-                modifier = Modifier
-                    .padding(start = 4.dp)
-                    .align(alignment = Alignment.CenterStart)
-                    .size(36.dp)
-                    .clickable(onClick = onClickBack),
-                contentAlignment = Alignment.Center,
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.ic_media_play),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp),
-                )
-            }
-
-            Text(
-                if (state.writeRoutineType == WriteRoutineType.ADD) "루틴 등록" else "루틴 수정",
-                modifier = Modifier.align(alignment = Alignment.Center),
-                style = BitnagilTheme.typography.title3SemiBold,
-            )
-        }
+        BitnagilTopBar(
+            title = if (state.writeRoutineType == WriteRoutineType.ADD) "루틴 등록" else "루틴 수정",
+            showBackButton = true,
+            onBackClick = onClickBack,
+        )
 
         Column(
             modifier = Modifier
@@ -168,6 +144,7 @@ private fun WriteRoutineScreen(
                 ) {
                     Text(
                         "세부 루틴",
+                        color = BitnagilTheme.colors.coolGray10,
                         style = BitnagilTheme.typography.body1SemiBold,
                     )
 
@@ -187,10 +164,9 @@ private fun WriteRoutineScreen(
                         modifier = Modifier.height(52.dp).fillMaxWidth().padding(start = 24.dp, end = 16.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Image(
-                            painter = painterResource(R.drawable.ic_media_play),
-                            contentDescription = null,
-                            modifier = Modifier.size(20.dp),
+                        BitnagilIcon(
+                            id = R.drawable.ic_plus,
+                            tint = BitnagilTheme.colors.navy400,
                         )
 
                         Spacer(modifier = Modifier.width(10.dp))
@@ -329,10 +305,9 @@ private fun WriteRoutineScreen(
 
                         Spacer(modifier = Modifier.weight(1f))
 
-                        Image(
-                            painter = painterResource(R.drawable.ic_media_play),
-                            contentDescription = null,
-                            modifier = Modifier.size(20.dp),
+                        BitnagilIcon(
+                            id = R.drawable.ic_down_arrow,
+                            tint = BitnagilTheme.colors.navy400,
                         )
                     }
                 }
@@ -341,11 +316,12 @@ private fun WriteRoutineScreen(
             Spacer(modifier = Modifier.height(54.dp))
         }
 
-        TextButton(
-            modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 14.dp),
+        BitnagilTextButton(
             text = "등록하기",
             onClick = onClickRegister,
             enabled = state.registerButtonEnabled,
+            modifier = Modifier
+                .padding(start = 16.dp, end = 16.dp, top = 14.dp, bottom = 14.dp),
         )
     }
 }

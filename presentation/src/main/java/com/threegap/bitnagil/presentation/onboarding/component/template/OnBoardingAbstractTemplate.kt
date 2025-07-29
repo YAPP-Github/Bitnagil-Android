@@ -1,24 +1,25 @@
 package com.threegap.bitnagil.presentation.onboarding.component.template
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingAbstractTextItem
 
 @Composable
@@ -37,12 +38,14 @@ fun OnBoardingAbstractTemplate(
         }
     }
 
-    val titleTextStyle = TextStyle(fontSize = 20.sp)
-
     Column(
         modifier = modifier.padding(start = 16.dp, end = 16.dp, bottom = 20.dp, top = 32.dp),
     ) {
-        Text(title, style = titleTextStyle)
+        Text(
+            text = title,
+            color = BitnagilTheme.colors.navy500,
+            style = BitnagilTheme.typography.title2Bold,
+        )
 
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -51,9 +54,23 @@ fun OnBoardingAbstractTemplate(
             OnBoardingAbstractText(onBoardingAbstractTextList = onBoardingAbstractTextItemList)
         }
 
-        Spacer(modifier = Modifier.height(36.dp))
+        Spacer(modifier = Modifier.height(83.dp))
 
-        Box(modifier = Modifier.fillMaxWidth().weight(1f).background(color = Color(0xFFC2C4C8)))
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            contentAlignment = Alignment.TopCenter,
+        ) {
+            Image(
+                painter = painterResource(R.drawable.onboarding_character),
+                contentDescription = null,
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .padding(horizontal = 15.dp)
+                    .aspectRatio(295f / 280f),
+            )
+        }
     }
 }
 
@@ -62,12 +79,18 @@ private fun OnBoardingAbstractText(
     onBoardingAbstractTextList: List<OnBoardingAbstractTextItem>,
 ) {
     val annotatedString = buildAnnotatedString {
-        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+        withStyle(style = BitnagilTheme.typography.body2SemiBold.toSpanStyle()) {
             append("• ")
         }
 
         onBoardingAbstractTextList.forEach {
-            withStyle(style = SpanStyle(fontWeight = if (it.isBold) FontWeight.Bold else null)) {
+            withStyle(
+                style = if (it.isBold) {
+                    BitnagilTheme.typography.body2SemiBold.toSpanStyle()
+                } else {
+                    BitnagilTheme.typography.body2Regular.toSpanStyle()
+                },
+            ) {
                 append(it.text)
             }
         }
@@ -75,6 +98,7 @@ private fun OnBoardingAbstractText(
 
     Text(
         text = annotatedString,
-        style = TextStyle(fontSize = 14.sp),
+        color = BitnagilTheme.colors.coolGray30,
+        style = BitnagilTheme.typography.body2Regular,
     )
 }

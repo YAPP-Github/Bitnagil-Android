@@ -1,17 +1,13 @@
 package com.threegap.bitnagil.presentation.home.component.template
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -22,6 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.R
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
+import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.home.model.RoutineSortType
 import kotlinx.coroutines.launch
 
@@ -107,10 +106,7 @@ private fun SortOptionItem(
             .fillMaxWidth()
             .padding(vertical = 8.dp)
             .height(36.dp)
-            .clickable {
-                onClick(sortType)
-                // 짧은 지연 후 바텀시트 닫기 (선택적)
-            },
+            .clickableWithoutRipple { onClick(sortType) },
     ) {
         Text(
             text = text,
@@ -120,10 +116,8 @@ private fun SortOptionItem(
         )
 
         if (isSelected) {
-            // todo: 아이콘 변경하기
-            Icon(
-                imageVector = Icons.Default.Check,
-                contentDescription = null,
+            BitnagilIcon(
+                id = R.drawable.ic_check,
                 tint = BitnagilTheme.colors.orange500,
             )
         }

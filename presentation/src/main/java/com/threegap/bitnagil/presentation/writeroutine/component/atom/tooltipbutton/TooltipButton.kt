@@ -1,8 +1,6 @@
 package com.threegap.bitnagil.presentation.writeroutine.component.atom.tooltipbutton
 
-import android.R
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -30,12 +28,14 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.R
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
+import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.tooltipbutton.model.TooltipDirection
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.tooltipbutton.model.TooltipPositionProvider
 import kotlinx.coroutines.launch
@@ -91,12 +91,11 @@ fun TooltipButton(
         },
         state = tooltipState,
     ) {
-        Image(
-            painter = painterResource(R.drawable.ic_menu_info_details),
-            contentDescription = null,
+        BitnagilIcon(
+            id = R.drawable.ic_tooltip,
+            tint = BitnagilTheme.colors.navy200,
             modifier = Modifier
-                .size(24.dp)
-                .clickable {
+                .clickableWithoutRipple {
                     coroutineScope.launch {
                         tooltipState.show()
                     }

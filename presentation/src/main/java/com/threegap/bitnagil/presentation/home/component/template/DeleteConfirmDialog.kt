@@ -2,7 +2,6 @@ package com.threegap.bitnagil.presentation.home.component.template
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,9 +65,14 @@ fun DeleteConfirmDialog(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { onDeleteToday() }
+                        .clickableWithoutRipple { onDeleteToday() }
                         .height(44.dp)
                         .background(
+                            color = BitnagilTheme.colors.white,
+                            shape = RoundedCornerShape(8.dp),
+                        )
+                        .border(
+                            width = 1.dp,
                             color = BitnagilTheme.colors.navy500,
                             shape = RoundedCornerShape(8.dp),
                         ),
@@ -75,7 +80,7 @@ fun DeleteConfirmDialog(
                     Text(
                         text = "선택한 요일만 삭제",
                         style = BitnagilTheme.typography.body2Medium,
-                        color = BitnagilTheme.colors.white,
+                        color = BitnagilTheme.colors.navy500,
                         modifier = Modifier.padding(vertical = 8.dp),
                     )
                 }
@@ -84,7 +89,7 @@ fun DeleteConfirmDialog(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { onDeleteAll() }
+                        .clickableWithoutRipple { onDeleteAll() }
                         .height(44.dp)
                         .background(
                             color = BitnagilTheme.colors.white,
@@ -99,7 +104,7 @@ fun DeleteConfirmDialog(
                     Text(
                         text = "전체 루틴 삭제",
                         style = BitnagilTheme.typography.body2Medium,
-                        color = BitnagilTheme.colors.black,
+                        color = BitnagilTheme.colors.navy500,
                         modifier = Modifier.padding(vertical = 8.dp),
                     )
                 }
