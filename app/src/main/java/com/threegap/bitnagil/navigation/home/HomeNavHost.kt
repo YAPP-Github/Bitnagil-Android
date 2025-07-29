@@ -58,7 +58,7 @@ fun HomeNavHost(
                 composable(HomeRoute.RecommendRoutine.route) {
                     RecommendRoutineScreenContainer(
                         navigateToEmotion = navigateToEmotion,
-                        navigateToRegisterRoutine = navigateToRegisterRoutine,
+                        navigateToRegisterRoutine = {},
                     )
                 }
 
