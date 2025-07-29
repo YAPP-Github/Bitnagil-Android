@@ -5,7 +5,6 @@ import com.threegap.bitnagil.data.writeroutine.model.dto.SubRoutineInfosDiffDto
 import com.threegap.bitnagil.data.writeroutine.model.request.EditRoutineRequest
 import com.threegap.bitnagil.data.writeroutine.model.request.RegisterRoutineRequest
 import com.threegap.bitnagil.domain.writeroutine.model.RepeatDay
-import com.threegap.bitnagil.domain.writeroutine.model.Routine
 import com.threegap.bitnagil.domain.writeroutine.model.SubRoutineDiff
 import com.threegap.bitnagil.domain.writeroutine.model.Time
 import com.threegap.bitnagil.domain.writeroutine.repository.WriteRoutineRepository
@@ -42,11 +41,5 @@ class WriteRoutineRepositoryImpl @Inject constructor(
         )
 
         return writeRoutineDataSource.editRoutine(request)
-    }
-
-    override suspend fun getRoutine(routineId: String): Result<Routine> {
-        return writeRoutineDataSource.getRoutine(routineId).map { routineDto ->
-            routineDto.toRoutine()
-        }
     }
 }

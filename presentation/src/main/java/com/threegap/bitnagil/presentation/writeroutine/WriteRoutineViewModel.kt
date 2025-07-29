@@ -3,10 +3,10 @@ package com.threegap.bitnagil.presentation.writeroutine
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.threegap.bitnagil.domain.recommendroutine.usecase.GetRecommendRoutineUseCase
+import com.threegap.bitnagil.domain.routine.usecase.GetRoutineUseCase
 import com.threegap.bitnagil.domain.writeroutine.model.RepeatDay
 import com.threegap.bitnagil.domain.writeroutine.usecase.EditRoutineUseCase
 import com.threegap.bitnagil.domain.writeroutine.usecase.GetChangedSubRoutinesUseCase
-import com.threegap.bitnagil.domain.writeroutine.usecase.GetRoutineUseCase
 import com.threegap.bitnagil.domain.writeroutine.usecase.RegisterRoutineUseCase
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
 import com.threegap.bitnagil.presentation.writeroutine.model.Day
@@ -85,10 +85,10 @@ class WriteRoutineViewModel @AssistedInject constructor(
                     oldSubRoutines = routine.subRoutines.map { SubRoutine.fromDomainSubRoutine(it) }
                     sendIntent(
                         WriteRoutineIntent.SetRoutine(
-                            name = routine.name,
-                            repeatDays = routine.repeatDays.map { Day.fromRepeatDay(it) },
-                            startTime = Time.fromDomainTime(routine.startTime),
-                            subRoutines = routine.subRoutines.map { it.name },
+                            name = routine.routineName,
+                            repeatDays = routine.repeatDay.map { Day.fromDayOfWeek(it) },
+                            startTime = Time.fromDomainTimeString(routine.executionTime),
+                            subRoutines = routine.subRoutines.map { it.subRoutineName },
                         ),
                     )
                 },
@@ -109,7 +109,7 @@ class WriteRoutineViewModel @AssistedInject constructor(
                         WriteRoutineIntent.SetRoutine(
                             name = routine.name,
                             repeatDays = listOf(),
-                            startTime = Time.fromRecommendDomainTimeString(routine.executionTime),
+                            startTime = Time.fromDomainTimeString(routine.executionTime),
                             subRoutines = oldSubRoutines.map { it.name },
                         ),
                     )

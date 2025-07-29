@@ -18,11 +18,7 @@ data class Time(
         val Init = Time(hour = 12, minute = 0)
         val AllDay = Time(hour = 0, minute = 0)
 
-        fun fromDomainTime(time: DomainTime): Time {
-            return Time(hour = time.hour, minute = time.minute)
-        }
-
-        fun fromRecommendDomainTimeString(timeString: String): Time {
+        fun fromDomainTimeString(timeString: String): Time {
             try {
                 val (hour, minute) = timeString.split(":").map { it.toInt() }
                 return Time(hour = hour, minute = minute)

@@ -1,6 +1,6 @@
 package com.threegap.bitnagil.presentation.writeroutine.model
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendSubRoutine
-import com.threegap.bitnagil.domain.writeroutine.model.SubRoutine as DomainSubRoutine
+import com.threegap.bitnagil.domain.routine.model.SubRoutine as DomainSubRoutine
 
 data class SubRoutine(
     val id: String,
@@ -9,8 +9,8 @@ data class SubRoutine(
     companion object {
         fun fromDomainSubRoutine(subRoutine: DomainSubRoutine): SubRoutine {
             return SubRoutine(
-                id = subRoutine.id,
-                name = subRoutine.name,
+                id = subRoutine.subRoutineId,
+                name = subRoutine.subRoutineName,
             )
         }
 

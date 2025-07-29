@@ -1,5 +1,6 @@
 package com.threegap.bitnagil.presentation.writeroutine.model
 
+import com.threegap.bitnagil.domain.routine.model.DayOfWeek
 import com.threegap.bitnagil.domain.writeroutine.model.RepeatDay
 
 enum class Day(val text: String) {
@@ -25,15 +26,15 @@ enum class Day(val text: String) {
     }
 
     companion object {
-        fun fromRepeatDay(repeatDay: RepeatDay): Day {
-            return when (repeatDay) {
-                RepeatDay.MON -> MON
-                RepeatDay.TUE -> TUE
-                RepeatDay.WED -> WED
-                RepeatDay.THU -> THU
-                RepeatDay.FRI -> FRI
-                RepeatDay.SAT -> SAT
-                RepeatDay.SUN -> SUN
+        fun fromDayOfWeek(dayOfWeek: DayOfWeek): Day {
+            return when (dayOfWeek) {
+                DayOfWeek.MONDAY -> MON
+                DayOfWeek.TUESDAY -> TUE
+                DayOfWeek.WEDNESDAY -> WED
+                DayOfWeek.THURSDAY -> THU
+                DayOfWeek.FRIDAY -> FRI
+                DayOfWeek.SATURDAY -> SAT
+                DayOfWeek.SUNDAY -> SUN
             }
         }
     }
