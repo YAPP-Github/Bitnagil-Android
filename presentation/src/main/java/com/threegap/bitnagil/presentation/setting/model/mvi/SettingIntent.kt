@@ -1,6 +1,7 @@
 package com.threegap.bitnagil.presentation.setting.model.mvi
 
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviIntent
+import com.threegap.bitnagil.presentation.setting.model.ConfirmDialogType
 
 sealed class SettingIntent : MviIntent {
     data class LoadSettingSuccess(
@@ -10,6 +11,9 @@ sealed class SettingIntent : MviIntent {
         val latestVersion: String,
     ) : SettingIntent()
 
+    data class ShowConfirmDialog(val type: ConfirmDialogType) : SettingIntent()
+    data object HideConfirmDialog : SettingIntent()
+    data object ConfirmDialogAction : SettingIntent()
     data object ToggleServiceAlarm : SettingIntent()
     data object TogglePushAlarm : SettingIntent()
     data object LogoutLoading : SettingIntent()

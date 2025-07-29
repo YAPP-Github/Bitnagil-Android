@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.threegap.bitnagil.domain.auth.usecase.LogoutUseCase
 import com.threegap.bitnagil.domain.auth.usecase.WithdrawalUseCase
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
+import com.threegap.bitnagil.presentation.setting.model.ConfirmDialogType
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingIntent
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingSideEffect
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingState
@@ -41,15 +42,24 @@ class SettingViewModel @Inject constructor(
                 )
             }
             SettingIntent.TogglePushAlarm -> {
-                return state.copy(
-                    usePushAlarm = !state.usePushAlarm,
-                )
+                return state.copy(usePushAlarm = !state.usePushAlarm)
             }
             SettingIntent.ToggleServiceAlarm -> {
-                return state.copy(
-                    useServiceAlarm = !state.useServiceAlarm,
-                )
+                return state.copy(useServiceAlarm = !state.useServiceAlarm)
             }
+
+            is SettingIntent.ShowConfirmDialog -> {
+                return state.copy(showConfirmDialog = intent.type)
+            }
+
+            is SettingIntent.HideConfirmDialog -> {
+                return state.copy(showConfirmDialog = null)
+            }
+
+            is SettingIntent.ConfirmDialogAction -> {
+                return state.copy(showConfirmDialog = null)
+            }
+
             SettingIntent.LogoutSuccess -> {
                 sendSideEffect(SettingSideEffect.NavigateToIntro)
                 return null
@@ -73,6 +83,30 @@ class SettingViewModel @Inject constructor(
         }
     }
 
+    fun showLogoutDialog() {
+        sendIntent(SettingIntent.ShowConfirmDialog(ConfirmDialogType.LOGOUT))
+    }
+
+    fun showWithdrawalDialog() {
+        sendIntent(SettingIntent.ShowConfirmDialog(ConfirmDialogType.WITHDRAW))
+    }
+
+    fun hideConfirmDialog() {
+        sendIntent(SettingIntent.HideConfirmDialog)
+    }
+
+    fun confirmDialogAction() {
+        val currentDialogType = container.stateFlow.value.showConfirmDialog
+
+        sendIntent(SettingIntent.ConfirmDialogAction)
+
+        when (currentDialogType) {
+            ConfirmDialogType.LOGOUT -> executeLogout()
+            ConfirmDialogType.WITHDRAW -> executeWithdrawal()
+            null -> {}
+        }
+    }
+
     fun toggleServiceAlarm() {
         sendIntent(SettingIntent.ToggleServiceAlarm)
         setServiceAlarmJob?.cancel()
@@ -89,7 +123,7 @@ class SettingViewModel @Inject constructor(
         }
     }
 
-    fun logout() {
+    private fun executeLogout() {
         viewModelScope.launch {
             sendIntent(SettingIntent.LogoutLoading)
             logoutUseCase().onSuccess {
@@ -100,7 +134,7 @@ class SettingViewModel @Inject constructor(
         }
     }
 
-    fun withdrawal() {
+    private fun executeWithdrawal() {
         viewModelScope.launch {
             sendIntent(SettingIntent.WithdrawalLoading)
             withdrawalUseCase().onSuccess {
