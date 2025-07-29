@@ -2,6 +2,7 @@ package com.threegap.bitnagil
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
@@ -15,6 +16,8 @@ import com.threegap.bitnagil.presentation.splash.SplashScreenContainer
 import com.threegap.bitnagil.presentation.terms.TermsAgreementScreenContainer
 import com.threegap.bitnagil.presentation.webview.BitnagilWebViewScreen
 import com.threegap.bitnagil.presentation.writeroutine.WriteRoutineScreenContainer
+import com.threegap.bitnagil.presentation.writeroutine.WriteRoutineViewModel
+import com.threegap.bitnagil.presentation.writeroutine.model.navarg.WriteRoutineScreenArg
 
 @Composable
 fun MainNavHost(
@@ -162,8 +165,20 @@ fun MainNavHost(
             )
         }
 
-        composable<Route.WriteRoutine> {
+        composable<Route.WriteRoutine> { navBackStackEntry ->
+            val arg = navBackStackEntry.toRoute<Route.WriteRoutine>()
+            val writeScreenNavArg = if (arg.isRegister) {
+                WriteRoutineScreenArg.Add(baseRoutineId = arg.routineId)
+            } else {
+                WriteRoutineScreenArg.Edit(routineId = arg.routineId!!)
+            }
+
+            val viewModel = hiltViewModel<WriteRoutineViewModel, WriteRoutineViewModel.Factory> { factory ->
+                factory.create(writeScreenNavArg)
+            }
+
             WriteRoutineScreenContainer(
+                viewModel = viewModel,
                 navigateToBack = {
                     navigator.navController.popBackStack()
                 },

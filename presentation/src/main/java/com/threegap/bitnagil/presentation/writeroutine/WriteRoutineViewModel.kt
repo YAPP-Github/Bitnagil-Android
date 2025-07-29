@@ -2,7 +2,7 @@ package com.threegap.bitnagil.presentation.writeroutine
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
+import com.threegap.bitnagil.domain.recommendroutine.usecase.GetRecommendRoutineUseCase
 import com.threegap.bitnagil.domain.writeroutine.model.RepeatDay
 import com.threegap.bitnagil.domain.writeroutine.usecase.EditRoutineUseCase
 import com.threegap.bitnagil.domain.writeroutine.usecase.GetChangedSubRoutinesUseCase
@@ -19,33 +19,36 @@ import com.threegap.bitnagil.presentation.writeroutine.model.mvi.WriteRoutineInt
 import com.threegap.bitnagil.presentation.writeroutine.model.mvi.WriteRoutineSideEffect
 import com.threegap.bitnagil.presentation.writeroutine.model.mvi.WriteRoutineState
 import com.threegap.bitnagil.presentation.writeroutine.model.navarg.WriteRoutineScreenArg
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
-import javax.inject.Inject
 import com.threegap.bitnagil.domain.writeroutine.model.SubRoutine as DomainSubRoutine
 
-@HiltViewModel
-class WriteRoutineViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = WriteRoutineViewModel.Factory::class)
+class WriteRoutineViewModel @AssistedInject constructor(
     savedStateHandle: SavedStateHandle,
     private val getChangedSubRoutinesUseCase: GetChangedSubRoutinesUseCase,
     private val registerRoutineUseCase: RegisterRoutineUseCase,
     private val editRoutineUseCase: EditRoutineUseCase,
     private val getRoutineUseCase: GetRoutineUseCase,
+    private val getRecommendRoutineUseCase: GetRecommendRoutineUseCase,
+    @Assisted private val writeRoutineArg: WriteRoutineScreenArg,
 ) : MviViewModel<WriteRoutineState, WriteRoutineSideEffect, WriteRoutineIntent>(
     initState = WriteRoutineState.Init,
     savedStateHandle = savedStateHandle,
 ) {
+    @AssistedFactory interface Factory {
+        fun create(writeRoutineArg: WriteRoutineScreenArg): WriteRoutineViewModel
+    }
+
     private var routineId: String? = null
     private var oldSubRoutines: List<SubRoutine> = listOf()
 
     init {
-        val navigationArg = try {
-            savedStateHandle.toRoute<WriteRoutineScreenArg>()
-        } catch (e: IllegalArgumentException) {
-            WriteRoutineScreenArg.Add(baseRoutineId = null)
-        }
-
+        val navigationArg = writeRoutineArg
         initResource(navigationArg)
     }
 
@@ -58,7 +61,7 @@ class WriteRoutineViewModel @Inject constructor(
 
                 navigationArg.baseRoutineId?.let {
                     routineId = it
-                    loadRoutine(it)
+                    loadRecommendRoutine(it)
                 }
             }
             is WriteRoutineScreenArg.Edit -> {
@@ -86,6 +89,28 @@ class WriteRoutineViewModel @Inject constructor(
                             repeatDays = routine.repeatDays.map { Day.fromRepeatDay(it) },
                             startTime = Time.fromDomainTime(routine.startTime),
                             subRoutines = routine.subRoutines.map { it.name },
+                        ),
+                    )
+                },
+                onFailure = {
+                    // 실패 케이스 처리 예정
+                },
+            )
+        }
+    }
+
+    private fun loadRecommendRoutine(recommendRoutineId: String) {
+        viewModelScope.launch {
+            sendIntent(WriteRoutineIntent.GetRoutineLoading)
+            getRecommendRoutineUseCase(recommendRoutineId).fold(
+                onSuccess = { routine ->
+                    oldSubRoutines = routine.recommendSubRoutines.map { SubRoutine.fromDomainRecommendSubRoutine(it) }
+                    sendIntent(
+                        WriteRoutineIntent.SetRoutine(
+                            name = routine.name,
+                            repeatDays = listOf(),
+                            startTime = Time.fromRecommendDomainTimeString(routine.executionTime),
+                            subRoutines = oldSubRoutines.map { it.name },
                         ),
                     )
                 },
