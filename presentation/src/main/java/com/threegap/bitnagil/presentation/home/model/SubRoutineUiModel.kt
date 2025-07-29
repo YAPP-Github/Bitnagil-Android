@@ -3,6 +3,7 @@ package com.threegap.bitnagil.presentation.home.model
 import android.os.Parcelable
 import com.threegap.bitnagil.domain.routine.model.RoutineType
 import com.threegap.bitnagil.domain.routine.model.SubRoutine
+import com.threegap.bitnagil.domain.routine.model.SubRoutineDeletionInfo
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -27,4 +28,10 @@ fun SubRoutine.toUiModel(): SubRoutineUiModel =
         isCompleted = this.isCompleted,
         isModified = this.isModified,
         routineType = this.routineType,
+    )
+
+fun SubRoutineUiModel.toSubRoutineDeletionInfo(): SubRoutineDeletionInfo =
+    SubRoutineDeletionInfo(
+        routineCompletionId = this.routineCompletionId,
+        subRoutineId = this.subRoutineId,
     )

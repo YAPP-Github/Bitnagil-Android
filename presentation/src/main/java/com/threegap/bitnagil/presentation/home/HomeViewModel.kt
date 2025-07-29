@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.threegap.bitnagil.domain.routine.model.RoutineCompletion
 import com.threegap.bitnagil.domain.routine.model.RoutineCompletionInfo
+import com.threegap.bitnagil.domain.routine.usecase.DeleteRoutineByDayUseCase
 import com.threegap.bitnagil.domain.routine.usecase.DeleteRoutineUseCase
 import com.threegap.bitnagil.domain.routine.usecase.FetchWeeklyRoutinesUseCase
 import com.threegap.bitnagil.domain.routine.usecase.RoutineCompletionUseCase
@@ -15,6 +16,7 @@ import com.threegap.bitnagil.presentation.home.model.HomeState
 import com.threegap.bitnagil.presentation.home.model.RoutineSortType
 import com.threegap.bitnagil.presentation.home.model.RoutineUiModel
 import com.threegap.bitnagil.presentation.home.model.RoutinesUiModel
+import com.threegap.bitnagil.presentation.home.model.toRoutineByDayDeletion
 import com.threegap.bitnagil.presentation.home.model.toUiModel
 import com.threegap.bitnagil.presentation.home.util.getCurrentWeekDays
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,6 +37,7 @@ class HomeViewModel @Inject constructor(
     private val fetchWeeklyRoutinesUseCase: FetchWeeklyRoutinesUseCase,
     private val routineCompletionUseCase: RoutineCompletionUseCase,
     private val deleteRoutineUseCase: DeleteRoutineUseCase,
+    private val deleteRoutineByDayUseCase: DeleteRoutineByDayUseCase,
 ) : MviViewModel<HomeState, HomeSideEffect, HomeIntent>(
     initState = HomeState(),
     savedStateHandle = savedStateHandle,
@@ -154,6 +157,30 @@ class HomeViewModel @Inject constructor(
                     deletingRoutine = null,
                 )
             }
+
+            is HomeIntent.DeleteRoutineByDayOptimistically -> {
+                val dateKey = intent.performedDate
+                val updatedRoutinesByDate = state.routines.routinesByDate.toMutableMap()
+                val routinesForDate = updatedRoutinesByDate[dateKey]?.toMutableList()
+
+                if (routinesForDate != null) {
+                    updatedRoutinesByDate[dateKey] = routinesForDate.filterNot {
+                        it.routineId == intent.routineId
+                    }
+                }
+
+                state.copy(
+                    routines = RoutinesUiModel(routinesByDate = updatedRoutinesByDate),
+                    showDeleteConfirmDialog = false,
+                    deletingRoutine = null,
+                )
+            }
+
+            is HomeIntent.RestoreRoutinesAfterDeleteByDayFailure -> {
+                state.copy(routines = intent.backupRoutines)
+            }
+
+            is HomeIntent.ConfirmRoutineByDayDeletion -> null
         }
         return newState
     }
@@ -391,6 +418,37 @@ class HomeViewModel @Inject constructor(
                 onFailure = { error ->
                     Log.e("HomeViewModel", "루틴 삭제 실패: ${error.message}")
                     sendIntent(HomeIntent.RestoreRoutinesAfterDeleteFailure(currentRoutines))
+                },
+            )
+        }
+    }
+
+    fun deleteRoutineByDay(routineUiModel: RoutineUiModel) {
+        val currentRoutines = container.stateFlow.value.routines
+        val performedDate = container.stateFlow.value.selectedDate.toString()
+
+        sendIntent(
+            HomeIntent.DeleteRoutineByDayOptimistically(
+                routineId = routineUiModel.routineId,
+                performedDate = performedDate,
+            ),
+        )
+
+        viewModelScope.launch {
+            val routineByDayDeletion = routineUiModel.toRoutineByDayDeletion(performedDate)
+
+            deleteRoutineByDayUseCase(routineByDayDeletion).fold(
+                onSuccess = {
+                    sendIntent(
+                        HomeIntent.ConfirmRoutineByDayDeletion(
+                            routineId = routineUiModel.routineId,
+                            performedDate = performedDate,
+                        ),
+                    )
+                },
+                onFailure = {
+                    Log.e("HomeViewModel", "루틴 삭제 실패: ${it.message}")
+                    sendIntent(HomeIntent.RestoreRoutinesAfterDeleteByDayFailure(currentRoutines))
                 },
             )
         }
