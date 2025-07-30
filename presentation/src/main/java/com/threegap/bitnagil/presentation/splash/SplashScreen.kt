@@ -56,10 +56,10 @@ private fun SplashScreen(
             .fillMaxSize()
             .background(BitnagilTheme.colors.white),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             BitnagilLottieAnimation(
                 lottieJson = R.raw.splash_lottie,
@@ -77,7 +77,7 @@ private fun SplashScreen(
             androidx.compose.animation.AnimatedVisibility(
                 visible = showIcon,
                 enter = fadeIn(animationSpec = tween(500)),
-                modifier = Modifier.align(Alignment.BottomCenter)
+                modifier = Modifier.align(Alignment.BottomCenter),
             ) {
                 BitnagilIcon(id = R.drawable.img_app_name)
             }

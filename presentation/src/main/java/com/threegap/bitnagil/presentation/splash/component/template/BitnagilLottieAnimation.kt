@@ -33,9 +33,9 @@ fun BitnagilLottieAnimation(
         targetValue = if (lottieComposition != null) 1f else 0f,
         animationSpec = tween(
             durationMillis = 500,
-            easing = FastOutSlowInEasing
+            easing = FastOutSlowInEasing,
         ),
-        label = "lottieAlpha"
+        label = "lottieAlpha",
     )
 
     LaunchedEffect(lottieComposition) {
@@ -46,7 +46,7 @@ fun BitnagilLottieAnimation(
                 clipSpec = LottieClipSpec.Frame(0, maxFrame),
                 iterations = 1,
                 ignoreSystemAnimationsDisabled = true,
-                useCompositionFrameRate = true
+                useCompositionFrameRate = true,
             )
             onComplete()
         }
@@ -56,7 +56,7 @@ fun BitnagilLottieAnimation(
         composition = lottieComposition,
         progress = { lottieAnimatable.progress },
         modifier = modifier.alpha(alpha),
-        clipToCompositionBounds = false
+        clipToCompositionBounds = false,
     )
 }
 
@@ -67,6 +67,6 @@ private fun BitnagilLottieAnimationPreview() {
         lottieJson = R.raw.splash_lottie,
         maxFrame = 800,
         onComplete = {},
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     )
 }

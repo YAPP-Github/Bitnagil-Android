@@ -114,16 +114,16 @@ private fun LoginScreen(
                 .clickableWithoutRipple { onKakaoLoginClick() }
                 .background(
                     color = BitnagilTheme.colors.kakao,
-                    shape = RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(12.dp),
                 )
                 .fillMaxWidth()
                 .padding(vertical = 18.dp),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
 
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 BitnagilIcon(
                     id = R.drawable.ic_kakao_login,
@@ -131,7 +131,7 @@ private fun LoginScreen(
                 Text(
                     text = "카카오로 시작하기",
                     color = BitnagilTheme.colors.black,
-                    style = BitnagilTheme.typography.button2
+                    style = BitnagilTheme.typography.button2,
                 )
             }
         }

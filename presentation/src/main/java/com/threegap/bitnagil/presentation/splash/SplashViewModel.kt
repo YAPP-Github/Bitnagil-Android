@@ -8,7 +8,6 @@ import com.threegap.bitnagil.presentation.splash.model.SplashIntent
 import com.threegap.bitnagil.presentation.splash.model.SplashSideEffect
 import com.threegap.bitnagil.presentation.splash.model.SplashState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
@@ -34,7 +33,6 @@ class SplashViewModel @Inject constructor(
         state: SplashState,
     ): SplashState? =
         when (intent) {
-
             is SplashIntent.SetTokenChecked -> {
                 state.copy(isTokenChecked = intent.hasToken != null)
             }
