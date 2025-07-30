@@ -8,7 +8,7 @@ import com.threegap.bitnagil.network.model.BaseResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.Path
 
 interface EmotionService {
     @GET("/api/v1/emotion-marbles")
@@ -19,8 +19,8 @@ interface EmotionService {
         @Body request: RegisterEmotionRequest,
     ): BaseResponse<RegisterEmotionResponse>
 
-    @GET("/api/v1/emotion-marbles/me")
+    @GET("/api/v1/emotion-marbles/{searchDate}")
     suspend fun getMyEmotionMarble(
-        @Query("searchDate") date: String,
+        @Path("searchDate") date: String,
     ): BaseResponse<MyEmotionResponseDto>
 }

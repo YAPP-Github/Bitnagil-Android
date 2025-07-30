@@ -5,6 +5,6 @@ import com.threegap.bitnagil.network.model.BaseResponse
 import retrofit2.http.GET
 
 interface UserService {
-    @GET("/api/v1/users/nickname")
+    @GET("/api/v1/users/infos")
     suspend fun fetchUserProfile(): BaseResponse<UserProfileResponseDto>
 }
