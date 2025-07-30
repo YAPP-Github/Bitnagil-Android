@@ -14,7 +14,9 @@ import com.threegap.bitnagil.designsystem.component.block.BitnagilProgressTopBar
 import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.onboarding.component.template.OnBoardingAbstractTemplate
 import com.threegap.bitnagil.presentation.onboarding.component.template.OnBoardingSelectTemplate
+import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingItem
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingPageInfo
+import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingSetType
 import com.threegap.bitnagil.presentation.onboarding.model.mvi.OnBoardingSideEffect
 import com.threegap.bitnagil.presentation.onboarding.model.mvi.OnBoardingState
 
@@ -87,12 +89,20 @@ private fun OnBoardingScreen(
                         OnBoardingSelectTemplate(
                             modifier = Modifier.weight(1f),
                             title = "당신만의 추천 루틴이\n생성되었어요!",
-                            subText = "당신의 생활 패턴과 목표에 맞춰 구성된 맞춤 루틴이에요.\n지금부터 가볍게 시작해보세요.",
+                            subText = state.onBoardingSetType.subText,
                             items = currentOnBoardingPageInfo.routines,
                             nextButtonEnable = state.nextButtonEnable,
                             onClickNextButton = onClickRegister,
-                            onClickItem = onClickRoutine,
-                            onClickSkip = onClickSkip,
+                            onClickItem = if (state.onBoardingSetType.canSelectRoutine) {
+                                onClickRoutine
+                            } else {
+                                null
+                            },
+                            onClickSkip = if (state.onBoardingSetType.canSkip) {
+                                onClickSkip
+                            } else {
+                                null
+                            },
                         )
                     }
                     is OnBoardingPageInfo.SelectOnBoarding -> {
@@ -121,9 +131,14 @@ fun OnBoardingScreenPreview() {
     OnBoardingScreen(
         state = OnBoardingState.Idle(
             nextButtonEnable = false,
-            currentOnBoardingPageInfo = OnBoardingPageInfo.SelectOnBoarding(id = "id", title = "title", description = "description"),
+            currentOnBoardingPageInfo = OnBoardingPageInfo.RecommendRoutines(
+                listOf(
+                    OnBoardingItem("1", "루틴명", "세부 루틴 한 줄 설명", null),
+                ),
+            ),
             totalStep = 5,
             currentStep = 1,
+            onBoardingSetType = OnBoardingSetType.RESET,
         ),
         onClickNext = {},
         onClickPreviousInSelectOnBoarding = {},

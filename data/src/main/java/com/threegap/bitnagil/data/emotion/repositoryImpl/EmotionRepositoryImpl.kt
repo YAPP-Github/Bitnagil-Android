@@ -3,6 +3,7 @@ package com.threegap.bitnagil.data.emotion.repositoryImpl
 import com.threegap.bitnagil.data.emotion.datasource.EmotionDataSource
 import com.threegap.bitnagil.data.emotion.model.response.toDomain
 import com.threegap.bitnagil.domain.emotion.model.Emotion
+import com.threegap.bitnagil.domain.emotion.model.EmotionRecommendRoutine
 import com.threegap.bitnagil.domain.emotion.model.MyEmotion
 import com.threegap.bitnagil.domain.emotion.repository.EmotionRepository
 import javax.inject.Inject
@@ -26,7 +27,7 @@ class EmotionRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun registerEmotion(emotion: Emotion): Result<Unit> {
+    override suspend fun registerEmotion(emotion: Emotion): Result<List<EmotionRecommendRoutine>> {
         val selectedEmotion = when (emotion) {
             Emotion.CALM -> "CALM"
             Emotion.VITALITY -> "VITALITY"
@@ -36,7 +37,12 @@ class EmotionRepositoryImpl @Inject constructor(
             Emotion.FATIGUE -> "FATIGUE"
         }
 
-        return emotionDataSource.registerEmotion(selectedEmotion).map { _ -> }
+        return emotionDataSource.registerEmotion(selectedEmotion).map {
+            it.recommendedRoutines.map {
+                    emotionRecommendedRoutineDto ->
+                emotionRecommendedRoutineDto.toEmotionRecommendRoutine()
+            }
+        }
     }
 
     override suspend fun getMyEmotionMarble(currentDate: String): Result<MyEmotion> =

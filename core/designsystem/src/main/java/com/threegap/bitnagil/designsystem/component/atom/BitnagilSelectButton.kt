@@ -30,7 +30,7 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 @Composable
 fun BitnagilSelectButton(
     title: String,
-    onClick: () -> Unit,
+    onClick: (() -> Unit)?,
     modifier: Modifier = Modifier,
     description: String? = null,
     selected: Boolean = false,
@@ -57,11 +57,17 @@ fun BitnagilSelectButton(
             .fillMaxWidth()
             .clip(shape)
             .background(backgroundColor)
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null,
-                onClick = onClick,
-            )
+            .let {
+                if (onClick != null) {
+                    it.clickable(
+                        interactionSource = interactionSource,
+                        indication = null,
+                        onClick = onClick,
+                    )
+                } else {
+                    it
+                }
+            }
             .padding(horizontal = 20.dp, vertical = 16.dp)
             .semantics {
                 role = Role.Button

@@ -1,5 +1,6 @@
 package com.threegap.bitnagil.data.emotion.model.dto
 
+import com.threegap.bitnagil.domain.emotion.model.EmotionRecommendRoutine
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -13,4 +14,12 @@ data class EmotionRecommendedRoutineDto(
     val recommendedRoutineDescription: String,
     @SerialName("recommendedSubRoutineSearchResult")
     val recommendedSubRoutineSearchResult: List<EmotionRecommendedSubRoutineDto>,
-)
+) {
+    fun toEmotionRecommendRoutine(): EmotionRecommendRoutine {
+        return EmotionRecommendRoutine(
+            routineId = recommendedRoutineId.toString(),
+            routineName = recommendedRoutineName,
+            routineDescription = recommendedRoutineDescription,
+        )
+    }
+}

@@ -25,7 +25,7 @@ fun OnBoardingSelectTemplate(
     items: List<OnBoardingItem>,
     nextButtonEnable: Boolean = false,
     onClickNextButton: () -> Unit,
-    onClickItem: (String) -> Unit,
+    onClickItem: ((String) -> Unit)?,
     onClickSkip: (() -> Unit)? = null,
 ) {
     Column(
@@ -59,8 +59,10 @@ fun OnBoardingSelectTemplate(
                 BitnagilSelectButton(
                     title = item.title,
                     description = item.description,
-                    onClick = {
-                        onClickItem(item.id)
+                    onClick = if (onClickItem != null) {
+                        { onClickItem(item.id) }
+                    } else {
+                        null
                     },
                     selected = item.selected,
                     modifier = Modifier.padding(bottom = 12.dp),
