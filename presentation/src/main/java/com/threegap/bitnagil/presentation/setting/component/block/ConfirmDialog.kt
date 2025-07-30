@@ -53,7 +53,7 @@ fun ConfirmDialog(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             BitnagilIcon(
-                id = R.drawable.ic_warning,
+                id = R.drawable.ic_modal_warning,
                 tint = null,
                 modifier = Modifier.size(55.dp),
             )

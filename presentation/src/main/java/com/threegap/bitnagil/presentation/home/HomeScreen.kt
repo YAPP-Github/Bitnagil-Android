@@ -26,6 +26,8 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
+import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
+import com.threegap.bitnagil.presentation.common.toast.GlobalBitnagilToast
 import com.threegap.bitnagil.presentation.home.component.template.CollapsibleHomeHeader
 import com.threegap.bitnagil.presentation.home.component.template.DeleteConfirmDialog
 import com.threegap.bitnagil.presentation.home.component.template.RoutineDetailsBottomSheet
@@ -34,6 +36,7 @@ import com.threegap.bitnagil.presentation.home.component.template.RoutineSection
 import com.threegap.bitnagil.presentation.home.component.template.RoutineSortBottomSheet
 import com.threegap.bitnagil.presentation.home.component.template.WeeklyDatePicker
 import com.threegap.bitnagil.presentation.home.model.HomeIntent
+import com.threegap.bitnagil.presentation.home.model.HomeSideEffect
 import com.threegap.bitnagil.presentation.home.model.HomeState
 import com.threegap.bitnagil.presentation.home.model.RoutineUiModel
 import com.threegap.bitnagil.presentation.home.util.rememberCollapsibleHeaderState
@@ -47,6 +50,30 @@ fun HomeScreenContainer(
     navigateToEmotion: () -> Unit,
 ) {
     val uiState by viewModel.stateFlow.collectAsStateWithLifecycle()
+
+    viewModel.sideEffectFlow.collectAsEffect { sideEffect ->
+        when (sideEffect) {
+            is HomeSideEffect.NavigateToRegisterRoutine -> {
+                navigateToRegisterRoutine()
+            }
+
+            is HomeSideEffect.NavigateToEmotion -> {
+                navigateToEmotion()
+            }
+
+            is HomeSideEffect.NavigateToEditRoutine -> {
+                navigateToEditRoutine(sideEffect.routineId)
+            }
+
+            is HomeSideEffect.ShowToastWithIcon -> {
+                GlobalBitnagilToast.showCheck(sideEffect.message)
+            }
+
+            is HomeSideEffect.ShowToast -> {
+                GlobalBitnagilToast.show(sideEffect.message)
+            }
+        }
+    }
 
     if (uiState.routineSortBottomSheetVisible) {
         RoutineSortBottomSheet(
@@ -65,7 +92,7 @@ fun HomeScreenContainer(
             RoutineDetailsBottomSheet(
                 routine = routine,
                 onDismiss = { viewModel.sendIntent(HomeIntent.HideRoutineDetailsBottomSheet) },
-                onEdit = navigateToEditRoutine,
+                onEdit = { viewModel.sendIntent(HomeIntent.NavigateToEditRoutine(routine.routineId)) },
                 onDelete = {
                     if (routine.repeatDay.isEmpty()) {
                         viewModel.deleteRoutine(routine.routineId)
@@ -117,8 +144,12 @@ fun HomeScreenContainer(
         onShowRoutineDetailsBottomSheet = { routine ->
             viewModel.sendIntent(HomeIntent.ShowRoutineDetailsBottomSheet(routine))
         },
-        onRegisterRoutineClick = navigateToRegisterRoutine,
-        onRegisterEmotionClick = navigateToEmotion,
+        onRegisterRoutineClick = {
+            viewModel.sendIntent(HomeIntent.OnRegisterRoutineClick)
+        },
+        onRegisterEmotionClick = {
+            viewModel.sendIntent(HomeIntent.OnRegisterEmotionClick)
+        },
     )
 }
 
