@@ -225,6 +225,7 @@ private fun EmotionScreenPreview() {
                 emotions = Emotion.entries,
                 isLoading = false,
                 step = EmotionScreenStep.Emotion,
+                recommendRoutines = listOf(),
             ),
             onClickEmotion = { _ -> },
             onClickPreviousButton = {},
