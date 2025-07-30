@@ -18,6 +18,7 @@ dependencies {
     implementation(libs.bundles.orbit)
     implementation(libs.kakao.v2.user)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.lottie.compose)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlin.coroutines.test)
