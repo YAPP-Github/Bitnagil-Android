@@ -5,6 +5,7 @@ import com.threegap.bitnagil.data.emotion.service.EmotionService
 import com.threegap.bitnagil.data.onboarding.service.OnBoardingService
 import com.threegap.bitnagil.data.recommendroutine.service.RecommendRoutineService
 import com.threegap.bitnagil.data.routine.service.RoutineService
+import com.threegap.bitnagil.data.user.service.UserService
 import com.threegap.bitnagil.data.writeroutine.service.WriteRoutineService
 import com.threegap.bitnagil.di.core.Auth
 import com.threegap.bitnagil.di.core.NoneAuth
@@ -49,6 +50,11 @@ object ServiceModule {
     @Singleton
     fun provideReissueService(@NoneAuth retrofit: Retrofit): ReissueService =
         retrofit.create(ReissueService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideUserService(@Auth retrofit: Retrofit): UserService =
+        retrofit.create(UserService::class.java)
 
     @Provides
     @Singleton

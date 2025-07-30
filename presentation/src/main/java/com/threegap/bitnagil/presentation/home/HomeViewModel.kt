@@ -3,18 +3,23 @@ package com.threegap.bitnagil.presentation.home
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.threegap.bitnagil.domain.emotion.usecase.GetMyEmotionUseCase
 import com.threegap.bitnagil.domain.routine.model.RoutineCompletion
 import com.threegap.bitnagil.domain.routine.model.RoutineCompletionInfo
+import com.threegap.bitnagil.domain.routine.usecase.DeleteRoutineByDayUseCase
 import com.threegap.bitnagil.domain.routine.usecase.DeleteRoutineUseCase
 import com.threegap.bitnagil.domain.routine.usecase.FetchWeeklyRoutinesUseCase
 import com.threegap.bitnagil.domain.routine.usecase.RoutineCompletionUseCase
+import com.threegap.bitnagil.domain.user.usecase.FetchUserProfileUseCase
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
+import com.threegap.bitnagil.presentation.home.model.EmotionBallType
 import com.threegap.bitnagil.presentation.home.model.HomeIntent
 import com.threegap.bitnagil.presentation.home.model.HomeSideEffect
 import com.threegap.bitnagil.presentation.home.model.HomeState
 import com.threegap.bitnagil.presentation.home.model.RoutineSortType
 import com.threegap.bitnagil.presentation.home.model.RoutineUiModel
 import com.threegap.bitnagil.presentation.home.model.RoutinesUiModel
+import com.threegap.bitnagil.presentation.home.model.toRoutineByDayDeletion
 import com.threegap.bitnagil.presentation.home.model.toUiModel
 import com.threegap.bitnagil.presentation.home.util.getCurrentWeekDays
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,8 +38,11 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val fetchWeeklyRoutinesUseCase: FetchWeeklyRoutinesUseCase,
+    private val fetchUserProfileUseCase: FetchUserProfileUseCase,
+    private val getMyEmotionUseCase: GetMyEmotionUseCase,
     private val routineCompletionUseCase: RoutineCompletionUseCase,
     private val deleteRoutineUseCase: DeleteRoutineUseCase,
+    private val deleteRoutineByDayUseCase: DeleteRoutineByDayUseCase,
 ) : MviViewModel<HomeState, HomeSideEffect, HomeIntent>(
     initState = HomeState(),
     savedStateHandle = savedStateHandle,
@@ -47,6 +55,8 @@ class HomeViewModel @Inject constructor(
         observeWeekChanges()
         observeRoutineUpdates()
         fetchWeeklyRoutines(container.stateFlow.value.currentWeeks)
+        fetchUserProfile()
+        getMyEmotion(container.stateFlow.value.selectedDate)
     }
 
     override suspend fun SimpleSyntax<HomeState, HomeSideEffect>.reduceState(
@@ -56,6 +66,10 @@ class HomeViewModel @Inject constructor(
         val newState = when (intent) {
             is HomeIntent.UpdateLoading -> {
                 state.copy(isLoading = intent.isLoading)
+            }
+
+            is HomeIntent.LoadUserProfile -> {
+                state.copy(userNickname = intent.nickname)
             }
 
             is HomeIntent.LoadWeeklyRoutines -> {
@@ -110,6 +124,8 @@ class HomeViewModel @Inject constructor(
                     routines = RoutinesUiModel(routinesByDate = updatedRoutinesByDate),
                     showDeleteConfirmDialog = false,
                     deletingRoutine = null,
+                    routineDetailsBottomSheetVisible = false,
+                    selectedRoutine = null,
                 )
             }
 
@@ -154,6 +170,36 @@ class HomeViewModel @Inject constructor(
                     deletingRoutine = null,
                 )
             }
+
+            is HomeIntent.DeleteRoutineByDayOptimistically -> {
+                val dateKey = intent.performedDate
+                val updatedRoutinesByDate = state.routines.routinesByDate.toMutableMap()
+                val routinesForDate = updatedRoutinesByDate[dateKey]?.toMutableList()
+
+                if (routinesForDate != null) {
+                    updatedRoutinesByDate[dateKey] = routinesForDate.filterNot {
+                        it.routineId == intent.routineId
+                    }
+                }
+
+                state.copy(
+                    routines = RoutinesUiModel(routinesByDate = updatedRoutinesByDate),
+                    showDeleteConfirmDialog = false,
+                    deletingRoutine = null,
+                    routineDetailsBottomSheetVisible = false,
+                    selectedRoutine = null,
+                )
+            }
+
+            is HomeIntent.RestoreRoutinesAfterDeleteByDayFailure -> {
+                state.copy(routines = intent.backupRoutines)
+            }
+
+            is HomeIntent.ConfirmRoutineByDayDeletion -> null
+
+            is HomeIntent.LoadMyEmotion -> {
+                state.copy(myEmotion = intent.emotion)
+            }
         }
         return newState
     }
@@ -183,6 +229,22 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun fetchUserProfile() {
+        sendIntent(HomeIntent.UpdateLoading(true))
+        viewModelScope.launch {
+            fetchUserProfileUseCase().fold(
+                onSuccess = {
+                    sendIntent(HomeIntent.LoadUserProfile(it.nickname))
+                    sendIntent(HomeIntent.UpdateLoading(false))
+                },
+                onFailure = { error ->
+                    Log.e("HomeViewModel", "유저 정보 가져오기 실패: ${error.message}")
+                    sendIntent(HomeIntent.UpdateLoading(false))
+                },
+            )
+        }
+    }
+
     private fun fetchWeeklyRoutines(currentWeeks: List<LocalDate>) {
         sendIntent(HomeIntent.UpdateLoading(true))
         val startDate = currentWeeks.first().toString()
@@ -196,6 +258,23 @@ class HomeViewModel @Inject constructor(
                 },
                 onFailure = { error ->
                     Log.e("HomeViewModel", "루틴 가져오기 실패: ${error.message}")
+                    sendIntent(HomeIntent.UpdateLoading(false))
+                },
+            )
+        }
+    }
+
+    private fun getMyEmotion(currentDate: LocalDate) {
+        sendIntent(HomeIntent.UpdateLoading(true))
+        viewModelScope.launch {
+            getMyEmotionUseCase(currentDate.toString()).fold(
+                onSuccess = { emotion ->
+                    val ballType = EmotionBallType.fromDomainEmotion(emotion.emotionMarbleType)
+                    sendIntent(HomeIntent.LoadMyEmotion(ballType))
+                    sendIntent(HomeIntent.UpdateLoading(false))
+                },
+                onFailure = { error ->
+                    Log.e("HomeViewModel", "나의 감정 실패: ${error.message}")
                     sendIntent(HomeIntent.UpdateLoading(false))
                 },
             )
@@ -391,6 +470,37 @@ class HomeViewModel @Inject constructor(
                 onFailure = { error ->
                     Log.e("HomeViewModel", "루틴 삭제 실패: ${error.message}")
                     sendIntent(HomeIntent.RestoreRoutinesAfterDeleteFailure(currentRoutines))
+                },
+            )
+        }
+    }
+
+    fun deleteRoutineByDay(routineUiModel: RoutineUiModel) {
+        val currentRoutines = container.stateFlow.value.routines
+        val performedDate = container.stateFlow.value.selectedDate.toString()
+
+        sendIntent(
+            HomeIntent.DeleteRoutineByDayOptimistically(
+                routineId = routineUiModel.routineId,
+                performedDate = performedDate,
+            ),
+        )
+
+        viewModelScope.launch {
+            val routineByDayDeletion = routineUiModel.toRoutineByDayDeletion(performedDate)
+
+            deleteRoutineByDayUseCase(routineByDayDeletion).fold(
+                onSuccess = {
+                    sendIntent(
+                        HomeIntent.ConfirmRoutineByDayDeletion(
+                            routineId = routineUiModel.routineId,
+                            performedDate = performedDate,
+                        ),
+                    )
+                },
+                onFailure = {
+                    Log.e("HomeViewModel", "루틴 삭제 실패: ${it.message}")
+                    sendIntent(HomeIntent.RestoreRoutinesAfterDeleteByDayFailure(currentRoutines))
                 },
             )
         }

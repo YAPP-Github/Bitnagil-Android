@@ -26,12 +26,14 @@ import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.home.component.atom.EmotionBall
 import com.threegap.bitnagil.presentation.home.component.block.SpeechBubbleTooltip
+import com.threegap.bitnagil.presentation.home.model.EmotionBallType
 import com.threegap.bitnagil.presentation.home.util.CollapsibleHeaderState
 import com.threegap.bitnagil.presentation.home.util.rememberCollapsibleHeaderState
 
 @Composable
 fun CollapsibleHomeHeader(
     userName: String,
+    emotionBallType: EmotionBallType?,
     collapsibleHeaderState: CollapsibleHeaderState,
     onEmotionRecordClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -96,7 +98,7 @@ fun CollapsibleHomeHeader(
                         .align(Alignment.BottomEnd),
                 ) {
                     EmotionBall(
-                        emotionType = null,
+                        emotionType = emotionBallType,
                         onClick = {},
                     )
                 }
@@ -149,6 +151,7 @@ private fun GreetingMessage(
 private fun HomeTopBarPreview() {
     CollapsibleHomeHeader(
         userName = "대현",
+        emotionBallType = null,
         collapsibleHeaderState = rememberCollapsibleHeaderState(),
         onEmotionRecordClick = {},
     )

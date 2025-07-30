@@ -5,6 +5,8 @@ import java.time.LocalDate
 
 sealed class HomeIntent : MviIntent {
     data class UpdateLoading(val isLoading: Boolean) : HomeIntent()
+    data class LoadUserProfile(val nickname: String) : HomeIntent()
+    data class LoadMyEmotion(val emotion: EmotionBallType?) : HomeIntent()
     data class LoadWeeklyRoutines(val routines: RoutinesUiModel) : HomeIntent()
     data class OnDateSelect(val date: LocalDate) : HomeIntent()
     data class OnRoutineCompletionToggle(val routineId: String, val isCompleted: Boolean) : HomeIntent()
@@ -13,6 +15,9 @@ sealed class HomeIntent : MviIntent {
     data class DeleteRoutineOptimistically(val routineId: String) : HomeIntent()
     data class ConfirmRoutineDeletion(val routineId: String) : HomeIntent()
     data class RestoreRoutinesAfterDeleteFailure(val backupRoutines: RoutinesUiModel) : HomeIntent()
+    data class DeleteRoutineByDayOptimistically(val routineId: String, val performedDate: String) : HomeIntent()
+    data class ConfirmRoutineByDayDeletion(val routineId: String, val performedDate: String) : HomeIntent()
+    data class RestoreRoutinesAfterDeleteByDayFailure(val backupRoutines: RoutinesUiModel) : HomeIntent()
     data class ShowRoutineDetailsBottomSheet(val routine: RoutineUiModel) : HomeIntent()
     data class ShowDeleteConfirmDialog(val routine: RoutineUiModel) : HomeIntent()
     data object OnPreviousWeekClick : HomeIntent()

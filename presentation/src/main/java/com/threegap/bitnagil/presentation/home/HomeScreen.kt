@@ -81,6 +81,7 @@ fun HomeScreenContainer(
         if (uiState.showDeleteConfirmDialog) {
             DeleteConfirmDialog(
                 onDeleteToday = {
+                    viewModel.deleteRoutineByDay(routine)
                     viewModel.sendIntent(HomeIntent.HideDeleteConfirmDialog)
                 },
                 onDeleteAll = {
@@ -239,7 +240,8 @@ private fun HomeScreen(
         }
 
         CollapsibleHomeHeader(
-            userName = "대현",
+            userName = uiState.userNickname,
+            emotionBallType = uiState.myEmotion,
             collapsibleHeaderState = collapsibleHeaderState,
             onEmotionRecordClick = onRegisterEmotionClick,
         )

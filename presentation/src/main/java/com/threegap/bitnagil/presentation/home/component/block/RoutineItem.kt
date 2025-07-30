@@ -78,6 +78,7 @@ private fun RoutineItemPreview() {
             routineName = "개운하게 일어나기",
             executionTime = "20:30:00",
             isCompleted = false,
+            routineCompletionId = 1,
             isModified = false,
             subRoutines = listOf(
                 SubRoutineUiModel(
@@ -85,6 +86,7 @@ private fun RoutineItemPreview() {
                     historySeq = 1,
                     subRoutineName = "물 마시기",
                     sortOrder = 1,
+                    routineCompletionId = 1,
                     isCompleted = false,
                     isModified = false,
                     routineType = RoutineType.SUB_ROUTINE,
@@ -94,6 +96,7 @@ private fun RoutineItemPreview() {
                     historySeq = 1,
                     subRoutineName = "스트레칭하기",
                     sortOrder = 1,
+                    routineCompletionId = 1,
                     isCompleted = false,
                     isModified = false,
                     routineType = RoutineType.SUB_ROUTINE,
@@ -103,6 +106,7 @@ private fun RoutineItemPreview() {
                     historySeq = 1,
                     subRoutineName = "심호흡하기",
                     sortOrder = 1,
+                    routineCompletionId = 1,
                     isCompleted = false,
                     isModified = false,
                     routineType = RoutineType.SUB_ROUTINE,
