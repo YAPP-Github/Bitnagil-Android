@@ -29,6 +29,7 @@ import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.setting.component.atom.settingtitle.SettingTitle
 import com.threegap.bitnagil.presentation.setting.component.atom.toggleswitch.ToggleSwitch
+import com.threegap.bitnagil.presentation.setting.component.block.ConfirmDialog
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingSideEffect
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingState
 
@@ -48,6 +49,14 @@ fun SettingScreenContainer(
         }
     }
 
+    state.showConfirmDialog?.let { dialogType ->
+        ConfirmDialog(
+            type = dialogType,
+            onDismiss = viewModel::hideConfirmDialog,
+            onConfirm = viewModel::confirmDialogAction,
+        )
+    }
+
     SettingScreen(
         state = state,
         toggleServiceAlarm = viewModel::toggleServiceAlarm,
@@ -56,8 +65,8 @@ fun SettingScreenContainer(
         onClickBack = navigateToBack,
         onClickTermsOfService = navigateToTermsOfService,
         onClickPrivacyPolicy = navigateToPrivacyPolicy,
-        onClickLogout = viewModel::logout,
-        onClickWithdrawal = viewModel::withdrawal,
+        onClickLogout = viewModel::showLogoutDialog,
+        onClickWithdrawal = viewModel::showWithdrawalDialog,
     )
 }
 
@@ -213,6 +222,7 @@ fun SettingScreenPreview() {
             version = "1.0.1",
             latestVersion = "1.0.0",
             loading = false,
+            showConfirmDialog = null,
         ),
         toggleServiceAlarm = {},
         togglePushAlarm = {},
