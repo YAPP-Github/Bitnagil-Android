@@ -10,9 +10,14 @@ import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingAbstractTextItem
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingItem
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingPageInfo
+import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingSetType
 import com.threegap.bitnagil.presentation.onboarding.model.mvi.OnBoardingIntent
 import com.threegap.bitnagil.presentation.onboarding.model.mvi.OnBoardingSideEffect
 import com.threegap.bitnagil.presentation.onboarding.model.mvi.OnBoardingState
+import com.threegap.bitnagil.presentation.onboarding.model.navarg.OnBoardingScreenArg
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
@@ -20,19 +25,23 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
-import javax.inject.Inject
 
-@HiltViewModel
-class OnBoardingViewModel @Inject constructor(
+@HiltViewModel(assistedFactory = OnBoardingViewModel.Factory::class)
+class OnBoardingViewModel @AssistedInject constructor(
     savedStateHandle: SavedStateHandle,
     private val getOnBoardingsUseCase: GetOnBoardingsUseCase,
     private val getRecommendOnBoardingRoutinesUseCase: GetRecommendOnBoardingRoutinesUseCase,
     private val getOnBoardingAbstractUseCase: GetOnBoardingAbstractUseCase,
     private val registerRecommendOnBoardingRoutinesUseCase: RegisterRecommendOnBoardingRoutinesUseCase,
+    @Assisted private val onBoardingArg: OnBoardingScreenArg,
 ) : MviViewModel<OnBoardingState, OnBoardingSideEffect, OnBoardingIntent>(
     initState = OnBoardingState.Loading,
     savedStateHandle = savedStateHandle,
 ) {
+    @AssistedFactory interface Factory {
+        fun create(onBoardingArg: OnBoardingScreenArg): OnBoardingViewModel
+    }
+
     // 내부에 전체 온보딩 항목 저장
     private val onBoardingPageInfos = mutableListOf<OnBoardingPageInfo.SelectOnBoarding>()
 
@@ -68,6 +77,7 @@ class OnBoardingViewModel @Inject constructor(
                     currentOnBoardingPageInfo = onBoardingPageInfos.first(),
                     totalStep = onBoardingPageInfos.size + 2,
                     currentStep = 1,
+                    onBoardingSetType = OnBoardingSetType.fromOnBoardingScreenArg(onBoardingArg),
                 )
             }
 

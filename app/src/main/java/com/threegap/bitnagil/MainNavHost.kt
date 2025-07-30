@@ -11,6 +11,8 @@ import com.threegap.bitnagil.presentation.emotion.EmotionScreenContainer
 import com.threegap.bitnagil.presentation.intro.IntroScreenContainer
 import com.threegap.bitnagil.presentation.login.LoginScreenContainer
 import com.threegap.bitnagil.presentation.onboarding.OnBoardingScreenContainer
+import com.threegap.bitnagil.presentation.onboarding.OnBoardingViewModel
+import com.threegap.bitnagil.presentation.onboarding.model.navarg.OnBoardingScreenArg
 import com.threegap.bitnagil.presentation.setting.SettingScreenContainer
 import com.threegap.bitnagil.presentation.splash.SplashScreenContainer
 import com.threegap.bitnagil.presentation.terms.TermsAgreementScreenContainer
@@ -80,7 +82,7 @@ fun MainNavHost(
                     )
                 },
                 navigateToOnBoarding = {
-                    navigator.navController.navigate(Route.OnBoarding)
+                    navigator.navController.navigate(Route.OnBoarding())
                 },
                 navigateToBack = { navigator.navController.popBackStack() },
             )
@@ -92,7 +94,7 @@ fun MainNavHost(
                     navigator.navController.navigate(Route.Setting)
                 },
                 navigateToOnBoarding = {
-                    navigator.navController.navigate(Route.OnBoarding)
+                    navigator.navController.navigate(Route.OnBoarding(isNew = false))
                 },
                 navigateToNotice = {
                 },
@@ -150,8 +152,20 @@ fun MainNavHost(
             )
         }
 
-        composable<Route.OnBoarding> {
+        composable<Route.OnBoarding> { navBackStackEntry ->
+            val arg = navBackStackEntry.toRoute<Route.OnBoarding>()
+            val onBoardingScreenArg = if (arg.isNew) {
+                OnBoardingScreenArg.NEW
+            } else {
+                OnBoardingScreenArg.RESET
+            }
+
+            val viewModel = hiltViewModel<OnBoardingViewModel, OnBoardingViewModel.Factory> { factory ->
+                factory.create(onBoardingScreenArg)
+            }
+
             OnBoardingScreenContainer(
+                onBoardingViewModel = viewModel,
                 navigateToHome = {
                     navigator.navController.navigate(Route.Home) {
                         popUpTo(navigator.navController.graph.startDestinationId) {

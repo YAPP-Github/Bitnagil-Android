@@ -29,7 +29,9 @@ sealed interface Route {
     data object Setting : Route
 
     @Serializable
-    data object OnBoarding : Route
+    data class OnBoarding(
+        val isNew: Boolean = true,
+    ) : Route
 
     @Serializable
     data class WriteRoutine(
