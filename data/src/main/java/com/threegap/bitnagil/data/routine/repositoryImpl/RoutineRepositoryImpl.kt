@@ -3,8 +3,8 @@ package com.threegap.bitnagil.data.routine.repositoryImpl
 import com.threegap.bitnagil.data.routine.datasource.RoutineRemoteDataSource
 import com.threegap.bitnagil.data.routine.mapper.toDomain
 import com.threegap.bitnagil.data.routine.mapper.toDto
-import com.threegap.bitnagil.domain.routine.model.Routine
 import com.threegap.bitnagil.data.routine.model.request.toDto
+import com.threegap.bitnagil.domain.routine.model.Routine
 import com.threegap.bitnagil.domain.routine.model.RoutineByDayDeletion
 import com.threegap.bitnagil.domain.routine.model.RoutineCompletion
 import com.threegap.bitnagil.domain.routine.model.Routines

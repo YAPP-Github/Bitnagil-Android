@@ -1,7 +1,7 @@
 package com.threegap.bitnagil.data.emotion.datasource
 
-import com.threegap.bitnagil.data.emotion.model.response.MyEmotionResponseDto
 import com.threegap.bitnagil.data.emotion.model.dto.EmotionDto
+import com.threegap.bitnagil.data.emotion.model.response.MyEmotionResponseDto
 import com.threegap.bitnagil.data.emotion.model.response.RegisterEmotionResponse
 
 interface EmotionDataSource {
