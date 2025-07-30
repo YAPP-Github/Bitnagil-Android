@@ -7,7 +7,11 @@ import com.threegap.bitnagil.data.writeroutine.model.request.RegisterRoutineRequ
 import com.threegap.bitnagil.domain.writeroutine.model.RepeatDay
 import com.threegap.bitnagil.domain.writeroutine.model.SubRoutineDiff
 import com.threegap.bitnagil.domain.writeroutine.model.Time
+import com.threegap.bitnagil.domain.writeroutine.model.WriteRoutineEvent
 import com.threegap.bitnagil.domain.writeroutine.repository.WriteRoutineRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import javax.inject.Inject
 
 class WriteRoutineRepositoryImpl @Inject constructor(
@@ -20,7 +24,11 @@ class WriteRoutineRepositoryImpl @Inject constructor(
             executionTime = startTime.toFormattedString(),
             subRoutineName = subRoutines,
         )
-        return writeRoutineDataSource.registerRoutine(request)
+        return writeRoutineDataSource.registerRoutine(request).also {
+            if (it.isSuccess) {
+                _writeRoutineEventFlow.emit(WriteRoutineEvent.AddRoutine)
+            }
+        }
     }
 
     override suspend fun editRoutine(
@@ -40,6 +48,13 @@ class WriteRoutineRepositoryImpl @Inject constructor(
             },
         )
 
-        return writeRoutineDataSource.editRoutine(request)
+        return writeRoutineDataSource.editRoutine(request).also {
+            if (it.isSuccess) {
+                _writeRoutineEventFlow.emit(WriteRoutineEvent.EditRoutine(routineId))
+            }
+        }
     }
+
+    private val _writeRoutineEventFlow = MutableSharedFlow<WriteRoutineEvent>()
+    override suspend fun getWriteRoutineEventFlow(): Flow<WriteRoutineEvent> = _writeRoutineEventFlow.asSharedFlow()
 }
