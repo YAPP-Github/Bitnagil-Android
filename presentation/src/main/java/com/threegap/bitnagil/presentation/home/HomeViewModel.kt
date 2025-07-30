@@ -200,6 +200,30 @@ class HomeViewModel @Inject constructor(
             is HomeIntent.LoadMyEmotion -> {
                 state.copy(myEmotion = intent.emotion)
             }
+
+            is HomeIntent.OnRegisterEmotionClick -> {
+                if (state.myEmotion == null) {
+                    sendSideEffect(HomeSideEffect.NavigateToEmotion)
+                } else {
+                    sendSideEffect(HomeSideEffect.ShowToastWithIcon("선택한 감정 구슬이 이미 반영되었어요."))
+                }
+                null
+            }
+
+            is HomeIntent.OnRegisterRoutineClick -> {
+                sendSideEffect(HomeSideEffect.NavigateToRegisterRoutine)
+                null
+            }
+
+            is HomeIntent.RoutineToggleCompletionFailure -> {
+                sendSideEffect(HomeSideEffect.ShowToast("루틴 완료 상태 저장에 실패했어요.\n다시 시도해 주세요."))
+                null
+            }
+
+            is HomeIntent.NavigateToEditRoutine -> {
+                sendSideEffect(HomeSideEffect.NavigateToEditRoutine(intent.routineId))
+                null
+            }
         }
         return newState
     }
@@ -450,6 +474,7 @@ class HomeViewModel @Inject constructor(
             onFailure = { error ->
                 Log.e("HomeViewModel", "루틴 동기화 실패: ${error.message}")
                 val backupState = backupStatesByDate[dateKey] ?: return
+                sendIntent(HomeIntent.RoutineToggleCompletionFailure)
                 sendIntent(HomeIntent.LoadWeeklyRoutines(backupState))
                 pendingChangesByDate.remove(dateKey)
                 backupStatesByDate.remove(dateKey)
