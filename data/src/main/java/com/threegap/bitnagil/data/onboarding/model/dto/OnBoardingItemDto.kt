@@ -35,25 +35,25 @@ data class OnBoardingItemDto(
         )
 
         val RealOutingZeroPerWeek = OnBoardingItemDto(
-            id = "ZERO_PER_WEEK",
+            id = "NEVER",
             title = "밖에 나가지 않고 집에서만 지냈어요",
             description = null,
         )
 
         val RealOutingOneToTwoPerWeek = OnBoardingItemDto(
-            id = "ONE_TO_TWO_PER_WEEK",
+            id = "SHORT",
             title = "잠깐 외출했어요",
             description = null,
         )
 
         val RealOutingThreeToFourPerWeek = OnBoardingItemDto(
-            id = "THREE_TO_FOUR_PER_WEEK",
+            id = "SOMETIMES",
             title = "가끔 나가요",
             description = null,
         )
 
         val RealOutingMoreThanFivePerWeek = OnBoardingItemDto(
-            id = "MORE_THAN_FIVE_PER_WEEK",
+            id = "OFTEN",
             title = "자주 외출해요",
             description = null,
         )
@@ -83,19 +83,19 @@ data class OnBoardingItemDto(
         )
 
         val TargetOutingOneToTwoPerWeek = OnBoardingItemDto(
-            id = "ONE_TO_TWO_PER_WEEK",
+            id = "ONE_PER_WEEK",
             title = "시작이 더 중요해요",
             description = "일주일에 1회",
         )
 
         val TargetOutingThreeToFourPerWeek = OnBoardingItemDto(
-            id = "THREE_TO_FOUR_PER_WEEK",
+            id = "TWO_TO_THREE_PER_WEEK",
             title = "너무 무리하지 않아도 괜찮아요",
             description = "일주일에 2~3회",
         )
 
         val TargetOutingMoreThenFivePerWeek = OnBoardingItemDto(
-            id = "MORE_THAN_FIVE_PER_WEEK",
+            id = "MORE_THAN_FOUR_PER_WEEK",
             title = "이 정도면 충분히 활력 있는 한 주가 될거에요",
             description = "일주일에 4회 이상",
         )
