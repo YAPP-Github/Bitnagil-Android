@@ -6,6 +6,7 @@ data class SubRoutine(
     val subRoutineName: String,
     val isModified: Boolean,
     val sortOrder: Int,
+    val routineCompletionId: Int?,
     val isCompleted: Boolean,
     val routineType: RoutineType,
 )

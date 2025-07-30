@@ -15,6 +15,8 @@ data class SubRoutineDto(
     val isModified: Boolean,
     @SerialName("sortOrder")
     val sortOrder: Int,
+    @SerialName("routineCompletionId")
+    val routineCompletionId: Int?,
     @SerialName("completeYn")
     val isCompleted: Boolean,
     @SerialName("routineType")

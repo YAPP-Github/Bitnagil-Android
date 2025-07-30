@@ -1,7 +1,9 @@
 package com.threegap.bitnagil.data.emotion.repositoryImpl
 
 import com.threegap.bitnagil.data.emotion.datasource.EmotionDataSource
+import com.threegap.bitnagil.data.emotion.model.response.toDomain
 import com.threegap.bitnagil.domain.emotion.model.Emotion
+import com.threegap.bitnagil.domain.emotion.model.MyEmotion
 import com.threegap.bitnagil.domain.emotion.repository.EmotionRepository
 import javax.inject.Inject
 
@@ -36,4 +38,7 @@ class EmotionRepositoryImpl @Inject constructor(
 
         return emotionDataSource.registerEmotion(selectedEmotion).map { _ -> }
     }
+
+    override suspend fun getMyEmotionMarble(currentDate: String): Result<MyEmotion> =
+        emotionDataSource.getMyEmotionMarble(currentDate).map { it.toDomain() }
 }

@@ -29,6 +29,7 @@ internal fun RoutineDto.toDomain() =
         executionTime = this.executionTime,
         subRoutines = this.subRoutines.sortedBy { it.sortOrder }.map { it.toDomain() },
         isModified = this.isModified,
+        routineCompletionId = this.routineCompletionId,
         isCompleted = this.isCompleted,
         repeatDay = this.repeatDay.map { DayOfWeek.fromString(it) },
         routineType = RoutineType.fromString(this.routineType),
@@ -41,6 +42,7 @@ internal fun SubRoutineDto.toDomain() =
         subRoutineName = this.subRoutineName,
         isModified = this.isModified,
         sortOrder = this.sortOrder,
+        routineCompletionId = this.routineCompletionId,
         isCompleted = this.isCompleted,
         routineType = RoutineType.fromString(this.routineType),
     )

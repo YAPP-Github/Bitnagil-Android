@@ -12,6 +12,8 @@ import com.threegap.bitnagil.data.recommendroutine.datasource.RecommendRoutineDa
 import com.threegap.bitnagil.data.recommendroutine.datasourceImpl.RecommendRoutineDataSourceImpl
 import com.threegap.bitnagil.data.routine.datasource.RoutineRemoteDataSource
 import com.threegap.bitnagil.data.routine.datasourceImpl.RoutineRemoteDataSourceImpl
+import com.threegap.bitnagil.data.user.datasource.UserDataSource
+import com.threegap.bitnagil.data.user.datasourceImpl.UserDataSourceImpl
 import com.threegap.bitnagil.data.writeroutine.datasource.WriteRoutineDataSource
 import com.threegap.bitnagil.data.writeroutine.datasourceImpl.WriteRoutineDataSourceImpl
 import dagger.Binds
@@ -47,6 +49,10 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindWriteRoutineDataSource(writeRoutineDataSourceImpl: WriteRoutineDataSourceImpl): WriteRoutineDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindUserDataSource(userDataSourceImpl: UserDataSourceImpl): UserDataSource
 
     @Binds
     @Singleton

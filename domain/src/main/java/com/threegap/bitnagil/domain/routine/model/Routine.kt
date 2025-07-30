@@ -8,6 +8,7 @@ data class Routine(
     val executionTime: String,
     val subRoutines: List<SubRoutine>,
     val isModified: Boolean,
+    val routineCompletionId: Int?,
     val isCompleted: Boolean,
     val routineType: RoutineType,
 ) {

@@ -19,6 +19,8 @@ data class RoutineDto(
     val subRoutines: List<SubRoutineDto>,
     @SerialName("modifiedYn")
     val isModified: Boolean,
+    @SerialName("routineCompletionId")
+    val routineCompletionId: Int?,
     @SerialName("completeYn")
     val isCompleted: Boolean,
     @SerialName("routineType")

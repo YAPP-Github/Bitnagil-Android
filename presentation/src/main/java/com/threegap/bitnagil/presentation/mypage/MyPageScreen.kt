@@ -17,7 +17,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -77,10 +78,10 @@ private fun MyPageScreen(
         Spacer(modifier = Modifier.height(32.dp))
 
         Image(
-            painter = ColorPainter(BitnagilTheme.colors.coolGray98),
+            imageVector = ImageVector.vectorResource(R.drawable.img_default_progile),
             contentDescription = null,
             modifier = Modifier
-                .size(80.dp)
+                .size(90.dp)
                 .clip(shape = CircleShape),
         )
 

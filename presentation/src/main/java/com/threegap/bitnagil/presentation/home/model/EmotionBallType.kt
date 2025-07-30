@@ -3,6 +3,7 @@ package com.threegap.bitnagil.presentation.home.model
 import androidx.annotation.DrawableRes
 import androidx.compose.ui.graphics.Color
 import com.threegap.bitnagil.designsystem.R
+import com.threegap.bitnagil.domain.emotion.model.Emotion
 
 enum class EmotionBallType(
     @DrawableRes val drawableId: Int,
@@ -39,4 +40,10 @@ enum class EmotionBallType(
         ambientColor = Color(0xFFC71A1A).copy(alpha = 0.28f),
         spotColor = Color(0xFFC71A1A),
     ),
+    ;
+
+    companion object {
+        fun fromDomainEmotion(emotion: Emotion?): EmotionBallType? =
+            emotion?.let { valueOf(it.name) }
+    }
 }

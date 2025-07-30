@@ -1,5 +1,6 @@
 package com.threegap.bitnagil.data.routine.service
 
+import com.threegap.bitnagil.data.routine.model.request.RoutineByDayDeletionRequestDto
 import com.threegap.bitnagil.data.routine.model.request.RoutineCompletionRequestDto
 import com.threegap.bitnagil.data.routine.model.response.RoutineDto
 import com.threegap.bitnagil.data.routine.model.response.RoutinesResponseDto
@@ -7,6 +8,7 @@ import com.threegap.bitnagil.network.model.BaseResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -32,4 +34,9 @@ interface RoutineService {
     suspend fun getRoutine(
         @Path("routineId") routineId: String,
     ): BaseResponse<RoutineDto>
+
+    @HTTP(method = "DELETE", path = "/api/v1/routines/day", hasBody = true)
+    suspend fun deleteRoutineByDay(
+        @Body request: RoutineByDayDeletionRequestDto,
+    ): BaseResponse<Unit>
 }
