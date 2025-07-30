@@ -13,7 +13,6 @@ sealed class SettingIntent : MviIntent {
 
     data class ShowConfirmDialog(val type: ConfirmDialogType) : SettingIntent()
     data object HideConfirmDialog : SettingIntent()
-    data object ConfirmDialogAction : SettingIntent()
     data object ToggleServiceAlarm : SettingIntent()
     data object TogglePushAlarm : SettingIntent()
     data object LogoutLoading : SettingIntent()

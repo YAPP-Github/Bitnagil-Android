@@ -56,10 +56,6 @@ class SettingViewModel @Inject constructor(
                 return state.copy(showConfirmDialog = null)
             }
 
-            is SettingIntent.ConfirmDialogAction -> {
-                return state.copy(showConfirmDialog = null)
-            }
-
             SettingIntent.LogoutSuccess -> {
                 sendSideEffect(SettingSideEffect.NavigateToIntro)
                 return null
@@ -98,7 +94,7 @@ class SettingViewModel @Inject constructor(
     fun confirmDialogAction() {
         val currentDialogType = container.stateFlow.value.showConfirmDialog
 
-        sendIntent(SettingIntent.ConfirmDialogAction)
+        sendIntent(SettingIntent.HideConfirmDialog)
 
         when (currentDialogType) {
             ConfirmDialogType.LOGOUT -> executeLogout()
