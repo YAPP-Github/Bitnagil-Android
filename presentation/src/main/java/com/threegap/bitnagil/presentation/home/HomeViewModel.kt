@@ -11,6 +11,7 @@ import com.threegap.bitnagil.domain.routine.usecase.DeleteRoutineUseCase
 import com.threegap.bitnagil.domain.routine.usecase.FetchWeeklyRoutinesUseCase
 import com.threegap.bitnagil.domain.routine.usecase.RoutineCompletionUseCase
 import com.threegap.bitnagil.domain.user.usecase.FetchUserProfileUseCase
+import com.threegap.bitnagil.domain.writeroutine.usecase.GetWriteRoutineEventFlowUseCase
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
 import com.threegap.bitnagil.presentation.home.model.EmotionBallType
 import com.threegap.bitnagil.presentation.home.model.HomeIntent
@@ -43,6 +44,7 @@ class HomeViewModel @Inject constructor(
     private val routineCompletionUseCase: RoutineCompletionUseCase,
     private val deleteRoutineUseCase: DeleteRoutineUseCase,
     private val deleteRoutineByDayUseCase: DeleteRoutineByDayUseCase,
+    private val getWriteRoutineEventFlowUseCase: GetWriteRoutineEventFlowUseCase,
 ) : MviViewModel<HomeState, HomeSideEffect, HomeIntent>(
     initState = HomeState(),
     savedStateHandle = savedStateHandle,
@@ -52,6 +54,7 @@ class HomeViewModel @Inject constructor(
     private val routineSyncTrigger = MutableSharedFlow<LocalDate>()
 
     init {
+        observeWriteRoutineEvent()
         observeWeekChanges()
         observeRoutineUpdates()
         fetchWeeklyRoutines(container.stateFlow.value.currentWeeks)
@@ -226,6 +229,14 @@ class HomeViewModel @Inject constructor(
             }
         }
         return newState
+    }
+
+    private fun observeWriteRoutineEvent() {
+        viewModelScope.launch {
+            getWriteRoutineEventFlowUseCase().collect {
+                fetchWeeklyRoutines(container.stateFlow.value.currentWeeks)
+            }
+        }
     }
 
     @OptIn(FlowPreview::class)
