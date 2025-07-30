@@ -15,7 +15,6 @@ import com.threegap.bitnagil.presentation.emotion.model.mvi.EmotionState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
-import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import javax.inject.Inject
 
 @HiltViewModel
@@ -78,7 +77,7 @@ class EmotionViewModel @Inject constructor(
                 )
             }
             EmotionIntent.RegisterRecommendRoutinesSuccess -> {
-                postSideEffect(EmotionSideEffect.NavigateToBack)
+                sendSideEffect(EmotionSideEffect.NavigateToBack)
                 return null
             }
             EmotionIntent.BackToSelectEmotionStep -> {
@@ -101,7 +100,7 @@ class EmotionViewModel @Inject constructor(
             }
 
             EmotionIntent.NavigateToBack -> {
-                postSideEffect(EmotionSideEffect.NavigateToBack)
+                sendSideEffect(EmotionSideEffect.NavigateToBack)
                 return null
             }
         }

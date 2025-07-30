@@ -12,13 +12,14 @@ import kotlinx.parcelize.Parcelize
 data class EmotionState(
     val emotions: List<Emotion>,
     val isLoading: Boolean,
-    val recommendRoutines: List<EmotionRecommendRoutineUiModel> = emptyList(),
+    val recommendRoutines: List<EmotionRecommendRoutineUiModel>,
     val step: EmotionScreenStep,
 ) : MviState {
     companion object {
         val Init = EmotionState(
             emotions = emptyList(),
             isLoading = true,
+            recommendRoutines = emptyList(),
             step = EmotionScreenStep.Emotion,
         )
     }
