@@ -25,6 +25,7 @@ import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilFloatingActionMenu
 import com.threegap.bitnagil.designsystem.component.atom.FloatingActionItem
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
+import com.threegap.bitnagil.presentation.common.toast.GlobalBitnagilToast
 import com.threegap.bitnagil.presentation.home.HomeScreenContainer
 import com.threegap.bitnagil.presentation.mypage.MyPageScreenContainer
 import com.threegap.bitnagil.presentation.recommendroutine.RecommendRoutineScreenContainer
@@ -114,8 +115,7 @@ fun HomeNavHost(
                 onToggle = { expanded -> showFloatingOverlay = expanded },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(16.dp)
-                    .padding(bottom = 80.dp),
+                    .padding(end = 16.dp, bottom = 80.dp),
             )
         }
     }
@@ -131,6 +131,7 @@ fun DoubleBackButtonPressedHandler() {
             (context as? Activity)?.finish()
         } else {
             backPressedTimeMillis = System.currentTimeMillis()
+            GlobalBitnagilToast.showWarning("버튼을 한 번 더 누르면 종료됩니다.")
         }
     }
 }
