@@ -124,6 +124,8 @@ class HomeViewModel @Inject constructor(
                     routines = RoutinesUiModel(routinesByDate = updatedRoutinesByDate),
                     showDeleteConfirmDialog = false,
                     deletingRoutine = null,
+                    routineDetailsBottomSheetVisible = false,
+                    selectedRoutine = null,
                 )
             }
 
@@ -184,6 +186,8 @@ class HomeViewModel @Inject constructor(
                     routines = RoutinesUiModel(routinesByDate = updatedRoutinesByDate),
                     showDeleteConfirmDialog = false,
                     deletingRoutine = null,
+                    routineDetailsBottomSheetVisible = false,
+                    selectedRoutine = null,
                 )
             }
 
