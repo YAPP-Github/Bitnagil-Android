@@ -1,7 +1,6 @@
 package com.threegap.bitnagil.domain.writeroutine.repository
 
 import com.threegap.bitnagil.domain.writeroutine.model.RepeatDay
-import com.threegap.bitnagil.domain.writeroutine.model.Routine
 import com.threegap.bitnagil.domain.writeroutine.model.SubRoutineDiff
 import com.threegap.bitnagil.domain.writeroutine.model.Time
 
@@ -20,6 +19,4 @@ interface WriteRoutineRepository {
         startTime: Time,
         subRoutines: List<SubRoutineDiff>,
     ): Result<Unit>
-
-    suspend fun getRoutine(routineId: String): Result<Routine>
 }

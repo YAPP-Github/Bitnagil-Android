@@ -3,6 +3,7 @@ package com.threegap.bitnagil.data.recommendroutine.datasourceImpl
 import com.threegap.bitnagil.data.common.safeApiCall
 import com.threegap.bitnagil.data.recommendroutine.datasource.RecommendRoutineDataSource
 import com.threegap.bitnagil.data.recommendroutine.model.response.RecommendRoutinesDto
+import com.threegap.bitnagil.data.recommendroutine.model.response.RecommendedRoutineDto
 import com.threegap.bitnagil.data.recommendroutine.service.RecommendRoutineService
 import javax.inject.Inject
 
@@ -13,5 +14,10 @@ class RecommendRoutineDataSourceImpl @Inject constructor(
     override suspend fun fetchRecommendRoutines(): Result<RecommendRoutinesDto> =
         safeApiCall {
             recommendRoutineService.fetchRecommendRoutines()
+        }
+
+    override suspend fun getRecommendRoutine(recommendRoutineId: Int): Result<RecommendedRoutineDto> =
+        safeApiCall {
+            recommendRoutineService.getRecommendRoutine(recommendRoutineId)
         }
 }

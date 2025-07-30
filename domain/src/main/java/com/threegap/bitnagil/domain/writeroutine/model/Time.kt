@@ -9,5 +9,5 @@ data class Time(
         require(minute in 0..59) { "Minute must be in range 0..59, but was $minute" }
     }
 
-    fun toFormattedString(): String = "%02d:%02d".format(hour, minute)
+    fun toFormattedString(): String = "%02d:%02d:00".format(hour, minute)
 }

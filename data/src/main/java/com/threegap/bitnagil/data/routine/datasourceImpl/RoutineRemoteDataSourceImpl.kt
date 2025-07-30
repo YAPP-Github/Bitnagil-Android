@@ -5,6 +5,7 @@ import com.threegap.bitnagil.data.common.safeUnitApiCall
 import com.threegap.bitnagil.data.routine.datasource.RoutineRemoteDataSource
 import com.threegap.bitnagil.data.routine.model.request.RoutineByDayDeletionRequestDto
 import com.threegap.bitnagil.data.routine.model.request.RoutineCompletionRequestDto
+import com.threegap.bitnagil.data.routine.model.response.RoutineDto
 import com.threegap.bitnagil.data.routine.model.response.RoutinesResponseDto
 import com.threegap.bitnagil.data.routine.service.RoutineService
 import javax.inject.Inject
@@ -30,5 +31,10 @@ class RoutineRemoteDataSourceImpl @Inject constructor(
     override suspend fun deleteRoutineByDay(routineByDayDeletionRequestDto: RoutineByDayDeletionRequestDto): Result<Unit> =
         safeUnitApiCall {
             routineService.deleteRoutineByDay(routineByDayDeletionRequestDto)
+        }
+
+    override suspend fun getRoutine(routineId: String): Result<RoutineDto> =
+        safeApiCall {
+            routineService.getRoutine(routineId)
         }
 }

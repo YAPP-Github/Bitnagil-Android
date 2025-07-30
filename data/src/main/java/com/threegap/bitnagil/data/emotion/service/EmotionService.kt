@@ -1,7 +1,7 @@
 package com.threegap.bitnagil.data.emotion.service
 
+import com.threegap.bitnagil.data.emotion.model.dto.EmotionDto
 import com.threegap.bitnagil.data.emotion.model.request.RegisterEmotionRequest
-import com.threegap.bitnagil.data.emotion.model.response.GetEmotionsResponse
 import com.threegap.bitnagil.data.emotion.model.response.MyEmotionResponseDto
 import com.threegap.bitnagil.data.emotion.model.response.RegisterEmotionResponse
 import com.threegap.bitnagil.network.model.BaseResponse
@@ -12,7 +12,7 @@ import retrofit2.http.Query
 
 interface EmotionService {
     @GET("/api/v1/emotion-marbles")
-    suspend fun getEmotions(): BaseResponse<GetEmotionsResponse>
+    suspend fun getEmotions(): BaseResponse<List<EmotionDto>>
 
     @POST("/api/v1/emotion-marbles")
     suspend fun postEmotions(
