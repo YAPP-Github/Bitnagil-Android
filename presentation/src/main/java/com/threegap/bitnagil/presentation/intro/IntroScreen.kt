@@ -1,6 +1,7 @@
 package com.threegap.bitnagil.presentation.intro
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -57,7 +58,9 @@ private fun IntroScreen(
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .background(BitnagilTheme.colors.white),
     ) {
         Spacer(modifier = Modifier.height(screenHeight * 0.0748f))
 
