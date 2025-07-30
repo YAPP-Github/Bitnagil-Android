@@ -23,8 +23,10 @@ class SplashViewModel @Inject constructor(
     savedStateHandle = savedStateHandle,
 ) {
 
+    private var hasToken: Boolean? = null
+
     init {
-        checkAutoLogin()
+        checkTokenStatus()
     }
 
     override suspend fun SimpleSyntax<SplashState, SplashSideEffect>.reduceState(
@@ -32,35 +34,48 @@ class SplashViewModel @Inject constructor(
         state: SplashState,
     ): SplashState? =
         when (intent) {
-            is SplashIntent.SetLoading -> {
-                state.copy(isLoading = intent.isLoading)
+
+            is SplashIntent.SetTokenChecked -> {
+                state.copy(isTokenChecked = intent.hasToken != null)
             }
 
             is SplashIntent.NavigateToIntro -> {
                 sendSideEffect(SplashSideEffect.NavigateToIntro)
-                state.copy(isLoading = false)
+                null
             }
 
             is SplashIntent.NavigateToHome -> {
                 sendSideEffect(SplashSideEffect.NavigateToHome)
-                state.copy(isLoading = false)
+                null
             }
         }
 
-    private fun checkAutoLogin() {
+    private fun checkTokenStatus() {
         viewModelScope.launch {
-            sendIntent(SplashIntent.SetLoading(true))
-            val delayDeferred = async { delay(2000L) }
-            val tokenDeferred = async { hasTokenUseCase() }
-
-            delayDeferred.await()
-            val hasToken = tokenDeferred.await()
-
-            if (hasToken) {
-                sendIntent(SplashIntent.NavigateToHome)
-            } else {
-                sendIntent(SplashIntent.NavigateToIntro)
+            try {
+                hasToken = hasTokenUseCase()
+                sendIntent(SplashIntent.SetTokenChecked(hasToken))
+            } catch (e: Exception) {
+                hasToken = false
+                sendIntent(SplashIntent.SetTokenChecked(false))
             }
+        }
+    }
+
+    fun onAnimationCompleted() {
+        val tokenResult = hasToken
+        if (tokenResult == null) {
+            viewModelScope.launch {
+                delay(100)
+                onAnimationCompleted()
+            }
+            return
+        }
+
+        if (tokenResult) {
+            sendIntent(SplashIntent.NavigateToHome)
+        } else {
+            sendIntent(SplashIntent.NavigateToIntro)
         }
     }
 }
