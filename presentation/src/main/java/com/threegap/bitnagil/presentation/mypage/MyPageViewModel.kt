@@ -2,6 +2,7 @@ package com.threegap.bitnagil.presentation.mypage
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.threegap.bitnagil.domain.user.usecase.FetchUserProfileUseCase
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
 import com.threegap.bitnagil.presentation.mypage.model.MyPageIntent
 import com.threegap.bitnagil.presentation.mypage.model.MyPageSideEffect
@@ -14,6 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    private val fetchUserProfileUseCase: FetchUserProfileUseCase,
 ) : MviViewModel<MyPageState, MyPageSideEffect, MyPageIntent>(
     MyPageState.Init,
     savedStateHandle,
@@ -24,7 +26,18 @@ class MyPageViewModel @Inject constructor(
 
     private fun loadMyPageInfo() {
         viewModelScope.launch {
-            sendIntent(MyPageIntent.LoadMyPageSuccess(name = "이름", profileUrl = "profileUrl"))
+            fetchUserProfileUseCase().fold(
+                onSuccess = {
+                    sendIntent(
+                        MyPageIntent.LoadMyPageSuccess(
+                            name = it.nickname,
+                            profileUrl = "profileUrl",
+                        ),
+                    )
+                },
+                onFailure = {
+                },
+            )
         }
     }
 
