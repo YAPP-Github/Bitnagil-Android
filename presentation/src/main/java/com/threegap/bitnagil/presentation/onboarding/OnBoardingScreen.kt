@@ -131,9 +131,11 @@ fun OnBoardingScreenPreview() {
     OnBoardingScreen(
         state = OnBoardingState.Idle(
             nextButtonEnable = false,
-            currentOnBoardingPageInfo = OnBoardingPageInfo.RecommendRoutines(listOf(
-                OnBoardingItem("1", "루틴명", "세부 루틴 한 줄 설명", null),
-            )),
+            currentOnBoardingPageInfo = OnBoardingPageInfo.RecommendRoutines(
+                listOf(
+                    OnBoardingItem("1", "루틴명", "세부 루틴 한 줄 설명", null),
+                ),
+            ),
             totalStep = 5,
             currentStep = 1,
             onBoardingSetType = OnBoardingSetType.RESET,

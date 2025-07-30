@@ -58,8 +58,8 @@ fun EmotionScreenContainer(
         }
     }
 
-    when(state.step) {
-        EmotionScreenStep.Emotion ->  EmotionScreen(
+    when (state.step) {
+        EmotionScreenStep.Emotion -> EmotionScreen(
             state = state,
             onClickPreviousButton = navigateToBack,
             onClickEmotion = viewModel::selectEmotion,
@@ -69,7 +69,7 @@ fun EmotionScreenContainer(
             onClickPreviousButton = viewModel::moveToPrev,
             onClickRoutine = viewModel::selectRecommendRoutine,
             onClickRegisterRecommendRoutines = viewModel::registerRecommendRoutines,
-            onClickSkip = navigateToBack
+            onClickSkip = navigateToBack,
         )
     }
 }
@@ -164,7 +164,6 @@ private fun EmotionRecommendRoutineScreen(
                 style = BitnagilTheme.typography.title2Bold,
             )
 
-
             Spacer(modifier = Modifier.height(10.dp))
 
             Text(
@@ -172,7 +171,6 @@ private fun EmotionRecommendRoutineScreen(
                 color = BitnagilTheme.colors.coolGray50,
                 style = BitnagilTheme.typography.body2Medium,
             )
-
 
             Spacer(modifier = Modifier.height(28.dp))
 
@@ -249,8 +247,8 @@ private fun EmotionRecommendRoutineScreenPreview() {
                         name = "루틴 이름",
                         description = "루틴 설명",
                         selected = true,
-                    )
-                )
+                    ),
+                ),
             ),
             onClickPreviousButton = {},
             onClickRoutine = {},

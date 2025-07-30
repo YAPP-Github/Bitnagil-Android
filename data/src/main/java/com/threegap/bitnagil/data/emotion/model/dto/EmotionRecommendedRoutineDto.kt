@@ -15,7 +15,7 @@ data class EmotionRecommendedRoutineDto(
     @SerialName("recommendedSubRoutineSearchResult")
     val recommendedSubRoutineSearchResult: List<EmotionRecommendedSubRoutineDto>,
 ) {
-    fun toEmotionRecommendRoutine() : EmotionRecommendRoutine {
+    fun toEmotionRecommendRoutine(): EmotionRecommendRoutine {
         return EmotionRecommendRoutine(
             routineId = recommendedRoutineId.toString(),
             routineName = recommendedRoutineName,

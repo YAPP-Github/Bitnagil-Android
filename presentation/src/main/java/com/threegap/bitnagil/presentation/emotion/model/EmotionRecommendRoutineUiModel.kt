@@ -13,8 +13,8 @@ data class EmotionRecommendRoutineUiModel(
 ) : Parcelable {
     companion object {
         fun fromEmotionRecommendRoutine(
-            emotionRecommendRoutine: EmotionRecommendRoutine
-        ) : EmotionRecommendRoutineUiModel {
+            emotionRecommendRoutine: EmotionRecommendRoutine,
+        ): EmotionRecommendRoutineUiModel {
             return EmotionRecommendRoutineUiModel(
                 id = emotionRecommendRoutine.routineId,
                 name = emotionRecommendRoutine.routineName,

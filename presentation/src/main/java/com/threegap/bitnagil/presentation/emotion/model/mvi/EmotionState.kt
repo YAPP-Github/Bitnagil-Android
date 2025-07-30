@@ -19,7 +19,7 @@ data class EmotionState(
         val Init = EmotionState(
             emotions = emptyList(),
             isLoading = true,
-            step = EmotionScreenStep.Emotion
+            step = EmotionScreenStep.Emotion,
         )
     }
 

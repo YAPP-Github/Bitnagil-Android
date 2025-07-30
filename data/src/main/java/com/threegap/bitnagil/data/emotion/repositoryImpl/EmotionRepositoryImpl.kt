@@ -39,7 +39,8 @@ class EmotionRepositoryImpl @Inject constructor(
 
         return emotionDataSource.registerEmotion(selectedEmotion).map {
             it.recommendedRoutines.map {
-                emotionRecommendedRoutineDto -> emotionRecommendedRoutineDto.toEmotionRecommendRoutine()
+                    emotionRecommendedRoutineDto ->
+                emotionRecommendedRoutineDto.toEmotionRecommendRoutine()
             }
         }
     }

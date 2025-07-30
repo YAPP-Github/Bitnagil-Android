@@ -135,7 +135,7 @@ class EmotionViewModel @Inject constructor(
         viewModelScope.launch {
             val currentState = stateFlow.value
 
-            when(currentState.step) {
+            when (currentState.step) {
                 EmotionScreenStep.Emotion -> sendIntent(EmotionIntent.NavigateToBack)
                 EmotionScreenStep.RecommendRoutines -> sendIntent(EmotionIntent.BackToSelectEmotionStep)
             }
