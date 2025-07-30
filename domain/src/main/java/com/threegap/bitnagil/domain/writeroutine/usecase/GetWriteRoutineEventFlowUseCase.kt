@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetWriteRoutineEventFlowUseCase @Inject constructor(
-    private val repository: WriteRoutineRepository
-){
-    suspend operator fun invoke() : Flow<WriteRoutineEvent> = repository.getWriteRoutineEventFlow()
+    private val repository: WriteRoutineRepository,
+) {
+    suspend operator fun invoke(): Flow<WriteRoutineEvent> = repository.getWriteRoutineEventFlow()
 }

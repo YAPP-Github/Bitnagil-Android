@@ -44,7 +44,7 @@ class HomeViewModel @Inject constructor(
     private val routineCompletionUseCase: RoutineCompletionUseCase,
     private val deleteRoutineUseCase: DeleteRoutineUseCase,
     private val deleteRoutineByDayUseCase: DeleteRoutineByDayUseCase,
-    private val getWriteRoutineEventFlowUseCase: GetWriteRoutineEventFlowUseCase
+    private val getWriteRoutineEventFlowUseCase: GetWriteRoutineEventFlowUseCase,
 ) : MviViewModel<HomeState, HomeSideEffect, HomeIntent>(
     initState = HomeState(),
     savedStateHandle = savedStateHandle,
