@@ -101,8 +101,20 @@ fun MainNavHost(
                     navigator.navController.navigate(Route.OnBoarding(isNew = false))
                 },
                 navigateToNotice = {
+                    navigator.navController.navigate(
+                        Route.WebView(
+                            title = "공지 사항",
+                            url = "https://complex-wombat-99f.notion.site/23ff4587491d80efa0a5e4baece6017b?source=copy_link",
+                        )
+                    )
                 },
                 navigateToQnA = {
+                    navigator.navController.navigate(
+                        Route.WebView(
+                            title = "자주 묻는 질문",
+                            url = "https://complex-wombat-99f.notion.site/23ff4587491d80659ae3ea392afbc05e?source=copy_link",
+                        )
+                    )
                 },
                 navigateToRegisterRoutine = { routineId ->
                     navigator.navController.navigate(Route.WriteRoutine(routineId = routineId))
