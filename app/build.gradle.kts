@@ -54,7 +54,6 @@ android {
                 ?: System.getenv("BITNAGIL_DEV_URL")
                 ?: throw GradleException("bitnagil.dev.url 값이 없습니다.")
             buildConfigField("String", "BASE_URL", "\"$devUrl\"")
-            applicationIdSuffix = ".debug"
         }
 
         release {
