@@ -2,7 +2,6 @@ package com.threegap.bitnagil.presentation.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,6 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
+import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.login.kakao.KakaoLoginHandlerImpl
 import com.threegap.bitnagil.presentation.login.model.LoginSideEffect
 import org.orbitmvi.orbit.compose.collectSideEffect
@@ -82,7 +83,8 @@ private fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
-            .background(BitnagilTheme.colors.white),
+            .background(BitnagilTheme.colors.white)
+            .systemBarsPadding(),
     ) {
         Spacer(modifier = Modifier.height(screenHeight * 0.0748f))
 
@@ -111,7 +113,7 @@ private fun LoginScreen(
             modifier = Modifier
                 .padding(start = 16.dp, end = 16.dp, bottom = 20.dp)
                 .height(54.dp)
-                .clickable { onKakaoLoginClick() }
+                .clickableWithoutRipple { onKakaoLoginClick() }
                 .background(
                     color = BitnagilTheme.colors.kakao,
                     shape = RoundedCornerShape(12.dp),
@@ -122,7 +124,7 @@ private fun LoginScreen(
         ) {
             BitnagilIcon(
                 id = R.drawable.ic_kakao_login,
-                modifier = Modifier.padding(end = 8.dp)
+                modifier = Modifier.padding(end = 8.dp),
             )
             Text(
                 text = "카카오로 시작하기",
