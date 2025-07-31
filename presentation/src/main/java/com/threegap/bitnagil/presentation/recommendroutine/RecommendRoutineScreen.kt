@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -81,7 +82,8 @@ private fun RecommendRoutineScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(BitnagilTheme.colors.white),
+            .background(BitnagilTheme.colors.white)
+            .statusBarsPadding(),
     ) {
         BitnagilTopBar(title = "추천 루틴")
 
