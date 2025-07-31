@@ -103,7 +103,7 @@ fun HomeNavHost(
                     FloatingActionItem(
                         icon = R.drawable.ic_report,
                         text = "제보하기",
-                        onClick = {},
+                        onClick = { GlobalBitnagilToast.showWarning("제보하기 기능은 추후 제공될 예정입니다.") },
                     ),
                     FloatingActionItem(
                         icon = R.drawable.ic_add_routine,

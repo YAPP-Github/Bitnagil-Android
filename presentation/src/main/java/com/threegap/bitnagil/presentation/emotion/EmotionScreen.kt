@@ -148,7 +148,8 @@ private fun EmotionRecommendRoutineScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = BitnagilTheme.colors.coolGray99),
+            .background(color = BitnagilTheme.colors.coolGray99)
+            .statusBarsPadding(),
     ) {
         BitnagilProgressTopBar(
             onBackClick = onClickPreviousButton,
