@@ -5,5 +5,5 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class SplashState(
-    val isLoading: Boolean = false,
+    val isTokenChecked: Boolean = false,
 ) : MviState

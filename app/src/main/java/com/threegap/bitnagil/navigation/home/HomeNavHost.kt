@@ -47,7 +47,7 @@ fun HomeNavHost(
 
     DoubleBackButtonPressedHandler()
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = modifier.fillMaxSize()) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             bottomBar = {

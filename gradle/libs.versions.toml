@@ -51,6 +51,7 @@ material = "1.12.0"
 orbit = "6.1.0"
 javax = "1"
 kakaoLogin = "2.21.4"
+lottie-compose = "6.6.0"
 
 [libraries]
 ## Android Gradle Plugin
@@ -117,6 +118,7 @@ kotlin-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coro
 ## Other
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 kakao-v2-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakaoLogin" }
+lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie-compose" }
 
 [bundles]
 androidx-core = [

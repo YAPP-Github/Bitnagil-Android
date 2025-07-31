@@ -33,7 +33,11 @@ fun MainNavHost(
     ) {
         composable<Route.Splash> {
             SplashScreenContainer(
-                navigateToIntro = { navigator.navController.navigate(Route.Intro) },
+                navigateToIntro = {
+                    navigator.navController.navigate(Route.Intro) {
+                        popUpTo<Route.Splash> { inclusive = true }
+                    }
+                },
                 navigateToHome = {
                     navigator.navController.navigate(Route.Home) {
                         popUpTo(navigator.navController.graph.startDestinationId) {

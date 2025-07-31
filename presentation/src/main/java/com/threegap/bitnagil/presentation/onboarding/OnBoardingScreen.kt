@@ -3,6 +3,7 @@ package com.threegap.bitnagil.presentation.onboarding
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -66,6 +67,7 @@ private fun OnBoardingScreen(
 ) {
     Column(
         modifier = Modifier
+            .statusBarsPadding()
             .background(BitnagilTheme.colors.coolGray99),
     ) {
         BitnagilProgressTopBar(
