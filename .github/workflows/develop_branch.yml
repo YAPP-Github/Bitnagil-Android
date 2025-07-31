@@ -19,7 +19,7 @@ jobs:
           RELEASE_STORE_BASE_64: ${{ secrets.RELEASE_STORE_BASE_64 }}
         run: |
           echo $RELEASE_STORE_BASE_64 > encoded_keystore.txt
-          base64 -d -o release.jks < encoded_keystore.txt
+          base64 --decode encoded_keystore.txt > release.jks
 
       - name: Generate local.properties
         env:
