@@ -2,8 +2,8 @@ package com.threegap.bitnagil.presentation.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,7 +29,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
-import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.login.kakao.KakaoLoginHandlerImpl
 import com.threegap.bitnagil.presentation.login.model.LoginSideEffect
 import org.orbitmvi.orbit.compose.collectSideEffect
@@ -108,32 +107,28 @@ private fun LoginScreen(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Box(
+        Row(
             modifier = Modifier
                 .padding(start = 16.dp, end = 16.dp, bottom = 20.dp)
-                .clickableWithoutRipple { onKakaoLoginClick() }
+                .height(54.dp)
+                .clickable { onKakaoLoginClick() }
                 .background(
                     color = BitnagilTheme.colors.kakao,
                     shape = RoundedCornerShape(12.dp),
                 )
-                .fillMaxWidth()
-                .padding(vertical = 18.dp),
-            contentAlignment = Alignment.Center,
-
+                .fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                BitnagilIcon(
-                    id = R.drawable.ic_kakao_login,
-                )
-                Text(
-                    text = "카카오로 시작하기",
-                    color = BitnagilTheme.colors.black,
-                    style = BitnagilTheme.typography.button2,
-                )
-            }
+            BitnagilIcon(
+                id = R.drawable.ic_kakao_login,
+                modifier = Modifier.padding(end = 8.dp)
+            )
+            Text(
+                text = "카카오로 시작하기",
+                color = BitnagilTheme.colors.black,
+                style = BitnagilTheme.typography.button2,
+            )
         }
     }
 }
