@@ -31,7 +31,6 @@ fun BitnagilTopBar(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .systemBarsPadding()
             .height(54.dp),
     ) {
         if (showBackButton) {
