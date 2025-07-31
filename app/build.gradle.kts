@@ -17,6 +17,21 @@ android {
             }
         }
 
+    signingConfigs {
+        create("release") {
+            keyAlias = properties["release.key.alias"] as? String
+                ?: System.getenv("RELEASE_KEY_ALIAS")
+                ?: throw GradleException("RELEASE_KEY_ALIAS 값이 없습니다.")
+            keyPassword = properties["release.key.password"] as? String
+                ?: System.getenv("RELEASE_KEY_PASSWORD")
+                ?: throw GradleException("RELEASE_KEY_PASSWORD 값이 없습니다.")
+            storePassword = properties["release.keystore.password"] as? String
+                ?: System.getenv("RELEASE_KEYSTORE_PASSWORD")
+                ?: throw GradleException("RELEASE_KEYSTORE_PASSWORD 값이 없습니다.")
+            storeFile = File("${properties["release.keystore.path"]}")
+        }
+    }
+
     defaultConfig {
         applicationId = "com.threegap.bitnagil"
 
@@ -51,6 +66,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 
