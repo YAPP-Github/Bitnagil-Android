@@ -29,7 +29,6 @@ import com.threegap.bitnagil.designsystem.component.block.BitnagilOptionButton
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.setting.component.atom.settingtitle.SettingTitle
-import com.threegap.bitnagil.presentation.setting.component.atom.toggleswitch.ToggleSwitch
 import com.threegap.bitnagil.presentation.setting.component.block.ConfirmDialog
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingSideEffect
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingState
@@ -102,38 +101,6 @@ private fun SettingScreen(
                 .verticalScroll(scrollState),
         ) {
             Spacer(modifier = Modifier.height(32.dp))
-
-            SettingTitle("알림")
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp)
-                    .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text("서비스 이용 알림", style = BitnagilTheme.typography.body1Regular)
-                ToggleSwitch(checked = state.useServiceAlarm, onCheckedChange = { toggleServiceAlarm() })
-            }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp)
-                    .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text("푸시알림", style = BitnagilTheme.typography.body1Regular)
-                ToggleSwitch(checked = state.usePushAlarm, onCheckedChange = { togglePushAlarm() })
-            }
-
-            Spacer(modifier = Modifier.height(6.dp))
-
-            HorizontalDivider(modifier = Modifier.height(6.dp), thickness = 6.dp, color = BitnagilTheme.colors.coolGray98)
-
-            Spacer(modifier = Modifier.height(18.dp))
 
             SettingTitle("정보")
 

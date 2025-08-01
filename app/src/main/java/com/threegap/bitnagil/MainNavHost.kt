@@ -88,7 +88,11 @@ fun MainNavHost(
                 navigateToOnBoarding = {
                     navigator.navController.navigate(Route.OnBoarding())
                 },
-                navigateToBack = { navigator.navController.popBackStack() },
+                navigateToBack = {
+                    if (navigator.navController.previousBackStackEntry != null) {
+                        navigator.navController.popBackStack()
+                    }
+                },
             )
         }
 
@@ -133,14 +137,20 @@ fun MainNavHost(
             BitnagilWebViewScreen(
                 title = webViewRoute.title,
                 url = webViewRoute.url,
-                onBackClick = { navigator.navController.popBackStack() },
+                onBackClick = {
+                    if (navigator.navController.previousBackStackEntry != null) {
+                        navigator.navController.popBackStack()
+                    }
+                },
             )
         }
 
         composable<Route.Setting> {
             SettingScreenContainer(
                 navigateToBack = {
-                    navigator.navController.popBackStack()
+                    if (navigator.navController.previousBackStackEntry != null) {
+                        navigator.navController.popBackStack()
+                    }
                 },
                 navigateToTermsOfService = {
                     navigator.navController.navigate(
@@ -190,7 +200,9 @@ fun MainNavHost(
                     }
                 },
                 navigateToBack = {
-                    navigator.navController.popBackStack()
+                    if (navigator.navController.previousBackStackEntry != null) {
+                        navigator.navController.popBackStack()
+                    }
                 },
             )
         }
@@ -210,7 +222,9 @@ fun MainNavHost(
             WriteRoutineScreenContainer(
                 viewModel = viewModel,
                 navigateToBack = {
-                    navigator.navController.popBackStack()
+                    if (navigator.navController.previousBackStackEntry != null) {
+                        navigator.navController.popBackStack()
+                    }
                 },
             )
         }
@@ -218,7 +232,9 @@ fun MainNavHost(
         composable<Route.Emotion> {
             EmotionScreenContainer(
                 navigateToBack = {
-                    navigator.navController.popBackStack()
+                    if (navigator.navController.previousBackStackEntry != null) {
+                        navigator.navController.popBackStack()
+                    }
                 },
             )
         }
