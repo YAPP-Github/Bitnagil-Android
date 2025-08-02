@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Bitnagil" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Base.Theme.Bitnagil" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.Bitnagil" parent="Base.Theme.Bitnagil">
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
 </resources>

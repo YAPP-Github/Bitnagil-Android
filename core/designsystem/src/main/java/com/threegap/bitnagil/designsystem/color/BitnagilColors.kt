@@ -1,0 +1,74 @@
+package com.threegap.bitnagil.designsystem.color
+
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.Color
+
+@Immutable
+data class BitnagilColors(
+    val white: Color = White,
+    val black: Color = Black,
+    val kakao: Color = Kakao,
+    val error: Color = Error,
+    val emotionHappy: Color = EmotionHappy,
+    val emotionLethargy: Color = EmotionLethargy,
+    val emotionLonely: Color = EmotionLonely,
+    val emotionSad: Color = EmotionSad,
+    val emotionAnxiety: Color = EmotionAnxiety,
+    val progressBarGradientStartColor: Color = ProgressBarGradientStartColor,
+    val progressBarGradientEndColor: Color = ProgressBarGradientEndColor,
+    val homeGradientStartColor: Color = HomeGradientStartColor,
+    val homeGradientEndColor: Color = HomeGradientEndColor,
+    val coolGray99: Color = CoolGray99,
+    val coolGray98: Color = CoolGray98,
+    val coolGray97: Color = CoolGray97,
+    val coolGray96: Color = CoolGray96,
+    val coolGray95: Color = CoolGray95,
+    val coolGray90: Color = CoolGray90,
+    val coolGray80: Color = CoolGray80,
+    val coolGray70: Color = CoolGray70,
+    val coolGray60: Color = CoolGray60,
+    val coolGray50: Color = CoolGray50,
+    val coolGray40: Color = CoolGray40,
+    val coolGray30: Color = CoolGray30,
+    val coolGray20: Color = CoolGray20,
+    val coolGray10: Color = CoolGray10,
+    val coolGray7: Color = CoolGray7,
+    val coolGray5: Color = CoolGray5,
+    val navy900: Color = Navy900,
+    val navy800: Color = Navy800,
+    val navy700: Color = Navy700,
+    val navy600: Color = Navy600,
+    val navy500: Color = Navy500,
+    val navy400: Color = Navy400,
+    val navy300: Color = Navy300,
+    val navy200: Color = Navy200,
+    val navy100: Color = Navy100,
+    val navy50: Color = Navy50,
+    val lightBlue900: Color = LightBlue900,
+    val lightBlue800: Color = LightBlue800,
+    val lightBlue700: Color = LightBlue700,
+    val lightBlue600: Color = LightBlue600,
+    val lightBlue500: Color = LightBlue500,
+    val lightBlue400: Color = LightBlue400,
+    val lightBlue300: Color = LightBlue300,
+    val lightBlue200: Color = LightBlue200,
+    val lightBlue100: Color = LightBlue100,
+    val lightBlue75: Color = LightBlue75,
+    val lightBlue50: Color = LightBlue50,
+    val orange900: Color = Orange900,
+    val orange800: Color = Orange800,
+    val orange700: Color = Orange700,
+    val orange600: Color = Orange600,
+    val orange500: Color = Orange500,
+    val orange400: Color = Orange400,
+    val orange300: Color = Orange300,
+    val orange200: Color = Orange200,
+    val orange100: Color = Orange100,
+    val orange50: Color = Orange50,
+)
+
+internal fun bitnagilColorsLight(): BitnagilColors = BitnagilColors()
+internal fun bitnagilColorsDark(): BitnagilColors = BitnagilColors()
+
+internal val LocalBitnagilColors = staticCompositionLocalOf { bitnagilColorsLight() }
