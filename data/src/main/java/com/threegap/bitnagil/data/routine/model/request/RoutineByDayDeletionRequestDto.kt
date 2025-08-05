@@ -10,6 +10,8 @@ data class RoutineByDayDeletionRequestDto(
     val routineCompletionId: Int?,
     @SerialName("routineId")
     val routineId: String,
+    @SerialName("routineType")
+    val routineType: String,
     @SerialName("subRoutineInfosForDelete")
     val subRoutineInfosForDelete: List<SubRoutineDeletionInfoDto>,
     @SerialName("performedDate")
@@ -22,6 +24,7 @@ fun RoutineByDayDeletion.toDto() =
     RoutineByDayDeletionRequestDto(
         routineCompletionId = this.routineCompletionId,
         routineId = this.routineId,
+        routineType = this.routineType.name,
         subRoutineInfosForDelete = this.subRoutineInfosForDelete.map { it.toDto() },
         performedDate = this.performedDate,
         historySeq = this.historySeq,
