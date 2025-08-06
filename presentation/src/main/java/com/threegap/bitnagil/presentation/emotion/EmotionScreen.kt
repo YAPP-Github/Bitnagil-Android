@@ -236,7 +236,7 @@ private fun EmotionScreenPreview() {
                         imageUrl = "https://bitnagil-s3.s3.ap-northeast-2.amazonaws.com/home_satisfaction.png",
                         emotionMarbleName = "emotionMarbleName",
                         offlineBackupImageResourceId = null,
-                    )
+                    ),
                 ),
                 isLoading = false,
                 step = EmotionScreenStep.Emotion,
@@ -260,7 +260,7 @@ private fun EmotionRecommendRoutineScreenPreview() {
                         imageUrl = "https://bitnagil-s3.s3.ap-northeast-2.amazonaws.com/home_satisfaction.png",
                         emotionMarbleName = "emotionMarbleName",
                         offlineBackupImageResourceId = null,
-                    )
+                    ),
                 ),
                 isLoading = false,
                 step = EmotionScreenStep.RecommendRoutines,

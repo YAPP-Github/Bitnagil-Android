@@ -19,7 +19,7 @@ fun GetEmotionResponse.toDomain(): Emotion? {
         Emotion(
             emotionType = emotionMarbleType,
             emotionMarbleName = emotionMarbleName,
-            imageUrl = imageUrl
+            imageUrl = imageUrl,
         )
     } else {
         null

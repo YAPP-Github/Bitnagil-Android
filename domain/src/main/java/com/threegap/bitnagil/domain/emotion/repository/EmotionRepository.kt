@@ -1,8 +1,8 @@
 package com.threegap.bitnagil.domain.emotion.repository
 
-import com.threegap.bitnagil.domain.emotion.model.EmotionRecommendRoutine
 import com.threegap.bitnagil.domain.emotion.model.Emotion
 import com.threegap.bitnagil.domain.emotion.model.EmotionChangeEvent
+import com.threegap.bitnagil.domain.emotion.model.EmotionRecommendRoutine
 import kotlinx.coroutines.flow.Flow
 
 interface EmotionRepository {

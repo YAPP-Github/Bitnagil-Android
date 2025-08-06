@@ -1,8 +1,8 @@
 package com.threegap.bitnagil.presentation.emotion.model
 
 import android.os.Parcelable
-import com.threegap.bitnagil.domain.emotion.model.Emotion
 import com.threegap.bitnagil.designsystem.R
+import com.threegap.bitnagil.domain.emotion.model.Emotion
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
