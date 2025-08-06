@@ -3,6 +3,7 @@ package com.threegap.bitnagil.presentation.home
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.threegap.bitnagil.domain.emotion.usecase.GetEmotionChangeEventFlowUseCase
 import com.threegap.bitnagil.domain.emotion.usecase.GetEmotionUseCase
 import com.threegap.bitnagil.domain.routine.model.RoutineCompletion
 import com.threegap.bitnagil.domain.routine.model.RoutineCompletionInfo
@@ -45,6 +46,7 @@ class HomeViewModel @Inject constructor(
     private val deleteRoutineUseCase: DeleteRoutineUseCase,
     private val deleteRoutineByDayUseCase: DeleteRoutineByDayUseCase,
     private val getWriteRoutineEventFlowUseCase: GetWriteRoutineEventFlowUseCase,
+    private val getEmotionChangeEventFlowUseCase: GetEmotionChangeEventFlowUseCase,
 ) : MviViewModel<HomeState, HomeSideEffect, HomeIntent>(
     initState = HomeState(),
     savedStateHandle = savedStateHandle,
@@ -55,6 +57,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         observeWriteRoutineEvent()
+        observeEmotionChangeEvent()
         observeWeekChanges()
         observeRoutineUpdates()
         fetchWeeklyRoutines(container.stateFlow.value.currentWeeks)
@@ -234,7 +237,15 @@ class HomeViewModel @Inject constructor(
     private fun observeWriteRoutineEvent() {
         viewModelScope.launch {
             getWriteRoutineEventFlowUseCase().collect {
-                fetchWeeklyRoutines(container.stateFlow.value.currentWeeks)
+                fetchWeeklyRoutines(stateFlow.value.currentWeeks)
+            }
+        }
+    }
+
+    private fun observeEmotionChangeEvent() {
+        viewModelScope.launch {
+            getEmotionChangeEventFlowUseCase().collect {
+                getMyEmotion(stateFlow.value.selectedDate)
             }
         }
     }
