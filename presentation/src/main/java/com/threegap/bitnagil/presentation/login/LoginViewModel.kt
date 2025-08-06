@@ -4,10 +4,7 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.common.model.ClientError
-import com.kakao.sdk.common.model.ClientErrorCause
 import com.threegap.bitnagil.domain.auth.usecase.LoginUseCase
-import com.threegap.bitnagil.domain.error.model.BitnagilError
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
 import com.threegap.bitnagil.presentation.login.model.LoginIntent
 import com.threegap.bitnagil.presentation.login.model.LoginSideEffect
@@ -19,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
     private val loginUseCase: LoginUseCase,
 ) : MviViewModel<LoginState, LoginSideEffect, LoginIntent>(
     initState = LoginState(),
@@ -49,7 +46,6 @@ class LoginViewModel @Inject constructor(
             }
 
             is LoginIntent.KakaoTalkLoginCancel -> {
-                sendSideEffect(LoginSideEffect.RequestKakaoAccountLogin)
                 state.copy(isLoading = false)
             }
 
@@ -64,11 +60,6 @@ class LoginViewModel @Inject constructor(
             when {
                 token != null -> {
                     processKakaoLoginSuccess(token)
-                }
-
-                error is ClientError && error.reason == ClientErrorCause.Cancelled -> {
-                    Log.e("KakaoLogin", "카카오 로그인 취소", error)
-                    sendIntent(LoginIntent.KakaoTalkLoginCancel)
                 }
 
                 error != null -> {
@@ -90,9 +81,6 @@ class LoginViewModel @Inject constructor(
             },
             onFailure = { e ->
                 sendIntent(LoginIntent.LoginFailure)
-                if (e is BitnagilError) {
-                    Log.e("Login", "${e.code} ${e.message}")
-                }
                 Log.e("Login", "${e.message}")
             },
         )

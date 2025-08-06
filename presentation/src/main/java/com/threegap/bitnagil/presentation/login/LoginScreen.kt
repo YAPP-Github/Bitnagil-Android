@@ -44,12 +44,6 @@ fun LoginScreenContainer(
 
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
-            is LoginSideEffect.RequestKakaoAccountLogin -> {
-                KakaoLoginHandlerImpl.accountLogin(context) { token, error ->
-                    viewModel.kakaoLogin(token, error)
-                }
-            }
-
             is LoginSideEffect.NavigateToHome -> {
                 navigateToHome()
             }
