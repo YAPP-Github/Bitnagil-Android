@@ -1,10 +1,7 @@
 package com.threegap.bitnagil.domain.emotion.model
 
-enum class Emotion {
-    CALM,
-    VITALITY,
-    LETHARGY,
-    ANXIETY,
-    SATISFACTION,
-    FATIGUE,
-}
+data class Emotion(
+    val emotionType: String,
+    val emotionMarbleName: String,
+    val imageUrl: String,
+)

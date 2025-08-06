@@ -1,5 +1,6 @@
 package com.threegap.bitnagil.data.emotion.model.dto
 
+import com.threegap.bitnagil.domain.emotion.model.Emotion
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -11,4 +12,11 @@ data class EmotionDto(
     val emotionMarbleName: String,
     @SerialName("imageUrl")
     val imageUrl: String,
-)
+) {
+    fun toDomain(): Emotion =
+        Emotion(
+            emotionType = emotionMarbleType,
+            emotionMarbleName = emotionMarbleName,
+            imageUrl = imageUrl,
+        )
+}
