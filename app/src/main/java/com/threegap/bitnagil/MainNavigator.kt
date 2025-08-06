@@ -9,6 +9,13 @@ class MainNavigator(
     val navController: NavHostController,
 ) {
     val startDestination = Route.Splash
+
+    internal fun navigateToHomeAndClearStack() =
+        navController.navigate(Route.Home) {
+            popUpTo(0) {
+                inclusive = true
+            }
+        }
 }
 
 @Composable
