@@ -39,6 +39,7 @@ fun RoutineUiModel.toRoutineByDayDeletion(performedDate: String): RoutineByDayDe
     RoutineByDayDeletion(
         routineCompletionId = this.routineCompletionId,
         routineId = this.routineId,
+        routineType = this.routineType,
         subRoutineInfosForDelete = this.subRoutines.map { it.toSubRoutineDeletionInfo() },
         performedDate = performedDate,
         historySeq = this.historySeq,
