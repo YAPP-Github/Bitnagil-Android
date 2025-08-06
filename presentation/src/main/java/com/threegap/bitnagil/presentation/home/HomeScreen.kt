@@ -95,7 +95,7 @@ fun HomeScreenContainer(
                 onEdit = { viewModel.sendIntent(HomeIntent.NavigateToEditRoutine(routine.routineId)) },
                 onDelete = {
                     if (routine.repeatDay.isEmpty()) {
-                        viewModel.deleteRoutine(routine.routineId)
+                        viewModel.deleteRoutineByDay(routine)
                     } else {
                         viewModel.sendIntent(HomeIntent.ShowDeleteConfirmDialog(routine))
                     }
