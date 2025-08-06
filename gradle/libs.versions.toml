@@ -52,6 +52,7 @@ orbit = "6.1.0"
 javax = "1"
 kakaoLogin = "2.21.4"
 lottie-compose = "6.6.0"
+coil = "3.3.0"
 
 [libraries]
 ## Android Gradle Plugin
@@ -115,6 +116,10 @@ androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "j
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 kotlin-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 
+## coil
+coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
+coil-network = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
+
 ## Other
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 kakao-v2-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakaoLogin" }
@@ -169,6 +174,11 @@ orbit = [
     "orbit-core",
     "orbit-compose",
     "orbit-viewmodel"
+]
+
+coil = [
+    "coil-compose",
+    "coil-network"
 ]
 
 [plugins]
