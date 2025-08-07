@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -56,6 +57,10 @@ private fun IntroScreen(
     val screenHeight = with(LocalDensity.current) {
         windowInfo.containerSize.height.toDp()
     }
+    val screenWidth = with(LocalDensity.current) {
+        windowInfo.containerSize.width.toDp()
+    }
+    val widthRatio = 260f / 360f
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -64,24 +69,26 @@ private fun IntroScreen(
             .statusBarsPadding()
             .background(BitnagilTheme.colors.white),
     ) {
-        Spacer(modifier = Modifier.height(screenHeight * 0.0748f))
+        Spacer(modifier = Modifier.height(screenHeight * 0.105f))
 
         Text(
             text = "당신의 하루 리듬을 이해하고,\n작은 변화를 함께 시작해볼게요.",
             color = BitnagilTheme.colors.navy500,
             style = BitnagilTheme.typography.title2Bold,
             textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(60.dp),
         )
 
-        Spacer(modifier = Modifier.height(screenHeight * 0.151f))
+        Spacer(modifier = Modifier.height(screenHeight * 0.136f))
 
         Image(
             painter = painterResource(R.drawable.intro_character),
             contentDescription = null,
             contentScale = ContentScale.Fit,
             modifier = Modifier
-                .padding(50.dp)
+                .width(screenWidth * widthRatio)
                 .aspectRatio(260f / 295f),
         )
 

@@ -8,7 +8,7 @@ enum class UserRole {
     fun isGuest() = this == GUEST
 
     companion object {
-        fun from(value: String): UserRole =
+        fun fromString(value: String): UserRole =
             when (value) {
                 "USER" -> USER
                 "GUEST" -> GUEST
