@@ -245,7 +245,8 @@ class HomeViewModel @Inject constructor(
     private fun observeEmotionChangeEvent() {
         viewModelScope.launch {
             getEmotionChangeEventFlowUseCase().collect {
-                getMyEmotion(stateFlow.value.selectedDate)
+                val currentDate = LocalDate.now()
+                getMyEmotion(currentDate)
             }
         }
     }
