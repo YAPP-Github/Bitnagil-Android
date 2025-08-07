@@ -173,6 +173,10 @@ private fun RecommendRoutineScreen(
                         onAddRoutineClick = { onRegisterRoutineClick(routine.id.toString()) },
                     )
                 }
+
+                item {
+                    Spacer(modifier = Modifier.height(110.dp))
+                }
             }
         }
     }
