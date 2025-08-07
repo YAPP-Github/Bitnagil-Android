@@ -3,9 +3,12 @@ package com.threegap.bitnagil.data.emotion.repositoryImpl
 import com.threegap.bitnagil.data.emotion.datasource.EmotionDataSource
 import com.threegap.bitnagil.data.emotion.model.response.toDomain
 import com.threegap.bitnagil.domain.emotion.model.Emotion
+import com.threegap.bitnagil.domain.emotion.model.EmotionChangeEvent
 import com.threegap.bitnagil.domain.emotion.model.EmotionRecommendRoutine
-import com.threegap.bitnagil.domain.emotion.model.MyEmotion
 import com.threegap.bitnagil.domain.emotion.repository.EmotionRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import javax.inject.Inject
 
 class EmotionRepositoryImpl @Inject constructor(
@@ -13,38 +16,26 @@ class EmotionRepositoryImpl @Inject constructor(
 ) : EmotionRepository {
     override suspend fun getEmotions(): Result<List<Emotion>> {
         return emotionDataSource.getEmotions().map { response ->
-            response.mapNotNull {
-                when (it.emotionMarbleType) {
-                    "CALM" -> Emotion.CALM
-                    "VITALITY" -> Emotion.VITALITY
-                    "LETHARGY" -> Emotion.LETHARGY
-                    "ANXIETY" -> Emotion.ANXIETY
-                    "SATISFACTION" -> Emotion.SATISFACTION
-                    "FATIGUE" -> Emotion.FATIGUE
-                    else -> null
-                }
-            }
+            response.map { it.toDomain() }
         }
     }
 
-    override suspend fun registerEmotion(emotion: Emotion): Result<List<EmotionRecommendRoutine>> {
-        val selectedEmotion = when (emotion) {
-            Emotion.CALM -> "CALM"
-            Emotion.VITALITY -> "VITALITY"
-            Emotion.LETHARGY -> "LETHARGY"
-            Emotion.ANXIETY -> "ANXIETY"
-            Emotion.SATISFACTION -> "SATISFACTION"
-            Emotion.FATIGUE -> "FATIGUE"
-        }
-
-        return emotionDataSource.registerEmotion(selectedEmotion).map {
+    override suspend fun registerEmotion(emotionMarbleType: String): Result<List<EmotionRecommendRoutine>> {
+        return emotionDataSource.registerEmotion(emotionMarbleType).map {
             it.recommendedRoutines.map {
                     emotionRecommendedRoutineDto ->
                 emotionRecommendedRoutineDto.toEmotionRecommendRoutine()
             }
+        }.also {
+            if (it.isSuccess) {
+                _emotionChangeEventFlow.emit(EmotionChangeEvent.ChangeEmotion(emotionMarbleType))
+            }
         }
     }
 
-    override suspend fun getMyEmotionMarble(currentDate: String): Result<MyEmotion> =
-        emotionDataSource.getMyEmotionMarble(currentDate).map { it.toDomain() }
+    override suspend fun getEmotionMarble(currentDate: String): Result<Emotion?> =
+        emotionDataSource.getEmotionMarble(currentDate).map { it.toDomain() }
+
+    private val _emotionChangeEventFlow = MutableSharedFlow<EmotionChangeEvent>()
+    override suspend fun getEmotionChangeEventFlow(): Flow<EmotionChangeEvent> = _emotionChangeEventFlow.asSharedFlow()
 }
