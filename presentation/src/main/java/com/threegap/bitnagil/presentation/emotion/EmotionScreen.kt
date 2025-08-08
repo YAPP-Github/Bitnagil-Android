@@ -86,8 +86,8 @@ private fun EmotionScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .statusBarsPadding()
-            .background(color = BitnagilTheme.colors.white),
+            .background(color = BitnagilTheme.colors.white)
+            .statusBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         BitnagilTopBar(

@@ -67,8 +67,8 @@ private fun OnBoardingScreen(
 ) {
     Column(
         modifier = Modifier
-            .statusBarsPadding()
-            .background(BitnagilTheme.colors.coolGray99),
+            .background(BitnagilTheme.colors.coolGray99)
+            .statusBarsPadding(),
     ) {
         BitnagilProgressTopBar(
             onBackClick = onClickPreviousInSelectOnBoarding,

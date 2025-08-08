@@ -82,8 +82,8 @@ private fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
-            .statusBarsPadding()
-            .background(BitnagilTheme.colors.white),
+            .background(BitnagilTheme.colors.white)
+            .statusBarsPadding(),
     ) {
         Spacer(modifier = Modifier.height(screenHeight * 0.105f))
 
