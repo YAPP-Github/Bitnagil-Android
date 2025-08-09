@@ -105,11 +105,11 @@ private fun WriteRoutineScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(color = BitnagilTheme.colors.white)
             .statusBarsPadding()
             .windowInsetsPadding(
                 WindowInsets.ime.exclude(WindowInsets.navigationBars),
-            )
-            .background(color = BitnagilTheme.colors.white),
+            ),
     ) {
         BitnagilTopBar(
             title = if (state.writeRoutineType == WriteRoutineType.ADD) "루틴 등록" else "루틴 수정",

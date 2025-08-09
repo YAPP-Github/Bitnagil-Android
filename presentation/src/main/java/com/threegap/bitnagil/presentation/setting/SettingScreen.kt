@@ -85,8 +85,8 @@ private fun SettingScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .statusBarsPadding()
-            .background(color = BitnagilTheme.colors.white),
+            .background(color = BitnagilTheme.colors.white)
+            .statusBarsPadding(),
     ) {
         BitnagilTopBar(
             title = "설정",

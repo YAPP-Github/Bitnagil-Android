@@ -101,8 +101,8 @@ private fun TermsAgreementScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .statusBarsPadding()
-            .background(BitnagilTheme.colors.white),
+            .background(BitnagilTheme.colors.white)
+            .statusBarsPadding(),
     ) {
         BitnagilTopBar(
             title = "약관 동의",
