@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilIconButton
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 
 @Composable
@@ -39,8 +41,11 @@ fun BitnagilTopBar(
                     .padding(start = 4.dp)
                     .clickableWithoutRipple { onBackClick() },
             ) {
-                BitnagilIcon(
-                    id = R.drawable.ic_back_arrow_36,
+                BitnagilIconButton(
+                    id = R.drawable.ic_chevron_left_lg,
+                    onClick = onBackClick,
+                    modifier = Modifier.size(40.dp),
+                    tint = BitnagilTheme.colors.coolGray10,
                 )
             }
         }

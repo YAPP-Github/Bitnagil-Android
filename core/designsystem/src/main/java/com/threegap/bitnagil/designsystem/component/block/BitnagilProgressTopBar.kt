@@ -5,15 +5,16 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
-import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilIconButton
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilProgressBar
-import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 
 @Composable
 fun BitnagilProgressTopBar(
@@ -29,9 +30,11 @@ fun BitnagilProgressTopBar(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        BitnagilIcon(
-            id = R.drawable.ic_back_arrow_36,
-            modifier = Modifier.clickableWithoutRipple(onClick = onBackClick),
+        BitnagilIconButton(
+            id = R.drawable.ic_chevron_left_lg,
+            onClick = onBackClick,
+            modifier = Modifier.size(40.dp),
+            tint = BitnagilTheme.colors.coolGray10,
         )
 
         BitnagilProgressBar(
