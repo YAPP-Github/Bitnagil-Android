@@ -7,7 +7,11 @@ import com.threegap.bitnagil.data.onboarding.model.request.RegisterOnBoardingRec
 import com.threegap.bitnagil.domain.onboarding.model.OnBoarding
 import com.threegap.bitnagil.domain.onboarding.model.OnBoardingAbstract
 import com.threegap.bitnagil.domain.onboarding.model.OnBoardingRecommendRoutine
+import com.threegap.bitnagil.domain.onboarding.model.OnBoardingRecommendRoutineEvent
 import com.threegap.bitnagil.domain.onboarding.repository.OnBoardingRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import javax.inject.Inject
 
 class OnBoardingRepositoryImpl @Inject constructor(
@@ -52,6 +56,13 @@ class OnBoardingRepositoryImpl @Inject constructor(
             recommendedRoutineIds = selectedRecommendRoutineIds.mapNotNull { it.toIntOrNull() },
         )
 
-        return onBoardingDataSource.registerRecommendRoutineList(selectedRecommendRoutineIds = request.recommendedRoutineIds)
+        return onBoardingDataSource.registerRecommendRoutineList(selectedRecommendRoutineIds = request.recommendedRoutineIds).also {
+            if (it.isSuccess) {
+                _onBoardingRecommendRoutineEventFlow.emit(OnBoardingRecommendRoutineEvent.AddRoutines(selectedRecommendRoutineIds))
+            }
+        }
     }
+
+    private val _onBoardingRecommendRoutineEventFlow = MutableSharedFlow<OnBoardingRecommendRoutineEvent>()
+    override suspend fun getOnBoardingRecommendRoutineEventFlow(): Flow<OnBoardingRecommendRoutineEvent> = _onBoardingRecommendRoutineEventFlow.asSharedFlow()
 }
