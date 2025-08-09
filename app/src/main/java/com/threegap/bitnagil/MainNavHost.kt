@@ -38,6 +38,16 @@ fun MainNavHost(
                         popUpTo<Route.Splash> { inclusive = true }
                     }
                 },
+                navigateToTermsAgreement = {
+                    navigator.navController.navigate(Route.TermsAgreement) {
+                        popUpTo<Route.Splash> { inclusive = true }
+                    }
+                },
+                navigateToOnboarding = {
+                    navigator.navController.navigate(Route.OnBoarding()) {
+                        popUpTo<Route.Splash> { inclusive = true }
+                    }
+                },
                 navigateToHome = navigator::navigateToHomeAndClearStack,
             )
         }
