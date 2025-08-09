@@ -31,4 +31,9 @@ class AuthRemoteDataSourceImpl @Inject constructor(
         safeUnitApiCall {
             authService.postWithdrawal()
         }
+
+    override suspend fun reissueToken(refreshToken: String): Result<LoginResponseDto> =
+        safeApiCall {
+            authService.postReissueToken(refreshToken)
+        }
 }
