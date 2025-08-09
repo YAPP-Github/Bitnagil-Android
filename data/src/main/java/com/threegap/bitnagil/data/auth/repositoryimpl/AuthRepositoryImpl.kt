@@ -18,11 +18,6 @@ class AuthRepositoryImpl @Inject constructor(
         authRemoteDataSource.login(socialAccessToken, LoginRequestDto(socialType))
             .map { it.toDomain() }
 
-    override suspend fun hasToken(): Boolean = authLocalDataSource.hasToken()
-
-    override suspend fun updateAuthToken(accessToken: String, refreshToken: String): Result<Unit> =
-        authLocalDataSource.updateAuthToken(accessToken, refreshToken)
-
     override suspend fun submitAgreement(termsAgreement: TermsAgreement): Result<Unit> =
         authRemoteDataSource.submitAgreement(
             termsAgreement.toDto(),
@@ -39,4 +34,16 @@ class AuthRepositoryImpl @Inject constructor(
             if (it.isSuccess) authLocalDataSource.clearAuthToken()
         }
     }
+
+    override suspend fun reissueToken(refreshToken: String): Result<AuthSession> =
+        authRemoteDataSource.reissueToken(refreshToken).map { it.toDomain() }
+
+    override suspend fun getRefreshToken(): String? =
+        authLocalDataSource.getRefreshToken()
+
+    override suspend fun updateAuthToken(accessToken: String, refreshToken: String): Result<Unit> =
+        authLocalDataSource.updateAuthToken(accessToken, refreshToken)
+
+    override suspend fun clearAuthToken(): Result<Unit> =
+        authLocalDataSource.clearAuthToken()
 }
