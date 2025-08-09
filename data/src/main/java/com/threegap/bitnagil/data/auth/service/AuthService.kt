@@ -29,7 +29,7 @@ interface AuthService {
     suspend fun postLogout(): BaseResponse<Unit>
 
     @POST("/api/v1/auth/token/reissue")
-    @Headers("No-Service-Token: true")
+    @Headers("No-Service-Token: true", "Auto-Login: true")
     suspend fun postReissueToken(
         @Header("Refresh-Token") refreshToken: String,
     ): BaseResponse<LoginResponseDto>

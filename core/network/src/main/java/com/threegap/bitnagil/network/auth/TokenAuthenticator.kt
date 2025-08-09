@@ -19,6 +19,7 @@ class TokenAuthenticator(
     private val authMutex = Mutex()
 
     override fun authenticate(route: Route?, response: Response): Request? {
+        if (response.request.header(AUTO_LOGIN_HEADER) != null) return null
         if (!shouldRetry(response)) return null
 
         val currentToken = runBlocking { tokenProvider.getAccessToken() }
@@ -82,6 +83,7 @@ class TokenAuthenticator(
     private fun buildRequestWithToken(originalRequest: Request, token: String): Request {
         return originalRequest.newBuilder()
             .header(AUTHORIZATION, "$TOKEN_PREFIX $token")
+            .removeHeader(AUTO_LOGIN_HEADER)
             .build()
     }
 
@@ -96,5 +98,6 @@ class TokenAuthenticator(
         private const val AUTHORIZATION = "Authorization"
         private const val TOKEN_PREFIX = "Bearer"
         private const val SUCCESS_CODE = "CO000"
+        private const val AUTO_LOGIN_HEADER = "Auto-Login"
     }
 }
