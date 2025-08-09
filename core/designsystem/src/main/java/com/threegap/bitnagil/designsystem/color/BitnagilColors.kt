@@ -10,11 +10,6 @@ data class BitnagilColors(
     val black: Color = Black,
     val kakao: Color = Kakao,
     val error: Color = Error,
-    val emotionHappy: Color = EmotionHappy,
-    val emotionLethargy: Color = EmotionLethargy,
-    val emotionLonely: Color = EmotionLonely,
-    val emotionSad: Color = EmotionSad,
-    val emotionAnxiety: Color = EmotionAnxiety,
     val progressBarGradientStartColor: Color = ProgressBarGradientStartColor,
     val progressBarGradientEndColor: Color = ProgressBarGradientEndColor,
     val homeGradientStartColor: Color = HomeGradientStartColor,
@@ -66,6 +61,7 @@ data class BitnagilColors(
     val orange200: Color = Orange200,
     val orange100: Color = Orange100,
     val orange50: Color = Orange50,
+    val orange25: Color = Orange25,
 )
 
 internal fun bitnagilColorsLight(): BitnagilColors = BitnagilColors()
