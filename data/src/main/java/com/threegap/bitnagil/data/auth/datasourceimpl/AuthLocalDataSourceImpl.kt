@@ -9,10 +9,10 @@ class AuthLocalDataSourceImpl @Inject constructor(
     private val authTokenDataStore: AuthTokenDataStore,
 ) : AuthLocalDataSource {
 
-    override suspend fun getRefreshToken(): String? {
-        val refreshToken = authTokenDataStore.tokenFlow.firstOrNull()?.refreshToken
-        return refreshToken
-    }
+    override suspend fun getRefreshToken(): String? =
+        runCatching {
+            authTokenDataStore.tokenFlow.firstOrNull()?.refreshToken
+        }.getOrNull()
 
     override suspend fun updateAuthToken(accessToken: String, refreshToken: String): Result<Unit> =
         runCatching {
