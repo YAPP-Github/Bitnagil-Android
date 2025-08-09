@@ -11,6 +11,7 @@ import com.threegap.bitnagil.presentation.splash.model.SplashState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
 import javax.inject.Inject
 
@@ -62,8 +63,14 @@ class SplashViewModel @Inject constructor(
 
     private fun performAutoLogin() {
         viewModelScope.launch {
-            val userRole = autoLoginUseCase()
-            sendIntent(SplashIntent.SetUserRole(userRole))
+            try {
+                val userRole = withTimeoutOrNull(5000) {
+                    autoLoginUseCase()
+                }
+                sendIntent(SplashIntent.SetUserRole(userRole))
+            } catch (e: Exception) {
+                sendIntent(SplashIntent.SetUserRole(null))
+            }
         }
     }
 
