@@ -6,10 +6,8 @@ import com.threegap.bitnagil.data.auth.model.response.LoginResponseDto
 
 interface AuthRemoteDataSource {
     suspend fun login(socialAccessToken: String, loginRequestDto: LoginRequestDto): Result<LoginResponseDto>
-
     suspend fun submitAgreement(termsAgreementRequestDto: TermsAgreementRequestDto): Result<Unit>
-
     suspend fun logout(): Result<Unit>
-
     suspend fun withdrawal(): Result<Unit>
+    suspend fun reissueToken(refreshToken: String): Result<LoginResponseDto>
 }

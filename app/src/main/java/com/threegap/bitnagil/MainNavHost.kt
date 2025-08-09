@@ -38,13 +38,17 @@ fun MainNavHost(
                         popUpTo<Route.Splash> { inclusive = true }
                     }
                 },
-                navigateToHome = {
-                    navigator.navController.navigate(Route.Home) {
-                        popUpTo(navigator.navController.graph.startDestinationId) {
-                            inclusive = true
-                        }
+                navigateToTermsAgreement = {
+                    navigator.navController.navigate(Route.TermsAgreement) {
+                        popUpTo<Route.Splash> { inclusive = true }
                     }
                 },
+                navigateToOnboarding = {
+                    navigator.navController.navigate(Route.OnBoarding()) {
+                        popUpTo<Route.Splash> { inclusive = true }
+                    }
+                },
+                navigateToHome = navigator::navigateToHomeAndClearStack,
             )
         }
 
@@ -56,13 +60,7 @@ fun MainNavHost(
 
         composable<Route.Login> {
             LoginScreenContainer(
-                navigateToHome = {
-                    navigator.navController.navigate(Route.Home) {
-                        popUpTo(navigator.navController.graph.startDestinationId) {
-                            inclusive = true
-                        }
-                    }
-                },
+                navigateToHome = navigator::navigateToHomeAndClearStack,
                 navigateToTermsAgreement = { navigator.navController.navigate(Route.TermsAgreement) },
             )
         }
@@ -192,13 +190,7 @@ fun MainNavHost(
 
             OnBoardingScreenContainer(
                 onBoardingViewModel = viewModel,
-                navigateToHome = {
-                    navigator.navController.navigate(Route.Home) {
-                        popUpTo(navigator.navController.graph.startDestinationId) {
-                            inclusive = true
-                        }
-                    }
-                },
+                navigateToHome = navigator::navigateToHomeAndClearStack,
                 navigateToBack = {
                     if (navigator.navController.previousBackStackEntry != null) {
                         navigator.navController.popBackStack()

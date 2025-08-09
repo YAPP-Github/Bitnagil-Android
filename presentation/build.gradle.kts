@@ -19,6 +19,7 @@ dependencies {
     implementation(libs.kakao.v2.user)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.lottie.compose)
+    implementation(libs.bundles.coil)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlin.coroutines.test)

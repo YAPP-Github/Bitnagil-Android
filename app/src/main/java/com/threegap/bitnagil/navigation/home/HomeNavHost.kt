@@ -5,6 +5,7 @@ import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -53,11 +54,12 @@ fun HomeNavHost(
             bottomBar = {
                 HomeBottomNavigationBar(navController = navigator.navController)
             },
-            content = { _ ->
+            contentWindowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
+            content = { innerPadding ->
                 NavHost(
                     navController = navigator.navController,
                     startDestination = navigator.startDestination,
-                    modifier = modifier,
+                    modifier = modifier.padding(innerPadding),
                 ) {
                     composable(HomeRoute.Home.route) {
                         HomeScreenContainer(

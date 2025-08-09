@@ -11,7 +11,7 @@ internal fun LoginResponseDto.toDomain() =
     AuthSession(
         accessToken = this.accessToken,
         refreshToken = this.refreshToken,
-        role = UserRole.from(this.role),
+        role = UserRole.fromString(this.role),
     )
 
 // toDto

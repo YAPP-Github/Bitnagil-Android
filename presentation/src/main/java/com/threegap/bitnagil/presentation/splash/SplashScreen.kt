@@ -29,12 +29,16 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 @Composable
 fun SplashScreenContainer(
     navigateToIntro: () -> Unit,
+    navigateToTermsAgreement: () -> Unit,
+    navigateToOnboarding: () -> Unit,
     navigateToHome: () -> Unit,
     viewModel: SplashViewModel = hiltViewModel(),
 ) {
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
             is SplashSideEffect.NavigateToIntro -> navigateToIntro()
+            is SplashSideEffect.NavigateToTermsAgreement -> navigateToTermsAgreement()
+            is SplashSideEffect.NavigateToOnboarding -> navigateToOnboarding()
             is SplashSideEffect.NavigateToHome -> navigateToHome()
         }
     }

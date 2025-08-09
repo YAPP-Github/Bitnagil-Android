@@ -6,9 +6,9 @@ import com.threegap.bitnagil.domain.emotion.usecase.GetEmotionsUseCase
 import com.threegap.bitnagil.domain.emotion.usecase.RegisterEmotionUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.RegisterRecommendOnBoardingRoutinesUseCase
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
-import com.threegap.bitnagil.presentation.emotion.model.Emotion
 import com.threegap.bitnagil.presentation.emotion.model.EmotionRecommendRoutineUiModel
 import com.threegap.bitnagil.presentation.emotion.model.EmotionScreenStep
+import com.threegap.bitnagil.presentation.emotion.model.EmotionUiModel
 import com.threegap.bitnagil.presentation.emotion.model.mvi.EmotionIntent
 import com.threegap.bitnagil.presentation.emotion.model.mvi.EmotionSideEffect
 import com.threegap.bitnagil.presentation.emotion.model.mvi.EmotionState
@@ -36,7 +36,7 @@ class EmotionViewModel @Inject constructor(
             getEmotionsUseCase().fold(
                 onSuccess = { emotions ->
                     sendIntent(
-                        EmotionIntent.EmotionListLoadSuccess(emotions = emotions.map { Emotion.fromDomain(it) }),
+                        EmotionIntent.EmotionListLoadSuccess(emotionTypeUiModels = emotions.map { EmotionUiModel.fromDomain(it) }),
                     )
                 },
                 onFailure = {
@@ -50,7 +50,7 @@ class EmotionViewModel @Inject constructor(
         when (intent) {
             is EmotionIntent.EmotionListLoadSuccess -> {
                 return state.copy(
-                    emotions = intent.emotions,
+                    emotionTypeUiModels = intent.emotionTypeUiModels,
                     isLoading = false,
                 )
             }
@@ -106,13 +106,13 @@ class EmotionViewModel @Inject constructor(
         }
     }
 
-    fun selectEmotion(emotion: Emotion) {
+    fun selectEmotion(emotionType: String) {
         val isLoading = stateFlow.value.isLoading
         if (isLoading) return
 
         viewModelScope.launch {
             sendIntent(EmotionIntent.RegisterEmotionLoading)
-            registerEmotionUseCase(emotion = emotion.toDomain()).fold(
+            registerEmotionUseCase(emotionType = emotionType).fold(
                 onSuccess = { emotionRecommendRoutines ->
                     val recommendRoutines = emotionRecommendRoutines.map { EmotionRecommendRoutineUiModel.fromEmotionRecommendRoutine(it) }
                     sendIntent(EmotionIntent.RegisterEmotionSuccess(recommendRoutines))

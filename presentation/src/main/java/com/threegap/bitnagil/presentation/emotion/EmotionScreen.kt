@@ -1,11 +1,11 @@
 package com.threegap.bitnagil.presentation.emotion
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,23 +22,26 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilSelectButton
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButtonColor
-import com.threegap.bitnagil.designsystem.component.block.BitnagilProgressTopBar
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
-import com.threegap.bitnagil.presentation.emotion.model.Emotion
 import com.threegap.bitnagil.presentation.emotion.model.EmotionRecommendRoutineUiModel
 import com.threegap.bitnagil.presentation.emotion.model.EmotionScreenStep
+import com.threegap.bitnagil.presentation.emotion.model.EmotionUiModel
 import com.threegap.bitnagil.presentation.emotion.model.mvi.EmotionSideEffect
 import com.threegap.bitnagil.presentation.emotion.model.mvi.EmotionState
 
@@ -67,7 +70,6 @@ fun EmotionScreenContainer(
         )
         EmotionScreenStep.RecommendRoutines -> EmotionRecommendRoutineScreen(
             state = state,
-            onClickPreviousButton = viewModel::moveToPrev,
             onClickRoutine = viewModel::selectRecommendRoutine,
             onClickRegisterRecommendRoutines = viewModel::registerRecommendRoutines,
             onClickSkip = navigateToBack,
@@ -79,13 +81,13 @@ fun EmotionScreenContainer(
 private fun EmotionScreen(
     state: EmotionState,
     onClickPreviousButton: () -> Unit,
-    onClickEmotion: (Emotion) -> Unit,
+    onClickEmotion: (String) -> Unit,
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .statusBarsPadding()
-            .background(color = BitnagilTheme.colors.white),
+            .background(color = BitnagilTheme.colors.white)
+            .statusBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         BitnagilTopBar(
@@ -117,18 +119,24 @@ private fun EmotionScreen(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalArrangement = Arrangement.spacedBy(28.dp),
         ) {
-            items(state.emotions) { emotion ->
+            items(state.emotionTypeUiModels) { emotion ->
                 Column(
                     modifier = Modifier
-                        .clickableWithoutRipple { onClickEmotion(emotion) },
+                        .clickableWithoutRipple { onClickEmotion(emotion.emotionType) },
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    Image(
-                        painter = painterResource(id = emotion.imageResourceId),
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(emotion.imageUrl)
+                            .crossfade(true)
+                            .build(),
+                        modifier = Modifier.aspectRatio(1f),
                         contentDescription = null,
+                        error = emotion.offlineBackupImageResourceId?.let { painterResource(it) },
                     )
+
                     Text(
-                        text = emotion.emotionName,
+                        text = emotion.emotionMarbleName,
                         style = BitnagilTheme.typography.body1Regular.copy(color = BitnagilTheme.colors.coolGray20),
                     )
                 }
@@ -140,7 +148,6 @@ private fun EmotionScreen(
 @Composable
 private fun EmotionRecommendRoutineScreen(
     state: EmotionState,
-    onClickPreviousButton: () -> Unit,
     onClickRoutine: (String) -> Unit,
     onClickRegisterRecommendRoutines: () -> Unit,
     onClickSkip: () -> Unit,
@@ -149,73 +156,65 @@ private fun EmotionRecommendRoutineScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(color = BitnagilTheme.colors.coolGray99)
-            .statusBarsPadding(),
+            .statusBarsPadding()
+            .padding(start = 16.dp, end = 16.dp, bottom = 20.dp, top = 32.dp),
     ) {
-        BitnagilProgressTopBar(
-            onBackClick = onClickPreviousButton,
-            progress = 1f,
+        Spacer(modifier = Modifier.height(54.dp))
+
+        Text(
+            text = "오늘 감정에 따른\n루틴을 추천드릴께요!",
+            color = BitnagilTheme.colors.navy500,
+            style = BitnagilTheme.typography.title2Bold,
         )
 
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Text(
+            text = "오늘 당신의 감정 상태에 맞춰 구성된 맞춤 루틴이에요.\n원하는 루틴을 선택해서 가볍게 시작해보세요.",
+            color = BitnagilTheme.colors.coolGray50,
+            style = BitnagilTheme.typography.body2Medium,
+        )
+
+        Spacer(modifier = Modifier.height(28.dp))
+
+        val scrollState = rememberScrollState()
         Column(
             modifier = Modifier
                 .weight(1f)
-                .padding(start = 16.dp, end = 16.dp, bottom = 20.dp, top = 32.dp),
+                .verticalScroll(state = scrollState),
         ) {
-            Text(
-                text = "오늘 감정에 따른\n루틴을 추천드릴께요!",
-                color = BitnagilTheme.colors.navy500,
-                style = BitnagilTheme.typography.title2Bold,
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Text(
-                text = "오늘 당신의 감정 상태에 맞춰 구성된 맞춤 루틴이에요.\n원하는 루틴을 선택해서 가볍게 시작해보세요.",
-                color = BitnagilTheme.colors.coolGray50,
-                style = BitnagilTheme.typography.body2Medium,
-            )
-
-            Spacer(modifier = Modifier.height(28.dp))
-
-            val scrollState = rememberScrollState()
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(state = scrollState),
-            ) {
-                for (recommendRoutine in state.recommendRoutines) {
-                    BitnagilSelectButton(
-                        title = recommendRoutine.name,
-                        description = recommendRoutine.description,
-                        onClick = { onClickRoutine(recommendRoutine.id) },
-                        selected = recommendRoutine.selected,
-                        modifier = Modifier.padding(bottom = 12.dp),
-                    )
-                }
+            for (recommendRoutine in state.recommendRoutines) {
+                BitnagilSelectButton(
+                    title = recommendRoutine.name,
+                    description = recommendRoutine.description,
+                    onClick = { onClickRoutine(recommendRoutine.id) },
+                    selected = recommendRoutine.selected,
+                    modifier = Modifier.padding(bottom = 12.dp),
+                )
             }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            BitnagilTextButton(
-                text = "변경하기",
-                onClick = onClickRegisterRecommendRoutines,
-                enabled = state.registerRecommendRoutinesButtonEnabled,
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            BitnagilTextButton(
-                text = "건너뛰기",
-                onClick = onClickSkip,
-                colors = BitnagilTextButtonColor.skip().copy(
-                    defaultBackgroundColor = Color.Transparent,
-                    pressedBackgroundColor = Color.Transparent,
-                    disabledBackgroundColor = Color.Transparent,
-                ),
-                textStyle = BitnagilTheme.typography.body2Regular,
-                textDecoration = TextDecoration.Underline,
-            )
         }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        BitnagilTextButton(
+            text = "변경하기",
+            onClick = onClickRegisterRecommendRoutines,
+            enabled = state.registerRecommendRoutinesButtonEnabled,
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        BitnagilTextButton(
+            text = "건너뛰기",
+            onClick = onClickSkip,
+            colors = BitnagilTextButtonColor.skip().copy(
+                defaultBackgroundColor = Color.Transparent,
+                pressedBackgroundColor = Color.Transparent,
+                disabledBackgroundColor = Color.Transparent,
+            ),
+            textStyle = BitnagilTheme.typography.body2Regular,
+            textDecoration = TextDecoration.Underline,
+        )
     }
 }
 
@@ -225,7 +224,20 @@ private fun EmotionScreenPreview() {
     BitnagilTheme {
         EmotionScreen(
             state = EmotionState(
-                emotions = Emotion.entries,
+                emotionTypeUiModels = listOf(
+                    EmotionUiModel(
+                        emotionType = "emotionType",
+                        imageUrl = "https://bitnagil-s3.s3.ap-northeast-2.amazonaws.com/home_satisfaction.png",
+                        emotionMarbleName = "emotionMarbleName",
+                        offlineBackupImageResourceId = null,
+                    ),
+                    EmotionUiModel(
+                        emotionType = "emotionType",
+                        imageUrl = "https://bitnagil-s3.s3.ap-northeast-2.amazonaws.com/home_satisfaction.png",
+                        emotionMarbleName = "emotionMarbleName",
+                        offlineBackupImageResourceId = null,
+                    ),
+                ),
                 isLoading = false,
                 step = EmotionScreenStep.Emotion,
                 recommendRoutines = listOf(),
@@ -242,7 +254,14 @@ private fun EmotionRecommendRoutineScreenPreview() {
     BitnagilTheme {
         EmotionRecommendRoutineScreen(
             state = EmotionState(
-                emotions = Emotion.entries,
+                emotionTypeUiModels = listOf(
+                    EmotionUiModel(
+                        emotionType = "emotionType",
+                        imageUrl = "https://bitnagil-s3.s3.ap-northeast-2.amazonaws.com/home_satisfaction.png",
+                        emotionMarbleName = "emotionMarbleName",
+                        offlineBackupImageResourceId = null,
+                    ),
+                ),
                 isLoading = false,
                 step = EmotionScreenStep.RecommendRoutines,
                 recommendRoutines = listOf(
@@ -254,7 +273,6 @@ private fun EmotionRecommendRoutineScreenPreview() {
                     ),
                 ),
             ),
-            onClickPreviousButton = {},
             onClickRoutine = {},
             onClickRegisterRecommendRoutines = {},
             onClickSkip = {},

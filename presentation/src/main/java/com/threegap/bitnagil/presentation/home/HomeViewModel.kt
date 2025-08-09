@@ -3,7 +3,9 @@ package com.threegap.bitnagil.presentation.home
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.threegap.bitnagil.domain.emotion.usecase.GetMyEmotionUseCase
+import com.threegap.bitnagil.domain.emotion.usecase.GetEmotionChangeEventFlowUseCase
+import com.threegap.bitnagil.domain.emotion.usecase.GetEmotionUseCase
+import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingRecommendRoutineEventFlowUseCase
 import com.threegap.bitnagil.domain.routine.model.RoutineCompletion
 import com.threegap.bitnagil.domain.routine.model.RoutineCompletionInfo
 import com.threegap.bitnagil.domain.routine.usecase.DeleteRoutineByDayUseCase
@@ -40,11 +42,13 @@ class HomeViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val fetchWeeklyRoutinesUseCase: FetchWeeklyRoutinesUseCase,
     private val fetchUserProfileUseCase: FetchUserProfileUseCase,
-    private val getMyEmotionUseCase: GetMyEmotionUseCase,
+    private val getEmotionUseCase: GetEmotionUseCase,
     private val routineCompletionUseCase: RoutineCompletionUseCase,
     private val deleteRoutineUseCase: DeleteRoutineUseCase,
     private val deleteRoutineByDayUseCase: DeleteRoutineByDayUseCase,
     private val getWriteRoutineEventFlowUseCase: GetWriteRoutineEventFlowUseCase,
+    private val getEmotionChangeEventFlowUseCase: GetEmotionChangeEventFlowUseCase,
+    private val getOnBoardingRecommendRoutineEventFlowUseCase: GetOnBoardingRecommendRoutineEventFlowUseCase,
 ) : MviViewModel<HomeState, HomeSideEffect, HomeIntent>(
     initState = HomeState(),
     savedStateHandle = savedStateHandle,
@@ -55,6 +59,8 @@ class HomeViewModel @Inject constructor(
 
     init {
         observeWriteRoutineEvent()
+        observeEmotionChangeEvent()
+        observeRecommendRoutineEvent()
         observeWeekChanges()
         observeRoutineUpdates()
         fetchWeeklyRoutines(container.stateFlow.value.currentWeeks)
@@ -234,7 +240,24 @@ class HomeViewModel @Inject constructor(
     private fun observeWriteRoutineEvent() {
         viewModelScope.launch {
             getWriteRoutineEventFlowUseCase().collect {
-                fetchWeeklyRoutines(container.stateFlow.value.currentWeeks)
+                fetchWeeklyRoutines(stateFlow.value.currentWeeks)
+            }
+        }
+    }
+
+    private fun observeEmotionChangeEvent() {
+        viewModelScope.launch {
+            getEmotionChangeEventFlowUseCase().collect {
+                val currentDate = LocalDate.now()
+                getMyEmotion(currentDate)
+            }
+        }
+    }
+
+    private fun observeRecommendRoutineEvent() {
+        viewModelScope.launch {
+            getOnBoardingRecommendRoutineEventFlowUseCase().collect {
+                fetchWeeklyRoutines(stateFlow.value.currentWeeks)
             }
         }
     }
@@ -302,9 +325,9 @@ class HomeViewModel @Inject constructor(
     private fun getMyEmotion(currentDate: LocalDate) {
         sendIntent(HomeIntent.UpdateLoading(true))
         viewModelScope.launch {
-            getMyEmotionUseCase(currentDate.toString()).fold(
+            getEmotionUseCase(currentDate.toString()).fold(
                 onSuccess = { emotion ->
-                    val ballType = EmotionBallType.fromDomainEmotion(emotion.emotionMarbleType)
+                    val ballType = EmotionBallType.fromDomainEmotion(emotion?.emotionType)
                     sendIntent(HomeIntent.LoadMyEmotion(ballType))
                     sendIntent(HomeIntent.UpdateLoading(false))
                 },
