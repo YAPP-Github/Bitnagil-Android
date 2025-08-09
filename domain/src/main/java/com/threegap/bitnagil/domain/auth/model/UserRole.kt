@@ -3,6 +3,9 @@ package com.threegap.bitnagil.domain.auth.model
 enum class UserRole {
     USER,
     GUEST,
+    ONBOARDING,
+    WITHDRAWN,
+    UNKNOWN,
     ;
 
     fun isGuest() = this == GUEST
@@ -12,7 +15,9 @@ enum class UserRole {
             when (value) {
                 "USER" -> USER
                 "GUEST" -> GUEST
-                else -> throw IllegalArgumentException("Unknown role: $value")
+                "ONBOARDING" -> ONBOARDING
+                "WITHDRAWN" -> WITHDRAWN
+                else -> UNKNOWN
             }
     }
 }
