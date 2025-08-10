@@ -76,7 +76,7 @@ private fun LoginScreen(
     val screenWidth = with(LocalDensity.current) {
         windowInfo.containerSize.width.toDp()
     }
-    val widthRatio = 260f / 360f
+    val widthRatio = 290f / 360f
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -85,27 +85,27 @@ private fun LoginScreen(
             .background(BitnagilTheme.colors.white)
             .statusBarsPadding(),
     ) {
-        Spacer(modifier = Modifier.height(screenHeight * 0.105f))
+        Spacer(modifier = Modifier.height(screenHeight * 0.114f))
 
         Text(
-            text = "빛나길에 오신걸 환영해요!",
-            color = BitnagilTheme.colors.navy500,
-            style = BitnagilTheme.typography.title2Bold,
-            textAlign = TextAlign.Center,
+            text = "안녕! 저는 포모예요\n함께 빛나길을 시작해볼까요?",
+            color = BitnagilTheme.colors.coolGray10,
+            style = BitnagilTheme.typography.title1Bold,
+            textAlign = TextAlign.Start,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(60.dp),
+                .padding(start = 20.dp),
         )
 
-        Spacer(modifier = Modifier.height(screenHeight * 0.136f))
+        Spacer(modifier = Modifier.height(screenHeight * 0.112f))
 
         Image(
-            painter = painterResource(R.drawable.intro_character),
+            painter = painterResource(R.drawable.login_fomo),
             contentDescription = null,
             contentScale = ContentScale.Fit,
             modifier = Modifier
                 .width(screenWidth * widthRatio)
-                .aspectRatio(260f / 295f),
+                .aspectRatio(290f / 305f),
         )
 
         Spacer(modifier = Modifier.weight(1f))
