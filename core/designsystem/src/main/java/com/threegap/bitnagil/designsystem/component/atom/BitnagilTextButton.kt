@@ -94,12 +94,12 @@ data class BitnagilTextButtonColor(
     companion object {
         @Composable
         fun default(): BitnagilTextButtonColor = BitnagilTextButtonColor(
-            defaultBackgroundColor = BitnagilTheme.colors.navy500,
-            pressedBackgroundColor = BitnagilTheme.colors.navy700,
-            disabledBackgroundColor = BitnagilTheme.colors.navy50,
+            defaultBackgroundColor = BitnagilTheme.colors.coolGray10,
+            pressedBackgroundColor = BitnagilTheme.colors.coolGray5,
+            disabledBackgroundColor = BitnagilTheme.colors.coolGray96,
             defaultTextColor = BitnagilTheme.colors.white,
-            pressedTextColor = BitnagilTheme.colors.coolGray70,
-            disabledTextColor = BitnagilTheme.colors.coolGray70,
+            pressedTextColor = BitnagilTheme.colors.coolGray20,
+            disabledTextColor = BitnagilTheme.colors.white,
         )
 
         @Composable

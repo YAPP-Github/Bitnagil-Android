@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,14 +25,13 @@ fun BitnagilProgressTopBar(
         modifier = modifier
             .fillMaxWidth()
             .height(54.dp)
-            .padding(start = 4.dp, end = 18.dp),
+            .padding(end = 76.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        horizontalArrangement = Arrangement.spacedBy(38.dp),
     ) {
         BitnagilIconButton(
             id = R.drawable.ic_chevron_left_lg,
             onClick = onBackClick,
-            modifier = Modifier.size(40.dp),
             tint = BitnagilTheme.colors.coolGray10,
         )
 
@@ -48,7 +46,7 @@ fun BitnagilProgressTopBar(
 @Composable
 private fun BitnagilProgressTopBarPreview() {
     BitnagilProgressTopBar(
-        progress = 0.5f,
+        progress = 1f,
         onBackClick = {},
     )
 }
