@@ -31,7 +31,7 @@ import com.threegap.bitnagil.presentation.common.toast.GlobalBitnagilToast
 import com.threegap.bitnagil.presentation.home.component.template.CollapsibleHomeHeader
 import com.threegap.bitnagil.presentation.home.component.template.DeleteConfirmDialog
 import com.threegap.bitnagil.presentation.home.component.template.RoutineDetailsBottomSheet
-import com.threegap.bitnagil.presentation.home.component.template.RoutineEmptyView
+import com.threegap.bitnagil.presentation.home.component.template.EmptyRoutineView
 import com.threegap.bitnagil.presentation.home.component.template.RoutineSection
 import com.threegap.bitnagil.presentation.home.component.template.RoutineSortBottomSheet
 import com.threegap.bitnagil.presentation.home.component.template.WeeklyDatePicker
@@ -211,7 +211,7 @@ private fun HomeScreen(
             ) {
                 if (uiState.selectedDateRoutines.isEmpty()) {
                     item {
-                        RoutineEmptyView(
+                        EmptyRoutineView(
                             onRegisterRoutineClick = onRegisterRoutineClick,
                             modifier = Modifier
                                 .fillMaxSize()

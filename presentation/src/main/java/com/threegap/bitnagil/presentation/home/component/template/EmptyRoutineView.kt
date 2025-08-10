@@ -18,7 +18,7 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 
 @Composable
-fun RoutineEmptyView(
+fun EmptyRoutineView(
     onRegisterRoutineClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -31,10 +31,11 @@ fun RoutineEmptyView(
             text = "등록한 루틴이 없어요",
             style = BitnagilTheme.typography.subtitle1SemiBold,
             color = BitnagilTheme.colors.coolGray30,
+            modifier = Modifier.height(28.dp),
         )
         Text(
-            text = "루틴을 등록해서 빛나길을 시작해보세요",
-            style = BitnagilTheme.typography.body2Medium,
+            text = "루틴을 등록하고, 작은 변화부터 시작해보세요!",
+            style = BitnagilTheme.typography.body2Regular,
             color = BitnagilTheme.colors.coolGray70,
         )
 
@@ -43,28 +44,28 @@ fun RoutineEmptyView(
         Box(
             modifier = Modifier
                 .background(
-                    color = BitnagilTheme.colors.navy50,
-                    shape = RoundedCornerShape(100.dp),
+                    color = BitnagilTheme.colors.coolGray96,
+                    shape = RoundedCornerShape(8.dp),
                 )
                 .clickableWithoutRipple { onRegisterRoutineClick() }
                 .padding(
-                    vertical = 8.dp,
-                    horizontal = 10.dp,
+                    vertical = 10.dp,
+                    horizontal = 14.dp,
                 ),
         ) {
             Text(
                 text = "루틴 등록하기",
-                style = BitnagilTheme.typography.caption1Medium,
+                style = BitnagilTheme.typography.caption1SemiBold,
                 color = BitnagilTheme.colors.coolGray30,
             )
         }
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun RoutineEmptyViewPreview() {
-    RoutineEmptyView(
+    EmptyRoutineView(
         onRegisterRoutineClick = {},
     )
 }
