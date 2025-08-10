@@ -2,6 +2,7 @@ package com.threegap.bitnagil.designsystem.component.block
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,19 +36,15 @@ fun BitnagilTopBar(
             .height(54.dp),
     ) {
         if (showBackButton) {
-            Box(
+            BitnagilIconButton(
+                id = R.drawable.ic_chevron_left_lg,
+                onClick = onBackClick,
+                paddingValues = PaddingValues(start = 4.dp),
+                tint = BitnagilTheme.colors.coolGray10,
                 modifier = Modifier
                     .align(Alignment.CenterStart)
-                    .padding(start = 4.dp)
-                    .clickableWithoutRipple { onBackClick() },
-            ) {
-                BitnagilIconButton(
-                    id = R.drawable.ic_chevron_left_lg,
-                    onClick = onBackClick,
-                    modifier = Modifier.size(40.dp),
-                    tint = BitnagilTheme.colors.coolGray10,
-                )
-            }
+                    .size(40.dp),
+            )
         }
 
         if (title != null) {
