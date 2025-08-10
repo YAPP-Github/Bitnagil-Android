@@ -2,6 +2,7 @@ package com.threegap.bitnagil.presentation.onboarding.component.template
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -76,6 +77,7 @@ fun OnBoardingSelectTemplate(
             text = "다음",
             onClick = onClickNextButton,
             enabled = nextButtonEnable,
+            modifier = Modifier.fillMaxWidth(),
         )
 
         onClickSkip?.let {
@@ -87,6 +89,7 @@ fun OnBoardingSelectTemplate(
                 colors = BitnagilTextButtonColor.skip(),
                 textStyle = BitnagilTheme.typography.body2Regular,
                 textDecoration = TextDecoration.Underline,
+                modifier = Modifier.fillMaxWidth(),
             )
         }
     }

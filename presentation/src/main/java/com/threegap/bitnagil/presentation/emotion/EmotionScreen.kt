@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -200,6 +201,7 @@ private fun EmotionRecommendRoutineScreen(
             text = "변경하기",
             onClick = onClickRegisterRecommendRoutines,
             enabled = state.registerRecommendRoutinesButtonEnabled,
+            modifier = Modifier.fillMaxWidth(),
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -214,6 +216,7 @@ private fun EmotionRecommendRoutineScreen(
             ),
             textStyle = BitnagilTheme.typography.body2Regular,
             textDecoration = TextDecoration.Underline,
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }
