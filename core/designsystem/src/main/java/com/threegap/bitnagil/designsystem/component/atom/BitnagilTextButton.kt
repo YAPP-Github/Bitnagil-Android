@@ -58,7 +58,6 @@ fun BitnagilTextButton(
 
     Box(
         modifier = modifier
-            .fillMaxWidth()
             .height(54.dp)
             .clip(shape)
             .background(backgroundColor)
@@ -122,6 +121,7 @@ private fun BitnagilTextButtonPreview() {
             text = "시작하기",
             onClick = {},
             enabled = false,
+            modifier = Modifier.fillMaxWidth(),
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -129,6 +129,7 @@ private fun BitnagilTextButtonPreview() {
         BitnagilTextButton(
             text = "시작하기",
             onClick = {},
+            modifier = Modifier.fillMaxWidth(),
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -139,6 +140,7 @@ private fun BitnagilTextButtonPreview() {
             colors = BitnagilTextButtonColor.skip(),
             textStyle = BitnagilTheme.typography.body2Regular,
             textDecoration = TextDecoration.Underline,
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }
