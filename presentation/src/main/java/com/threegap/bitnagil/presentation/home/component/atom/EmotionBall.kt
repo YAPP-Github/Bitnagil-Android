@@ -15,13 +15,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.R
-import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.home.model.EmotionBallType
 
 @Composable
 fun EmotionBall(
     emotionType: EmotionBallType?,
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (emotionType != null) {
@@ -30,7 +28,6 @@ fun EmotionBall(
             contentDescription = null,
             modifier = modifier
                 .size(172.dp)
-                .clickableWithoutRipple { onClick() }
                 .padding(10.dp)
                 .fillMaxSize()
                 .shadow(
@@ -42,11 +39,10 @@ fun EmotionBall(
         )
     } else {
         Image(
-            painter = painterResource(R.drawable.default_ball),
+            painter = painterResource(R.drawable.default_emotion),
             contentDescription = null,
             modifier = modifier
-                .size(172.dp)
-                .clickableWithoutRipple { onClick() }
+                .size(108.dp, 150.dp)
                 .fillMaxSize(),
         )
     }
@@ -61,7 +57,6 @@ private fun EmotionBallDefaultPreview() {
     ) {
         EmotionBall(
             emotionType = null,
-            onClick = {},
         )
     }
 }
@@ -75,7 +70,6 @@ private fun EmotionBallCalmPreview() {
     ) {
         EmotionBall(
             emotionType = EmotionBallType.CALM,
-            onClick = {},
         )
     }
 }
@@ -89,7 +83,6 @@ private fun EmotionBallVitalityPreview() {
     ) {
         EmotionBall(
             emotionType = EmotionBallType.VITALITY,
-            onClick = {},
         )
     }
 }
@@ -103,7 +96,6 @@ private fun EmotionBallLethargyPreview() {
     ) {
         EmotionBall(
             emotionType = EmotionBallType.LETHARGY,
-            onClick = {},
         )
     }
 }
@@ -117,7 +109,6 @@ private fun EmotionBallAnxietyPreview() {
     ) {
         EmotionBall(
             emotionType = EmotionBallType.ANXIETY,
-            onClick = {},
         )
     }
 }
@@ -131,7 +122,6 @@ private fun EmotionBallSatisfactionPreview() {
     ) {
         EmotionBall(
             emotionType = EmotionBallType.SATISFACTION,
-            onClick = {},
         )
     }
 }
@@ -145,7 +135,6 @@ private fun EmotionBallFatiguePreview() {
     ) {
         EmotionBall(
             emotionType = EmotionBallType.FATIGUE,
-            onClick = {},
         )
     }
 }
