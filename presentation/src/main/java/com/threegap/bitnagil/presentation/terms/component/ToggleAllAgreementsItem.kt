@@ -29,9 +29,9 @@ fun ToggleAllAgreementsItem(
     onToggleAllAgreements: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val backgroundColor = if (isAllAgreed) BitnagilTheme.colors.lightBlue75 else BitnagilTheme.colors.coolGray99
-    val iconColor = if (isAllAgreed) BitnagilTheme.colors.navy500 else BitnagilTheme.colors.navy100
-    val textColor = if (isAllAgreed) BitnagilTheme.colors.navy500 else BitnagilTheme.colors.coolGray50
+    val backgroundColor = if (isAllAgreed) BitnagilTheme.colors.orange50 else BitnagilTheme.colors.coolGray99
+    val iconColor = if (isAllAgreed) BitnagilTheme.colors.orange500 else BitnagilTheme.colors.coolGray90
+    val textColor = if (isAllAgreed) BitnagilTheme.colors.orange500 else BitnagilTheme.colors.coolGray90
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -50,7 +50,7 @@ fun ToggleAllAgreementsItem(
             ),
     ) {
         BitnagilIcon(
-            id = R.drawable.ic_check,
+            id = R.drawable.ic_check_lg,
             tint = iconColor,
             modifier = Modifier.size(24.dp),
         )
