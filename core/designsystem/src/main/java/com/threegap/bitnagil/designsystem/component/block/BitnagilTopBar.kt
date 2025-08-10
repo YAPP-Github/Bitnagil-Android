@@ -20,7 +20,6 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIconButton
-import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 
 @Composable
 fun BitnagilTopBar(
