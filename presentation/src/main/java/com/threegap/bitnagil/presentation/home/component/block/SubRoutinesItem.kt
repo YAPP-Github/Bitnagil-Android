@@ -3,10 +3,7 @@ package com.threegap.bitnagil.presentation.home.component.block
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,47 +26,29 @@ fun SubRoutinesItem(
 ) {
     Column(
         modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        Text(
-            text = "세부 루틴",
-            style = BitnagilTheme.typography.caption1Medium,
-            color = BitnagilTheme.colors.coolGray60,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp),
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
         subRoutines.forEach { subRoutine ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(34.dp)
                     .clickableWithoutRipple {
                         onSubRoutineToggle(subRoutine.subRoutineId, !subRoutine.isCompleted)
-                    }
-                    .padding(
-                        vertical = 7.dp,
-                        horizontal = 14.dp,
-                    ),
+                    },
             ) {
                 BitnagilIcon(
-                    id = R.drawable.ic_check,
-                    tint = if (subRoutine.isCompleted) {
-                        BitnagilTheme.colors.orange500
-                    } else {
-                        BitnagilTheme.colors.coolGray96
-                    },
-                    modifier = Modifier.size(20.dp),
+                    id = if (subRoutine.isCompleted) R.drawable.ic_check_circle else R.drawable.ic_check_default,
+                    tint = null,
+                    modifier = Modifier.size(24.dp),
                 )
 
                 Text(
                     text = subRoutine.subRoutineName,
                     style = BitnagilTheme.typography.body2Medium,
-                    color = BitnagilTheme.colors.coolGray20,
+                    color = BitnagilTheme.colors.coolGray40,
+                    modifier = Modifier.weight(1f),
                 )
             }
         }
@@ -87,7 +66,7 @@ private fun SubRoutinesItemPreview() {
                 subRoutineName = "물 마시기",
                 sortOrder = 1,
                 routineCompletionId = 1,
-                isCompleted = false,
+                isCompleted = true,
                 isModified = false,
                 routineType = RoutineType.SUB_ROUTINE,
             ),
