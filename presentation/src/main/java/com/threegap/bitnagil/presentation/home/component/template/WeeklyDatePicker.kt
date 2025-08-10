@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -22,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
-import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilIconButton
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.home.util.formatDayOfMonth
 import com.threegap.bitnagil.presentation.home.util.formatDayOfWeekShort
@@ -54,36 +55,26 @@ fun WeeklyDatePicker(
         ) {
             Text(
                 text = selectedDate.formatMonthYear(),
-                style = BitnagilTheme.typography.body1SemiBold,
+                style = BitnagilTheme.typography.title3SemiBold,
                 color = BitnagilTheme.colors.coolGray10,
             )
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Box(
-                    modifier = Modifier
-                        .clickableWithoutRipple(onClick = onPreviousWeekClick)
-                        .padding(14.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    BitnagilIcon(
-                        id = R.drawable.ic_back_arrow_20,
-                        tint = BitnagilTheme.colors.black,
-                    )
-                }
+                BitnagilIconButton(
+                    id = R.drawable.ic_chevron_left_md,
+                    onClick = onPreviousWeekClick,
+                    paddingValues = PaddingValues(12.dp),
+                    tint = BitnagilTheme.colors.coolGray10,
+                )
 
-                Box(
-                    modifier = Modifier
-                        .clickableWithoutRipple(onClick = onNextWeekClick)
-                        .padding(14.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    BitnagilIcon(
-                        id = R.drawable.ic_right_arrow_20,
-                        tint = BitnagilTheme.colors.black,
-                    )
-                }
+                BitnagilIconButton(
+                    id = R.drawable.ic_chevron_right_md,
+                    onClick = onNextWeekClick,
+                    paddingValues = PaddingValues(12.dp),
+                    tint = BitnagilTheme.colors.coolGray10,
+                )
             }
         }
 
@@ -123,8 +114,8 @@ private fun DateItem(
     ) {
         Text(
             text = if (!isToday) date.formatDayOfWeekShort() else "오늘",
-            style = BitnagilTheme.typography.caption1Medium,
-            color = if (!isSelected) BitnagilTheme.colors.coolGray70 else BitnagilTheme.colors.navy500,
+            style = BitnagilTheme.typography.caption1SemiBold,
+            color = if (!isSelected) BitnagilTheme.colors.coolGray70 else BitnagilTheme.colors.coolGray10,
         )
 
         Box(
@@ -132,14 +123,14 @@ private fun DateItem(
             modifier = modifier
                 .size(30.dp)
                 .background(
-                    color = if (!isSelected) Color.Transparent else BitnagilTheme.colors.lightBlue100,
+                    color = if (!isSelected) Color.Transparent else BitnagilTheme.colors.coolGray10,
                     shape = RoundedCornerShape(8.dp),
                 ),
         ) {
             Text(
                 text = date.formatDayOfMonth(),
-                style = BitnagilTheme.typography.body2Medium,
-                color = if (!isSelected) BitnagilTheme.colors.coolGray70 else BitnagilTheme.colors.navy500,
+                style = if (!isSelected) BitnagilTheme.typography.body2Medium else BitnagilTheme.typography.body2SemiBold,
+                color = if (!isSelected) BitnagilTheme.colors.coolGray70 else BitnagilTheme.colors.white,
             )
         }
     }
