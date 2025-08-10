@@ -108,7 +108,7 @@ fun HomeNavHost(
                         onClick = { GlobalBitnagilToast.showWarning("제보하기 기능은 추후 제공될 예정입니다.") },
                     ),
                     FloatingActionItem(
-                        icon = R.drawable.ic_add_routine,
+                        icon = R.drawable.ic_routine_add,
                         text = "루틴 등록",
                         onClick = { navigateToRegisterRoutine(null) },
                     ),

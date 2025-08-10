@@ -186,7 +186,7 @@ private fun BitnagilFloatingButtonPreview() {
                     onClick = {},
                 ),
                 FloatingActionItem(
-                    icon = R.drawable.ic_add_routine,
+                    icon = R.drawable.ic_routine_add,
                     text = "루틴 등록",
                     onClick = {},
                 ),

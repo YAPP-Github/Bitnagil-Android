@@ -17,3 +17,7 @@ val pretendard = FontFamily(
     Font(R.font.pretendard_extra_light, FontWeight.ExtraLight, FontStyle.Normal),
     Font(R.font.pretendard_thin, FontWeight.Thin, FontStyle.Normal),
 )
+
+val cafe24SsurroundAir = FontFamily(
+    Font(R.font.cafe_24_ssurround_air_v1_1, FontWeight.Light, FontStyle.Normal),
+)

@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
-import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilIconButton
 
 @Composable
 fun BitnagilTopBar(
@@ -33,16 +33,13 @@ fun BitnagilTopBar(
             .height(54.dp),
     ) {
         if (showBackButton) {
-            Box(
+            BitnagilIconButton(
+                id = R.drawable.ic_chevron_left_lg,
+                onClick = onBackClick,
+                tint = BitnagilTheme.colors.coolGray10,
                 modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .padding(start = 4.dp)
-                    .clickableWithoutRipple { onBackClick() },
-            ) {
-                BitnagilIcon(
-                    id = R.drawable.ic_back_arrow_36,
-                )
-            }
+                    .align(Alignment.CenterStart),
+            )
         }
 
         if (title != null) {
