@@ -57,7 +57,7 @@ class SettingViewModel @Inject constructor(
             }
 
             SettingIntent.LogoutSuccess -> {
-                sendSideEffect(SettingSideEffect.NavigateToIntro)
+                sendSideEffect(SettingSideEffect.NavigateToLogin)
                 return null
             }
             SettingIntent.LogoutLoading -> {
@@ -67,7 +67,7 @@ class SettingViewModel @Inject constructor(
                 return state.copy(loading = false)
             }
             SettingIntent.WithdrawalSuccess -> {
-                sendSideEffect(SettingSideEffect.NavigateToIntro)
+                sendSideEffect(SettingSideEffect.NavigateToLogin)
                 return null
             }
             SettingIntent.WithdrawalLoading -> {

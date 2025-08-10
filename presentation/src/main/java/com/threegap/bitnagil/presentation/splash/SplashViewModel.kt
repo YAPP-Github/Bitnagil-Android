@@ -40,8 +40,8 @@ class SplashViewModel @Inject constructor(
                 )
             }
 
-            is SplashIntent.NavigateToIntro -> {
-                sendSideEffect(SplashSideEffect.NavigateToIntro)
+            is SplashIntent.NavigateToLogin -> {
+                sendSideEffect(SplashSideEffect.NavigateToLogin)
                 null
             }
 
@@ -88,7 +88,7 @@ class SplashViewModel @Inject constructor(
             UserRole.GUEST -> sendIntent(SplashIntent.NavigateToTermsAgreement)
             UserRole.USER -> sendIntent(SplashIntent.NavigateToHome)
             UserRole.ONBOARDING -> sendIntent(SplashIntent.NavigateToOnboarding)
-            else -> sendIntent(SplashIntent.NavigateToIntro)
+            else -> sendIntent(SplashIntent.NavigateToLogin)
         }
     }
 }
