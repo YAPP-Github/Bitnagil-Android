@@ -23,7 +23,8 @@ import com.threegap.bitnagil.designsystem.component.atom.BitnagilIconButton
 
 @Composable
 fun RoutineDetailsCard(
-    modifier: Modifier = Modifier
+    onDeleteClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
@@ -32,12 +33,12 @@ fun RoutineDetailsCard(
                 shape = RoundedCornerShape(12.dp),
             )
             .fillMaxWidth()
-            .padding(vertical = 14.dp)
+            .padding(vertical = 14.dp),
     ) {
         Row(
             modifier = Modifier
                 .padding(start = 16.dp, end = 2.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             BitnagilIcon(
                 id = R.drawable.ic_wakeup,
@@ -45,16 +46,16 @@ fun RoutineDetailsCard(
                 modifier = Modifier
                     .background(
                         color = BitnagilTheme.colors.orange25,
-                        shape = RoundedCornerShape(4.dp)
+                        shape = RoundedCornerShape(4.dp),
                     )
-                    .padding(4.dp)
+                    .padding(4.dp),
             )
 
             Text(
                 text = "개운하게 일어나기",
                 color = BitnagilTheme.colors.coolGray10,
                 style = BitnagilTheme.typography.body1SemiBold,
-                modifier = Modifier.padding(start = 10.dp)
+                modifier = Modifier.padding(start = 10.dp),
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -63,27 +64,27 @@ fun RoutineDetailsCard(
                 id = R.drawable.ic_edit,
                 onClick = { /*TODO*/ },
                 tint = null,
-                paddingValues = PaddingValues(12.dp)
+                paddingValues = PaddingValues(12.dp),
             )
 
             BitnagilIconButton(
                 id = R.drawable.ic_trash,
-                onClick = { /*TODO*/ },
+                onClick = onDeleteClick,
                 tint = null,
-                paddingValues = PaddingValues(12.dp)
+                paddingValues = PaddingValues(12.dp),
             )
         }
 
         HorizontalDivider(
             thickness = 1.dp,
             color = BitnagilTheme.colors.coolGray97,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp)
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
         )
 
         Column(
             modifier = Modifier
                 .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(2.dp)
+            verticalArrangement = Arrangement.spacedBy(2.dp),
         ) {
             Text(
                 text = "세부 루틴",
@@ -110,13 +111,13 @@ fun RoutineDetailsCard(
         HorizontalDivider(
             thickness = 1.dp,
             color = BitnagilTheme.colors.coolGray97,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp)
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
         )
 
         Column(
             modifier = Modifier
                 .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(2.dp)
+            verticalArrangement = Arrangement.spacedBy(2.dp),
         ) {
             Text(
                 text = "반복:",
@@ -140,5 +141,7 @@ fun RoutineDetailsCard(
 @Preview
 @Composable
 private fun RoutineDetailsCardPreview() {
-    RoutineDetailsCard()
+    RoutineDetailsCard(
+        onDeleteClick = {},
+    )
 }

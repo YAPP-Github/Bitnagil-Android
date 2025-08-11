@@ -45,7 +45,7 @@ fun WeeklyDatePicker(
                 isSelected = selectedDate == date,
                 isToday = date == LocalDate.now(),
                 onDateClick = { onDateSelect(date) },
-                modifier = Modifier.padding(bottom = 18.dp)
+                modifier = Modifier.padding(bottom = 18.dp),
             )
         }
     }
