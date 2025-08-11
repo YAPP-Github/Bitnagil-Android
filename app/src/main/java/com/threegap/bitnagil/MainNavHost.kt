@@ -8,7 +8,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.threegap.bitnagil.navigation.home.HomeNavHost
 import com.threegap.bitnagil.presentation.emotion.EmotionScreenContainer
-import com.threegap.bitnagil.presentation.intro.IntroScreenContainer
 import com.threegap.bitnagil.presentation.login.LoginScreenContainer
 import com.threegap.bitnagil.presentation.onboarding.OnBoardingScreenContainer
 import com.threegap.bitnagil.presentation.onboarding.OnBoardingViewModel
@@ -33,8 +32,8 @@ fun MainNavHost(
     ) {
         composable<Route.Splash> {
             SplashScreenContainer(
-                navigateToIntro = {
-                    navigator.navController.navigate(Route.Intro) {
+                navigateToLogin = {
+                    navigator.navController.navigate(Route.Login) {
                         popUpTo<Route.Splash> { inclusive = true }
                     }
                 },
@@ -49,12 +48,6 @@ fun MainNavHost(
                     }
                 },
                 navigateToHome = navigator::navigateToHomeAndClearStack,
-            )
-        }
-
-        composable<Route.Intro> {
-            IntroScreenContainer(
-                navigateToLogin = { navigator.navController.navigate(Route.Login) },
             )
         }
 
@@ -166,8 +159,8 @@ fun MainNavHost(
                         ),
                     )
                 },
-                navigateToIntro = {
-                    navigator.navController.navigate(Route.Intro) {
+                navigateToLogin = {
+                    navigator.navController.navigate(Route.Login) {
                         popUpTo(0) {
                             inclusive = true
                         }

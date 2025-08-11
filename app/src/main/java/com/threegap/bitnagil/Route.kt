@@ -8,9 +8,6 @@ sealed interface Route {
     data object Splash : Route
 
     @Serializable
-    data object Intro : Route
-
-    @Serializable
     data object TermsAgreement : Route
 
     @Serializable

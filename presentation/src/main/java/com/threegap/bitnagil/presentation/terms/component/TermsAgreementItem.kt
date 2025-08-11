@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -48,8 +49,9 @@ fun TermsAgreementItem(
                 .clickableWithoutRipple { onCheckedChange() },
         ) {
             BitnagilIcon(
-                id = R.drawable.ic_check,
-                tint = if (isChecked) BitnagilTheme.colors.navy500 else BitnagilTheme.colors.navy100,
+                id = R.drawable.ic_check_md,
+                tint = if (isChecked) BitnagilTheme.colors.orange500 else BitnagilTheme.colors.coolGray90,
+                modifier = Modifier.size(20.dp),
             )
 
             Text(
