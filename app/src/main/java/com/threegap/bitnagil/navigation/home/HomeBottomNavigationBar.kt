@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,27 +31,34 @@ fun HomeBottomNavigationBar(
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(color = BitnagilTheme.colors.white)
-            .height(62.dp)
-            .padding(horizontal = 16.dp, vertical = 7.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        HomeRoute.entries.map { homeRoute ->
-            HomeBottomNavigationItem(
-                modifier = Modifier.weight(1f),
-                icon = homeRoute.icon,
-                title = homeRoute.title,
-                onClick = {
-                    navController.navigate(homeRoute.route) {
-                        popUpTo(0) { inclusive = true }
-                    }
-                },
-                selected = navBackStackEntry?.destination?.route == homeRoute.route,
-            )
+    Column {
+        HorizontalDivider(
+            modifier = Modifier.fillMaxWidth(),
+            thickness = 1.dp,
+            color = BitnagilTheme.colors.coolGray98,
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(color = BitnagilTheme.colors.white)
+                .height(62.dp)
+                .padding(horizontal = 16.dp, vertical = 7.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            HomeRoute.entries.map { homeRoute ->
+                HomeBottomNavigationItem(
+                    modifier = Modifier.weight(1f),
+                    icon = homeRoute.icon,
+                    title = homeRoute.title,
+                    onClick = {
+                        navController.navigate(homeRoute.route) {
+                            popUpTo(0) { inclusive = true }
+                        }
+                    },
+                    selected = navBackStackEntry?.destination?.route == homeRoute.route,
+                )
+            }
         }
     }
 }
