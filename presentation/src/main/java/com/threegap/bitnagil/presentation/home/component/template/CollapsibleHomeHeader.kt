@@ -28,7 +28,7 @@ fun CollapsibleHomeHeader(
     userName: String,
     emotionBallType: EmotionBallType?,
     collapsibleHeaderState: CollapsibleHeaderState,
-    onEmotionRecordClick: () -> Unit,
+    onRegisterEmotion: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -70,7 +70,8 @@ fun CollapsibleHomeHeader(
                     )
 
                     EmotionRegisterButton(
-                        onClick = onEmotionRecordClick,
+                        onClick = onRegisterEmotion,
+                        enabled = emotionBallType == null,
                     )
                 }
 
@@ -90,11 +91,11 @@ fun CollapsibleHomeHeader(
 
 @Preview
 @Composable
-private fun HomeTopBarPreview() {
+private fun CollapsibleHomeHeaderPreview() {
     CollapsibleHomeHeader(
         userName = "대현",
         emotionBallType = null,
         collapsibleHeaderState = rememberCollapsibleHeaderState(),
-        onEmotionRecordClick = {},
+        onRegisterEmotion = {},
     )
 }

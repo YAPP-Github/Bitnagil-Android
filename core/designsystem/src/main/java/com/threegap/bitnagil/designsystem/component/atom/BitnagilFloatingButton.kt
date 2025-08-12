@@ -54,7 +54,6 @@ fun BitnagilFloatingButton(
         BitnagilIcon(
             id = id,
             tint = if (isActive) colors.activeIconColor else colors.defaultIconColor,
-            modifier = Modifier.size(24.dp),
         )
     }
 }
