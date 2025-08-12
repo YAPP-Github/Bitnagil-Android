@@ -33,7 +33,6 @@ import com.threegap.bitnagil.presentation.home.component.template.DeleteConfirmD
 import com.threegap.bitnagil.presentation.home.component.template.RoutineDetailsBottomSheet
 import com.threegap.bitnagil.presentation.home.component.template.EmptyRoutineView
 import com.threegap.bitnagil.presentation.home.component.template.RoutineSection
-import com.threegap.bitnagil.presentation.home.component.template.RoutineSortBottomSheet
 import com.threegap.bitnagil.presentation.home.component.template.WeeklyDatePicker
 import com.threegap.bitnagil.presentation.home.model.HomeIntent
 import com.threegap.bitnagil.presentation.home.model.HomeSideEffect
@@ -73,18 +72,6 @@ fun HomeScreenContainer(
                 GlobalBitnagilToast.show(sideEffect.message)
             }
         }
-    }
-
-    if (uiState.routineSortBottomSheetVisible) {
-        RoutineSortBottomSheet(
-            currentSortType = uiState.currentSortType,
-            onSortTypeChange = { sortType ->
-                viewModel.sendIntent(HomeIntent.OnSortTypeChange(sortType))
-            },
-            onDismiss = {
-                viewModel.sendIntent(HomeIntent.HideRoutineSortBottomSheet)
-            },
-        )
     }
 
     uiState.selectedRoutine?.let { routine ->
@@ -138,9 +125,6 @@ fun HomeScreenContainer(
         onSubRoutineCompletionToggle = { routineId, subRoutineId, isCompleted ->
             viewModel.toggleSubRoutineCompletion(routineId, subRoutineId, isCompleted)
         },
-        onShowRoutineSortBottomSheet = {
-            viewModel.sendIntent(HomeIntent.ShowRoutineSortBottomSheet)
-        },
         onShowRoutineDetailsBottomSheet = { routine ->
             viewModel.sendIntent(HomeIntent.ShowRoutineDetailsBottomSheet(routine))
         },
@@ -161,7 +145,6 @@ private fun HomeScreen(
     onNextWeekClick: () -> Unit,
     onRoutineCompletionToggle: (String, Boolean) -> Unit,
     onSubRoutineCompletionToggle: (String, String, Boolean) -> Unit,
-    onShowRoutineSortBottomSheet: () -> Unit,
     onShowRoutineDetailsBottomSheet: (RoutineUiModel) -> Unit,
     onRegisterRoutineClick: () -> Unit,
     onRegisterEmotionClick: () -> Unit,
@@ -249,18 +232,7 @@ private fun HomeScreen(
                                         .padding(horizontal = 16.dp),
                                 )
 
-                                if (index == 0) {
-                                    BitnagilIcon(
-                                        id = R.drawable.ic_arrow_down_up,
-                                        tint = BitnagilTheme.colors.navy200,
-                                        modifier = Modifier
-                                            .align(Alignment.TopEnd)
-                                            .padding(end = 4.dp)
-                                            .clickableWithoutRipple { onShowRoutineSortBottomSheet() }
-                                            .zIndex(1f),
                                     )
-                                }
-                            }
                         }
                     }
                 }
@@ -289,7 +261,6 @@ private fun HomeScreenPreview() {
         onNextWeekClick = {},
         onRoutineCompletionToggle = { _, _ -> },
         onSubRoutineCompletionToggle = { _, _, _ -> },
-        onShowRoutineSortBottomSheet = {},
         onShowRoutineDetailsBottomSheet = {},
         onRegisterRoutineClick = {},
         onRegisterEmotionClick = {},

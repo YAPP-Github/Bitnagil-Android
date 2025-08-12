@@ -19,7 +19,6 @@ import com.threegap.bitnagil.presentation.home.model.EmotionBallType
 import com.threegap.bitnagil.presentation.home.model.HomeIntent
 import com.threegap.bitnagil.presentation.home.model.HomeSideEffect
 import com.threegap.bitnagil.presentation.home.model.HomeState
-import com.threegap.bitnagil.presentation.home.model.RoutineSortType
 import com.threegap.bitnagil.presentation.home.model.RoutineUiModel
 import com.threegap.bitnagil.presentation.home.model.RoutinesUiModel
 import com.threegap.bitnagil.presentation.home.model.toRoutineByDayDeletion
@@ -113,17 +112,6 @@ class HomeViewModel @Inject constructor(
                 updateSubRoutine(state, intent.routineId, intent.subRoutineId, intent.isCompleted)
             }
 
-            is HomeIntent.OnSortTypeChange -> {
-                val newSortType = if (state.currentSortType == intent.sortType) {
-                    RoutineSortType.TIME_ORDER
-                } else {
-                    intent.sortType
-                }
-                state.copy(
-                    currentSortType = newSortType,
-                )
-            }
-
             is HomeIntent.DeleteRoutineOptimistically -> {
                 val updatedRoutinesByDate = state.routines.routinesByDate.mapValues { (_, routineList) ->
                     routineList.filterNot { it.routineId == intent.routineId }
@@ -143,14 +131,6 @@ class HomeViewModel @Inject constructor(
             }
 
             is HomeIntent.ConfirmRoutineDeletion -> null
-
-            is HomeIntent.ShowRoutineSortBottomSheet -> {
-                state.copy(routineSortBottomSheetVisible = true)
-            }
-
-            is HomeIntent.HideRoutineSortBottomSheet -> {
-                state.copy(routineSortBottomSheetVisible = false)
-            }
 
             is HomeIntent.ShowRoutineDetailsBottomSheet -> {
                 state.copy(

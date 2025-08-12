@@ -11,7 +11,6 @@ sealed class HomeIntent : MviIntent {
     data class OnDateSelect(val date: LocalDate) : HomeIntent()
     data class OnRoutineCompletionToggle(val routineId: String, val isCompleted: Boolean) : HomeIntent()
     data class OnSubRoutineCompletionToggle(val routineId: String, val subRoutineId: String, val isCompleted: Boolean) : HomeIntent()
-    data class OnSortTypeChange(val sortType: RoutineSortType) : HomeIntent()
     data class DeleteRoutineOptimistically(val routineId: String) : HomeIntent()
     data class ConfirmRoutineDeletion(val routineId: String) : HomeIntent()
     data class RestoreRoutinesAfterDeleteFailure(val backupRoutines: RoutinesUiModel) : HomeIntent()
@@ -26,8 +25,6 @@ sealed class HomeIntent : MviIntent {
     data object OnRegisterRoutineClick : HomeIntent()
     data object OnPreviousWeekClick : HomeIntent()
     data object OnNextWeekClick : HomeIntent()
-    data object ShowRoutineSortBottomSheet : HomeIntent()
-    data object HideRoutineSortBottomSheet : HomeIntent()
     data object HideRoutineDetailsBottomSheet : HomeIntent()
     data object HideDeleteConfirmDialog : HomeIntent()
 }
