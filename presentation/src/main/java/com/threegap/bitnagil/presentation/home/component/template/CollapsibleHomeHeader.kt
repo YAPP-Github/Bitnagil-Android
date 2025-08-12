@@ -1,36 +1,61 @@
 package com.threegap.bitnagil.presentation.home.component.template
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
+import coil3.size.Size
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
-import com.threegap.bitnagil.presentation.home.component.atom.EmotionBall
 import com.threegap.bitnagil.presentation.home.component.atom.EmotionRegisterButton
-import com.threegap.bitnagil.presentation.home.model.EmotionBallType
+import com.threegap.bitnagil.presentation.home.model.TodayEmotionUiModel
 import com.threegap.bitnagil.presentation.home.util.CollapsibleHeaderState
 import com.threegap.bitnagil.presentation.home.util.rememberCollapsibleHeaderState
 
 @Composable
 fun CollapsibleHomeHeader(
     userName: String,
-    emotionBallType: EmotionBallType?,
+    todayEmotion: TodayEmotionUiModel?,
     collapsibleHeaderState: CollapsibleHeaderState,
     onRegisterEmotion: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val alpha by animateFloatAsState(
+        targetValue = 1f - collapsibleHeaderState.collapseProgress,
+        animationSpec = tween(durationMillis = 300),
+        label = "header_alpha",
+    )
+    val hasEmotion = todayEmotion != null
+    val welcomeMessage = if (hasEmotion) {
+        "${userName}님,\n${todayEmotion?.homeMessage}"
+    } else {
+        "${userName}님, 오셨군요!\n오늘 기분은 어떤가요?"
+    }
+
     Column(
         modifier = modifier
             .height(collapsibleHeaderState.currentHeaderHeight),
@@ -43,7 +68,7 @@ fun CollapsibleHomeHeader(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             BitnagilIcon(
-                id = com.threegap.bitnagil.designsystem.R.drawable.ic_logo,
+                id = R.drawable.ic_logo,
                 tint = BitnagilTheme.colors.coolGray50,
                 modifier = Modifier.padding(start = 16.dp),
             )
@@ -54,7 +79,7 @@ fun CollapsibleHomeHeader(
                 modifier = Modifier
                     .padding(top = 18.dp)
                     .height(collapsibleHeaderState.currentHeaderHeight - collapsibleHeaderState.collapsedHeaderHeight)
-                    .alpha(1f - collapsibleHeaderState.collapseProgress),
+                    .alpha(alpha),
             ) {
                 Column(
                     modifier = Modifier
@@ -64,26 +89,34 @@ fun CollapsibleHomeHeader(
                     verticalArrangement = Arrangement.spacedBy(20.dp),
                 ) {
                     Text(
-                        text = "${userName}님, 오셨군요!\n오늘 기분은 어떤가요?",
+                        text = welcomeMessage,
                         style = BitnagilTheme.typography.cafe24SsurroundAir,
                         color = BitnagilTheme.colors.white,
+                        fontWeight = FontWeight.SemiBold,
                     )
 
                     EmotionRegisterButton(
                         onClick = onRegisterEmotion,
-                        enabled = emotionBallType == null,
+                        enabled = !hasEmotion,
                     )
                 }
 
-                Box(
-                    modifier = modifier
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(todayEmotion?.imageUrl)
+                        .crossfade(true)
+                        .size(Size.ORIGINAL)
+                        .build(),
+                    contentDescription = null,
+                    placeholder = painterResource(R.drawable.default_emotion),
+                    error = painterResource(R.drawable.default_emotion),
+                    contentScale = ContentScale.Fit,
+                    filterQuality = FilterQuality.High,
+                    modifier = Modifier
                         .align(Alignment.BottomEnd)
-                        .padding(end = 18.dp),
-                ) {
-                    EmotionBall(
-                        emotionType = emotionBallType,
-                    )
-                }
+                        .padding(end = 18.dp)
+                        .aspectRatio(108f / 148f),
+                )
             }
         }
     }
@@ -94,7 +127,7 @@ fun CollapsibleHomeHeader(
 private fun CollapsibleHomeHeaderPreview() {
     CollapsibleHomeHeader(
         userName = "대현",
-        emotionBallType = null,
+        todayEmotion = null,
         collapsibleHeaderState = rememberCollapsibleHeaderState(),
         onRegisterEmotion = {},
     )

@@ -3,8 +3,8 @@ package com.threegap.bitnagil.presentation.home
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.threegap.bitnagil.domain.emotion.usecase.FetchTodayEmotionUseCase
 import com.threegap.bitnagil.domain.emotion.usecase.GetEmotionChangeEventFlowUseCase
-import com.threegap.bitnagil.domain.emotion.usecase.GetEmotionUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingRecommendRoutineEventFlowUseCase
 import com.threegap.bitnagil.domain.routine.model.RoutineCompletion
 import com.threegap.bitnagil.domain.routine.model.RoutineCompletionInfo
@@ -15,7 +15,6 @@ import com.threegap.bitnagil.domain.routine.usecase.RoutineCompletionUseCase
 import com.threegap.bitnagil.domain.user.usecase.FetchUserProfileUseCase
 import com.threegap.bitnagil.domain.writeroutine.usecase.GetWriteRoutineEventFlowUseCase
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
-import com.threegap.bitnagil.presentation.home.model.EmotionBallType
 import com.threegap.bitnagil.presentation.home.model.HomeIntent
 import com.threegap.bitnagil.presentation.home.model.HomeSideEffect
 import com.threegap.bitnagil.presentation.home.model.HomeState
@@ -41,7 +40,7 @@ class HomeViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val fetchWeeklyRoutinesUseCase: FetchWeeklyRoutinesUseCase,
     private val fetchUserProfileUseCase: FetchUserProfileUseCase,
-    private val getEmotionUseCase: GetEmotionUseCase,
+    private val fetchTodayEmotionUseCase: FetchTodayEmotionUseCase,
     private val routineCompletionUseCase: RoutineCompletionUseCase,
     private val deleteRoutineUseCase: DeleteRoutineUseCase,
     private val deleteRoutineByDayUseCase: DeleteRoutineByDayUseCase,
@@ -186,8 +185,8 @@ class HomeViewModel @Inject constructor(
 
             is HomeIntent.ConfirmRoutineByDayDeletion -> null
 
-            is HomeIntent.LoadMyEmotion -> {
-                state.copy(myEmotion = intent.emotion)
+            is HomeIntent.LoadTodayEmotion -> {
+                state.copy(todayEmotion = intent.emotion)
             }
 
             is HomeIntent.OnRegisterEmotionClick -> {
@@ -305,10 +304,9 @@ class HomeViewModel @Inject constructor(
     private fun getMyEmotion(currentDate: LocalDate) {
         sendIntent(HomeIntent.UpdateLoading(true))
         viewModelScope.launch {
-            getEmotionUseCase(currentDate.toString()).fold(
-                onSuccess = { emotion ->
-                    val ballType = EmotionBallType.fromDomainEmotion(emotion?.emotionType)
-                    sendIntent(HomeIntent.LoadMyEmotion(ballType))
+            fetchTodayEmotionUseCase(currentDate.toString()).fold(
+                onSuccess = { todayEmotion ->
+                    sendIntent(HomeIntent.LoadTodayEmotion(todayEmotion?.toUiModel()))
                     sendIntent(HomeIntent.UpdateLoading(false))
                 },
                 onFailure = { error ->

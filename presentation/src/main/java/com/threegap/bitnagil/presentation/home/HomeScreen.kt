@@ -130,7 +130,7 @@ fun HomeScreenContainer(
         },
         onShowMoreRoutinesClick = {
             // TODO: 루틴 리스트 화면으로 이동
-        }
+        },
     )
 }
 
@@ -244,7 +244,7 @@ private fun HomeScreen(
 
         CollapsibleHomeHeader(
             userName = uiState.userNickname,
-            emotionBallType = uiState.myEmotion,
+            todayEmotion = uiState.todayEmotion,
             collapsibleHeaderState = collapsibleHeaderState,
             onRegisterEmotion = onRegisterEmotionClick,
         )
@@ -263,6 +263,6 @@ private fun HomeScreenPreview() {
         onSubRoutineCompletionToggle = { _, _, _ -> },
         onRegisterRoutineClick = {},
         onRegisterEmotionClick = {},
-        onShowMoreRoutinesClick = {}
+        onShowMoreRoutinesClick = {},
     )
 }
