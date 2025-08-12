@@ -1,6 +1,7 @@
 package com.threegap.bitnagil.presentation.writeroutine.model.mvi
 
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviState
+import com.threegap.bitnagil.presentation.writeroutine.model.Date
 import com.threegap.bitnagil.presentation.writeroutine.model.Day
 import com.threegap.bitnagil.presentation.writeroutine.model.RepeatType
 import com.threegap.bitnagil.presentation.writeroutine.model.SelectableDay
@@ -14,12 +15,19 @@ data class WriteRoutineState(
     val subRoutineNames: List<String>,
     val repeatType: RepeatType?,
     val repeatDays: List<SelectableDay>,
-    val periodWeek: Int?,
     val startTime: Time?,
+    val startDate: Date?,
+    val endDate: Date?,
     val selectAllTime: Boolean,
     val loading: Boolean,
     val showTimePickerBottomSheet: Boolean,
+    val showStartDatePickerBottomSheet: Boolean,
+    val showEndDatePickerBottomSheet: Boolean,
     val writeRoutineType: WriteRoutineType,
+    val subRoutineUiExpanded: Boolean,
+    val repeatDaysUiExpanded: Boolean,
+    val periodUiExpanded: Boolean,
+    val startTimeUiExpanded: Boolean,
 ) : MviState {
     companion object {
         val Init = WriteRoutineState(
@@ -56,12 +64,19 @@ data class WriteRoutineState(
                     selected = false,
                 ),
             ),
-            periodWeek = null,
             startTime = null,
             selectAllTime = false,
             loading = false,
+            showStartDatePickerBottomSheet = false,
+            showEndDatePickerBottomSheet = false,
             showTimePickerBottomSheet = false,
             writeRoutineType = WriteRoutineType.ADD,
+            subRoutineUiExpanded = false,
+            repeatDaysUiExpanded = false,
+            periodUiExpanded = false,
+            startTimeUiExpanded = false,
+            startDate = null,
+            endDate = null,
         )
     }
 
@@ -69,7 +84,4 @@ data class WriteRoutineState(
         get() = routineName.isNotEmpty() &&
             (repeatType == RepeatType.DAILY || (repeatType == RepeatType.DAY && repeatDays.any { it.selected })) &&
             startTime != null && !loading
-
-    val addSubRoutineButtonEnabled: Boolean
-        get() = subRoutineNames.size < 3 && !loading
 }

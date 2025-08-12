@@ -13,7 +13,6 @@ sealed class WriteRoutineIntent : MviIntent {
     data class SetSubRoutineName(val index: Int, val name: String) : WriteRoutineIntent()
     data class SetRepeatType(val repeatType: RepeatType) : WriteRoutineIntent()
     data class SelectDay(val day: Day) : WriteRoutineIntent()
-    data class SetPeriodWeek(val periodWeek: Int) : WriteRoutineIntent()
     data class SetStartTime(val time: Time) : WriteRoutineIntent()
     data class SetWriteRoutineType(val writeRoutineType: WriteRoutineType) : WriteRoutineIntent()
     data class SetRoutine(val name: String, val repeatDays: List<Day>, val startTime: Time, val subRoutines: List<String>) : WriteRoutineIntent()

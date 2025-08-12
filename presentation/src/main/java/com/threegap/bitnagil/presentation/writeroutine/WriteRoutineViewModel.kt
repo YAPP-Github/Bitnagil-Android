@@ -155,11 +155,6 @@ class WriteRoutineViewModel @AssistedInject constructor(
                     },
                 )
             }
-            is WriteRoutineIntent.SetPeriodWeek -> {
-                return state.copy(
-                    periodWeek = intent.periodWeek,
-                )
-            }
             is WriteRoutineIntent.SetRepeatType -> {
                 return state.copy(
                     repeatType = intent.repeatType,

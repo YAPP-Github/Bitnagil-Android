@@ -1,6 +1,8 @@
 package com.threegap.bitnagil.presentation.writeroutine
 
+import ExpandableContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,7 +19,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -28,19 +29,20 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
-import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.namefield.NameField
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.selectcell.SelectCell
-import com.threegap.bitnagil.presentation.writeroutine.component.atom.strokebutton.StrokeButton
-import com.threegap.bitnagil.presentation.writeroutine.component.atom.tooltipbutton.TooltipButton
+import com.threegap.bitnagil.presentation.writeroutine.component.atom.writeroutinebutton.WriteRoutineButton
 import com.threegap.bitnagil.presentation.writeroutine.component.block.labeledcheckbox.LabeledCheckBox
-import com.threegap.bitnagil.presentation.writeroutine.component.template.TimePickerBottomSheet
+import com.threegap.bitnagil.presentation.writeroutine.component.block.routinedetailrow.RoutineDetailRow
+import com.threegap.bitnagil.presentation.writeroutine.component.block.subroutinefield.SubRoutineField
+import com.threegap.bitnagil.presentation.writeroutine.component.template.datepickerbottomsheet.DatePickerBottomSheet
+import com.threegap.bitnagil.presentation.writeroutine.component.template.timepickerbottomsheet.TimePickerBottomSheet
+import com.threegap.bitnagil.presentation.writeroutine.model.Date
 import com.threegap.bitnagil.presentation.writeroutine.model.Day
 import com.threegap.bitnagil.presentation.writeroutine.model.RepeatType
-import com.threegap.bitnagil.presentation.writeroutine.model.SelectableDay
 import com.threegap.bitnagil.presentation.writeroutine.model.Time
 import com.threegap.bitnagil.presentation.writeroutine.model.WriteRoutineType
 import com.threegap.bitnagil.presentation.writeroutine.model.mvi.WriteRoutineSideEffect
@@ -68,6 +70,24 @@ fun WriteRoutineScreenContainer(
             hour = state.startTime?.hour ?: Time.Init.hour,
             minute = state.startTime?.minute ?: Time.Init.minute,
             onDismiss = viewModel::hideTimePickerBottomSheet,
+        )
+    }
+
+    if (state.showStartDatePickerBottomSheet) {
+        DatePickerBottomSheet(
+            modifier = Modifier.fillMaxWidth(),
+            onDateSelected = {},
+            date = state.startDate ?: Date.now(),
+            onDismiss = {},
+        )
+    }
+
+    if (state.showEndDatePickerBottomSheet) {
+        DatePickerBottomSheet(
+            modifier = Modifier.fillMaxWidth(),
+            onDateSelected = {},
+            date = state.endDate ?: Date.now(),
+            onDismiss = {},
         )
     }
 
@@ -119,213 +139,198 @@ private fun WriteRoutineScreen(
 
         Column(
             modifier = Modifier
-                .padding(start = 16.dp, end = 16.dp, top = 32.dp)
+                .padding(start = 16.dp, end = 16.dp)
                 .weight(1f)
                 .verticalScroll(state = scrollState),
         ) {
-            Column {
-                Row {
-                    Text(
-                        "루틴 이름",
-                        style = BitnagilTheme.typography.body1SemiBold,
-                    )
+            Spacer(modifier = Modifier.height(50.dp))
 
-                    Spacer(modifier = Modifier.width(2.dp))
-
-                    Text(
-                        "*",
-                        style = BitnagilTheme.typography.body1SemiBold.copy(color = BitnagilTheme.colors.error),
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(14.dp))
-
-                NameField(
-                    value = state.routineName,
-                    onValueChange = setRoutineName,
-                    placeholder = "ex) 아침에 개운하게 일어나기",
-                    onClickRemove = null,
-                )
-            }
+            NameField(
+                value = state.routineName,
+                onValueChange = setRoutineName,
+                placeholder = "ex) 아침에 개운하게 일어나기",
+                onClickRemove = null,
+            )
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            Column {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
+            Column(
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                ExpandableContent(
+                    expand = state.subRoutineUiExpanded,
+                    required = false,
+                    iconResourceId = R.drawable.img_subroutines,
+                    title = "세부루틴",
+                    placeHolder = "ex) 일어나자마자 이불 개기",
+                    valueText = "",
+                    onClick = {
+
+                    }
                 ) {
-                    Text(
-                        "세부 루틴",
-                        color = BitnagilTheme.colors.coolGray10,
-                        style = BitnagilTheme.typography.body1SemiBold,
-                    )
-
-                    Spacer(modifier = Modifier.width(2.dp))
-
-                    TooltipButton("어려운 루틴이라면 단계별로 나눠보세요!")
-                }
-
-                Spacer(modifier = Modifier.height(14.dp))
-
-                StrokeButton.Custom(
-                    isSelected = false,
-                    onClick = addSubRoutine,
-                    enabled = state.addSubRoutineButtonEnabled,
-                ) {
-                    Row(
-                        modifier = Modifier.height(52.dp).fillMaxWidth().padding(start = 24.dp, end = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically,
+                    Column(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 20.dp),
+                        verticalArrangement = Arrangement.spacedBy(24.dp),
+                        horizontalAlignment = Alignment.End
                     ) {
-                        BitnagilIcon(
-                            id = R.drawable.ic_plus,
-                            tint = BitnagilTheme.colors.navy400,
+                        SubRoutineField(
+                            resourceId = R.drawable.img_circle_1,
+                            placeHolder = getSubRoutinePlaceHolder(0),
+                            value = state.subRoutineNames.getOrNull(0) ?: "",
+                            onValueChange = { setSubRoutineName(0, it) },
+                            enabled = true,
                         )
 
-                        Spacer(modifier = Modifier.width(10.dp))
+                        SubRoutineField(
+                            resourceId = R.drawable.img_circle_2,
+                            placeHolder = getSubRoutinePlaceHolder(1),
+                            value = state.subRoutineNames.getOrNull(1) ?: "",
+                            onValueChange = { setSubRoutineName(1, it) },
+                            enabled = true,
+                        )
 
-                        Text(
-                            "세부 루틴 추가",
-                            style = BitnagilTheme.typography.body2Medium.copy(color = BitnagilTheme.colors.coolGray40),
+                        SubRoutineField(
+                            resourceId = R.drawable.img_circle_3,
+                            placeHolder = getSubRoutinePlaceHolder(2),
+                            value = state.subRoutineNames.getOrNull(2) ?: "",
+                            onValueChange = { setSubRoutineName(2, it) },
+                            enabled = true,
+                        )
+
+                        LabeledCheckBox(
+                            label = "세부 루틴 설정 안함",
+                            checked = true,
+                            onClick = {
+                                addSubRoutine()
+                            }
                         )
                     }
                 }
 
-                state.subRoutineNames.forEachIndexed { index, subRoutineName ->
-                    Spacer(modifier = Modifier.height(10.dp))
-                    NameField(
-                        value = subRoutineName,
-                        onValueChange = {
-                            setSubRoutineName(index, it)
-                        },
-                        placeholder = getSubRoutinePlaceHolder(index),
-                        onClickRemove = {
-                            removeSubRoutine(index)
-                        },
-                    )
-                }
-            }
+                ExpandableContent(
+                    expand = state.repeatDaysUiExpanded,
+                    required = false,
+                    iconResourceId = R.drawable.img_repeat_days,
+                    title = "반복 요일",
+                    placeHolder = "ex) 매주 월,화,수.목,금",
+                    valueText = "",
+                    onClick = {
 
-            Spacer(modifier = Modifier.height(40.dp))
-
-            Column {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
+                    }
                 ) {
-                    Text(
-                        "루틴 반복",
-                        style = BitnagilTheme.typography.body1SemiBold,
-                    )
-
-                    Spacer(modifier = Modifier.width(2.dp))
-
-                    TooltipButton(
-                        "선택하지 않을 경우, 당일 루틴으로만 자동 설정돼요.",
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(14.dp))
-
-                Row {
-                    StrokeButton.Text(
-                        modifier = Modifier.height(52.dp).weight(1f),
-                        text = "매일",
-                        isSelected = state.repeatType == RepeatType.DAILY,
-                        onClick = {
-                            selectRepeatTime(RepeatType.DAILY)
-                        },
-                    )
-
-                    Spacer(modifier = Modifier.width(12.dp))
-
-                    StrokeButton.Text(
-                        modifier = Modifier.height(52.dp).weight(1f),
-                        text = "요일 선택",
-                        isSelected = state.repeatType == RepeatType.DAY,
-                        onClick = {
-                            selectRepeatTime(RepeatType.DAY)
-                        },
-                    )
-                }
-
-                if (state.repeatType == RepeatType.DAY) {
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Row {
-                        state.repeatDays.forEachIndexed { index, selectableDay ->
-                            SelectCell(
-                                modifier = Modifier.weight(1f),
-                                text = selectableDay.day.text,
+                    Column(
+                        modifier = Modifier.fillMaxWidth().padding(top = 14.dp, bottom = 18.dp, start = 18.dp, end = 18.dp)
+                    ) {
+                        Row {
+                            WriteRoutineButton.Text(
+                                modifier = Modifier.height(52.dp).weight(1f),
+                                text = "매일",
+                                isSelected = state.repeatType == RepeatType.DAILY,
                                 onClick = {
-                                    selectDay(selectableDay.day)
+                                    selectRepeatTime(RepeatType.DAILY)
                                 },
-                                selected = selectableDay.selected,
                             )
-                            if (index != state.repeatDays.lastIndex) {
-                                Spacer(modifier = Modifier.width(8.dp))
+
+                            Spacer(modifier = Modifier.width(12.dp))
+
+                            WriteRoutineButton.Text(
+                                modifier = Modifier.height(52.dp).weight(1f),
+                                text = "요일 선택",
+                                isSelected = state.repeatType == RepeatType.DAY,
+                                onClick = {
+                                    selectRepeatTime(RepeatType.DAY)
+                                },
+                            )
+                        }
+
+                        if (state.repeatType == RepeatType.DAY) {
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            Row {
+                                state.repeatDays.forEachIndexed { index, selectableDay ->
+                                    SelectCell(
+                                        modifier = Modifier.weight(1f),
+                                        text = selectableDay.day.text,
+                                        onClick = {
+                                            selectDay(selectableDay.day)
+                                        },
+                                        selected = selectableDay.selected,
+                                    )
+                                    if (index != state.repeatDays.lastIndex) {
+                                        Spacer(modifier = Modifier.width(8.dp))
+                                    }
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            Spacer(modifier = Modifier.height(40.dp))
+                ExpandableContent(
+                    expand = state.periodUiExpanded,
+                    required = false,
+                    iconResourceId = R.drawable.img_routine_period,
+                    title = "목표 기간",
+                    placeHolder = "ex) 25.08.06 - 25.08.06",
+                    valueText = "",
+                    onClick = {
 
-            Column {
-                Row {
-                    Text(
-                        "시작 시간",
-                        style = BitnagilTheme.typography.body1SemiBold,
-                    )
-
-                    Spacer(modifier = Modifier.width(2.dp))
-
-                    Text(
-                        "*",
-                        style = BitnagilTheme.typography.body1SemiBold.copy(color = BitnagilTheme.colors.error),
-                    )
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    LabeledCheckBox(
-                        label = "하루종일",
-                        checked = state.selectAllTime,
-                        onClick = selectAllTime,
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(14.dp))
-
-                StrokeButton.Custom(
-                    isSelected = false,
-                    onClick = showTimePickerBottomSheet,
+                    }
                 ) {
-                    Row(
-                        modifier = Modifier.height(52.dp).fillMaxWidth().padding(start = 24.dp, end = 20.dp),
-                        verticalAlignment = Alignment.CenterVertically,
+                    Column(
+                        modifier = Modifier.fillMaxWidth().padding(top = 14.dp, bottom = 18.dp, start = 18.dp, end = 18.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        Text(
-                            if (state.startTime == null) {
-                                "시간 선택"
-                            } else {
-                                "${state.startTime.hour}".padStart(2, '0') + ":" + "${state.startTime.minute}".padStart(
-                                    2,
-                                    '0',
-                                )
-                            },
-                            style = BitnagilTheme.typography.body2Medium.copy(color = BitnagilTheme.colors.coolGray40),
+                        RoutineDetailRow(
+                            title = "시작일",
+                            placeHolder = "눌러서 선택",
+                            value = "",
+                            onClick = {},
                         )
 
-                        Spacer(modifier = Modifier.weight(1f))
-
-                        BitnagilIcon(
-                            id = R.drawable.ic_down_arrow,
-                            tint = BitnagilTheme.colors.navy400,
+                        RoutineDetailRow(
+                            title = "종료일",
+                            placeHolder = "눌러서 선택",
+                            value = "",
+                            onClick = {},
                         )
                     }
                 }
-            }
 
-            Spacer(modifier = Modifier.height(54.dp))
+                ExpandableContent(
+                    expand = state.startTimeUiExpanded,
+                    required = true,
+                    iconResourceId = R.drawable.img_start_time,
+                    title = "시간",
+                    placeHolder = "ex) 오전 9:40부터 시작",
+                    valueText = "",
+                    onClick = {
+
+                    }
+                ) {
+                    Column(
+                        modifier = Modifier.fillMaxWidth().padding(top = 14.dp, bottom = 18.dp, start = 18.dp, end = 18.dp),
+                        horizontalAlignment = Alignment.End
+                    ) {
+                        RoutineDetailRow(
+                            title = "시작 시간",
+                            placeHolder = "눌러서 선택",
+                            value = "",
+                            onClick = {},
+                        )
+
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        LabeledCheckBox(
+                            label = "하루 종일",
+                            checked = state.selectAllTime,
+                            onClick = {
+
+                            }
+                        )
+                    }
+
+                }
+            }
         }
 
         BitnagilTextButton(
@@ -353,50 +358,7 @@ private fun getSubRoutinePlaceHolder(index: Int): String {
 fun WriteRoutineScreenPreview() {
     BitnagilTheme {
         WriteRoutineScreen(
-            state = WriteRoutineState(
-                routineName = "이름",
-                subRoutineNames = listOf(
-                    "1",
-                    "2",
-                ),
-                repeatType = RepeatType.DAILY,
-                repeatDays = listOf(
-                    SelectableDay(
-                        day = Day.MON,
-                        selected = true,
-                    ),
-                    SelectableDay(
-                        day = Day.TUE,
-                        selected = false,
-                    ),
-                    SelectableDay(
-                        day = Day.WED,
-                        selected = false,
-                    ),
-                    SelectableDay(
-                        day = Day.THU,
-                        selected = false,
-                    ),
-                    SelectableDay(
-                        day = Day.FRI,
-                        selected = false,
-                    ),
-                    SelectableDay(
-                        day = Day.SAT,
-                        selected = false,
-                    ),
-                    SelectableDay(
-                        day = Day.SUN,
-                        selected = false,
-                    ),
-                ),
-                periodWeek = null,
-                startTime = null,
-                selectAllTime = false,
-                loading = false,
-                showTimePickerBottomSheet = false,
-                writeRoutineType = WriteRoutineType.ADD,
-            ),
+            state = WriteRoutineState.Init.copy(periodUiExpanded = true, startTimeUiExpanded = true),
             setRoutineName = {},
             setSubRoutineName = { _, _ -> },
             addSubRoutine = {},
