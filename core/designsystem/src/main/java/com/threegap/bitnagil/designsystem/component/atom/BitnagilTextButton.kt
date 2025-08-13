@@ -110,6 +110,16 @@ data class BitnagilTextButtonColor(
             pressedTextColor = BitnagilTheme.colors.navy500,
             disabledTextColor = BitnagilTheme.colors.navy500,
         )
+
+        @Composable
+        fun cancel(): BitnagilTextButtonColor = BitnagilTextButtonColor(
+            defaultBackgroundColor = BitnagilTheme.colors.coolGray97,
+            pressedBackgroundColor = BitnagilTheme.colors.coolGray97,
+            disabledBackgroundColor = BitnagilTheme.colors.coolGray97,
+            defaultTextColor = BitnagilTheme.colors.coolGray40,
+            pressedTextColor = BitnagilTheme.colors.coolGray40,
+            disabledTextColor = BitnagilTheme.colors.coolGray40,
+        )
     }
 }
 
