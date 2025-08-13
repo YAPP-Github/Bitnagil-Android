@@ -30,6 +30,7 @@ import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.setting.component.atom.settingtitle.SettingTitle
 import com.threegap.bitnagil.presentation.setting.component.block.LogoutConfirmDialog
+import com.threegap.bitnagil.presentation.setting.model.mvi.SettingIntent
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingSideEffect
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingState
 
@@ -40,12 +41,14 @@ fun SettingScreenContainer(
     navigateToTermsOfService: () -> Unit,
     navigateToPrivacyPolicy: () -> Unit,
     navigateToLogin: () -> Unit,
+    navigateToWithdrawal: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsState()
 
     viewModel.sideEffectFlow.collectAsEffect { sideEffect ->
         when (sideEffect) {
             SettingSideEffect.NavigateToLogin -> navigateToLogin()
+            SettingSideEffect.NavigateToWithdrawal -> navigateToWithdrawal()
         }
     }
 
@@ -65,7 +68,7 @@ fun SettingScreenContainer(
         onClickTermsOfService = navigateToTermsOfService,
         onClickPrivacyPolicy = navigateToPrivacyPolicy,
         onClickLogout = viewModel::showLogoutDialog,
-        onClickWithdrawal = {},
+        onClickWithdrawal = { viewModel.sendIntent(SettingIntent.OnWithdrawalClick) },
     )
 }
 

@@ -17,4 +17,5 @@ sealed class SettingIntent : MviIntent {
     data object LogoutLoading : SettingIntent()
     data object LogoutSuccess : SettingIntent()
     data object LogoutFailure : SettingIntent()
+    data object OnWithdrawalClick : SettingIntent()
 }
