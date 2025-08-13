@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.sp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
-import com.threegap.bitnagil.designsystem.component.atom.BitnagilIconButton
+import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 
 @Composable
 fun ExpandableContent(
@@ -59,6 +59,7 @@ fun ExpandableContent(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .clickableWithoutRipple(onClick = onClick)
                 .padding(start = 18.dp, end = 12.dp, top = 18.dp, bottom = 18.dp)
                 .animateContentSize(),
             verticalAlignment = Alignment.CenterVertically,
@@ -97,13 +98,12 @@ fun ExpandableContent(
                 }
             }
 
-            BitnagilIconButton(
+            BitnagilIcon(
                 id = if (expand) R.drawable.ic_up_arrow_20 else R.drawable.ic_down_arrow_20,
                 tint = BitnagilTheme.colors.coolGray30,
                 modifier = Modifier
                     .size(36.dp)
                     .padding(8.dp),
-                onClick = onClick,
             )
         }
 
