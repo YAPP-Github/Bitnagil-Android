@@ -45,7 +45,7 @@ class SettingViewModel @Inject constructor(
                 return state.copy(useServiceAlarm = !state.useServiceAlarm)
             }
 
-            is SettingIntent.ShowConfirmDialog -> {
+            is SettingIntent.ShowLogoutConfirmDialog -> {
                 return state.copy(logoutConfirmDialogVisible = true)
             }
 
@@ -69,7 +69,7 @@ class SettingViewModel @Inject constructor(
     }
 
     fun showLogoutDialog() {
-        sendIntent(SettingIntent.ShowConfirmDialog)
+        sendIntent(SettingIntent.ShowLogoutConfirmDialog)
     }
 
     fun hideConfirmDialog() {

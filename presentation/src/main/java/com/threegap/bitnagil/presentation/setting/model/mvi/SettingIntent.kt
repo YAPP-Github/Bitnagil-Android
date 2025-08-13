@@ -10,7 +10,7 @@ sealed class SettingIntent : MviIntent {
         val latestVersion: String,
     ) : SettingIntent()
 
-    data object ShowConfirmDialog : SettingIntent()
+    data object ShowLogoutConfirmDialog : SettingIntent()
     data object HideConfirmDialog : SettingIntent()
     data object ToggleServiceAlarm : SettingIntent()
     data object TogglePushAlarm : SettingIntent()
