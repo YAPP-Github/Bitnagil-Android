@@ -77,14 +77,19 @@ class SettingViewModel @Inject constructor(
     }
 
     fun logout() {
+        if (container.stateFlow.value.loading) return
+
         sendIntent(SettingIntent.HideConfirmDialog)
         viewModelScope.launch {
             sendIntent(SettingIntent.LogoutLoading)
-            logoutUseCase().onSuccess {
-                sendIntent(SettingIntent.LogoutSuccess)
-            }.onFailure {
-                sendIntent(SettingIntent.LogoutFailure)
-            }
+            logoutUseCase().fold(
+                onSuccess = {
+                    sendIntent(SettingIntent.LogoutSuccess)
+                },
+                onFailure = {
+                    sendIntent(SettingIntent.LogoutFailure)
+                },
+            )
         }
     }
 
