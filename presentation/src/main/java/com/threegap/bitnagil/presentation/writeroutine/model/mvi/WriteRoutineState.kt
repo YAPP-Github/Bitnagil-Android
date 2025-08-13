@@ -13,6 +13,7 @@ import kotlinx.parcelize.Parcelize
 data class WriteRoutineState(
     val routineName: String,
     val subRoutineNames: List<String>,
+    val selectNotUseSUbRoutines: Boolean,
     val repeatType: RepeatType?,
     val repeatDays: List<SelectableDay>,
     val startTime: Time?,
@@ -32,7 +33,8 @@ data class WriteRoutineState(
     companion object {
         val Init = WriteRoutineState(
             routineName = "",
-            subRoutineNames = emptyList(),
+            subRoutineNames = listOf("", "", ""),
+            selectNotUseSUbRoutines = false,
             repeatType = null,
             repeatDays = listOf(
                 SelectableDay(
@@ -84,4 +86,22 @@ data class WriteRoutineState(
         get() = routineName.isNotEmpty() &&
             (repeatType == RepeatType.DAILY || (repeatType == RepeatType.DAY && repeatDays.any { it.selected })) &&
             startTime != null && !loading
+
+    val subRoutinesText: String get() = subRoutineNames.filter { it.isNotEmpty() }.joinToString(separator = "\n")
+
+    val repeatDaysText: String
+        get() = when(repeatType) {
+            RepeatType.DAILY -> "매일"
+            RepeatType.DAY -> "매주 ${repeatDays.filter { it.selected }.joinToString { it.day.text }}"
+            null -> ""
+        }
+
+    val periodText: String get() {
+        if (startDate == null && endDate == null) return ""
+        return "${startDate?.toYearShrinkageFormattedString() ?: ""} ~ ${endDate?.toYearShrinkageFormattedString() ?: ""}"
+    }
+
+    val startTimeText: String
+        get() = if (selectAllTime) "하루종일" else startTime?.let { "${it.toAmPmFormattedString()}부터 시작" } ?: ""
+
 }

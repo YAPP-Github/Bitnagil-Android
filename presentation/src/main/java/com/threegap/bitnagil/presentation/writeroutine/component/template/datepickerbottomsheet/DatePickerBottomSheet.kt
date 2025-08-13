@@ -21,6 +21,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -38,6 +39,7 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIconButton
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
 import com.threegap.bitnagil.designsystem.R
+import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.writeroutine.component.template.datepickerbottomsheet.model.CalendarUtils
 import com.threegap.bitnagil.presentation.writeroutine.model.Date
 import kotlinx.coroutines.launch
@@ -49,8 +51,12 @@ fun DatePickerBottomSheet(
     onDateSelected: (Date) -> Unit,
     date: Date,
     onDismiss: () -> Unit,
+    availableStartDate: Date?,
+    availableEndDate: Date?,
 ) {
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
     val coroutineScope = rememberCoroutineScope()
 
     ModalBottomSheet(
@@ -71,6 +77,8 @@ fun DatePickerBottomSheet(
                     }
             },
             initDate = date,
+            availableStartDate = availableStartDate,
+            availableEndDate = availableEndDate
         )
     }
 }
@@ -80,6 +88,8 @@ private fun DatePickerBottomSheetContent(
     modifier: Modifier = Modifier,
     onDateSelected: (Date) -> Unit,
     initDate: Date,
+    availableStartDate: Date?,
+    availableEndDate: Date?
 ) {
     var currentYear by remember { mutableIntStateOf(initDate.year) }
     var currentMonth by remember { mutableIntStateOf(initDate.month) }
@@ -93,6 +103,17 @@ private fun DatePickerBottomSheetContent(
     }
     val currentDaysOfMonth = remember(currentYear, currentMonth) {
         CalendarUtils.getDayAmountOfMonth(initDate.year, initDate.month)
+    }
+
+    val prevMonthButtonEnabled by remember(availableStartDate) {
+        derivedStateOf {
+            (availableStartDate == null) || (availableStartDate.year < currentYear) || (availableStartDate.month < currentMonth)
+        }
+    }
+    val nextMonthButtonEnabled by remember(availableEndDate) {
+        derivedStateOf {
+            (availableEndDate == null) || (availableEndDate.year > currentYear) || (availableEndDate.month > currentMonth)
+        }
     }
 
     Column(
@@ -121,11 +142,10 @@ private fun DatePickerBottomSheetContent(
                             currentMonth -= 1
                         }
                     },
-                    modifier = Modifier
-                        .size(48.dp),
-                    enabled = true,
+                    modifier = Modifier.size(48.dp),
+                    enabled = prevMonthButtonEnabled,
                     paddingValues = PaddingValues(14.dp),
-                    tint = BitnagilTheme.colors.coolGray10,
+                    tint = if (prevMonthButtonEnabled) BitnagilTheme.colors.coolGray10 else BitnagilTheme.colors.coolGray95,
                 )
 
                 BitnagilIconButton(
@@ -138,11 +158,10 @@ private fun DatePickerBottomSheetContent(
                             currentMonth += 1
                         }
                     },
-                    modifier = Modifier
-                        .size(48.dp),
-                    enabled = true,
+                    modifier = Modifier.size(48.dp),
+                    enabled = nextMonthButtonEnabled,
                     paddingValues = PaddingValues(14.dp),
-                    tint = BitnagilTheme.colors.coolGray10,
+                    tint = if (nextMonthButtonEnabled) BitnagilTheme.colors.coolGray10 else BitnagilTheme.colors.coolGray95,
                 )
             }
         }
@@ -180,19 +199,26 @@ private fun DatePickerBottomSheetContent(
 
                 items(currentDaysOfMonth) { index ->
                     val selected = (selectedDate.year == currentYear) && (selectedDate.month == currentMonth) && (selectedDate.day == index + 1)
+                    val currentDate = Date(year = currentYear, month = currentMonth, day = index + 1)
+                    val available = currentDate.checkInRange(startDate = availableStartDate, endDate = availableEndDate)
                     Box(
                         modifier = Modifier.aspectRatio(1f).background(
                             color = if (selected) { BitnagilTheme.colors.orange50 } else { Color.Transparent },
                             shape = if (selected) { RoundedCornerShape(12.dp) } else { RectangleShape }
-                        ),
+                        ).clickableWithoutRipple {
+                            if (!available) return@clickableWithoutRipple
+                            selectedDate = currentDate
+                        },
                         contentAlignment = Alignment.Center,
                     ) {
                         Text(
                             "${index + 1}",
                             style = if (selected) {
                                 BitnagilTheme.typography.subtitle1SemiBold.copy(color = BitnagilTheme.colors.orange500)
-                            } else {
+                            } else if (available) {
                                 BitnagilTheme.typography.subtitle1Regular.copy(color = BitnagilTheme.colors.coolGray10)
+                            } else {
+                                BitnagilTheme.typography.subtitle1Regular.copy(color = BitnagilTheme.colors.coolGray80)
                             },
                         )
                     }
@@ -234,7 +260,9 @@ private fun DatePickerBottomSheetContentPreview(){
         DatePickerBottomSheetContent(
             modifier = Modifier,
             onDateSelected = { _ -> },
-            initDate = Date(year = 2025, month = 8, day = 1)
+            initDate = Date(year = 2025, month = 8, day = 1),
+            availableStartDate = null,
+            availableEndDate = null
         )
     }
 }

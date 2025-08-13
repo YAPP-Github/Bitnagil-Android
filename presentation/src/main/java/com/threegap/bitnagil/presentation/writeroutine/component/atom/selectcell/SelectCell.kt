@@ -25,7 +25,7 @@ fun SelectCell(
 ) {
     Box(
         modifier = modifier
-            .height(48.dp)
+            .height(38.dp)
             .background(
                 color = if (selected) BitnagilTheme.colors.orange500 else BitnagilTheme.colors.white,
                 shape = RoundedCornerShape(12.dp),

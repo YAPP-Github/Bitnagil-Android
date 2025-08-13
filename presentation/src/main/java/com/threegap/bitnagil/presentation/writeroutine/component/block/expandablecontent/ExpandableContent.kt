@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -54,12 +55,12 @@ fun ExpandableContent(
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
             .background(color = BitnagilTheme.colors.coolGray99)
-            .animateContentSize(),
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 18.dp, end = 12.dp, top = 18.dp, bottom = 18.dp),
+                .padding(start = 18.dp, end = 12.dp, top = 18.dp, bottom = 18.dp)
+                .animateContentSize(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Image(
@@ -90,7 +91,6 @@ fun ExpandableContent(
                 if (!expand) {
                     Text(
                         text = if (showValueText) valueText ?: placeHolder else placeHolder,
-                        maxLines = 1,
                         style = if (showValueText) mainTextStyle else subTextStyle,
                     )
                 }
@@ -133,13 +133,13 @@ fun ExpandableContentPreview() {
             iconResourceId = R.drawable.img_subroutines,
             title = "세부루틴",
             placeHolder = "세부루틴을 설정해주세요.",
-            valueText = "",
+            valueText = "이거\n길면\n어떻게될까",
             onClick = { isExpanded = !isExpanded },
             required = true,
             content = {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.clickable { isChecked = !isChecked },
+                    modifier = Modifier.height(100.dp).clickable { isChecked = !isChecked },
                 ) {
                     Checkbox(
                         checked = isChecked,

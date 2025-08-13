@@ -9,6 +9,7 @@ import com.threegap.bitnagil.domain.writeroutine.usecase.EditRoutineUseCase
 import com.threegap.bitnagil.domain.writeroutine.usecase.GetChangedSubRoutinesUseCase
 import com.threegap.bitnagil.domain.writeroutine.usecase.RegisterRoutineUseCase
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
+import com.threegap.bitnagil.presentation.writeroutine.model.Date
 import com.threegap.bitnagil.presentation.writeroutine.model.Day
 import com.threegap.bitnagil.presentation.writeroutine.model.RepeatType
 import com.threegap.bitnagil.presentation.writeroutine.model.SelectableDay
@@ -88,7 +89,11 @@ class WriteRoutineViewModel @AssistedInject constructor(
                             name = routine.routineName,
                             repeatDays = routine.repeatDay.map { Day.fromDayOfWeek(it) },
                             startTime = Time.fromDomainTimeString(routine.executionTime),
-                            subRoutines = routine.subRoutines.map { it.subRoutineName },
+                            subRoutines = listOf(
+                                oldSubRoutines.getOrNull(0)?.name ?: "",
+                                oldSubRoutines.getOrNull(1)?.name ?: "",
+                                oldSubRoutines.getOrNull(2)?.name ?: "",
+                            ),
                         ),
                     )
                 },
@@ -110,7 +115,11 @@ class WriteRoutineViewModel @AssistedInject constructor(
                             name = routine.name,
                             repeatDays = listOf(),
                             startTime = Time.fromDomainTimeString(routine.executionTime),
-                            subRoutines = oldSubRoutines.map { it.name },
+                            subRoutines = listOf(
+                                oldSubRoutines.getOrNull(0)?.name ?: "",
+                                oldSubRoutines.getOrNull(1)?.name ?: "",
+                                oldSubRoutines.getOrNull(2)?.name ?: "",
+                            ),
                         ),
                     )
                 },
@@ -126,18 +135,6 @@ class WriteRoutineViewModel @AssistedInject constructor(
         state: WriteRoutineState,
     ): WriteRoutineState {
         when (intent) {
-            WriteRoutineIntent.AddSubRoutine -> {
-                return state.copy(
-                    subRoutineNames = state.subRoutineNames + "",
-                )
-            }
-            is WriteRoutineIntent.RemoveSubRoutine -> {
-                return state.copy(
-                    subRoutineNames = state.subRoutineNames.filterIndexed { index, _ ->
-                        index != intent.index
-                    },
-                )
-            }
             WriteRoutineIntent.SelectAllTime -> {
                 return state.copy(
                     selectAllTime = !state.selectAllTime,
@@ -262,6 +259,62 @@ class WriteRoutineViewModel @AssistedInject constructor(
                     loading = true,
                 )
             }
+            WriteRoutineIntent.ShowStartDatePickerBottomSheet -> {
+                return state.copy(
+                    showStartDatePickerBottomSheet = true,
+                )
+            }
+            WriteRoutineIntent.HideEndDatePickerBottomSheet -> {
+                return state.copy(
+                    showEndDatePickerBottomSheet = false,
+                )
+            }
+            WriteRoutineIntent.ShowEndDatePickerBottomSheet -> {
+                return state.copy(
+                    showEndDatePickerBottomSheet = true,
+                )
+            }
+            WriteRoutineIntent.HideStartDatePickerBottomSheet -> {
+                return state.copy(
+                    showStartDatePickerBottomSheet = false,
+                )
+            }
+            is WriteRoutineIntent.SetPeriodUiExpanded -> {
+                return state.copy(
+                    periodUiExpanded = intent.expanded,
+                )
+            }
+            is WriteRoutineIntent.SetRepeatDaysUiExpanded -> {
+                return state.copy(
+                    repeatDaysUiExpanded = intent.expanded,
+                )
+            }
+            is WriteRoutineIntent.SetStartTimeUiExpanded -> {
+                return state.copy(
+                    startTimeUiExpanded = intent.expanded,
+                )
+            }
+            is WriteRoutineIntent.SetSubRoutineUiExpanded -> {
+                return state.copy(
+                    subRoutineUiExpanded = intent.expanded,
+                )
+            }
+            is WriteRoutineIntent.SetEndDate -> {
+                return state.copy(
+                    endDate = intent.date,
+                )
+            }
+            is WriteRoutineIntent.SetStartDate -> {
+                return state.copy(
+                    startDate = intent.date,
+                )
+            }
+
+            WriteRoutineIntent.SelectNotUseSubRoutines -> {
+                return state.copy(
+                    selectNotUseSUbRoutines = !state.selectNotUseSUbRoutines,
+                )
+            }
         }
     }
 
@@ -277,15 +330,9 @@ class WriteRoutineViewModel @AssistedInject constructor(
         }
     }
 
-    fun addSubRoutine() {
+    fun selectNotUseSubRoutines() {
         viewModelScope.launch {
-            sendIntent(WriteRoutineIntent.AddSubRoutine)
-        }
-    }
-
-    fun removeSubRoutine(index: Int) {
-        viewModelScope.launch {
-            sendIntent(WriteRoutineIntent.RemoveSubRoutine(index))
+            sendIntent(WriteRoutineIntent.SelectNotUseSubRoutines)
         }
     }
 
@@ -326,6 +373,70 @@ class WriteRoutineViewModel @AssistedInject constructor(
         }
     }
 
+    fun showStartDatePickerBottomSheet() {
+        viewModelScope.launch {
+            sendIntent(WriteRoutineIntent.ShowStartDatePickerBottomSheet)
+        }
+    }
+
+    fun hideStartDatePickerBottomSheet() {
+        viewModelScope.launch {
+            sendIntent(WriteRoutineIntent.HideStartDatePickerBottomSheet)
+        }
+    }
+
+    fun showEndDatePickerBottomSheet() {
+        viewModelScope.launch {
+            sendIntent(WriteRoutineIntent.ShowEndDatePickerBottomSheet)
+        }
+    }
+
+    fun hideEndDatePickerBottomSheet() {
+        viewModelScope.launch {
+            sendIntent(WriteRoutineIntent.HideEndDatePickerBottomSheet)
+        }
+    }
+
+    fun setStartDate(date: Date) {
+        viewModelScope.launch {
+            sendIntent(WriteRoutineIntent.SetStartDate(date))
+        }
+    }
+
+    fun setEndDate(date: Date) {
+        viewModelScope.launch {
+            sendIntent(WriteRoutineIntent.SetEndDate(date))
+        }
+    }
+
+    fun toggleSubRoutineUiExpanded() {
+        val currentSubRoutineUiExpanded = stateFlow.value.subRoutineUiExpanded
+        viewModelScope.launch {
+            sendIntent(WriteRoutineIntent.SetSubRoutineUiExpanded(!currentSubRoutineUiExpanded))
+        }
+    }
+
+    fun toggleRepeatDaysUiExpanded() {
+        val currentRepeatDaysUiExpanded = stateFlow.value.repeatDaysUiExpanded
+        viewModelScope.launch {
+            sendIntent(WriteRoutineIntent.SetRepeatDaysUiExpanded(!currentRepeatDaysUiExpanded))
+        }
+    }
+
+    fun togglePeriodUiExpanded() {
+        val currentPeriodUiExpanded = stateFlow.value.periodUiExpanded
+        viewModelScope.launch {
+            sendIntent(WriteRoutineIntent.SetPeriodUiExpanded(!currentPeriodUiExpanded))
+        }
+    }
+
+    fun toggleStartTimeUiExpanded() {
+        val currentStartTimeUiExpanded = stateFlow.value.startTimeUiExpanded
+        viewModelScope.launch {
+            sendIntent(WriteRoutineIntent.SetStartTimeUiExpanded(!currentStartTimeUiExpanded))
+        }
+    }
+
     fun registerRoutine() {
         viewModelScope.launch {
             val currentState = stateFlow.value
@@ -354,11 +465,13 @@ class WriteRoutineViewModel @AssistedInject constructor(
             when (currentState.writeRoutineType) {
                 WriteRoutineType.ADD -> {
                     sendIntent(WriteRoutineIntent.RegisterRoutineLoading)
+                    val subRoutines = if (currentState.selectNotUseSUbRoutines) emptyList() else currentState.subRoutineNames
+
                     val registerRoutineResult = registerRoutineUseCase(
                         currentState.routineName,
                         repeatDay,
                         startTime.toDomainTime(),
-                        currentState.subRoutineNames,
+                        subRoutines,
                     )
 
                     if (registerRoutineResult.isSuccess) {
@@ -369,6 +482,7 @@ class WriteRoutineViewModel @AssistedInject constructor(
                 }
                 WriteRoutineType.EDIT -> {
                     val currentRoutineId = routineId ?: return@launch
+                    val subRoutines = if (currentState.selectNotUseSUbRoutines) emptyList() else currentState.subRoutineNames
 
                     val subRoutineDiffs = getChangedSubRoutinesUseCase(
                         oldSubRoutines = oldSubRoutines.mapIndexed { index, subRoutine ->
@@ -378,7 +492,7 @@ class WriteRoutineViewModel @AssistedInject constructor(
                                 sort = index + 1,
                             )
                         },
-                        newSubRoutineNames = currentState.subRoutineNames,
+                        newSubRoutineNames = subRoutines.filter { it.isNotEmpty() },
                     )
 
                     sendIntent(WriteRoutineIntent.EditRoutineLoading)

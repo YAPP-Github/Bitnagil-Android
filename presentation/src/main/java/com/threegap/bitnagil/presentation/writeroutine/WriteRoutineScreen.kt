@@ -76,18 +76,22 @@ fun WriteRoutineScreenContainer(
     if (state.showStartDatePickerBottomSheet) {
         DatePickerBottomSheet(
             modifier = Modifier.fillMaxWidth(),
-            onDateSelected = {},
-            date = state.startDate ?: Date.now(),
-            onDismiss = {},
+            onDateSelected = viewModel::setStartDate,
+            date = state.startDate ?: state.endDate?.let { Date.min(it, Date.now()) } ?: Date.now(),
+            onDismiss = viewModel::hideStartDatePickerBottomSheet,
+            availableStartDate = null,
+            availableEndDate = state.endDate,
         )
     }
 
     if (state.showEndDatePickerBottomSheet) {
         DatePickerBottomSheet(
             modifier = Modifier.fillMaxWidth(),
-            onDateSelected = {},
-            date = state.endDate ?: Date.now(),
-            onDismiss = {},
+            onDateSelected = viewModel::setEndDate,
+            date = state.endDate ?: state.startDate?.let { Date.max(it, Date.now()) } ?: Date.now(),
+            onDismiss = viewModel::hideEndDatePickerBottomSheet,
+            availableStartDate = state.startDate,
+            availableEndDate = null,
         )
     }
 
@@ -95,14 +99,19 @@ fun WriteRoutineScreenContainer(
         state = state,
         setRoutineName = viewModel::setRoutineName,
         setSubRoutineName = viewModel::setSubRoutineName,
-        addSubRoutine = viewModel::addSubRoutine,
+        selectNotUseSubRoutines = viewModel::selectNotUseSubRoutines,
         selectRepeatTime = viewModel::selectRepeatType,
         selectDay = viewModel::selectDay,
         selectAllTime = viewModel::selectAllTime,
         showTimePickerBottomSheet = viewModel::showTimePickerBottomSheet,
         onClickRegister = viewModel::registerRoutine,
-        removeSubRoutine = viewModel::removeSubRoutine,
         onClickBack = navigateToBack,
+        onClickSubRoutineExpand = viewModel::toggleSubRoutineUiExpanded,
+        onClickRepeatDaysExpand = viewModel::toggleRepeatDaysUiExpanded,
+        onClickStartTimeExpand = viewModel::toggleStartTimeUiExpanded,
+        onClickPeriodExpand = viewModel::togglePeriodUiExpanded,
+        showStartDatePickerBottomSheet = viewModel::showStartDatePickerBottomSheet,
+        showEndDatePickerBottomSheet = viewModel::showEndDatePickerBottomSheet,
     )
 }
 
@@ -111,14 +120,19 @@ private fun WriteRoutineScreen(
     state: WriteRoutineState,
     setRoutineName: (String) -> Unit,
     setSubRoutineName: (Int, String) -> Unit,
-    addSubRoutine: () -> Unit,
+    selectNotUseSubRoutines: () -> Unit,
     selectRepeatTime: (RepeatType) -> Unit,
     selectDay: (Day) -> Unit,
     selectAllTime: () -> Unit,
     showTimePickerBottomSheet: () -> Unit,
     onClickRegister: () -> Unit,
-    removeSubRoutine: (Int) -> Unit,
     onClickBack: () -> Unit,
+    onClickSubRoutineExpand: () -> Unit,
+    onClickRepeatDaysExpand: () -> Unit,
+    onClickStartTimeExpand: () -> Unit,
+    onClickPeriodExpand: () -> Unit,
+    showStartDatePickerBottomSheet: () -> Unit,
+    showEndDatePickerBottomSheet: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
 
@@ -163,10 +177,8 @@ private fun WriteRoutineScreen(
                     iconResourceId = R.drawable.img_subroutines,
                     title = "세부루틴",
                     placeHolder = "ex) 일어나자마자 이불 개기",
-                    valueText = "",
-                    onClick = {
-
-                    }
+                    valueText = state.subRoutinesText,
+                    onClick = onClickSubRoutineExpand
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 20.dp),
@@ -178,7 +190,7 @@ private fun WriteRoutineScreen(
                             placeHolder = getSubRoutinePlaceHolder(0),
                             value = state.subRoutineNames.getOrNull(0) ?: "",
                             onValueChange = { setSubRoutineName(0, it) },
-                            enabled = true,
+                            enabled = !state.selectNotUseSUbRoutines,
                         )
 
                         SubRoutineField(
@@ -186,7 +198,7 @@ private fun WriteRoutineScreen(
                             placeHolder = getSubRoutinePlaceHolder(1),
                             value = state.subRoutineNames.getOrNull(1) ?: "",
                             onValueChange = { setSubRoutineName(1, it) },
-                            enabled = true,
+                            enabled = !state.selectNotUseSUbRoutines,
                         )
 
                         SubRoutineField(
@@ -194,15 +206,13 @@ private fun WriteRoutineScreen(
                             placeHolder = getSubRoutinePlaceHolder(2),
                             value = state.subRoutineNames.getOrNull(2) ?: "",
                             onValueChange = { setSubRoutineName(2, it) },
-                            enabled = true,
+                            enabled = !state.selectNotUseSUbRoutines,
                         )
 
                         LabeledCheckBox(
                             label = "세부 루틴 설정 안함",
-                            checked = true,
-                            onClick = {
-                                addSubRoutine()
-                            }
+                            checked = state.selectNotUseSUbRoutines,
+                            onClick = selectNotUseSubRoutines
                         )
                     }
                 }
@@ -213,10 +223,8 @@ private fun WriteRoutineScreen(
                     iconResourceId = R.drawable.img_repeat_days,
                     title = "반복 요일",
                     placeHolder = "ex) 매주 월,화,수.목,금",
-                    valueText = "",
-                    onClick = {
-
-                    }
+                    valueText = state.repeatDaysText,
+                    onClick = onClickRepeatDaysExpand
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth().padding(top = 14.dp, bottom = 18.dp, start = 18.dp, end = 18.dp)
@@ -271,10 +279,8 @@ private fun WriteRoutineScreen(
                     iconResourceId = R.drawable.img_routine_period,
                     title = "목표 기간",
                     placeHolder = "ex) 25.08.06 - 25.08.06",
-                    valueText = "",
-                    onClick = {
-
-                    }
+                    valueText = state.periodText,
+                    onClick = onClickPeriodExpand
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth().padding(top = 14.dp, bottom = 18.dp, start = 18.dp, end = 18.dp),
@@ -283,15 +289,15 @@ private fun WriteRoutineScreen(
                         RoutineDetailRow(
                             title = "시작일",
                             placeHolder = "눌러서 선택",
-                            value = "",
-                            onClick = {},
+                            value = state.startDate?.toFormattedString() ?: "",
+                            onClick = showStartDatePickerBottomSheet,
                         )
 
                         RoutineDetailRow(
                             title = "종료일",
                             placeHolder = "눌러서 선택",
-                            value = "",
-                            onClick = {},
+                            value = state.endDate?.toFormattedString() ?: "",
+                            onClick = showEndDatePickerBottomSheet,
                         )
                     }
                 }
@@ -302,10 +308,8 @@ private fun WriteRoutineScreen(
                     iconResourceId = R.drawable.img_start_time,
                     title = "시간",
                     placeHolder = "ex) 오전 9:40부터 시작",
-                    valueText = "",
-                    onClick = {
-
-                    }
+                    valueText = state.startTimeText,
+                    onClick = onClickStartTimeExpand
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth().padding(top = 14.dp, bottom = 18.dp, start = 18.dp, end = 18.dp),
@@ -314,8 +318,8 @@ private fun WriteRoutineScreen(
                         RoutineDetailRow(
                             title = "시작 시간",
                             placeHolder = "눌러서 선택",
-                            value = "",
-                            onClick = {},
+                            value = state.startTime?.toAmPmFormattedString() ?: "",
+                            onClick = showTimePickerBottomSheet,
                         )
 
                         Spacer(modifier = Modifier.height(20.dp))
@@ -323,9 +327,7 @@ private fun WriteRoutineScreen(
                         LabeledCheckBox(
                             label = "하루 종일",
                             checked = state.selectAllTime,
-                            onClick = {
-
-                            }
+                            onClick = selectAllTime
                         )
                     }
 
@@ -361,14 +363,19 @@ fun WriteRoutineScreenPreview() {
             state = WriteRoutineState.Init.copy(periodUiExpanded = true, startTimeUiExpanded = true),
             setRoutineName = {},
             setSubRoutineName = { _, _ -> },
-            addSubRoutine = {},
             selectRepeatTime = {},
             selectDay = {},
             selectAllTime = {},
             showTimePickerBottomSheet = {},
             onClickRegister = {},
-            removeSubRoutine = {},
             onClickBack = {},
+            onClickSubRoutineExpand = {},
+            onClickRepeatDaysExpand = {},
+            onClickStartTimeExpand = {},
+            onClickPeriodExpand = {},
+            showStartDatePickerBottomSheet = {},
+            showEndDatePickerBottomSheet = {},
+            selectNotUseSubRoutines = {}
         )
     }
 }
