@@ -40,7 +40,6 @@ fun HomeNavHost(
     navigateToNotice: () -> Unit,
     navigateToQnA: () -> Unit,
     navigateToRegisterRoutine: (String?) -> Unit,
-    navigateToEditRoutine: (String) -> Unit,
     navigateToEmotion: () -> Unit,
 ) {
     val navigator = rememberHomeNavigator()
@@ -66,7 +65,6 @@ fun HomeNavHost(
                             navigateToRegisterRoutine = {
                                 navigateToRegisterRoutine(null)
                             },
-                            navigateToEditRoutine = navigateToEditRoutine,
                             navigateToEmotion = navigateToEmotion,
                         )
                     }

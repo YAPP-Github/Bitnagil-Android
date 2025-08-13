@@ -8,8 +8,6 @@ import com.threegap.bitnagil.domain.emotion.usecase.GetEmotionChangeEventFlowUse
 import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingRecommendRoutineEventFlowUseCase
 import com.threegap.bitnagil.domain.routine.model.RoutineCompletion
 import com.threegap.bitnagil.domain.routine.model.RoutineCompletionInfo
-import com.threegap.bitnagil.domain.routine.usecase.DeleteRoutineByDayUseCase
-import com.threegap.bitnagil.domain.routine.usecase.DeleteRoutineUseCase
 import com.threegap.bitnagil.domain.routine.usecase.FetchWeeklyRoutinesUseCase
 import com.threegap.bitnagil.domain.routine.usecase.RoutineCompletionUseCase
 import com.threegap.bitnagil.domain.user.usecase.FetchUserProfileUseCase
@@ -20,7 +18,6 @@ import com.threegap.bitnagil.presentation.home.model.HomeSideEffect
 import com.threegap.bitnagil.presentation.home.model.HomeState
 import com.threegap.bitnagil.presentation.home.model.RoutineUiModel
 import com.threegap.bitnagil.presentation.home.model.RoutinesUiModel
-import com.threegap.bitnagil.presentation.home.model.toRoutineByDayDeletion
 import com.threegap.bitnagil.presentation.home.model.toUiModel
 import com.threegap.bitnagil.presentation.home.util.getCurrentWeekDays
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,8 +39,6 @@ class HomeViewModel @Inject constructor(
     private val fetchUserProfileUseCase: FetchUserProfileUseCase,
     private val fetchTodayEmotionUseCase: FetchTodayEmotionUseCase,
     private val routineCompletionUseCase: RoutineCompletionUseCase,
-    private val deleteRoutineUseCase: DeleteRoutineUseCase,
-    private val deleteRoutineByDayUseCase: DeleteRoutineByDayUseCase,
     private val getWriteRoutineEventFlowUseCase: GetWriteRoutineEventFlowUseCase,
     private val getEmotionChangeEventFlowUseCase: GetEmotionChangeEventFlowUseCase,
     private val getOnBoardingRecommendRoutineEventFlowUseCase: GetOnBoardingRecommendRoutineEventFlowUseCase,
@@ -63,7 +58,7 @@ class HomeViewModel @Inject constructor(
         observeRoutineUpdates()
         fetchWeeklyRoutines(container.stateFlow.value.currentWeeks)
         fetchUserProfile()
-        getMyEmotion(container.stateFlow.value.selectedDate)
+        fetchTodayEmotion(container.stateFlow.value.selectedDate)
     }
 
     override suspend fun SimpleSyntax<HomeState, HomeSideEffect>.reduceState(
@@ -111,90 +106,12 @@ class HomeViewModel @Inject constructor(
                 updateSubRoutine(state, intent.routineId, intent.subRoutineId, intent.isCompleted)
             }
 
-            is HomeIntent.DeleteRoutineOptimistically -> {
-                val updatedRoutinesByDate = state.routines.routinesByDate.mapValues { (_, routineList) ->
-                    routineList.filterNot { it.routineId == intent.routineId }
-                }
-
-                state.copy(
-                    routines = RoutinesUiModel(routinesByDate = updatedRoutinesByDate),
-                    showDeleteConfirmDialog = false,
-                    deletingRoutine = null,
-                    routineDetailsBottomSheetVisible = false,
-                    selectedRoutine = null,
-                )
-            }
-
-            is HomeIntent.RestoreRoutinesAfterDeleteFailure -> {
-                state.copy(routines = intent.backupRoutines)
-            }
-
-            is HomeIntent.ConfirmRoutineDeletion -> null
-
-            is HomeIntent.ShowRoutineDetailsBottomSheet -> {
-                state.copy(
-                    routineDetailsBottomSheetVisible = true,
-                    selectedRoutine = intent.routine,
-                )
-            }
-
-            is HomeIntent.HideRoutineDetailsBottomSheet -> {
-                state.copy(
-                    routineDetailsBottomSheetVisible = false,
-                    selectedRoutine = null,
-                )
-            }
-
-            is HomeIntent.ShowDeleteConfirmDialog -> {
-                state.copy(
-                    showDeleteConfirmDialog = true,
-                    deletingRoutine = intent.routine,
-                )
-            }
-
-            is HomeIntent.HideDeleteConfirmDialog -> {
-                state.copy(
-                    showDeleteConfirmDialog = false,
-                    deletingRoutine = null,
-                )
-            }
-
-            is HomeIntent.DeleteRoutineByDayOptimistically -> {
-                val dateKey = intent.performedDate
-                val updatedRoutinesByDate = state.routines.routinesByDate.toMutableMap()
-                val routinesForDate = updatedRoutinesByDate[dateKey]?.toMutableList()
-
-                if (routinesForDate != null) {
-                    updatedRoutinesByDate[dateKey] = routinesForDate.filterNot {
-                        it.routineId == intent.routineId
-                    }
-                }
-
-                state.copy(
-                    routines = RoutinesUiModel(routinesByDate = updatedRoutinesByDate),
-                    showDeleteConfirmDialog = false,
-                    deletingRoutine = null,
-                    routineDetailsBottomSheetVisible = false,
-                    selectedRoutine = null,
-                )
-            }
-
-            is HomeIntent.RestoreRoutinesAfterDeleteByDayFailure -> {
-                state.copy(routines = intent.backupRoutines)
-            }
-
-            is HomeIntent.ConfirmRoutineByDayDeletion -> null
-
             is HomeIntent.LoadTodayEmotion -> {
                 state.copy(todayEmotion = intent.emotion)
             }
 
             is HomeIntent.OnRegisterEmotionClick -> {
-                if (state.myEmotion == null) {
-                    sendSideEffect(HomeSideEffect.NavigateToEmotion)
-                } else {
-                    sendSideEffect(HomeSideEffect.ShowToastWithIcon("선택한 감정 구슬이 이미 반영되었어요."))
-                }
+                sendSideEffect(HomeSideEffect.NavigateToEmotion)
                 null
             }
 
@@ -205,11 +122,6 @@ class HomeViewModel @Inject constructor(
 
             is HomeIntent.RoutineToggleCompletionFailure -> {
                 sendSideEffect(HomeSideEffect.ShowToast("루틴 완료 상태 저장에 실패했어요.\n다시 시도해 주세요."))
-                null
-            }
-
-            is HomeIntent.NavigateToEditRoutine -> {
-                sendSideEffect(HomeSideEffect.NavigateToEditRoutine(intent.routineId))
                 null
             }
         }
@@ -228,7 +140,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             getEmotionChangeEventFlowUseCase().collect {
                 val currentDate = LocalDate.now()
-                getMyEmotion(currentDate)
+                fetchTodayEmotion(currentDate)
             }
         }
     }
@@ -301,7 +213,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getMyEmotion(currentDate: LocalDate) {
+    private fun fetchTodayEmotion(currentDate: LocalDate) {
         sendIntent(HomeIntent.UpdateLoading(true))
         viewModelScope.launch {
             fetchTodayEmotionUseCase(currentDate.toString()).fold(
@@ -493,53 +405,5 @@ class HomeViewModel @Inject constructor(
                 sendIntent(HomeIntent.UpdateLoading(false))
             },
         )
-    }
-
-    fun deleteRoutine(routineId: String) {
-        val currentRoutines = container.stateFlow.value.routines
-        sendIntent(HomeIntent.DeleteRoutineOptimistically(routineId))
-
-        viewModelScope.launch {
-            deleteRoutineUseCase(routineId).fold(
-                onSuccess = {
-                    sendIntent(HomeIntent.ConfirmRoutineDeletion(routineId))
-                },
-                onFailure = { error ->
-                    Log.e("HomeViewModel", "루틴 삭제 실패: ${error.message}")
-                    sendIntent(HomeIntent.RestoreRoutinesAfterDeleteFailure(currentRoutines))
-                },
-            )
-        }
-    }
-
-    fun deleteRoutineByDay(routineUiModel: RoutineUiModel) {
-        val currentRoutines = container.stateFlow.value.routines
-        val performedDate = container.stateFlow.value.selectedDate.toString()
-
-        sendIntent(
-            HomeIntent.DeleteRoutineByDayOptimistically(
-                routineId = routineUiModel.routineId,
-                performedDate = performedDate,
-            ),
-        )
-
-        viewModelScope.launch {
-            val routineByDayDeletion = routineUiModel.toRoutineByDayDeletion(performedDate)
-
-            deleteRoutineByDayUseCase(routineByDayDeletion).fold(
-                onSuccess = {
-                    sendIntent(
-                        HomeIntent.ConfirmRoutineByDayDeletion(
-                            routineId = routineUiModel.routineId,
-                            performedDate = performedDate,
-                        ),
-                    )
-                },
-                onFailure = {
-                    Log.e("HomeViewModel", "루틴 삭제 실패: ${it.message}")
-                    sendIntent(HomeIntent.RestoreRoutinesAfterDeleteByDayFailure(currentRoutines))
-                },
-            )
-        }
     }
 }

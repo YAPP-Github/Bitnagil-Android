@@ -27,9 +27,7 @@ import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.common.toast.GlobalBitnagilToast
 import com.threegap.bitnagil.presentation.home.component.template.CollapsibleHomeHeader
-import com.threegap.bitnagil.presentation.home.component.template.DeleteConfirmDialog
 import com.threegap.bitnagil.presentation.home.component.template.EmptyRoutineView
-import com.threegap.bitnagil.presentation.home.component.template.RoutineDetailsBottomSheet
 import com.threegap.bitnagil.presentation.home.component.template.RoutineSection
 import com.threegap.bitnagil.presentation.home.component.template.WeeklyDatePicker
 import com.threegap.bitnagil.presentation.home.model.HomeIntent
@@ -42,7 +40,6 @@ import java.time.LocalDate
 fun HomeScreenContainer(
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToRegisterRoutine: () -> Unit,
-    navigateToEditRoutine: (String) -> Unit,
     navigateToEmotion: () -> Unit,
 ) {
     val uiState by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -57,10 +54,6 @@ fun HomeScreenContainer(
                 navigateToEmotion()
             }
 
-            is HomeSideEffect.NavigateToEditRoutine -> {
-                navigateToEditRoutine(sideEffect.routineId)
-            }
-
             is HomeSideEffect.ShowToastWithIcon -> {
                 GlobalBitnagilToast.showCheck(sideEffect.message)
             }
@@ -68,40 +61,6 @@ fun HomeScreenContainer(
             is HomeSideEffect.ShowToast -> {
                 GlobalBitnagilToast.show(sideEffect.message)
             }
-        }
-    }
-
-    uiState.selectedRoutine?.let { routine ->
-        if (uiState.routineDetailsBottomSheetVisible) {
-            RoutineDetailsBottomSheet(
-                routine = routine,
-                onDismiss = { viewModel.sendIntent(HomeIntent.HideRoutineDetailsBottomSheet) },
-                onEdit = { viewModel.sendIntent(HomeIntent.NavigateToEditRoutine(routine.routineId)) },
-                onDelete = {
-                    if (routine.repeatDay.isEmpty()) {
-                        viewModel.deleteRoutineByDay(routine)
-                    } else {
-                        viewModel.sendIntent(HomeIntent.ShowDeleteConfirmDialog(routine))
-                    }
-                },
-            )
-        }
-    }
-
-    uiState.deletingRoutine?.let { routine ->
-        if (uiState.showDeleteConfirmDialog) {
-            DeleteConfirmDialog(
-                onDeleteToday = {
-                    viewModel.deleteRoutineByDay(routine)
-                    viewModel.sendIntent(HomeIntent.HideDeleteConfirmDialog)
-                },
-                onDeleteAll = {
-                    viewModel.deleteRoutine(routine.routineId)
-                },
-                onDismiss = {
-                    viewModel.sendIntent(HomeIntent.HideDeleteConfirmDialog)
-                },
-            )
         }
     }
 
