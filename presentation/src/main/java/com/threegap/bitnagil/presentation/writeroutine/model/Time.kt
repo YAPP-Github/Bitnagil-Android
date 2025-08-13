@@ -41,13 +41,13 @@ data class Time(
             amPm = "오전"
             displayHour = 12
         } else if (hour == 12) { // 정오 (오후 12시)
-            amPm =  "오후"
+            amPm = "오후"
             displayHour = 12
         } else if (hour > 12) {
             amPm = "오후"
             displayHour -= 12
         } else {
-            amPm =  "오전"
+            amPm = "오전"
         }
 
         return "%s %d:%02d".format(amPm, displayHour, minute)

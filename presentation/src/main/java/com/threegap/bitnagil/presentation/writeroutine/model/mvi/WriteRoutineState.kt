@@ -90,7 +90,7 @@ data class WriteRoutineState(
     val subRoutinesText: String get() = subRoutineNames.filter { it.isNotEmpty() }.joinToString(separator = "\n")
 
     val repeatDaysText: String
-        get() = when(repeatType) {
+        get() = when (repeatType) {
             RepeatType.DAILY -> "매일"
             RepeatType.DAY -> "매주 ${repeatDays.filter { it.selected }.joinToString { it.day.text }}"
             null -> ""
@@ -103,5 +103,4 @@ data class WriteRoutineState(
 
     val startTimeText: String
         get() = if (selectAllTime) "하루종일" else startTime?.let { "${it.toAmPmFormattedString()}부터 시작" } ?: ""
-
 }

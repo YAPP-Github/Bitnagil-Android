@@ -25,7 +25,7 @@ fun RoutineDetailRow(
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(title, style = BitnagilTheme.typography.body2SemiBold.copy(color = BitnagilTheme.colors.coolGray30))
 
@@ -35,10 +35,11 @@ fun RoutineDetailRow(
             isSelected = false,
         ) {
             Box(
-                modifier = Modifier.padding(vertical = 10.dp)
+                modifier = Modifier.padding(vertical = 10.dp),
             ) {
-                if (value.isEmpty())
+                if (value.isEmpty()) {
                     Text(placeHolder, style = BitnagilTheme.typography.body2Medium.copy(color = BitnagilTheme.colors.coolGray90))
+                }
 
                 Text(value, style = BitnagilTheme.typography.body2Medium.copy(color = BitnagilTheme.colors.coolGray30))
             }

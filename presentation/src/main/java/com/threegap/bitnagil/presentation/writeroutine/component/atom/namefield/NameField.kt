@@ -54,12 +54,12 @@ fun NameField(
                     if (onClickRemove != null) {
                         Box(
                             modifier = Modifier.clickableWithoutRipple(onClick = onClickRemove),
-                            contentAlignment = Alignment.Center
+                            contentAlignment = Alignment.Center,
                         ) {
                             BitnagilIcon(
                                 id = R.drawable.ic_close_circle,
                                 tint = null,
-                                modifier = Modifier.size(24.dp).padding(top = 4.dp, bottom = 4.dp, start = 8.dp)
+                                modifier = Modifier.size(24.dp).padding(top = 4.dp, bottom = 4.dp, start = 8.dp),
                             )
                         }
                     }
@@ -80,7 +80,7 @@ fun NameField(
 @Composable
 @Preview(showBackground = true, widthDp = 300, heightDp = 300)
 fun NameFieldPreview() {
-    BitnagilTheme{
+    BitnagilTheme {
         NameField(
             value = "value",
             onValueChange = {},

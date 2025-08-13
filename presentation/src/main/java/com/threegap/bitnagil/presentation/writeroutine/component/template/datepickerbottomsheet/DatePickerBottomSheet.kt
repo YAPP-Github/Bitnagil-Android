@@ -36,9 +36,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIconButton
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
-import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.writeroutine.component.template.datepickerbottomsheet.model.CalendarUtils
 import com.threegap.bitnagil.presentation.writeroutine.model.Date
@@ -55,7 +55,7 @@ fun DatePickerBottomSheet(
     availableEndDate: Date?,
 ) {
     val sheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = true
+        skipPartiallyExpanded = true,
     )
     val coroutineScope = rememberCoroutineScope()
 
@@ -63,7 +63,7 @@ fun DatePickerBottomSheet(
         sheetState = sheetState,
         onDismissRequest = onDismiss,
         containerColor = BitnagilTheme.colors.white,
-    ){
+    ) {
         DatePickerBottomSheetContent(
             modifier = modifier,
             onDateSelected = { date ->
@@ -78,7 +78,7 @@ fun DatePickerBottomSheet(
             },
             initDate = date,
             availableStartDate = availableStartDate,
-            availableEndDate = availableEndDate
+            availableEndDate = availableEndDate,
         )
     }
 }
@@ -89,7 +89,7 @@ private fun DatePickerBottomSheetContent(
     onDateSelected: (Date) -> Unit,
     initDate: Date,
     availableStartDate: Date?,
-    availableEndDate: Date?
+    availableEndDate: Date?,
 ) {
     var currentYear by remember { mutableIntStateOf(initDate.year) }
     var currentMonth by remember { mutableIntStateOf(initDate.month) }
@@ -127,7 +127,7 @@ private fun DatePickerBottomSheetContent(
                 .fillMaxWidth()
                 .padding(start = 20.dp, end = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text("${currentYear}년 ${currentMonth}월", style = BitnagilTheme.typography.title2Bold.copy(color = BitnagilTheme.colors.coolGray10))
 
@@ -169,26 +169,26 @@ private fun DatePickerBottomSheetContent(
         Spacer(modifier = Modifier.height(16.dp))
 
         Box(
-            modifier = Modifier.padding(horizontal = 20.dp)
-        ){
+            modifier = Modifier.padding(horizontal = 20.dp),
+        ) {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(7),
                 verticalArrangement = Arrangement.spacedBy(2.dp),
-                horizontalArrangement = Arrangement.spacedBy(2.dp)
+                horizontalArrangement = Arrangement.spacedBy(2.dp),
             ) {
                 items(CalendarUtils.dateStringList.size) { index ->
                     Text(
                         CalendarUtils.dateStringList[index],
                         modifier = Modifier.padding(bottom = 16.dp),
                         style = BitnagilTheme.typography.body2SemiBold.copy(color = BitnagilTheme.colors.coolGray50),
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
                     )
                 }
 
                 itemsIndexed(lastDaysOfPrevMonth) { _, day ->
                     Box(
                         modifier = Modifier.aspectRatio(1f),
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.Center,
                     ) {
                         Text(
                             "$day",
@@ -204,7 +204,7 @@ private fun DatePickerBottomSheetContent(
                     Box(
                         modifier = Modifier.aspectRatio(1f).background(
                             color = if (selected) { BitnagilTheme.colors.orange50 } else { Color.Transparent },
-                            shape = if (selected) { RoundedCornerShape(12.dp) } else { RectangleShape }
+                            shape = if (selected) { RoundedCornerShape(12.dp) } else { RectangleShape },
                         ).clickableWithoutRipple {
                             if (!available) return@clickableWithoutRipple
                             selectedDate = currentDate
@@ -227,7 +227,7 @@ private fun DatePickerBottomSheetContent(
                 itemsIndexed(firstDaysOfNextMonth) { _, day ->
                     Box(
                         modifier = Modifier.aspectRatio(1f),
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.Center,
                     ) {
                         Text(
                             "$day",
@@ -255,14 +255,14 @@ private fun DatePickerBottomSheetContent(
 
 @Preview
 @Composable
-private fun DatePickerBottomSheetContentPreview(){
-    BitnagilTheme{
+private fun DatePickerBottomSheetContentPreview() {
+    BitnagilTheme {
         DatePickerBottomSheetContent(
             modifier = Modifier,
             onDateSelected = { _ -> },
             initDate = Date(year = 2025, month = 8, day = 1),
             availableStartDate = null,
-            availableEndDate = null
+            availableEndDate = null,
         )
     }
 }

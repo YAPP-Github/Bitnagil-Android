@@ -7,13 +7,13 @@ import kotlinx.parcelize.Parcelize
 data class Date(
     val year: Int,
     val month: Int,
-    val day: Int
+    val day: Int,
 ) : Parcelable {
     companion object {
         fun now() = Date(
             year = java.time.LocalDate.now().year,
             month = java.time.LocalDate.now().monthValue,
-            day = java.time.LocalDate.now().dayOfMonth
+            day = java.time.LocalDate.now().dayOfMonth,
         )
 
         fun min(d1: Date, d2: Date): Date {
@@ -44,7 +44,7 @@ data class Date(
     fun toFormattedString(): String = "%04d.%02d.%02d".format(year, month, day)
     fun toYearShrinkageFormattedString(): String = "%02d.%02d.%02d".format((year % 100), month, day)
 
-    fun checkInRange(startDate: Date?, endDate: Date?) : Boolean {
+    fun checkInRange(startDate: Date?, endDate: Date?): Boolean {
         val appliedStartDate = startDate ?: Date(year = 2000, month = 1, day = 1)
         val appliedEndDate = endDate ?: Date(year = 2999, month = 12, day = 31)
 

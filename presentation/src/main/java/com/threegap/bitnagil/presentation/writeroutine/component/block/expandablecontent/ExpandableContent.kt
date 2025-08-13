@@ -54,7 +54,7 @@ fun ExpandableContent(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
-            .background(color = BitnagilTheme.colors.coolGray99)
+            .background(color = BitnagilTheme.colors.coolGray99),
     ) {
         Row(
             modifier = Modifier
@@ -81,12 +81,13 @@ fun ExpandableContent(
                         style = if (showValueText && !expand) subTextStyle else mainTextStyle,
                     )
 
-                    if (required)
+                    if (required) {
                         BitnagilIcon(
                             id = R.drawable.ic_routine_success,
                             tint = null,
                             modifier = Modifier.size(12.dp),
                         )
+                    }
                 }
                 if (!expand) {
                     Text(
@@ -107,7 +108,7 @@ fun ExpandableContent(
         }
 
         AnimatedVisibility(visible = expand) {
-            Column{
+            Column {
                 HorizontalDivider(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 18.dp),
                     color = BitnagilTheme.colors.coolGray96,
@@ -118,7 +119,6 @@ fun ExpandableContent(
             }
         }
     }
-
 }
 
 @Preview(heightDp = 300)

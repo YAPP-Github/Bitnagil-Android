@@ -51,49 +51,49 @@ fun SelectCell(
 private fun SelectCellPreview() {
     BitnagilTheme {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             SelectCell(
                 text = "월",
                 selected = true,
                 onClick = {},
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             )
             SelectCell(
                 text = "화",
                 selected = false,
                 onClick = {},
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             )
             SelectCell(
                 text = "수",
                 selected = false,
                 onClick = {},
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             )
             SelectCell(
                 text = "목",
                 selected = false,
                 onClick = {},
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             )
             SelectCell(
                 text = "금",
                 selected = false,
                 onClick = {},
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             )
             SelectCell(
                 text = "토",
                 selected = false,
                 onClick = {},
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             )
             SelectCell(
                 text = "일",
                 selected = false,
                 onClick = {},
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             )
         }
     }

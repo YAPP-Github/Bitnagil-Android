@@ -169,7 +169,7 @@ private fun WriteRoutineScreen(
             Spacer(modifier = Modifier.height(40.dp))
 
             Column(
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 ExpandableContent(
                     expand = state.subRoutineUiExpanded,
@@ -178,12 +178,12 @@ private fun WriteRoutineScreen(
                     title = "세부루틴",
                     placeHolder = "ex) 일어나자마자 이불 개기",
                     valueText = state.subRoutinesText,
-                    onClick = onClickSubRoutineExpand
+                    onClick = onClickSubRoutineExpand,
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 20.dp),
                         verticalArrangement = Arrangement.spacedBy(24.dp),
-                        horizontalAlignment = Alignment.End
+                        horizontalAlignment = Alignment.End,
                     ) {
                         SubRoutineField(
                             resourceId = R.drawable.img_circle_1,
@@ -212,7 +212,7 @@ private fun WriteRoutineScreen(
                         LabeledCheckBox(
                             label = "세부 루틴 설정 안함",
                             checked = state.selectNotUseSUbRoutines,
-                            onClick = selectNotUseSubRoutines
+                            onClick = selectNotUseSubRoutines,
                         )
                     }
                 }
@@ -224,10 +224,10 @@ private fun WriteRoutineScreen(
                     title = "반복 요일",
                     placeHolder = "ex) 매주 월,화,수.목,금",
                     valueText = state.repeatDaysText,
-                    onClick = onClickRepeatDaysExpand
+                    onClick = onClickRepeatDaysExpand,
                 ) {
                     Column(
-                        modifier = Modifier.fillMaxWidth().padding(top = 14.dp, bottom = 18.dp, start = 18.dp, end = 18.dp)
+                        modifier = Modifier.fillMaxWidth().padding(top = 14.dp, bottom = 18.dp, start = 18.dp, end = 18.dp),
                     ) {
                         Row {
                             WriteRoutineButton.Text(
@@ -280,11 +280,11 @@ private fun WriteRoutineScreen(
                     title = "목표 기간",
                     placeHolder = "ex) 25.08.06 - 25.08.06",
                     valueText = state.periodText,
-                    onClick = onClickPeriodExpand
+                    onClick = onClickPeriodExpand,
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth().padding(top = 14.dp, bottom = 18.dp, start = 18.dp, end = 18.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
                         RoutineDetailRow(
                             title = "시작일",
@@ -309,11 +309,11 @@ private fun WriteRoutineScreen(
                     title = "시간",
                     placeHolder = "ex) 오전 9:40부터 시작",
                     valueText = state.startTimeText,
-                    onClick = onClickStartTimeExpand
+                    onClick = onClickStartTimeExpand,
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth().padding(top = 14.dp, bottom = 18.dp, start = 18.dp, end = 18.dp),
-                        horizontalAlignment = Alignment.End
+                        horizontalAlignment = Alignment.End,
                     ) {
                         RoutineDetailRow(
                             title = "시작 시간",
@@ -327,10 +327,9 @@ private fun WriteRoutineScreen(
                         LabeledCheckBox(
                             label = "하루 종일",
                             checked = state.selectAllTime,
-                            onClick = selectAllTime
+                            onClick = selectAllTime,
                         )
                     }
-
                 }
             }
         }
@@ -375,7 +374,7 @@ fun WriteRoutineScreenPreview() {
             onClickPeriodExpand = {},
             showStartDatePickerBottomSheet = {},
             showEndDatePickerBottomSheet = {},
-            selectNotUseSubRoutines = {}
+            selectNotUseSubRoutines = {},
         )
     }
 }

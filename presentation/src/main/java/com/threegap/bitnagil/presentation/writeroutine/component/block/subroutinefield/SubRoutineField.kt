@@ -30,7 +30,7 @@ fun SubRoutineField(
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Image(
             painter = painterResource(resourceId),
@@ -50,11 +50,12 @@ fun SubRoutineField(
             decorationBox = { innerTextField ->
                 Column {
                     Box {
-                        if (value.isEmpty())
+                        if (value.isEmpty()) {
                             Text(
                                 text = placeHolder,
                                 style = BitnagilTheme.typography.body2Medium.copy(color = BitnagilTheme.colors.coolGray90),
                             )
+                        }
                         innerTextField()
                     }
 
@@ -66,7 +67,7 @@ fun SubRoutineField(
                         color = BitnagilTheme.colors.coolGray90,
                     )
                 }
-            }
+            },
         )
     }
 }
@@ -74,13 +75,13 @@ fun SubRoutineField(
 @Composable
 @Preview(showBackground = true, widthDp = 300, heightDp = 300)
 fun NameFieldPreview() {
-    BitnagilTheme{
+    BitnagilTheme {
         SubRoutineField(
             resourceId = com.threegap.bitnagil.designsystem.R.drawable.img_circle_1,
             placeHolder = "세부루틴을 설정해주세요.",
             value = "TEXT",
             onValueChange = {},
-            enabled = true
+            enabled = true,
         )
     }
 }
