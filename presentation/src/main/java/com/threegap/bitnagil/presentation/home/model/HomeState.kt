@@ -15,5 +15,5 @@ data class HomeState(
     val routines: RoutinesUiModel = RoutinesUiModel(),
 ) : MviState {
     val selectedDateRoutines: List<RoutineUiModel>
-        get() = routines.routinesByDate[selectedDate.toString()] ?: emptyList()
+        get() = routines.routines[selectedDate.toString()]?.routineList ?: emptyList()
 }

@@ -14,7 +14,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface RoutineService {
-    @GET("/api/v1/routines")
+    @GET("/api/v2/routines")
     suspend fun fetchRoutines(
         @Query("startDate") startDate: String,
         @Query("endDate") endDate: String,
