@@ -78,8 +78,8 @@ fun HomeScreenContainer(
         onRoutineCompletionToggle = { routineId, isCompleted ->
             viewModel.toggleRoutineCompletion(routineId, isCompleted)
         },
-        onSubRoutineCompletionToggle = { routineId, subRoutineId, isCompleted ->
-            viewModel.toggleSubRoutineCompletion(routineId, subRoutineId, isCompleted)
+        onSubRoutineCompletionToggle = { routineId, subRoutineIndex, isCompleted ->
+            viewModel.toggleSubRoutineCompletion(routineId, subRoutineIndex, isCompleted)
         },
         onRegisterRoutineClick = {
             viewModel.sendIntent(HomeIntent.OnRegisterRoutineClick)
@@ -100,7 +100,7 @@ private fun HomeScreen(
     onPreviousWeekClick: () -> Unit,
     onNextWeekClick: () -> Unit,
     onRoutineCompletionToggle: (String, Boolean) -> Unit,
-    onSubRoutineCompletionToggle: (String, String, Boolean) -> Unit,
+    onSubRoutineCompletionToggle: (String, Int, Boolean) -> Unit,
     onRegisterRoutineClick: () -> Unit,
     onRegisterEmotionClick: () -> Unit,
     onShowMoreRoutinesClick: () -> Unit,
@@ -170,8 +170,7 @@ private fun HomeScreen(
                         .fillMaxSize()
                         .background(BitnagilTheme.colors.coolGray99)
                         .nestedScroll(collapsibleHeaderState.nestedScrollConnection)
-                        .padding(horizontal = 16.dp)
-                        .padding(bottom = 12.dp),
+                        .padding(horizontal = 16.dp),
                     state = collapsibleHeaderState.lazyListState,
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
@@ -187,10 +186,10 @@ private fun HomeScreen(
                                         isCompleted,
                                     )
                                 },
-                                onSubRoutineToggle = { subRoutineId, isCompleted ->
+                                onSubRoutineToggle = { subRoutineIndex, isCompleted ->
                                     onSubRoutineCompletionToggle(
                                         routine.routineId,
-                                        subRoutineId,
+                                        subRoutineIndex,
                                         isCompleted,
                                     )
                                 },

@@ -10,7 +10,7 @@ sealed class HomeIntent : MviIntent {
     data class LoadWeeklyRoutines(val routines: RoutinesUiModel) : HomeIntent()
     data class OnDateSelect(val date: LocalDate) : HomeIntent()
     data class OnRoutineCompletionToggle(val routineId: String, val isCompleted: Boolean) : HomeIntent()
-    data class OnSubRoutineCompletionToggle(val routineId: String, val subRoutineId: String, val isCompleted: Boolean) : HomeIntent()
+    data class OnSubRoutineCompletionToggle(val routineId: String, val subRoutineIndex: Int, val isCompleted: Boolean) : HomeIntent()
     data object RoutineToggleCompletionFailure : HomeIntent()
     data object OnRegisterEmotionClick : HomeIntent()
     data object OnRegisterRoutineClick : HomeIntent()

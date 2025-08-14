@@ -1,12 +1,16 @@
 package com.threegap.bitnagil.data.routine.model.request
 
+import com.threegap.bitnagil.domain.routine.model.RoutineCompletionInfos
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class RoutineCompletionRequestDto(
-    @SerialName("performedDate")
-    val performedDate: String,
     @SerialName("routineCompletionInfos")
-    val routineCompletions: List<RoutineCompletionInfoDto>,
+    val routineCompletionInfos: List<RoutineCompletionInfoDto>,
 )
+
+internal fun RoutineCompletionInfos.toDto() =
+    RoutineCompletionRequestDto(
+        routineCompletionInfos = this.routineCompletionInfos.map { it.toDto() },
+    )

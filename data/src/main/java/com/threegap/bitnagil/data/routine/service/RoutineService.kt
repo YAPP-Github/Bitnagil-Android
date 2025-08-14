@@ -9,7 +9,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.HTTP
-import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -20,7 +20,7 @@ interface RoutineService {
         @Query("endDate") endDate: String,
     ): BaseResponse<RoutinesResponseDto>
 
-    @POST("/api/v1/routines/completions")
+    @PUT("/api/v2/routines")
     suspend fun routineCompletion(
         @Body request: RoutineCompletionRequestDto,
     ): BaseResponse<Unit>

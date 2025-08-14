@@ -19,15 +19,13 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
-import com.threegap.bitnagil.domain.routine.model.RoutineType
 import com.threegap.bitnagil.presentation.home.model.RoutineUiModel
-import com.threegap.bitnagil.presentation.home.model.SubRoutineUiModel
 
 @Composable
 fun RoutineItem(
     routine: RoutineUiModel,
     onRoutineToggle: (Boolean) -> Unit,
-    onSubRoutineToggle: (String, Boolean) -> Unit,
+    onSubRoutineToggle: (Int, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -45,7 +43,7 @@ fun RoutineItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickableWithoutRipple { onRoutineToggle(!routine.isCompleted) },
+                .clickableWithoutRipple { onRoutineToggle(!routine.routineCompleteYn) },
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -57,7 +55,7 @@ fun RoutineItem(
             )
 
             BitnagilIcon(
-                id = if (routine.isCompleted) R.drawable.ic_check_circle else R.drawable.ic_check_default,
+                id = if (routine.routineCompleteYn) R.drawable.ic_check_circle else R.drawable.ic_check_default,
                 tint = null,
                 modifier = Modifier
                     .padding(start = 10.dp)
@@ -65,7 +63,7 @@ fun RoutineItem(
             )
         }
 
-        if (routine.subRoutines.isNotEmpty()) {
+        if (routine.subRoutineNames.isNotEmpty()) {
             HorizontalDivider(
                 thickness = 1.dp,
                 color = BitnagilTheme.colors.coolGray97,
@@ -73,9 +71,10 @@ fun RoutineItem(
             )
 
             SubRoutinesItem(
-                subRoutines = routine.subRoutines,
-                onSubRoutineToggle = { subRoutineId, isCompleted ->
-                    onSubRoutineToggle(subRoutineId, isCompleted)
+                subRoutineNames = routine.subRoutineNames,
+                subRoutineCompleteYn = routine.subRoutineCompleteYn,
+                onSubRoutineToggle = { index, isCompleted ->
+                    onSubRoutineToggle(index, isCompleted)
                 },
             )
         }
@@ -88,46 +87,14 @@ private fun RoutineItemPreview() {
     RoutineItem(
         routine = RoutineUiModel(
             routineId = "uuid1",
-            historySeq = 1,
             routineName = "개운하게 일어나기",
-            executionTime = "20:30:00",
-            isCompleted = false,
-            routineCompletionId = 1,
-            isModified = false,
-            subRoutines = listOf(
-                SubRoutineUiModel(
-                    subRoutineId = "uuid1",
-                    historySeq = 1,
-                    subRoutineName = "물 마시기",
-                    sortOrder = 1,
-                    routineCompletionId = 1,
-                    isCompleted = false,
-                    isModified = false,
-                    routineType = RoutineType.SUB_ROUTINE,
-                ),
-                SubRoutineUiModel(
-                    subRoutineId = "uuid2",
-                    historySeq = 1,
-                    subRoutineName = "스트레칭하기",
-                    sortOrder = 1,
-                    routineCompletionId = 1,
-                    isCompleted = false,
-                    isModified = false,
-                    routineType = RoutineType.SUB_ROUTINE,
-                ),
-                SubRoutineUiModel(
-                    subRoutineId = "uuid3",
-                    historySeq = 1,
-                    subRoutineName = "심호흡하기",
-                    sortOrder = 1,
-                    routineCompletionId = 1,
-                    isCompleted = false,
-                    isModified = false,
-                    routineType = RoutineType.SUB_ROUTINE,
-                ),
-            ),
             repeatDay = emptyList(),
-            routineType = RoutineType.ROUTINE,
+            executionTime = "20:30:00",
+            routineDate = "2025-08-15",
+            routineCompleteYn = false,
+            subRoutineNames = listOf("물 마시기", "스트레칭하기", "심호흡하기"),
+            subRoutineCompleteYn = listOf(true, false, true),
+            recommendedRoutineType = null,
         ),
         onRoutineToggle = { },
         onSubRoutineToggle = { _, _ -> },
@@ -141,14 +108,13 @@ private fun NoneSubRoutineRoutineItemPreview() {
         routine = RoutineUiModel(
             routineId = "uuid1",
             routineName = "개운하게 일어나기",
+            repeatDay = emptyList(),
             executionTime = "20:30:00",
-            routineCompletionId = 1,
-            isCompleted = false,
-            isModified = false,
-            subRoutines = emptyList(),
-            historySeq = 1,
-            repeatDay = listOf(),
-            routineType = RoutineType.ROUTINE,
+            routineDate = "2025-08-15",
+            routineCompleteYn = false,
+            subRoutineNames = emptyList(),
+            subRoutineCompleteYn = emptyList(),
+            recommendedRoutineType = null,
         ),
         onRoutineToggle = {},
         onSubRoutineToggle = { _, _ -> },

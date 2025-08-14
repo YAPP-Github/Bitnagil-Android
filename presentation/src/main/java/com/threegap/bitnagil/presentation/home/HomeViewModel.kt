@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.threegap.bitnagil.domain.emotion.usecase.FetchTodayEmotionUseCase
 import com.threegap.bitnagil.domain.emotion.usecase.GetEmotionChangeEventFlowUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingRecommendRoutineEventFlowUseCase
-import com.threegap.bitnagil.domain.routine.model.RoutineCompletion
 import com.threegap.bitnagil.domain.routine.model.RoutineCompletionInfo
+import com.threegap.bitnagil.domain.routine.model.RoutineCompletionInfos
 import com.threegap.bitnagil.domain.routine.usecase.FetchWeeklyRoutinesUseCase
 import com.threegap.bitnagil.domain.routine.usecase.RoutineCompletionUseCase
 import com.threegap.bitnagil.domain.user.usecase.FetchUserProfileUseCase
@@ -103,7 +103,7 @@ class HomeViewModel @Inject constructor(
             }
 
             is HomeIntent.OnSubRoutineCompletionToggle -> {
-                updateSubRoutine(state, intent.routineId, intent.subRoutineId, intent.isCompleted)
+                updateSubRoutine(state, intent.routineId, intent.subRoutineIndex, intent.isCompleted)
             }
 
             is HomeIntent.LoadTodayEmotion -> {
@@ -201,8 +201,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             fetchWeeklyRoutinesUseCase(startDate, endDate).fold(
                 onSuccess = { routines ->
-                    val routinesUiModel = routines.toUiModel()
-                    sendIntent(HomeIntent.LoadWeeklyRoutines(routinesUiModel))
+                    sendIntent(HomeIntent.LoadWeeklyRoutines(routines.toUiModel()))
                     sendIntent(HomeIntent.UpdateLoading(false))
                 },
                 onFailure = { error ->
@@ -237,11 +236,11 @@ class HomeViewModel @Inject constructor(
         processRoutineToggleChanges(originalState, predictedUpdatedState)
     }
 
-    fun toggleSubRoutineCompletion(routineId: String, subRoutineId: String, isCompleted: Boolean) {
+    fun toggleSubRoutineCompletion(routineId: String, subRoutineIndex: Int, isCompleted: Boolean) {
         val originalState = container.stateFlow.value
-        sendIntent(HomeIntent.OnSubRoutineCompletionToggle(routineId, subRoutineId, isCompleted))
+        sendIntent(HomeIntent.OnSubRoutineCompletionToggle(routineId, subRoutineIndex, isCompleted))
 
-        val predictedUpdatedState = updateSubRoutine(originalState, routineId, subRoutineId, isCompleted)
+        val predictedUpdatedState = updateSubRoutine(originalState, routineId, subRoutineIndex, isCompleted)
         processRoutineToggleChanges(originalState, predictedUpdatedState)
     }
 
@@ -278,11 +277,10 @@ class HomeViewModel @Inject constructor(
             val routineIndex = routinesForDate.indexOfFirst { it.routineId == routineId }
             if (routineIndex == -1) return@updateRoutinesForDate false
 
-            val updatedRoutine = routinesForDate[routineIndex].copy(
-                isCompleted = isCompleted,
-                subRoutines = routinesForDate[routineIndex].subRoutines.map { subRoutine ->
-                    subRoutine.copy(isCompleted = isCompleted)
-                },
+            val routine = routinesForDate[routineIndex]
+            val updatedRoutine = routine.copy(
+                routineCompleteYn = isCompleted,
+                subRoutineCompleteYn = routine.subRoutineCompleteYn.map { isCompleted },
             )
 
             routinesForDate[routineIndex] = updatedRoutine
@@ -293,7 +291,7 @@ class HomeViewModel @Inject constructor(
     private fun updateSubRoutine(
         state: HomeState,
         routineId: String,
-        subRoutineId: String,
+        subRoutineIndex: Int,
         isCompleted: Boolean,
     ): HomeState {
         return updateRoutinesForDate(state) { routinesForDate ->
@@ -301,19 +299,26 @@ class HomeViewModel @Inject constructor(
             if (routineIndex == -1) return@updateRoutinesForDate false
 
             val routine = routinesForDate[routineIndex]
-            val updatedSubRoutines = routine.subRoutines.map { subRoutine ->
-                if (subRoutine.subRoutineId == subRoutineId) {
-                    subRoutine.copy(isCompleted = isCompleted)
-                } else {
-                    subRoutine
+
+            if (subRoutineIndex < 0 || subRoutineIndex >= routine.subRoutineNames.size) {
+                return@updateRoutinesForDate false
+            }
+
+            val updatedSubRoutineCompleteYn = routine.subRoutineCompleteYn.toMutableList().apply {
+                if (subRoutineIndex < size) {
+                    this[subRoutineIndex] = isCompleted
                 }
             }
 
-            val routineCompleted = if (isCompleted) updatedSubRoutines.all { it.isCompleted } else false
+            val routineCompleted = if (isCompleted) {
+                updatedSubRoutineCompleteYn.all { it }
+            } else {
+                false
+            }
 
             val updatedRoutine = routine.copy(
-                subRoutines = updatedSubRoutines,
-                isCompleted = routineCompleted,
+                subRoutineCompleteYn = updatedSubRoutineCompleteYn,
+                routineCompleteYn = routineCompleted,
             )
 
             routinesForDate[routineIndex] = updatedRoutine
@@ -326,12 +331,13 @@ class HomeViewModel @Inject constructor(
         updateLogic: (MutableList<RoutineUiModel>) -> Boolean,
     ): HomeState {
         val dateKey = state.selectedDate.toString()
-        val routinesForDate = state.routines.routinesByDate[dateKey]?.toMutableList() ?: return state
+        val routinesForDate = state.routines.routines[dateKey]?.routineList?.toMutableList() ?: return state
 
         if (!updateLogic(routinesForDate)) return state
 
-        val updatedRoutinesByDate = state.routines.routinesByDate.toMutableMap()
-        updatedRoutinesByDate[dateKey] = routinesForDate
+        val updatedRoutinesByDate = state.routines.routines.toMutableMap()
+        val dayRoutines = updatedRoutinesByDate[dateKey] ?: return state
+        updatedRoutinesByDate[dateKey] = dayRoutines.copy(routineList = routinesForDate)
 
         return state.copy(routines = RoutinesUiModel(updatedRoutinesByDate))
     }
@@ -342,38 +348,24 @@ class HomeViewModel @Inject constructor(
         date: LocalDate,
     ): List<RoutineCompletionInfo> {
         val dateKey = date.toString()
-        val originalRoutineList = originalRoutines.routinesByDate[dateKey] ?: emptyList()
-        val updatedRoutineList = updatedRoutines.routinesByDate[dateKey] ?: emptyList()
+        val originalRoutineList = originalRoutines.routines[dateKey]?.routineList ?: emptyList()
+        val updatedRoutineList = updatedRoutines.routines[dateKey]?.routineList ?: emptyList()
 
         return buildList {
             updatedRoutineList.forEach { updatedRoutine ->
                 val originalRoutine = originalRoutineList.find { it.routineId == updatedRoutine.routineId }
 
-                if (originalRoutine?.isCompleted != updatedRoutine.isCompleted) {
+                val hasMainRoutineChanged = originalRoutine?.routineCompleteYn != updatedRoutine.routineCompleteYn
+                val hasSubRoutinesChanged = originalRoutine?.subRoutineCompleteYn != updatedRoutine.subRoutineCompleteYn
+
+                if (hasMainRoutineChanged || hasSubRoutinesChanged) {
                     add(
                         RoutineCompletionInfo(
-                            routineType = updatedRoutine.routineType,
                             routineId = updatedRoutine.routineId,
-                            historySeq = updatedRoutine.historySeq,
-                            isCompleted = updatedRoutine.isCompleted,
+                            routineCompleteYn = updatedRoutine.routineCompleteYn,
+                            subRoutineCompleteYn = updatedRoutine.subRoutineCompleteYn,
                         ),
                     )
-                }
-
-                updatedRoutine.subRoutines.forEach { updatedSubRoutine ->
-                    val originalSubRoutine = originalRoutine?.subRoutines
-                        ?.find { it.subRoutineId == updatedSubRoutine.subRoutineId }
-
-                    if (originalSubRoutine?.isCompleted != updatedSubRoutine.isCompleted) {
-                        add(
-                            RoutineCompletionInfo(
-                                routineType = updatedSubRoutine.routineType,
-                                routineId = updatedSubRoutine.subRoutineId,
-                                historySeq = updatedSubRoutine.historySeq,
-                                isCompleted = updatedSubRoutine.isCompleted,
-                            ),
-                        )
-                    }
                 }
             }
         }
@@ -385,9 +377,8 @@ class HomeViewModel @Inject constructor(
 
         if (unsyncedChanges.isEmpty()) return
 
-        val syncRequest = RoutineCompletion(
-            performedDate = dateKey,
-            routineCompletions = unsyncedChanges.toList(),
+        val syncRequest = RoutineCompletionInfos(
+            routineCompletionInfos = unsyncedChanges.toList(),
         )
 
         routineCompletionUseCase(syncRequest).fold(
