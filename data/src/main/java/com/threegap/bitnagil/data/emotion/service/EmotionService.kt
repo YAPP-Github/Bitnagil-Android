@@ -19,7 +19,7 @@ interface EmotionService {
         @Body request: RegisterEmotionRequest,
     ): BaseResponse<RegisterEmotionResponse>
 
-    @GET("/api/v2/{searchDate}")
+    @GET("/api/v2/emotion-marbles/{searchDate}")
     suspend fun fetchTodayEmotion(
         @Path("searchDate") date: String,
     ): BaseResponse<TodayEmotionResponseDto>
