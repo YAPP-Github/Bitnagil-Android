@@ -119,6 +119,7 @@ private fun HomeScreen(
             WeeklyDatePicker(
                 selectedDate = uiState.selectedDate,
                 weeklyDates = uiState.currentWeeks,
+                routines = uiState.routines,
                 onDateSelect = onDateSelect,
                 onPreviousWeekClick = onPreviousWeekClick,
                 onNextWeekClick = onNextWeekClick,

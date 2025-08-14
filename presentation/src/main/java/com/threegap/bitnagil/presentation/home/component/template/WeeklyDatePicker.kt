@@ -1,5 +1,16 @@
 package com.threegap.bitnagil.presentation.home.component.template
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.EaseInOutBack
+import androidx.compose.animation.core.EaseOut
+import androidx.compose.animation.core.EaseOutBounce
+import androidx.compose.animation.core.EaseOutQuart
+import androidx.compose.animation.core.keyframes
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,6 +23,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,8 +35,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIconButton
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
+import com.threegap.bitnagil.presentation.home.model.RoutinesUiModel
 import com.threegap.bitnagil.presentation.home.util.formatDayOfMonth
 import com.threegap.bitnagil.presentation.home.util.formatDayOfWeekShort
 import com.threegap.bitnagil.presentation.home.util.formatMonthYear
@@ -35,11 +49,21 @@ import java.time.LocalDate
 fun WeeklyDatePicker(
     selectedDate: LocalDate,
     weeklyDates: List<LocalDate>,
+    routines: RoutinesUiModel,
     onDateSelect: (LocalDate) -> Unit,
     onPreviousWeekClick: () -> Unit,
     onNextWeekClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val today = remember { LocalDate.now() }
+    val completionStates by remember(routines) {
+        derivedStateOf {
+            weeklyDates.associateWith { date ->
+                routines.routines[date.toString()]?.allCompleted ?: false
+            }
+        }
+    }
+
     Column(
         modifier = modifier,
     ) {
@@ -91,7 +115,8 @@ fun WeeklyDatePicker(
                 DateItem(
                     date = date,
                     isSelected = selectedDate == date,
-                    isToday = date == LocalDate.now(),
+                    isToday = date == today,
+                    isCompleted = completionStates[date] ?: false,
                     onDateClick = { onDateSelect(date) },
                 )
             }
@@ -104,6 +129,7 @@ private fun DateItem(
     date: LocalDate,
     isSelected: Boolean,
     isToday: Boolean,
+    isCompleted: Boolean,
     onDateClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -133,6 +159,36 @@ private fun DateItem(
                 color = if (!isSelected) BitnagilTheme.colors.coolGray70 else BitnagilTheme.colors.white,
             )
         }
+
+        Column(
+            modifier = Modifier.size(12.dp),
+        ) {
+            AnimatedVisibility(
+                visible = isCompleted,
+                enter = scaleIn(
+                    initialScale = 0f,
+                    animationSpec = keyframes {
+                        durationMillis = 600
+                        0f at 0 using EaseOutQuart
+                        1.3f at 300 using EaseInOutBack
+                        1f at 600 using EaseOutBounce
+                    },
+                ) + fadeIn(
+                    animationSpec = tween(300, easing = EaseOut),
+                ),
+                exit = scaleOut(
+                    targetScale = 0.8f,
+                    animationSpec = tween(200),
+                ) + fadeOut(
+                    animationSpec = tween(200),
+                ),
+            ) {
+                BitnagilIcon(
+                    id = R.drawable.ic_routine_success,
+                    tint = null,
+                )
+            }
+        }
     }
 }
 
@@ -143,8 +199,9 @@ private fun WeeklyDatePickerPreview() {
 
     WeeklyDatePicker(
         selectedDate = selectedDate,
-        onDateSelect = { selectedDate = it },
         weeklyDates = selectedDate.getCurrentWeekDays(),
+        routines = RoutinesUiModel(),
+        onDateSelect = { selectedDate = it },
         onPreviousWeekClick = { selectedDate = selectedDate.minusWeeks(1) },
         onNextWeekClick = { selectedDate = selectedDate.plusWeeks(1) },
     )

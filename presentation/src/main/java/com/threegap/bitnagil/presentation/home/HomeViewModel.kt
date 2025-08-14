@@ -331,13 +331,18 @@ class HomeViewModel @Inject constructor(
         updateLogic: (MutableList<RoutineUiModel>) -> Boolean,
     ): HomeState {
         val dateKey = state.selectedDate.toString()
-        val routinesForDate = state.routines.routines[dateKey]?.routineList?.toMutableList() ?: return state
+        val dayRoutines = state.routines.routines[dateKey] ?: return state
+        val routinesForDate = dayRoutines.routineList.toMutableList()
 
         if (!updateLogic(routinesForDate)) return state
 
+        val allCompleted = routinesForDate.all { it.routineCompleteYn }
+
         val updatedRoutinesByDate = state.routines.routines.toMutableMap()
-        val dayRoutines = updatedRoutinesByDate[dateKey] ?: return state
-        updatedRoutinesByDate[dateKey] = dayRoutines.copy(routineList = routinesForDate)
+        updatedRoutinesByDate[dateKey] = dayRoutines.copy(
+            routineList = routinesForDate,
+            allCompleted = allCompleted,
+        )
 
         return state.copy(routines = RoutinesUiModel(updatedRoutinesByDate))
     }
