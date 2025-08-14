@@ -2,23 +2,28 @@ package com.threegap.bitnagil.presentation.withdrawal
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
@@ -81,16 +86,17 @@ private fun WithdrawalScreen(
     onCustomReasonChanged: (String) -> Unit,
     onBackClick: () -> Unit,
     onWithdrawalClick: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
+    val scrollState = rememberScrollState()
 
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(BitnagilTheme.colors.white)
-            .statusBarsPadding(),
+            .statusBarsPadding()
+            .windowInsetsPadding(WindowInsets.ime),
     ) {
         BitnagilTopBar(
             title = "탈퇴하기",
@@ -99,7 +105,10 @@ private fun WithdrawalScreen(
         )
 
         Column(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .weight(1f)
+                .verticalScroll(scrollState),
         ) {
             Spacer(modifier = Modifier.height(46.dp))
 
@@ -136,13 +145,12 @@ private fun WithdrawalScreen(
                     style = BitnagilTheme.typography.body2Medium,
                 )
             }
-        }
 
-        if (uiState.isTermsChecked) {
             Spacer(modifier = Modifier.height(48.dp))
 
             Column(
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .alpha(if (uiState.isTermsChecked) 1f else 0f),
             ) {
                 Text(
                     text = "탈퇴 사유를 알려주실 수 있나요?",
@@ -172,6 +180,13 @@ private fun WithdrawalScreen(
                         color = BitnagilTheme.colors.coolGray10,
                     ),
                     modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            color = BitnagilTheme.colors.coolGray99,
+                            shape = RoundedCornerShape(12.dp),
+                        )
+                        .height(112.dp)
+                        .padding(vertical = 14.dp, horizontal = 20.dp)
                         .focusRequester(focusRequester)
                         .onFocusChanged { focusState ->
                             if (focusState.isFocused) {
@@ -179,31 +194,20 @@ private fun WithdrawalScreen(
                             }
                         },
                     decorationBox = { innerTextField ->
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(
-                                    color = BitnagilTheme.colors.coolGray99,
-                                    shape = RoundedCornerShape(12.dp),
-                                )
-                                .height(112.dp)
-                                .padding(vertical = 14.dp, horizontal = 20.dp),
-                        ) {
-                            if (uiState.customReasonText.isEmpty()) {
-                                Text(
-                                    text = "기타사항(직접 입력)",
-                                    color = BitnagilTheme.colors.coolGray80,
-                                    style = BitnagilTheme.typography.subtitle1Medium,
-                                )
-                            }
-                            innerTextField()
+                        if (uiState.customReasonText.isEmpty()) {
+                            Text(
+                                text = "기타사항(직접 입력)",
+                                color = BitnagilTheme.colors.coolGray80,
+                                style = BitnagilTheme.typography.subtitle1Medium,
+                            )
                         }
+                        innerTextField()
                     },
                 )
             }
-        }
 
-        Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.height(54.dp))
+        }
 
         BitnagilTextButton(
             text = "탈퇴하기",
@@ -211,7 +215,8 @@ private fun WithdrawalScreen(
             enabled = uiState.isWithdrawalEnabled,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 14.dp),
+                .alpha(if (uiState.isTermsChecked) 1f else 0f)
+                .padding(vertical = 14.dp, horizontal = 16.dp),
         )
     }
 }
