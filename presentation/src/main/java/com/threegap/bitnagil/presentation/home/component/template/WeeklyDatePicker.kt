@@ -55,8 +55,10 @@ fun WeeklyDatePicker(
     modifier: Modifier = Modifier,
 ) {
     val today = remember { LocalDate.now() }
-    val completionStates = weeklyDates.associateWith { date ->
-        routines.routines[date.toString()]?.allCompleted ?: false
+    val completionStates = remember(weeklyDates, routines) {
+        weeklyDates.associateWith { date ->
+            routines.routines[date.toString()]?.allCompleted ?: false
+        }
     }
 
     Column(
