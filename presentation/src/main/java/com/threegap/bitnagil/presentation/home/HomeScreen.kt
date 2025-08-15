@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -175,27 +176,19 @@ private fun HomeScreen(
                     state = collapsibleHeaderState.lazyListState,
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    uiState.selectedDateRoutines.forEach { routine ->
-                        item(
-                            key = "${routine.routineId}_${uiState.selectedDate}",
-                        ) {
-                            RoutineSection(
-                                routine = routine,
-                                onRoutineToggle = { isCompleted ->
-                                    onRoutineCompletionToggle(
-                                        routine.routineId,
-                                        isCompleted,
-                                    )
-                                },
-                                onSubRoutineToggle = { subRoutineIndex, isCompleted ->
-                                    onSubRoutineCompletionToggle(
-                                        routine.routineId,
-                                        subRoutineIndex,
-                                        isCompleted,
-                                    )
-                                },
-                            )
-                        }
+                    items(
+                        items = uiState.selectedDateRoutines,
+                        key = { routine -> "${routine.routineId}_${uiState.selectedDate}" },
+                    ) { routine ->
+                        RoutineSection(
+                            routine = routine,
+                            onRoutineToggle = { isCompleted ->
+                                onRoutineCompletionToggle(routine.routineId, isCompleted)
+                            },
+                            onSubRoutineToggle = { subRoutineIndex, isCompleted ->
+                                onSubRoutineCompletionToggle(routine.routineId, subRoutineIndex, isCompleted)
+                            },
+                        )
                     }
                 }
             }
