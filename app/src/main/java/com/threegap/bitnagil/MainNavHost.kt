@@ -115,9 +115,6 @@ fun MainNavHost(
                 navigateToRegisterRoutine = { routineId ->
                     navigator.navController.navigate(Route.WriteRoutine(routineId = routineId))
                 },
-                navigateToEditRoutine = { routineId ->
-                    navigator.navController.navigate(Route.WriteRoutine(routineId = routineId, isRegister = false))
-                },
                 navigateToEmotion = {
                     navigator.navController.navigate(Route.Emotion)
                 },

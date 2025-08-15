@@ -9,5 +9,4 @@ class FetchWeeklyRoutinesUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(startDate: String, endDate: String): Result<Routines> =
         routineRepository.fetchWeeklyRoutines(startDate, endDate)
-            .map { it.withSortedSubRoutines() }
 }

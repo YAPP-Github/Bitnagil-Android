@@ -82,13 +82,14 @@ class WriteRoutineViewModel @AssistedInject constructor(
             sendIntent(WriteRoutineIntent.GetRoutineLoading)
             getRoutineUseCase(routineId).fold(
                 onSuccess = { routine ->
-                    oldSubRoutines = routine.subRoutines.map { SubRoutine.fromDomainSubRoutine(it) }
+//                    oldSubRoutines = routine.subRoutines.map { SubRoutine.fromDomainSubRoutine(it) }
                     sendIntent(
                         WriteRoutineIntent.SetRoutine(
                             name = routine.routineName,
                             repeatDays = routine.repeatDay.map { Day.fromDayOfWeek(it) },
                             startTime = Time.fromDomainTimeString(routine.executionTime),
-                            subRoutines = routine.subRoutines.map { it.subRoutineName },
+//                            subRoutines = routine.subRoutines.map { it.subRoutineName },
+                            subRoutines = emptyList(),
                         ),
                     )
                 },

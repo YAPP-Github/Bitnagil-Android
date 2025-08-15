@@ -40,7 +40,6 @@ fun HomeNavHost(
     navigateToNotice: () -> Unit,
     navigateToQnA: () -> Unit,
     navigateToRegisterRoutine: (String?) -> Unit,
-    navigateToEditRoutine: (String) -> Unit,
     navigateToEmotion: () -> Unit,
 ) {
     val navigator = rememberHomeNavigator()
@@ -66,7 +65,6 @@ fun HomeNavHost(
                             navigateToRegisterRoutine = {
                                 navigateToRegisterRoutine(null)
                             },
-                            navigateToEditRoutine = navigateToEditRoutine,
                             navigateToEmotion = navigateToEmotion,
                         )
                     }
@@ -102,11 +100,6 @@ fun HomeNavHost(
 
             BitnagilFloatingActionMenu(
                 actions = listOf(
-                    FloatingActionItem(
-                        icon = R.drawable.ic_report,
-                        text = "제보하기",
-                        onClick = { GlobalBitnagilToast.showWarning("제보하기 기능은 추후 제공될 예정입니다.") },
-                    ),
                     FloatingActionItem(
                         icon = R.drawable.ic_routine_add,
                         text = "루틴 등록",

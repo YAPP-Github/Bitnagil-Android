@@ -97,8 +97,8 @@ class BitnagilTypography internal constructor(
     private val _cafe24SsurroundAir: BitnagilTextStyle = BitnagilTextStyle(
         fontFamily = cafe24SsurroundAir,
         fontWeight = FontWeight.Light,
-        fontSize = 24,
-        lineHeight = 36,
+        fontSize = 20,
+        lineHeight = 30,
         letterSpacing = (-0.5f),
     ),
 ) {
