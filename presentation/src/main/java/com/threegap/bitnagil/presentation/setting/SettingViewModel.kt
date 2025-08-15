@@ -65,6 +65,11 @@ class SettingViewModel @Inject constructor(
             SettingIntent.LogoutFailure -> {
                 return state.copy(loading = false)
             }
+
+            SettingIntent.OnWithdrawalClick -> {
+                sendSideEffect(SettingSideEffect.NavigateToWithdrawal)
+                return null
+            }
         }
     }
 

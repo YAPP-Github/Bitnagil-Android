@@ -38,4 +38,7 @@ sealed interface Route {
 
     @Serializable
     data object Emotion : Route
+
+    @Serializable
+    data object Withdrawal : Route
 }

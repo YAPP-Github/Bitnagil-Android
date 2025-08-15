@@ -16,6 +16,7 @@ import com.threegap.bitnagil.presentation.setting.SettingScreenContainer
 import com.threegap.bitnagil.presentation.splash.SplashScreenContainer
 import com.threegap.bitnagil.presentation.terms.TermsAgreementScreenContainer
 import com.threegap.bitnagil.presentation.webview.BitnagilWebViewScreen
+import com.threegap.bitnagil.presentation.withdrawal.WithdrawalScreenContainer
 import com.threegap.bitnagil.presentation.writeroutine.WriteRoutineScreenContainer
 import com.threegap.bitnagil.presentation.writeroutine.WriteRoutineViewModel
 import com.threegap.bitnagil.presentation.writeroutine.model.navarg.WriteRoutineScreenArg
@@ -166,6 +167,9 @@ fun MainNavHost(
                         }
                     }
                 },
+                navigateToWithdrawal = {
+                    navigator.navController.navigate(Route.Withdrawal)
+                },
             )
         }
 
@@ -219,6 +223,23 @@ fun MainNavHost(
                 navigateToBack = {
                     if (navigator.navController.previousBackStackEntry != null) {
                         navigator.navController.popBackStack()
+                    }
+                },
+            )
+        }
+
+        composable<Route.Withdrawal> {
+            WithdrawalScreenContainer(
+                navigateToBack = {
+                    if (navigator.navController.previousBackStackEntry != null) {
+                        navigator.navController.popBackStack()
+                    }
+                },
+                navigateToLogin = {
+                    navigator.navController.navigate(Route.Login) {
+                        popUpTo(0) {
+                            inclusive = true
+                        }
                     }
                 },
             )
