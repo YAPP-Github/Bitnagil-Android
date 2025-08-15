@@ -58,7 +58,7 @@ class HomeViewModel @Inject constructor(
         observeRoutineUpdates()
         fetchWeeklyRoutines(container.stateFlow.value.currentWeeks)
         fetchUserProfile()
-        fetchTodayEmotion(container.stateFlow.value.selectedDate)
+        fetchTodayEmotion(LocalDate.now())
     }
 
     override suspend fun SimpleSyntax<HomeState, HomeSideEffect>.reduceState(

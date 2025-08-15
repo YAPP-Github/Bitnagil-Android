@@ -64,7 +64,7 @@ fun EmptyRoutineView(
 
 @Preview(showBackground = true)
 @Composable
-private fun RoutineEmptyViewPreview() {
+private fun EmptyRoutineViewPreview() {
     EmptyRoutineView(
         onRegisterRoutineClick = {},
     )
