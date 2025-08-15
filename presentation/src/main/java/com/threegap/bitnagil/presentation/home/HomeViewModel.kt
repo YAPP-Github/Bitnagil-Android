@@ -300,21 +300,15 @@ class HomeViewModel @Inject constructor(
 
             val routine = routinesForDate[routineIndex]
 
-            if (subRoutineIndex < 0 || subRoutineIndex >= routine.subRoutineNames.size) {
+            if (subRoutineIndex !in routine.subRoutineCompleteYn.indices) {
                 return@updateRoutinesForDate false
             }
 
-            val updatedSubRoutineCompleteYn = routine.subRoutineCompleteYn.toMutableList().apply {
-                if (subRoutineIndex < size) {
-                    this[subRoutineIndex] = isCompleted
-                }
+            val updatedSubRoutineCompleteYn = routine.subRoutineCompleteYn.toMutableList().also {
+                it[subRoutineIndex] = isCompleted
             }
 
-            val routineCompleted = if (isCompleted) {
-                updatedSubRoutineCompleteYn.all { it }
-            } else {
-                false
-            }
+            val routineCompleted = updatedSubRoutineCompleteYn.all { it }
 
             val updatedRoutine = routine.copy(
                 subRoutineCompleteYn = updatedSubRoutineCompleteYn,
