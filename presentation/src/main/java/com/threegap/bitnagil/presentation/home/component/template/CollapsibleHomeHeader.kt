@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -44,6 +45,7 @@ fun CollapsibleHomeHeader(
     onRegisterEmotion: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
     val alpha by animateFloatAsState(
         targetValue = 1f - collapsibleHeaderState.collapseProgress,
         animationSpec = tween(durationMillis = 300),
@@ -102,16 +104,16 @@ fun CollapsibleHomeHeader(
                 }
 
                 AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(todayEmotion?.imageUrl)
-                        .crossfade(true)
-                        .size(Size.ORIGINAL)
-                        .build(),
+                    model = remember(todayEmotion?.imageUrl) {
+                        ImageRequest.Builder(context)
+                            .data(todayEmotion?.imageUrl)
+                            .crossfade(true)
+                            .build()
+                    },
                     contentDescription = null,
                     placeholder = painterResource(R.drawable.default_emotion),
                     error = painterResource(R.drawable.default_emotion),
                     contentScale = ContentScale.Fit,
-                    filterQuality = FilterQuality.High,
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .padding(end = 18.dp)
