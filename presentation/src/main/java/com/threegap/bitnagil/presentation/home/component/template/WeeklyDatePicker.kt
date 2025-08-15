@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,12 +55,8 @@ fun WeeklyDatePicker(
     modifier: Modifier = Modifier,
 ) {
     val today = remember { LocalDate.now() }
-    val completionStates by remember(routines) {
-        derivedStateOf {
-            weeklyDates.associateWith { date ->
-                routines.routines[date.toString()]?.allCompleted ?: false
-            }
-        }
+    val completionStates = weeklyDates.associateWith { date ->
+        routines.routines[date.toString()]?.allCompleted ?: false
     }
 
     Column(
