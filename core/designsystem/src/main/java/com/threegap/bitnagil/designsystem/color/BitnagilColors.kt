@@ -15,6 +15,7 @@ data class BitnagilColors(
     val purple10: Color = Purple10,
     val green10: Color = Green10,
     val pink10: Color = Pink10,
+    val yellow10: Color = Yellow10,
     val progressBarGradientStartColor: Color = ProgressBarGradientStartColor,
     val progressBarGradientEndColor: Color = ProgressBarGradientEndColor,
     val homeGradientStartColor: Color = HomeGradientStartColor,
