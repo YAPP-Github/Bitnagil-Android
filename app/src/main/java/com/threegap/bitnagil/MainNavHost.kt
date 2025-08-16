@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.threegap.bitnagil.navigation.home.HomeNavHost
 import com.threegap.bitnagil.presentation.emotion.EmotionScreenContainer
+import com.threegap.bitnagil.presentation.guide.GuideScreenContainer
 import com.threegap.bitnagil.presentation.login.LoginScreenContainer
 import com.threegap.bitnagil.presentation.onboarding.OnBoardingScreenContainer
 import com.threegap.bitnagil.presentation.onboarding.OnBoardingViewModel
@@ -111,6 +112,11 @@ fun MainNavHost(
                             url = "https://complex-wombat-99f.notion.site/23ff4587491d80659ae3ea392afbc05e?source=copy_link",
                         ),
                     )
+                },
+                navigateToGuide = {
+                    navigator.navController.navigate(Route.Guide) {
+                        launchSingleTop = true
+                    }
                 },
                 navigateToRegisterRoutine = { routineId ->
                     navigator.navController.navigate(Route.WriteRoutine(routineId = routineId))
@@ -237,6 +243,16 @@ fun MainNavHost(
                         popUpTo(0) {
                             inclusive = true
                         }
+                    }
+                },
+            )
+        }
+
+        composable<Route.Guide> {
+            GuideScreenContainer(
+                navigateToBack = {
+                    if (navigator.navController.previousBackStackEntry != null) {
+                        navigator.navController.popBackStack()
                     }
                 },
             )
