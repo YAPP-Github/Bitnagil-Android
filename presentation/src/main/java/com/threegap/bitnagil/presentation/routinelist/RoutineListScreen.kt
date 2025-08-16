@@ -23,6 +23,7 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.routinelist.component.template.DeleteConfirmBottomSheet
+import com.threegap.bitnagil.presentation.routinelist.component.template.EditConfirmBottomSheet
 import com.threegap.bitnagil.presentation.routinelist.component.template.EmptyRoutineListView
 import com.threegap.bitnagil.presentation.routinelist.component.template.RoutineDetailsCard
 import com.threegap.bitnagil.presentation.routinelist.component.template.WeeklyDatePicker
@@ -57,6 +58,18 @@ fun RoutineListScreenContainer(
         }
     }
 
+    if (uiState.editConfirmBottomSheetVisible) {
+        EditConfirmBottomSheet(
+            onDismissRequest = { viewModel.sendIntent(RoutineListIntent.HideEditConfirmBottomSheet) },
+            onApplyToday = {
+                // TODO("루틴수정으로 이동(id와 수정여부(TODAY) 넘겨주기")
+            },
+            onApplyTomorrow = {
+                //TODO("루틴수정으로 이동(id와 수정여부(TOMORROW) 넘겨주기")
+            },
+        )
+    }
+
     RoutineListScreen(
         uiState = uiState,
         onDateSelect = { selectedDate ->
@@ -65,6 +78,7 @@ fun RoutineListScreenContainer(
         onShowDeleteConfirmBottomSheet = { routine ->
             viewModel.sendIntent(RoutineListIntent.ShowDeleteConfirmBottomSheet(routine))
         },
+        onShowEditConfirmBottomSheet = { viewModel.sendIntent(RoutineListIntent.ShowEditConfirmBottomSheet) },
         onRegisterRoutineClick = {},
         onBackClick = { viewModel.sendIntent(RoutineListIntent.NavigateToBack) },
     )
@@ -75,6 +89,7 @@ private fun RoutineListScreen(
     uiState: RoutineListState,
     onDateSelect: (LocalDate) -> Unit,
     onShowDeleteConfirmBottomSheet: (RoutineUiModel) -> Unit,
+    onShowEditConfirmBottomSheet: () -> Unit,
     onRegisterRoutineClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -122,6 +137,7 @@ private fun RoutineListScreen(
                 ) { routine ->
                     RoutineDetailsCard(
                         routine = routine,
+                        onEditClick = { onShowEditConfirmBottomSheet() },
                         onDeleteClick = { onShowDeleteConfirmBottomSheet(routine) },
                     )
                 }
@@ -137,6 +153,7 @@ private fun RoutineListScreenPreview() {
         uiState = RoutineListState(),
         onDateSelect = {},
         onShowDeleteConfirmBottomSheet = {},
+        onShowEditConfirmBottomSheet = {},
         onRegisterRoutineClick = {},
         onBackClick = {},
     )

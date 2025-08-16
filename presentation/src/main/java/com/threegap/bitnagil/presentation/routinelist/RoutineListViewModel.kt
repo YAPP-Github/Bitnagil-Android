@@ -28,7 +28,7 @@ class RoutineListViewModel @Inject constructor(
             ?.let { dateString ->
                 runCatching { LocalDate.parse(dateString) }.getOrNull()
             }
-            ?: LocalDate.now()
+            ?: LocalDate.now(),
     ),
 ) {
 
@@ -53,6 +53,8 @@ class RoutineListViewModel @Inject constructor(
             }
 
             is RoutineListIntent.HideDeleteConfirmBottomSheet -> state.copy(deleteConfirmBottomSheetVisible = false)
+            is RoutineListIntent.ShowEditConfirmBottomSheet -> state.copy(editConfirmBottomSheetVisible = true)
+            is RoutineListIntent.HideEditConfirmBottomSheet -> state.copy(editConfirmBottomSheetVisible = false)
 
             is RoutineListIntent.NavigateToBack -> {
                 sendSideEffect(RoutineListSideEffect.NavigateToBack)

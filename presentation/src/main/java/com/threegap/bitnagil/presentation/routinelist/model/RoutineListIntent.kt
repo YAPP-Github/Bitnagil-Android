@@ -9,5 +9,7 @@ sealed class RoutineListIntent : MviIntent {
     data class OnDateSelect(val date: LocalDate) : RoutineListIntent()
     data class ShowDeleteConfirmBottomSheet(val routine: RoutineUiModel) : RoutineListIntent()
     data object HideDeleteConfirmBottomSheet : RoutineListIntent()
+    data object ShowEditConfirmBottomSheet : RoutineListIntent()
+    data object HideEditConfirmBottomSheet : RoutineListIntent()
     data object NavigateToBack : RoutineListIntent()
 }

@@ -27,6 +27,7 @@ import com.threegap.bitnagil.presentation.routinelist.model.RoutineUiModel
 @Composable
 fun RoutineDetailsCard(
     routine: RoutineUiModel,
+    onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -66,7 +67,7 @@ fun RoutineDetailsCard(
 
             BitnagilIconButton(
                 id = R.drawable.ic_edit,
-                onClick = { /*TODO*/ },
+                onClick = onEditClick,
                 tint = null,
                 paddingValues = PaddingValues(12.dp),
             )
@@ -148,8 +149,9 @@ private fun RoutineDetailsCardPreview() {
             executionTime = "12:00:00",
             routineDate = "2025-08-15",
             subRoutineNames = listOf("어쩌구", "저쩌구", "얼씨구"),
-            recommendedRoutineType = null
+            recommendedRoutineType = null,
         ),
+        onEditClick = {},
         onDeleteClick = {},
     )
 }

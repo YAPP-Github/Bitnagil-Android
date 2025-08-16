@@ -12,6 +12,7 @@ data class RoutineListState(
     val selectedRoutine: RoutineUiModel? = null,
     val selectedDate: LocalDate = LocalDate.now(),
     val deleteConfirmBottomSheetVisible: Boolean = false,
+    val editConfirmBottomSheetVisible: Boolean = false,
 ) : MviState {
     val currentWeekDates: List<LocalDate>
         get() = selectedDate.getCurrentWeekDays()

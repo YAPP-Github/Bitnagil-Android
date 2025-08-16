@@ -27,4 +27,3 @@ fun Routine.toUiModel(): RoutineUiModel =
         subRoutineNames = this.subRoutineNames,
         recommendedRoutineType = this.recommendedRoutineType,
     )
-

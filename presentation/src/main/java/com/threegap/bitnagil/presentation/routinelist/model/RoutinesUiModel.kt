@@ -15,4 +15,3 @@ fun Routines.toUiModel(): RoutinesUiModel =
             dayRoutines.toUiModel()
         },
     )
-
