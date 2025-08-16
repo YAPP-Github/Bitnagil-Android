@@ -41,6 +41,7 @@ fun HomeNavHost(
     navigateToQnA: () -> Unit,
     navigateToRegisterRoutine: (String?) -> Unit,
     navigateToEmotion: () -> Unit,
+    navigateToRoutineList: (String) -> Unit,
 ) {
     val navigator = rememberHomeNavigator()
     var showFloatingOverlay by remember { mutableStateOf(false) }
@@ -66,6 +67,9 @@ fun HomeNavHost(
                                 navigateToRegisterRoutine(null)
                             },
                             navigateToEmotion = navigateToEmotion,
+                            navigateToRoutineList = { selectedDate ->
+                                navigateToRoutineList(selectedDate)
+                            },
                         )
                     }
 

@@ -12,6 +12,7 @@ import com.threegap.bitnagil.presentation.login.LoginScreenContainer
 import com.threegap.bitnagil.presentation.onboarding.OnBoardingScreenContainer
 import com.threegap.bitnagil.presentation.onboarding.OnBoardingViewModel
 import com.threegap.bitnagil.presentation.onboarding.model.navarg.OnBoardingScreenArg
+import com.threegap.bitnagil.presentation.routinelist.RoutineListScreenContainer
 import com.threegap.bitnagil.presentation.setting.SettingScreenContainer
 import com.threegap.bitnagil.presentation.splash.SplashScreenContainer
 import com.threegap.bitnagil.presentation.terms.TermsAgreementScreenContainer
@@ -118,6 +119,13 @@ fun MainNavHost(
                 navigateToEmotion = {
                     navigator.navController.navigate(Route.Emotion)
                 },
+                navigateToRoutineList = { selectedDate ->
+                    navigator.navController.navigate(
+                        Route.RoutineList(selectedDate = selectedDate)
+                    ) {
+                        launchSingleTop = true
+                    }
+                }
             )
         }
 
@@ -237,6 +245,16 @@ fun MainNavHost(
                         popUpTo(0) {
                             inclusive = true
                         }
+                    }
+                },
+            )
+        }
+
+        composable<Route.RoutineList> {
+            RoutineListScreenContainer(
+                navigateToBack = {
+                    if (navigator.navController.previousBackStackEntry != null) {
+                        navigator.navController.popBackStack()
                     }
                 },
             )

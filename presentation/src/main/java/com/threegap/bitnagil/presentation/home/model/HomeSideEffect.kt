@@ -7,4 +7,5 @@ sealed interface HomeSideEffect : MviSideEffect {
     data class ShowToastWithIcon(val message: String) : HomeSideEffect
     data object NavigateToRegisterRoutine : HomeSideEffect
     data object NavigateToEmotion : HomeSideEffect
+    data class NavigateToRoutineList(val selectedDate: String) : HomeSideEffect
 }

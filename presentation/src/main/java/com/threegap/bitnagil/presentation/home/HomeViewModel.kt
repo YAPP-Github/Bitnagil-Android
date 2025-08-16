@@ -120,6 +120,12 @@ class HomeViewModel @Inject constructor(
                 null
             }
 
+            is HomeIntent.OnShowMoreRoutinesClick -> {
+                val selectedDate = container.stateFlow.value.selectedDate.toString()
+                sendSideEffect(HomeSideEffect.NavigateToRoutineList(selectedDate))
+                null
+            }
+
             is HomeIntent.RoutineToggleCompletionFailure -> {
                 sendSideEffect(HomeSideEffect.ShowToast("루틴 완료 상태 저장에 실패했어요.\n다시 시도해 주세요."))
                 null
