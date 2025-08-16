@@ -17,12 +17,11 @@ import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButtonColor
-import com.threegap.bitnagil.presentation.routinelist.model.RoutineUiModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeleteConfirmBottomSheet(
-    routine: RoutineUiModel,
+    isRepeatRoutine: Boolean,
     onDismissRequest: () -> Unit,
     onDeleteToday: () -> Unit,
     onDeleteAll: () -> Unit,
@@ -35,7 +34,7 @@ fun DeleteConfirmBottomSheet(
         contentColor = BitnagilTheme.colors.white,
         containerColor = BitnagilTheme.colors.white,
     ) {
-        if (routine.repeatDay.isNotEmpty()) {
+        if (isRepeatRoutine) {
             RepeatRoutineDeleteContent(
                 onDeleteToday = onDeleteToday,
                 onDeleteAll = onDeleteAll,
@@ -168,25 +167,5 @@ private fun RepeatRoutineDeleteContentPreview() {
         onDeleteToday = {},
         onDeleteAll = {},
         modifier = Modifier.padding(24.dp),
-    )
-}
-
-@Preview
-@Composable
-private fun DeleteConfirmBottomSheetPreview() {
-    DeleteConfirmBottomSheet(
-        routine = RoutineUiModel(
-            routineId = "1",
-            routineName = "물마시기",
-            repeatDay = listOf(),
-            routineDate = "",
-            executionTime = "08:00",
-            recommendedRoutineType = null,
-            subRoutineNames = emptyList()
-        ),
-        onDismissRequest = {},
-        onDeleteToday = {},
-        onDeleteAll = {},
-        onCancel = {},
     )
 }

@@ -48,7 +48,7 @@ fun RoutineListScreenContainer(
     if (uiState.deleteConfirmBottomSheetVisible) {
         uiState.selectedRoutine?.let { routine ->
             DeleteConfirmBottomSheet(
-                routine = routine,
+                isRepeatRoutine = routine.repeatDay.isNotEmpty(),
                 onDismissRequest = { viewModel.sendIntent(RoutineListIntent.HideDeleteConfirmBottomSheet) },
                 onDeleteToday = viewModel::deleteRoutineForToday,
                 onDeleteAll = viewModel::deleteRoutineCompletely,
