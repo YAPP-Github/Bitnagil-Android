@@ -3,6 +3,8 @@ package com.threegap.bitnagil.presentation.routinelist
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.threegap.bitnagil.domain.routine.usecase.DeleteRoutineForDayUseCase
+import com.threegap.bitnagil.domain.routine.usecase.DeleteRoutineUseCase
 import com.threegap.bitnagil.domain.routine.usecase.FetchWeeklyRoutinesUseCase
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
 import com.threegap.bitnagil.presentation.home.util.getCurrentWeekDays
@@ -20,6 +22,8 @@ import javax.inject.Inject
 class RoutineListViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val fetchWeeklyRoutinesUseCase: FetchWeeklyRoutinesUseCase,
+    private val deleteRoutineUseCase: DeleteRoutineUseCase,
+    private val deleteRoutineForDayUseCase: DeleteRoutineForDayUseCase,
 ) : MviViewModel<RoutineListState, RoutineListSideEffect, RoutineListIntent>(
     savedStateHandle = savedStateHandle,
     initState = RoutineListState(
@@ -67,7 +71,7 @@ class RoutineListViewModel @Inject constructor(
 
     private fun fetchRoutines() {
         sendIntent(RoutineListIntent.UpdateLoading(true))
-        val currentWeek = LocalDate.now().getCurrentWeekDays()
+        val currentWeek = container.stateFlow.value.selectedDate.getCurrentWeekDays()
         val startDate = currentWeek.first().toString()
         val endDate = currentWeek.last().toString()
         viewModelScope.launch {
@@ -85,10 +89,36 @@ class RoutineListViewModel @Inject constructor(
     }
 
     fun deleteRoutineCompletely() {
-        viewModelScope.launch {}
+        sendIntent(RoutineListIntent.UpdateLoading(true))
+        val selectedRoutine = stateFlow.value.selectedRoutine!!
+        viewModelScope.launch {
+            deleteRoutineUseCase(selectedRoutine.routineId).fold(
+                onSuccess = {
+                    sendIntent(RoutineListIntent.HideDeleteConfirmBottomSheet)
+                    sendIntent(RoutineListIntent.UpdateLoading(false))
+                },
+                onFailure = {
+                    Log.e("RoutineListViewModel", "루틴 삭제 실패: ${it.message}")
+                    sendIntent(RoutineListIntent.UpdateLoading(false))
+                },
+            )
+        }
     }
 
     fun deleteRoutineForToday() {
-        viewModelScope.launch { }
+        sendIntent(RoutineListIntent.UpdateLoading(true))
+        val selectedRoutine = stateFlow.value.selectedRoutine!!
+        viewModelScope.launch {
+            deleteRoutineForDayUseCase(selectedRoutine.routineId).fold(
+                onSuccess = {
+                    sendIntent(RoutineListIntent.HideDeleteConfirmBottomSheet)
+                    sendIntent(RoutineListIntent.UpdateLoading(false))
+                },
+                onFailure = {
+                    Log.e("RoutineListViewModel", "루틴 삭제 실패: ${it.message}")
+                    sendIntent(RoutineListIntent.UpdateLoading(false))
+                },
+            )
+        }
     }
 }
