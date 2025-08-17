@@ -23,6 +23,8 @@ import com.threegap.bitnagil.designsystem.component.atom.BitnagilIconButton
 import com.threegap.bitnagil.domain.routine.model.DayOfWeek
 import com.threegap.bitnagil.domain.routine.model.DayOfWeek.Companion.formatRepeatDays
 import com.threegap.bitnagil.presentation.routinelist.model.RoutineUiModel
+import com.threegap.bitnagil.presentation.routinelist.model.getColor
+import com.threegap.bitnagil.presentation.routinelist.model.getIcon
 
 @Composable
 fun RoutineDetailsCard(
@@ -46,11 +48,11 @@ fun RoutineDetailsCard(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             BitnagilIcon(
-                id = R.drawable.ic_check_circle_orange,
+                id = if (routine.recommendedRoutineType != null) routine.recommendedRoutineType.getIcon() else R.drawable.ic_shine,
                 tint = null,
                 modifier = Modifier
                     .background(
-                        color = BitnagilTheme.colors.orange25,
+                        color = if (routine.recommendedRoutineType != null) routine.recommendedRoutineType.getColor() else BitnagilTheme.colors.yellow10,
                         shape = RoundedCornerShape(4.dp),
                     )
                     .padding(4.dp),
@@ -146,7 +148,7 @@ private fun RoutineDetailsCardPreview() {
             routineId = "1",
             routineName = "야무진 루틴",
             repeatDay = listOf(DayOfWeek.MONDAY, DayOfWeek.TUESDAY),
-            executionTime = "12:00:00",
+            executionTime = "00:00:00",
             routineDate = "2025-08-15",
             subRoutineNames = listOf("어쩌구", "저쩌구", "얼씨구"),
             recommendedRoutineType = null,
