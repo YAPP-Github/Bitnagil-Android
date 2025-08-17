@@ -43,6 +43,13 @@ fun RoutineListScreenContainer(
     viewModel.sideEffectFlow.collectAsEffect { sideEffect ->
         when (sideEffect) {
             is RoutineListSideEffect.NavigateToBack -> navigateToBack()
+            is RoutineListSideEffect.NavigateToWriteRoutine -> {
+//                TODO: 네비게이션 연결하기
+//                navigateToWriteRoutine(
+//                    routineId = sideEffect.routineId,
+//                    applyDate = sideEffect.applyDate,
+//                )
+            }
         }
     }
 
@@ -59,15 +66,13 @@ fun RoutineListScreenContainer(
     }
 
     if (uiState.editConfirmBottomSheetVisible) {
-        EditConfirmBottomSheet(
-            onDismissRequest = { viewModel.sendIntent(RoutineListIntent.HideEditConfirmBottomSheet) },
-            onApplyToday = {
-                // TODO("루틴수정으로 이동(id와 수정여부(TODAY) 넘겨주기")
-            },
-            onApplyTomorrow = {
-                //TODO("루틴수정으로 이동(id와 수정여부(TOMORROW) 넘겨주기")
-            },
-        )
+        uiState.selectedRoutine?.let {
+            EditConfirmBottomSheet(
+                onDismissRequest = { viewModel.sendIntent(RoutineListIntent.HideEditConfirmBottomSheet) },
+                onApplyToday = { viewModel.sendIntent(RoutineListIntent.OnApplyTodayClick) },
+                onApplyTomorrow = { viewModel.sendIntent(RoutineListIntent.OnApplyTomorrowClick) },
+            )
+        }
     }
 
     RoutineListScreen(
@@ -78,8 +83,10 @@ fun RoutineListScreenContainer(
         onShowDeleteConfirmBottomSheet = { routine ->
             viewModel.sendIntent(RoutineListIntent.ShowDeleteConfirmBottomSheet(routine))
         },
-        onShowEditConfirmBottomSheet = { viewModel.sendIntent(RoutineListIntent.ShowEditConfirmBottomSheet) },
-        onRegisterRoutineClick = {},
+        onShowEditConfirmBottomSheet = { routine ->
+            viewModel.sendIntent(RoutineListIntent.ShowEditConfirmBottomSheet(routine))
+        },
+        onRegisterRoutineClick = { viewModel.sendIntent(RoutineListIntent.OnRegisterRoutineClick) },
         onBackClick = { viewModel.sendIntent(RoutineListIntent.NavigateToBack) },
     )
 }
@@ -89,7 +96,7 @@ private fun RoutineListScreen(
     uiState: RoutineListState,
     onDateSelect: (LocalDate) -> Unit,
     onShowDeleteConfirmBottomSheet: (RoutineUiModel) -> Unit,
-    onShowEditConfirmBottomSheet: () -> Unit,
+    onShowEditConfirmBottomSheet: (RoutineUiModel) -> Unit,
     onRegisterRoutineClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -137,7 +144,7 @@ private fun RoutineListScreen(
                 ) { routine ->
                     RoutineDetailsCard(
                         routine = routine,
-                        onEditClick = { onShowEditConfirmBottomSheet() },
+                        onEditClick = { onShowEditConfirmBottomSheet(routine) },
                         onDeleteClick = { onShowDeleteConfirmBottomSheet(routine) },
                     )
                 }

@@ -56,12 +56,54 @@ class RoutineListViewModel @Inject constructor(
                 )
             }
 
+            is RoutineListIntent.ShowEditConfirmBottomSheet -> {
+                state.copy(
+                    selectedRoutine = intent.routine,
+                    editConfirmBottomSheetVisible = true,
+                )
+            }
+
             is RoutineListIntent.HideDeleteConfirmBottomSheet -> state.copy(deleteConfirmBottomSheetVisible = false)
-            is RoutineListIntent.ShowEditConfirmBottomSheet -> state.copy(editConfirmBottomSheetVisible = true)
             is RoutineListIntent.HideEditConfirmBottomSheet -> state.copy(editConfirmBottomSheetVisible = false)
 
             is RoutineListIntent.NavigateToBack -> {
                 sendSideEffect(RoutineListSideEffect.NavigateToBack)
+                null
+            }
+
+            is RoutineListIntent.OnRegisterRoutineClick -> {
+                sendSideEffect(
+                    RoutineListSideEffect.NavigateToWriteRoutine(
+                        routineId = null,
+                        applyDate = null,
+                    ),
+                )
+                null
+            }
+
+            is RoutineListIntent.OnApplyTodayClick -> {
+                val selectedRoutine = state.selectedRoutine
+                if (selectedRoutine != null) {
+                    sendSideEffect(
+                        RoutineListSideEffect.NavigateToWriteRoutine(
+                            routineId = selectedRoutine.routineId,
+                            applyDate = "TODAY",
+                        ),
+                    )
+                }
+                null
+            }
+
+            is RoutineListIntent.OnApplyTomorrowClick -> {
+                val selectedRoutine = state.selectedRoutine
+                if (selectedRoutine != null) {
+                    sendSideEffect(
+                        RoutineListSideEffect.NavigateToWriteRoutine(
+                            routineId = selectedRoutine.routineId,
+                            applyDate = "TOMORROW",
+                        ),
+                    )
+                }
                 null
             }
         }

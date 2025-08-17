@@ -121,11 +121,11 @@ fun MainNavHost(
                 },
                 navigateToRoutineList = { selectedDate ->
                     navigator.navController.navigate(
-                        Route.RoutineList(selectedDate = selectedDate)
+                        Route.RoutineList(selectedDate = selectedDate),
                     ) {
                         launchSingleTop = true
                     }
-                }
+                },
             )
         }
 
