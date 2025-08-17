@@ -9,5 +9,5 @@ sealed class WriteRoutineType : Parcelable {
     data object Add : WriteRoutineType()
 
     @Parcelize
-    data class Edit(val updateRoutineFromNowDate: Boolean): WriteRoutineType()
+    data class Edit(val updateRoutineFromNowDate: Boolean) : WriteRoutineType()
 }

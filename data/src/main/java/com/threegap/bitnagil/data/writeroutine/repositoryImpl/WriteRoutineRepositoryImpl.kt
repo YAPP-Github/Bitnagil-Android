@@ -23,7 +23,7 @@ class WriteRoutineRepositoryImpl @Inject constructor(
         startTime: Time,
         startDate: Date?,
         endDate: Date?,
-        subRoutines: List<String>
+        subRoutines: List<String>,
     ): Result<Unit> {
         val request = RegisterRoutineRequest(
             routineName = name,
