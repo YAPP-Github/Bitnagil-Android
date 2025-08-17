@@ -72,7 +72,7 @@ data class WriteRoutineState(
             showStartDatePickerBottomSheet = false,
             showEndDatePickerBottomSheet = false,
             showTimePickerBottomSheet = false,
-            writeRoutineType = WriteRoutineType.ADD,
+            writeRoutineType = WriteRoutineType.Add,
             subRoutineUiExpanded = false,
             repeatDaysUiExpanded = false,
             periodUiExpanded = false,

@@ -9,6 +9,10 @@ data class RegisterRoutineRequest(
     val routineName: String,
     @SerialName("repeatDay")
     val repeatDay: List<String>,
+    @SerialName("routineStartDate")
+    val routineStartDate: String?,
+    @SerialName("routineEndDate")
+    val routineEndDate: String?,
     @SerialName("executionTime")
     val executionTime: String,
     @SerialName("subRoutineName")

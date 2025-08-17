@@ -197,7 +197,7 @@ fun MainNavHost(
             val writeScreenNavArg = if (arg.isRegister) {
                 WriteRoutineScreenArg.Add(baseRoutineId = arg.routineId)
             } else {
-                WriteRoutineScreenArg.Edit(routineId = arg.routineId!!)
+                WriteRoutineScreenArg.Edit(routineId = arg.routineId!!, updateRoutineFromNowDate = arg.isUpdateRoutineFromNowDate)
             }
 
             val viewModel = hiltViewModel<WriteRoutineViewModel, WriteRoutineViewModel.Factory> { factory ->

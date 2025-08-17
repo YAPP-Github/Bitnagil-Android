@@ -34,6 +34,7 @@ sealed interface Route {
     data class WriteRoutine(
         val routineId: String? = null,
         val isRegister: Boolean = true,
+        val isUpdateRoutineFromNowDate: Boolean = true,
     ) : Route
 
     @Serializable

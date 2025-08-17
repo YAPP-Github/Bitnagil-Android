@@ -8,5 +8,5 @@ sealed class WriteRoutineScreenArg {
     data class Add(val baseRoutineId: String?) : WriteRoutineScreenArg()
 
     @Serializable
-    data class Edit(val routineId: String) : WriteRoutineScreenArg()
+    data class Edit(val routineId: String, val updateRoutineFromNowDate: Boolean) : WriteRoutineScreenArg()
 }

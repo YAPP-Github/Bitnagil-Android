@@ -146,7 +146,7 @@ private fun WriteRoutineScreen(
             ),
     ) {
         BitnagilTopBar(
-            title = if (state.writeRoutineType == WriteRoutineType.ADD) "루틴 등록" else "루틴 수정",
+            title = if (state.writeRoutineType == WriteRoutineType.Add) "루틴 등록" else "루틴 수정",
             showBackButton = true,
             onBackClick = onClickBack,
         )

@@ -2,6 +2,7 @@ package com.threegap.bitnagil.presentation.writeroutine.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import com.threegap.bitnagil.domain.writeroutine.model.Date as DomainDate
 
 @Parcelize
 data class Date(
@@ -53,5 +54,13 @@ data class Date(
         val targetValue = year * 10000 + month * 100 + day
 
         return targetValue in startValue..endValue
+    }
+
+    fun toDomainDate(): DomainDate {
+        return DomainDate(
+            year = year,
+            month = month,
+            day = day,
+        )
     }
 }

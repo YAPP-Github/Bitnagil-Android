@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.threegap.bitnagil.domain.recommendroutine.usecase.GetRecommendRoutineUseCase
 import com.threegap.bitnagil.domain.routine.usecase.GetRoutineUseCase
 import com.threegap.bitnagil.domain.writeroutine.model.RepeatDay
+import com.threegap.bitnagil.domain.writeroutine.model.RoutineUpdateType
 import com.threegap.bitnagil.domain.writeroutine.usecase.EditRoutineUseCase
-import com.threegap.bitnagil.domain.writeroutine.usecase.GetChangedSubRoutinesUseCase
 import com.threegap.bitnagil.domain.writeroutine.usecase.RegisterRoutineUseCase
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
 import com.threegap.bitnagil.presentation.writeroutine.model.Date
@@ -26,12 +26,10 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
-import com.threegap.bitnagil.domain.writeroutine.model.SubRoutine as DomainSubRoutine
 
 @HiltViewModel(assistedFactory = WriteRoutineViewModel.Factory::class)
 class WriteRoutineViewModel @AssistedInject constructor(
     savedStateHandle: SavedStateHandle,
-    private val getChangedSubRoutinesUseCase: GetChangedSubRoutinesUseCase,
     private val registerRoutineUseCase: RegisterRoutineUseCase,
     private val editRoutineUseCase: EditRoutineUseCase,
     private val getRoutineUseCase: GetRoutineUseCase,
@@ -57,7 +55,7 @@ class WriteRoutineViewModel @AssistedInject constructor(
         when (navigationArg) {
             is WriteRoutineScreenArg.Add -> {
                 viewModelScope.launch {
-                    sendIntent(WriteRoutineIntent.SetWriteRoutineType(WriteRoutineType.ADD))
+                    sendIntent(WriteRoutineIntent.SetWriteRoutineType(WriteRoutineType.Add))
                 }
 
                 navigationArg.baseRoutineId?.let {
@@ -67,7 +65,7 @@ class WriteRoutineViewModel @AssistedInject constructor(
             }
             is WriteRoutineScreenArg.Edit -> {
                 viewModelScope.launch {
-                    sendIntent(WriteRoutineIntent.SetWriteRoutineType(WriteRoutineType.EDIT))
+                    sendIntent(WriteRoutineIntent.SetWriteRoutineType(WriteRoutineType.Edit(updateRoutineFromNowDate = navigationArg.updateRoutineFromNowDate)))
                 }
 
                 navigationArg.routineId.also {
@@ -462,16 +460,18 @@ class WriteRoutineViewModel @AssistedInject constructor(
                 null -> return@launch
             }
 
-            when (currentState.writeRoutineType) {
-                WriteRoutineType.ADD -> {
+            when (val writeRoutineType = currentState.writeRoutineType) {
+                WriteRoutineType.Add -> {
                     sendIntent(WriteRoutineIntent.RegisterRoutineLoading)
                     val subRoutines = if (currentState.selectNotUseSUbRoutines) emptyList() else currentState.subRoutineNames
 
                     val registerRoutineResult = registerRoutineUseCase(
-                        currentState.routineName,
-                        repeatDay,
-                        startTime.toDomainTime(),
-                        subRoutines,
+                        name = currentState.routineName,
+                        repeatDay = repeatDay,
+                        startTime = startTime.toDomainTime(),
+                        startDate = currentState.startDate?.toDomainDate(),
+                        endDate = currentState.endDate?.toDomainDate(),
+                        subRoutines = subRoutines,
                     )
 
                     if (registerRoutineResult.isSuccess) {
@@ -480,28 +480,25 @@ class WriteRoutineViewModel @AssistedInject constructor(
                         sendIntent(WriteRoutineIntent.RegisterRoutineFailure)
                     }
                 }
-                WriteRoutineType.EDIT -> {
+                is WriteRoutineType.Edit -> {
                     val currentRoutineId = routineId ?: return@launch
                     val subRoutines = if (currentState.selectNotUseSUbRoutines) emptyList() else currentState.subRoutineNames
-
-                    val subRoutineDiffs = getChangedSubRoutinesUseCase(
-                        oldSubRoutines = oldSubRoutines.mapIndexed { index, subRoutine ->
-                            DomainSubRoutine(
-                                id = subRoutine.id,
-                                name = subRoutine.name,
-                                sort = index + 1,
-                            )
-                        },
-                        newSubRoutineNames = subRoutines.filter { it.isNotEmpty() },
-                    )
+                    val routineUpdateType = if (writeRoutineType.updateRoutineFromNowDate) {
+                        RoutineUpdateType.Today
+                    } else {
+                        RoutineUpdateType.Tomorrow
+                    }
 
                     sendIntent(WriteRoutineIntent.EditRoutineLoading)
                     val editRoutineResult = editRoutineUseCase(
                         routineId = currentRoutineId,
+                        routineUpdateType = routineUpdateType,
                         name = currentState.routineName,
-                        repeatDay,
+                        repeatDay = repeatDay,
                         startTime = startTime.toDomainTime(),
-                        subRoutines = subRoutineDiffs,
+                        startDate = currentState.startDate?.toDomainDate(),
+                        endDate = currentState.endDate?.toDomainDate(),
+                        subRoutines = subRoutines,
                     )
 
                     if (editRoutineResult.isSuccess) {
