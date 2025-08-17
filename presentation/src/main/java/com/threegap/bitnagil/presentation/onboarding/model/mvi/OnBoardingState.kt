@@ -19,5 +19,8 @@ sealed class OnBoardingState(val progress: Float) : Parcelable, MviState {
         val totalStep: Int,
         val currentStep: Int,
         val onBoardingSetType: OnBoardingSetType,
+        val userName: String,
     ) : OnBoardingState(progress = currentStep.toFloat() / totalStep.toFloat())
+
+    val showProgress: Boolean get() = progress > 0
 }

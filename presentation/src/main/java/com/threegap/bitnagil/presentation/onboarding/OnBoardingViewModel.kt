@@ -6,6 +6,7 @@ import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingAbstractUseC
 import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingsUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.GetRecommendOnBoardingRoutinesUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.RegisterRecommendOnBoardingRoutinesUseCase
+import com.threegap.bitnagil.domain.user.usecase.FetchUserProfileUseCase
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingAbstractTextItem
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingItem
@@ -21,7 +22,6 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
@@ -33,6 +33,7 @@ class OnBoardingViewModel @AssistedInject constructor(
     private val getRecommendOnBoardingRoutinesUseCase: GetRecommendOnBoardingRoutinesUseCase,
     private val getOnBoardingAbstractUseCase: GetOnBoardingAbstractUseCase,
     private val registerRecommendOnBoardingRoutinesUseCase: RegisterRecommendOnBoardingRoutinesUseCase,
+    private val fetchUserProfileUseCase: FetchUserProfileUseCase,
     @Assisted private val onBoardingArg: OnBoardingScreenArg,
 ) : MviViewModel<OnBoardingState, OnBoardingSideEffect, OnBoardingIntent>(
     initState = OnBoardingState.Loading,
@@ -43,7 +44,7 @@ class OnBoardingViewModel @AssistedInject constructor(
     }
 
     // 내부에 전체 온보딩 항목 저장
-    private val onBoardingPageInfos = mutableListOf<OnBoardingPageInfo.SelectOnBoarding>()
+    private val selectOnBoardingPageInfos = mutableListOf<OnBoardingPageInfo.SelectOnBoarding>()
 
     private var loadRecommendRoutinesJob: Job? = null
 
@@ -54,12 +55,21 @@ class OnBoardingViewModel @AssistedInject constructor(
     private fun loadOnBoardingItems() {
         viewModelScope.launch {
             val onBoardings = getOnBoardingsUseCase()
-
             val onBoardingPages = onBoardings.map { onBoarding ->
                 OnBoardingPageInfo.SelectOnBoarding.fromOnBoarding(onBoarding = onBoarding)
             }
 
-            sendIntent(intent = OnBoardingIntent.LoadOnBoardingSuccess(onBoardingPageInfos = onBoardingPages))
+            val userProfile = fetchUserProfileUseCase()
+            val userName = userProfile.fold(
+                onSuccess = {
+                    return@fold it.nickname
+                },
+                onFailure = {
+                    return@fold "-"
+                },
+            )
+
+            sendIntent(intent = OnBoardingIntent.LoadOnBoardingSuccess(onBoardingPageInfos = onBoardingPages, userName = userName))
         }
     }
 
@@ -69,15 +79,22 @@ class OnBoardingViewModel @AssistedInject constructor(
     ): OnBoardingState? {
         when (intent) {
             is OnBoardingIntent.LoadOnBoardingSuccess -> {
-                onBoardingPageInfos.clear()
-                onBoardingPageInfos.addAll(intent.onBoardingPageInfos)
+                selectOnBoardingPageInfos.clear()
+                selectOnBoardingPageInfos.addAll(intent.onBoardingPageInfos)
+
+                val onBoardingSetType =  OnBoardingSetType.fromOnBoardingScreenArg(onBoardingArg)
+                val firstPage = when(onBoardingSetType) {
+                    OnBoardingSetType.NEW -> OnBoardingPageInfo.Intro
+                    OnBoardingSetType.RESET -> OnBoardingPageInfo.Intro
+                }
 
                 return OnBoardingState.Idle(
-                    nextButtonEnable = false,
-                    currentOnBoardingPageInfo = onBoardingPageInfos.first(),
-                    totalStep = onBoardingPageInfos.size + 2,
-                    currentStep = 1,
-                    onBoardingSetType = OnBoardingSetType.fromOnBoardingScreenArg(onBoardingArg),
+                    nextButtonEnable = true,
+                    currentOnBoardingPageInfo = firstPage,
+                    totalStep = selectOnBoardingPageInfos.size + 2,
+                    currentStep = 0,
+                    onBoardingSetType = onBoardingSetType,
+                    userName = intent.userName
                 )
             }
 
@@ -89,7 +106,7 @@ class OnBoardingViewModel @AssistedInject constructor(
                 if (currentPageInfo !is OnBoardingPageInfo.SelectOnBoarding) return null
 
                 val selectChangedCurrentPageInfo = currentPageInfo.selectItem(itemId = intent.itemId)
-                onBoardingPageInfos[currentState.currentStep - 1] = selectChangedCurrentPageInfo
+                selectOnBoardingPageInfos[currentState.currentStep - 1] = selectChangedCurrentPageInfo
                 return currentState.copy(
                     currentOnBoardingPageInfo = selectChangedCurrentPageInfo,
                     nextButtonEnable = selectChangedCurrentPageInfo.isItemSelected,
@@ -100,10 +117,10 @@ class OnBoardingViewModel @AssistedInject constructor(
                 val currentState = state
                 if (currentState !is OnBoardingState.Idle) return null
 
-                val isLastSelectOnBoarding = currentState.currentStep >= onBoardingPageInfos.size
-                if (isLastSelectOnBoarding) return null
+                val isLastPageOfSelectOnBoarding = currentState.currentStep >= selectOnBoardingPageInfos.size
+                if (isLastPageOfSelectOnBoarding) return null
 
-                val nextOnBoardingPageInfo = onBoardingPageInfos[currentState.currentStep]
+                val nextOnBoardingPageInfo = selectOnBoardingPageInfos[currentState.currentStep]
                 val nextButtonEnable = nextOnBoardingPageInfo.isItemSelected
                 return currentState.copy(
                     currentOnBoardingPageInfo = nextOnBoardingPageInfo,
@@ -114,14 +131,22 @@ class OnBoardingViewModel @AssistedInject constructor(
 
             is OnBoardingIntent.SelectPrevious -> {
                 val currentState = state
-                if (currentState !is OnBoardingState.Idle || currentState.currentStep == 1) {
+                if (currentState !is OnBoardingState.Idle || currentState.currentStep == 0) {
                     sendSideEffect(sideEffect = OnBoardingSideEffect.MoveToPreviousScreen)
                     return null
                 }
 
-                val isSelectOnBoardingStep = currentState.currentStep <= onBoardingPageInfos.size
+                if (currentState.currentStep == 1) {
+                    return currentState.copy(
+                        currentStep = 0,
+                        currentOnBoardingPageInfo = OnBoardingPageInfo.Intro,
+                        nextButtonEnable = true
+                    )
+                }
+
+                val isSelectOnBoardingStep = currentState.currentStep <= selectOnBoardingPageInfos.size
                 if (isSelectOnBoardingStep) {
-                    val previousOnBoardingPageInfo = onBoardingPageInfos[currentState.currentStep - 2]
+                    val previousOnBoardingPageInfo = selectOnBoardingPageInfos[currentState.currentStep - 2]
                     val nextButtonEnable = previousOnBoardingPageInfo.isItemSelected
                     return currentState.copy(
                         currentOnBoardingPageInfo = previousOnBoardingPageInfo,
@@ -129,12 +154,12 @@ class OnBoardingViewModel @AssistedInject constructor(
                         currentStep = currentState.currentStep - 1,
                     )
                 } else {
-                    val selectOnBoardingPageInfo = onBoardingPageInfos.last()
+                    val selectOnBoardingPageInfo = selectOnBoardingPageInfos.last()
                     val nextButtonEnable = selectOnBoardingPageInfo.isItemSelected
                     return currentState.copy(
                         currentOnBoardingPageInfo = selectOnBoardingPageInfo,
                         nextButtonEnable = nextButtonEnable,
-                        currentStep = onBoardingPageInfos.size,
+                        currentStep = selectOnBoardingPageInfos.size,
                     )
                 }
             }
@@ -193,9 +218,9 @@ class OnBoardingViewModel @AssistedInject constructor(
             val currentState = stateFlow.value
             if (currentState !is OnBoardingState.Idle) return@launch
 
-            val isLastSelectOnBoarding = currentState.currentStep >= onBoardingPageInfos.size
+            val isLastSelectOnBoarding = currentState.currentStep >= selectOnBoardingPageInfos.size
             if (isLastSelectOnBoarding) {
-                val selectedItemIdsWithOnBoardingId = getSelectedOnBoardingItemIdsWithId(onBoardingPageInfos)
+                val selectedItemIdsWithOnBoardingId = getSelectedOnBoardingItemIdsWithId(selectOnBoardingPageInfos)
 
                 val onBoardingAbstract = getOnBoardingAbstractUseCase(selectedItemIdsWithOnBoardingId = selectedItemIdsWithOnBoardingId)
 
@@ -239,12 +264,9 @@ class OnBoardingViewModel @AssistedInject constructor(
     }
 
     fun loadRecommendRoutines() {
+        loadRecommendRoutinesJob?.cancel()
         loadRecommendRoutinesJob = viewModelScope.async {
-            val minimumDelayDeferred = async {
-                delay(2000L)
-            }
-
-            val selectedItems = onBoardingPageInfos
+            val selectedItems = selectOnBoardingPageInfos
                 .map { onBoardingPage ->
                     val id = onBoardingPage.id
                     val selectedItemIds = onBoardingPage.items.filter { onBoardingItem ->
@@ -259,7 +281,6 @@ class OnBoardingViewModel @AssistedInject constructor(
 
             getRecommendOnBoardingRoutinesUseCase(selectedItems).fold(
                 onSuccess = { recommendRoutines ->
-                    minimumDelayDeferred.await()
                     if (isActive) {
                         sendIntent(
                             intent = OnBoardingIntent.LoadRecommendRoutinesSuccess(

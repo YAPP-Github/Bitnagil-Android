@@ -14,6 +14,7 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.component.block.BitnagilProgressTopBar
 import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.onboarding.component.template.OnBoardingAbstractTemplate
+import com.threegap.bitnagil.presentation.onboarding.component.template.OnBoardingIntroTemplate
 import com.threegap.bitnagil.presentation.onboarding.component.template.OnBoardingSelectTemplate
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingItem
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingPageInfo
@@ -67,24 +68,34 @@ private fun OnBoardingScreen(
 ) {
     Column(
         modifier = Modifier
-            .background(BitnagilTheme.colors.coolGray99)
+            .background(BitnagilTheme.colors.white)
             .statusBarsPadding(),
     ) {
-        BitnagilProgressTopBar(
-            onBackClick = onClickPreviousInSelectOnBoarding,
-            progress = state.progress,
-        )
+        if (state.showProgress)
+            BitnagilProgressTopBar(
+                modifier = Modifier,
+                onBackClick = onClickPreviousInSelectOnBoarding,
+                progress = state.progress,
+            )
 
         when (state) {
             is OnBoardingState.Idle -> {
                 when (val currentOnBoardingPageInfo = state.currentOnBoardingPageInfo) {
+                    OnBoardingPageInfo.Intro -> {
+                        OnBoardingIntroTemplate(
+                            userName = state.userName,
+                            onClickNextButton = onClickNext
+                        )
+                    }
                     is OnBoardingPageInfo.Abstract -> {
                         OnBoardingAbstractTemplate(
                             modifier = Modifier.weight(1f),
-                            title = "이제 당신에게\n꼭 맞는 루틴을 제안해드릴게요.",
-                            onInit = loadRecommendRoutines,
+                            title = "이제 포모가 당신에게\n꼭 맞는 루틴을 찾아줄거에요.",
                             onBoardingAbstractTexts = currentOnBoardingPageInfo.abstractTexts,
                             onDispose = cancelRecommendRoutines,
+                            onClickNextButton = loadRecommendRoutines,
+                            nextButtonEnable = state.nextButtonEnable,
+                            userName = state.userName,
                         )
                     }
                     is OnBoardingPageInfo.RecommendRoutines -> {
@@ -141,6 +152,7 @@ fun OnBoardingScreenPreview() {
             totalStep = 5,
             currentStep = 1,
             onBoardingSetType = OnBoardingSetType.RESET,
+            userName = "안드로이드"
         ),
         onClickNext = {},
         onClickPreviousInSelectOnBoarding = {},

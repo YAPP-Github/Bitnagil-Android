@@ -8,6 +8,9 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 sealed class OnBoardingPageInfo : Parcelable {
     @Parcelize
+    data object Intro : OnBoardingPageInfo()
+
+    @Parcelize
     data class SelectOnBoarding(
         val id: String,
         val title: String,
