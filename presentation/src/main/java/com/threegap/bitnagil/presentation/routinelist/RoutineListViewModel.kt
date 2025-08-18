@@ -113,7 +113,7 @@ class RoutineListViewModel @Inject constructor(
 
     private fun fetchRoutines() {
         sendIntent(RoutineListIntent.UpdateLoading(true))
-        val currentWeek = container.stateFlow.value.selectedDate.getCurrentWeekDays()
+        val currentWeek = stateFlow.value.selectedDate.getCurrentWeekDays()
         val startDate = currentWeek.first().toString()
         val endDate = currentWeek.last().toString()
         viewModelScope.launch {
