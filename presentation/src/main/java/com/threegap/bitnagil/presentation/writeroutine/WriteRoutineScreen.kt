@@ -77,9 +77,9 @@ fun WriteRoutineScreenContainer(
         DatePickerBottomSheet(
             modifier = Modifier.fillMaxWidth(),
             onDateSelected = viewModel::setStartDate,
-            date = state.startDate ?: state.endDate?.let { Date.min(it, Date.now()) } ?: Date.now(),
+            date = state.startDate,
             onDismiss = viewModel::hideStartDatePickerBottomSheet,
-            availableStartDate = null,
+            availableStartDate = Date.now(),
             availableEndDate = state.endDate,
         )
     }
@@ -88,7 +88,7 @@ fun WriteRoutineScreenContainer(
         DatePickerBottomSheet(
             modifier = Modifier.fillMaxWidth(),
             onDateSelected = viewModel::setEndDate,
-            date = state.endDate ?: state.startDate?.let { Date.max(it, Date.now()) } ?: Date.now(),
+            date = state.endDate,
             onDismiss = viewModel::hideEndDatePickerBottomSheet,
             availableStartDate = state.startDate,
             availableEndDate = null,
@@ -289,14 +289,14 @@ private fun WriteRoutineScreen(
                         RoutineDetailRow(
                             title = "시작일",
                             placeHolder = "눌러서 선택",
-                            value = state.startDate?.toFormattedString() ?: "",
+                            value = state.startDate.toFormattedString(),
                             onClick = showStartDatePickerBottomSheet,
                         )
 
                         RoutineDetailRow(
                             title = "종료일",
                             placeHolder = "눌러서 선택",
-                            value = state.endDate?.toFormattedString() ?: "",
+                            value = state.endDate.toFormattedString(),
                             onClick = showEndDatePickerBottomSheet,
                         )
                     }

@@ -457,20 +457,21 @@ class WriteRoutineViewModel @AssistedInject constructor(
                         .filter { it.selected }
                         .map { it.day.toRepeatDay() }
 
-                null -> return@launch
+                null -> listOf()
             }
 
             when (val writeRoutineType = currentState.writeRoutineType) {
                 WriteRoutineType.Add -> {
                     sendIntent(WriteRoutineIntent.RegisterRoutineLoading)
                     val subRoutines = if (currentState.selectNotUseSUbRoutines) emptyList() else currentState.subRoutineNames.filter { it.isNotEmpty() }
+                    val noRepeatRoutine = repeatDay.isEmpty()
 
                     val registerRoutineResult = registerRoutineUseCase(
                         name = currentState.routineName,
                         repeatDay = repeatDay,
                         startTime = startTime.toDomainTime(),
-                        startDate = currentState.startDate?.toDomainDate(),
-                        endDate = currentState.endDate?.toDomainDate(),
+                        startDate = if (noRepeatRoutine) Date.now().toDomainDate() else currentState.startDate.toDomainDate(),
+                        endDate = if (noRepeatRoutine) Date.now().toDomainDate() else currentState.endDate.toDomainDate(),
                         subRoutines = subRoutines,
                     )
 
@@ -496,8 +497,8 @@ class WriteRoutineViewModel @AssistedInject constructor(
                         name = currentState.routineName,
                         repeatDay = repeatDay,
                         startTime = startTime.toDomainTime(),
-                        startDate = currentState.startDate?.toDomainDate(),
-                        endDate = currentState.endDate?.toDomainDate(),
+                        startDate = currentState.startDate.toDomainDate(),
+                        endDate = currentState.endDate.toDomainDate(),
                         subRoutines = subRoutines,
                     )
 

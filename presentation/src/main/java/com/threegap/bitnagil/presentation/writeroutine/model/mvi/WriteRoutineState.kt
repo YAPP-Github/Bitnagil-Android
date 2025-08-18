@@ -17,8 +17,8 @@ data class WriteRoutineState(
     val repeatType: RepeatType?,
     val repeatDays: List<SelectableDay>,
     val startTime: Time?,
-    val startDate: Date?,
-    val endDate: Date?,
+    val startDate: Date,
+    val endDate: Date,
     val selectAllTime: Boolean,
     val loading: Boolean,
     val showTimePickerBottomSheet: Boolean,
@@ -77,28 +77,25 @@ data class WriteRoutineState(
             repeatDaysUiExpanded = false,
             periodUiExpanded = false,
             startTimeUiExpanded = false,
-            startDate = null,
-            endDate = null,
+            startDate = Date.now(),
+            endDate = Date.now(),
         )
     }
 
     val registerButtonEnabled: Boolean
-        get() = routineName.isNotEmpty() &&
-            (repeatType == RepeatType.DAILY || (repeatType == RepeatType.DAY && repeatDays.any { it.selected })) &&
-            startTime != null && !loading
+        get() = routineName.isNotEmpty() && startTime != null && !loading
 
     val subRoutinesText: String get() = subRoutineNames.filter { it.isNotEmpty() }.joinToString(separator = "\n")
 
     val repeatDaysText: String
         get() = when (repeatType) {
             RepeatType.DAILY -> "매일"
-            RepeatType.DAY -> "매주 ${repeatDays.filter { it.selected }.joinToString { it.day.text }}"
+            RepeatType.DAY -> if (repeatDays.none { it.selected }) "반복 안함" else "매주 ${repeatDays.filter { it.selected }.joinToString { it.day.text }}"
             null -> ""
         }
 
     val periodText: String get() {
-        if (startDate == null && endDate == null) return ""
-        return "${startDate?.toYearShrinkageFormattedString() ?: ""} ~ ${endDate?.toYearShrinkageFormattedString() ?: ""}"
+        return "${startDate.toYearShrinkageFormattedString()} ~ ${endDate.toYearShrinkageFormattedString()}"
     }
 
     val startTimeText: String
