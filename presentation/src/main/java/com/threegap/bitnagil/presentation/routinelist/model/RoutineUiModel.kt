@@ -8,6 +8,7 @@ import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.domain.routine.model.DayOfWeek
 import com.threegap.bitnagil.domain.routine.model.RecommendedRoutineType
 import com.threegap.bitnagil.domain.routine.model.Routine
+import com.threegap.bitnagil.presentation.home.util.formatExecutionTime12Hour
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -26,7 +27,7 @@ fun Routine.toUiModel(): RoutineUiModel =
         routineId = this.routineId,
         routineName = this.routineName,
         repeatDay = this.repeatDay,
-        executionTime = this.formattedExecutionTime,
+        executionTime = this.executionTime.formatExecutionTime12Hour(),
         routineDate = this.routineDate,
         subRoutineNames = this.subRoutineNames,
         recommendedRoutineType = this.recommendedRoutineType,

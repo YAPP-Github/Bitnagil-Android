@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.presentation.home.component.block.RoutineItem
 import com.threegap.bitnagil.presentation.home.model.RoutineUiModel
-import com.threegap.bitnagil.presentation.home.util.formatExecutionTime
+import com.threegap.bitnagil.presentation.home.util.formatExecutionTime24Hour
 
 @Composable
 fun RoutineSection(
@@ -26,7 +26,7 @@ fun RoutineSection(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
-            text = routine.executionTime.formatExecutionTime(),
+            text = routine.executionTime.formatExecutionTime24Hour(),
             style = BitnagilTheme.typography.body2Medium,
             color = BitnagilTheme.colors.coolGray10,
             modifier = Modifier.defaultMinSize(minWidth = 42.dp),
