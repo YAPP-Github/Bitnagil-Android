@@ -41,4 +41,7 @@ sealed interface Route {
 
     @Serializable
     data object Withdrawal : Route
+
+    @Serializable
+    data object Guide : Route
 }
