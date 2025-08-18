@@ -39,7 +39,6 @@ import java.time.LocalDate
 
 @Composable
 fun HomeScreenContainer(
-    viewModel: HomeViewModel = hiltViewModel(),
     navigateToGuide: () -> Unit,
     navigateToRegisterRoutine: () -> Unit,
     navigateToEmotion: () -> Unit,
