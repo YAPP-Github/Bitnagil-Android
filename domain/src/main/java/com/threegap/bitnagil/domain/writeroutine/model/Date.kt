@@ -12,6 +12,6 @@ data class Date(
     }
 
     fun toFormattedString(): String {
-        return "%04d.%02d.%02d".format(year, month, day)
+        return "%04d-%02d-%02d".format(year, month, day)
     }
 }
