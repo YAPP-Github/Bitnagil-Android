@@ -8,11 +8,10 @@ enum class RecommendedRoutineType {
     REST,
     GROW,
     OUTING_REPORT,
-    UNKNOWN,
     ;
 
     companion object {
-        fun fromString(categoryName: String?): RecommendedRoutineType =
-            RecommendedRoutineType.entries.find { it.name == categoryName } ?: UNKNOWN
+        fun fromString(categoryName: String?): RecommendedRoutineType? =
+            RecommendedRoutineType.entries.find { it.name == categoryName }
     }
 }

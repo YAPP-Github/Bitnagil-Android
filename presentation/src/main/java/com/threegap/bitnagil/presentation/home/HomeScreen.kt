@@ -39,10 +39,11 @@ import java.time.LocalDate
 
 @Composable
 fun HomeScreenContainer(
-    viewModel: HomeViewModel = hiltViewModel(),
     navigateToGuide: () -> Unit,
     navigateToRegisterRoutine: () -> Unit,
     navigateToEmotion: () -> Unit,
+    navigateToRoutineList: (String) -> Unit,
+    viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.stateFlow.collectAsStateWithLifecycle()
 
@@ -58,6 +59,10 @@ fun HomeScreenContainer(
 
             is HomeSideEffect.NavigateToEmotion -> {
                 navigateToEmotion()
+            }
+
+            is HomeSideEffect.NavigateToRoutineList -> {
+                navigateToRoutineList(sideEffect.selectedDate)
             }
 
             is HomeSideEffect.ShowToastWithIcon -> {
@@ -97,7 +102,7 @@ fun HomeScreenContainer(
             viewModel.sendIntent(HomeIntent.OnRegisterEmotionClick)
         },
         onShowMoreRoutinesClick = {
-            // TODO: 루틴 리스트 화면으로 이동
+            viewModel.sendIntent((HomeIntent.OnShowMoreRoutinesClick))
         },
     )
 }

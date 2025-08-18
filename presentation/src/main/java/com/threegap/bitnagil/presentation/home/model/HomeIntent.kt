@@ -17,4 +17,5 @@ sealed class HomeIntent : MviIntent {
     data object OnRegisterRoutineClick : HomeIntent()
     data object OnPreviousWeekClick : HomeIntent()
     data object OnNextWeekClick : HomeIntent()
+    data object OnShowMoreRoutinesClick : HomeIntent()
 }

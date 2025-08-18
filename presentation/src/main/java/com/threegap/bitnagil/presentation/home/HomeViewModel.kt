@@ -56,7 +56,7 @@ class HomeViewModel @Inject constructor(
         observeRecommendRoutineEvent()
         observeWeekChanges()
         observeRoutineUpdates()
-        fetchWeeklyRoutines(container.stateFlow.value.currentWeeks)
+        fetchWeeklyRoutines(stateFlow.value.currentWeeks)
         fetchUserProfile()
         fetchTodayEmotion(LocalDate.now())
     }
@@ -122,6 +122,12 @@ class HomeViewModel @Inject constructor(
 
             is HomeIntent.OnRegisterRoutineClick -> {
                 sendSideEffect(HomeSideEffect.NavigateToRegisterRoutine)
+                null
+            }
+
+            is HomeIntent.OnShowMoreRoutinesClick -> {
+                val selectedDate = stateFlow.value.selectedDate.toString()
+                sendSideEffect(HomeSideEffect.NavigateToRoutineList(selectedDate))
                 null
             }
 
