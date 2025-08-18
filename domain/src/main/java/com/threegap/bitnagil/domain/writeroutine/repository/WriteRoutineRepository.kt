@@ -12,8 +12,8 @@ interface WriteRoutineRepository {
         name: String,
         repeatDay: List<RepeatDay>,
         startTime: Time,
-        startDate: Date?,
-        endDate: Date?,
+        startDate: Date,
+        endDate: Date,
         subRoutines: List<String>,
     ): Result<Unit>
 
@@ -23,8 +23,8 @@ interface WriteRoutineRepository {
         name: String,
         repeatDay: List<RepeatDay>,
         startTime: Time,
-        startDate: Date?,
-        endDate: Date?,
+        startDate: Date,
+        endDate: Date,
         subRoutines: List<String>,
     ): Result<Unit>
 

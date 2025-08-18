@@ -21,16 +21,16 @@ class WriteRoutineRepositoryImpl @Inject constructor(
         name: String,
         repeatDay: List<RepeatDay>,
         startTime: Time,
-        startDate: Date?,
-        endDate: Date?,
+        startDate: Date,
+        endDate: Date,
         subRoutines: List<String>,
     ): Result<Unit> {
         val request = RegisterRoutineRequest(
             routineName = name,
             repeatDay = repeatDay.map { it.fullName },
             executionTime = startTime.toFormattedString(),
-            routineStartDate = startDate?.toFormattedString(),
-            routineEndDate = endDate?.toFormattedString(),
+            routineStartDate = startDate.toFormattedString(),
+            routineEndDate = endDate.toFormattedString(),
             subRoutineName = subRoutines,
         )
         return writeRoutineDataSource.registerRoutine(request).also {
@@ -46,8 +46,8 @@ class WriteRoutineRepositoryImpl @Inject constructor(
         name: String,
         repeatDay: List<RepeatDay>,
         startTime: Time,
-        startDate: Date?,
-        endDate: Date?,
+        startDate: Date,
+        endDate: Date,
         subRoutines: List<String>,
     ): Result<Unit> {
         val request = EditRoutineRequest(
@@ -56,8 +56,8 @@ class WriteRoutineRepositoryImpl @Inject constructor(
             routineName = name,
             repeatDay = repeatDay.map { it.fullName },
             executionTime = startTime.toFormattedString(),
-            routineStartDate = startDate?.toFormattedString(),
-            routineEndDate = endDate?.toFormattedString(),
+            routineStartDate = startDate.toFormattedString(),
+            routineEndDate = endDate.toFormattedString(),
             subRoutineName = subRoutines,
         )
 

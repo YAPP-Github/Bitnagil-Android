@@ -13,8 +13,8 @@ class RegisterRoutineUseCase @Inject constructor(
         name: String,
         repeatDay: List<RepeatDay>,
         startTime: Time,
-        startDate: Date?,
-        endDate: Date?,
+        startDate: Date,
+        endDate: Date,
         subRoutines: List<String>,
     ): Result<Unit> {
         return writeRoutineRepository.registerRoutine(

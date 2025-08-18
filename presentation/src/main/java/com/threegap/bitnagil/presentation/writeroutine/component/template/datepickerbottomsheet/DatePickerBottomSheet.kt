@@ -95,14 +95,14 @@ private fun DatePickerBottomSheetContent(
     var currentMonth by remember { mutableIntStateOf(initDate.month) }
     var selectedDate by remember { mutableStateOf(initDate) }
 
-    val lastDaysOfPrevMonth = remember(initDate) {
-        CalendarUtils.lastDaysOfPrevMonth(initDate.year, initDate.month)
+    val lastDaysOfPrevMonth = remember(currentYear, currentMonth) {
+        CalendarUtils.lastDaysOfPrevMonth(currentYear, currentMonth)
     }
     val firstDaysOfNextMonth = remember(currentYear, currentMonth) {
-        CalendarUtils.firstDaysOfNextMonth(initDate.year, initDate.month)
+        CalendarUtils.firstDaysOfNextMonth(currentYear, currentMonth)
     }
     val currentDaysOfMonth = remember(currentYear, currentMonth) {
-        CalendarUtils.getDayAmountOfMonth(initDate.year, initDate.month)
+        CalendarUtils.getDayAmountOfMonth(currentYear, currentMonth)
     }
 
     val prevMonthButtonEnabled by remember(availableStartDate) {
