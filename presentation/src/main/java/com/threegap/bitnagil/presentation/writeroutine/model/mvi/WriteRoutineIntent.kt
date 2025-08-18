@@ -15,7 +15,14 @@ sealed class WriteRoutineIntent : MviIntent {
     data class SelectDay(val day: Day) : WriteRoutineIntent()
     data class SetStartTime(val time: Time) : WriteRoutineIntent()
     data class SetWriteRoutineType(val writeRoutineType: WriteRoutineType) : WriteRoutineIntent()
-    data class SetRoutine(val name: String, val repeatDays: List<Day>, val startTime: Time, val subRoutines: List<String>) : WriteRoutineIntent()
+    data class SetRoutine(
+        val name: String,
+        val repeatDays: List<Day>,
+        val startTime: Time,
+        val subRoutines: List<String>,
+        val startDate: Date,
+        val endDate: Date,
+    ) : WriteRoutineIntent()
     data object SelectAllTime : WriteRoutineIntent()
     data object ShowTimePickerBottomSheet : WriteRoutineIntent()
     data object HideTimePickerBottomSheet : WriteRoutineIntent()

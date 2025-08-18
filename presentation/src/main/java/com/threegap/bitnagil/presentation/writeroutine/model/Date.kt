@@ -40,6 +40,11 @@ data class Date(
 
             return d2
         }
+
+        fun fromString(dateString: String): Date {
+            val (year, month, day) = dateString.split("-").map { it.toInt() }
+            return Date(year, month, day)
+        }
     }
 
     fun toFormattedString(): String = "%04d.%02d.%02d".format(year, month, day)

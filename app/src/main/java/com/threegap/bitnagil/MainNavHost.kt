@@ -263,6 +263,18 @@ fun MainNavHost(
                         navigator.navController.popBackStack()
                     }
                 },
+                navigateToAddRoutine = {
+                    navigator.navController.navigate(Route.WriteRoutine())
+                },
+                navigateToEditRoutine = { routineId, updateRoutineFromNowDate ->
+                    navigator.navController.navigate(
+                        Route.WriteRoutine(
+                            routineId = routineId,
+                            isRegister = false,
+                            isUpdateRoutineFromNowDate = updateRoutineFromNowDate,
+                        ),
+                    )
+                },
             )
         }
 
