@@ -45,5 +45,6 @@ sealed interface Route {
     @Serializable
     data class RoutineList(val selectedDate: String) : Route
 
+    @Serializable
     data object Guide : Route
 }
