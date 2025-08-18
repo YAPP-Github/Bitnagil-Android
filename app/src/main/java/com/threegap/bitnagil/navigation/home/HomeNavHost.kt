@@ -39,6 +39,7 @@ fun HomeNavHost(
     navigateToOnBoarding: () -> Unit,
     navigateToNotice: () -> Unit,
     navigateToQnA: () -> Unit,
+    navigateToGuide: () -> Unit,
     navigateToRegisterRoutine: (String?) -> Unit,
     navigateToEmotion: () -> Unit,
     navigateToRoutineList: (String) -> Unit,
@@ -63,6 +64,7 @@ fun HomeNavHost(
                 ) {
                     composable(HomeRoute.Home.route) {
                         HomeScreenContainer(
+                            navigateToGuide = navigateToGuide,
                             navigateToRegisterRoutine = {
                                 navigateToRegisterRoutine(null)
                             },

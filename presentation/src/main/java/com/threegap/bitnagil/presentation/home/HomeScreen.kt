@@ -39,6 +39,8 @@ import java.time.LocalDate
 
 @Composable
 fun HomeScreenContainer(
+    viewModel: HomeViewModel = hiltViewModel(),
+    navigateToGuide: () -> Unit,
     navigateToRegisterRoutine: () -> Unit,
     navigateToEmotion: () -> Unit,
     navigateToRoutineList: (String) -> Unit,
@@ -48,6 +50,10 @@ fun HomeScreenContainer(
 
     viewModel.sideEffectFlow.collectAsEffect { sideEffect ->
         when (sideEffect) {
+            is HomeSideEffect.NavigateToGuide -> {
+                navigateToGuide()
+            }
+
             is HomeSideEffect.NavigateToRegisterRoutine -> {
                 navigateToRegisterRoutine()
             }
@@ -87,6 +93,9 @@ fun HomeScreenContainer(
         onSubRoutineCompletionToggle = { routineId, subRoutineIndex, isCompleted ->
             viewModel.toggleSubRoutineCompletion(routineId, subRoutineIndex, isCompleted)
         },
+        onHelpClick = {
+            viewModel.sendIntent(HomeIntent.OnHelpClick)
+        },
         onRegisterRoutineClick = {
             viewModel.sendIntent(HomeIntent.OnRegisterRoutineClick)
         },
@@ -107,6 +116,7 @@ private fun HomeScreen(
     onNextWeekClick: () -> Unit,
     onRoutineCompletionToggle: (String, Boolean) -> Unit,
     onSubRoutineCompletionToggle: (String, Int, Boolean) -> Unit,
+    onHelpClick: () -> Unit,
     onRegisterRoutineClick: () -> Unit,
     onRegisterEmotionClick: () -> Unit,
     onShowMoreRoutinesClick: () -> Unit,
@@ -203,6 +213,7 @@ private fun HomeScreen(
             userName = uiState.userNickname,
             todayEmotion = uiState.todayEmotion,
             collapsibleHeaderState = collapsibleHeaderState,
+            onHelpClick = onHelpClick,
             onRegisterEmotion = onRegisterEmotionClick,
         )
     }
@@ -218,6 +229,7 @@ private fun HomeScreenPreview() {
         onNextWeekClick = {},
         onRoutineCompletionToggle = { _, _ -> },
         onSubRoutineCompletionToggle = { _, _, _ -> },
+        onHelpClick = {},
         onRegisterRoutineClick = {},
         onRegisterEmotionClick = {},
         onShowMoreRoutinesClick = {},

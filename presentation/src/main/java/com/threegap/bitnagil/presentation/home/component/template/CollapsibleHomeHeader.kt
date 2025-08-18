@@ -5,7 +5,9 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,6 +32,7 @@ import coil3.request.crossfade
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilIconButton
 import com.threegap.bitnagil.presentation.home.component.atom.EmotionRegisterButton
 import com.threegap.bitnagil.presentation.home.model.TodayEmotionUiModel
 import com.threegap.bitnagil.presentation.home.util.CollapsibleHeaderState
@@ -40,6 +43,7 @@ fun CollapsibleHomeHeader(
     userName: String,
     todayEmotion: TodayEmotionUiModel?,
     collapsibleHeaderState: CollapsibleHeaderState,
+    onHelpClick: () -> Unit,
     onRegisterEmotion: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -64,13 +68,22 @@ fun CollapsibleHomeHeader(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(collapsibleHeaderState.collapsedHeaderHeight)
-                .statusBarsPadding(),
+                .statusBarsPadding()
+                .padding(start = 16.dp, end = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             BitnagilIcon(
                 id = R.drawable.ic_logo,
                 tint = BitnagilTheme.colors.coolGray50,
-                modifier = Modifier.padding(start = 16.dp),
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            BitnagilIconButton(
+                id = R.drawable.ic_help_circle,
+                onClick = onHelpClick,
+                paddingValues = PaddingValues(12.dp),
+                tint = null,
             )
         }
 
@@ -129,6 +142,7 @@ private fun CollapsibleHomeHeaderPreview() {
         userName = "대현",
         todayEmotion = null,
         collapsibleHeaderState = rememberCollapsibleHeaderState(),
+        onHelpClick = {},
         onRegisterEmotion = {},
     )
 }

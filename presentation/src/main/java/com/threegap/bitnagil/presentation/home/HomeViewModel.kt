@@ -110,6 +110,11 @@ class HomeViewModel @Inject constructor(
                 state.copy(todayEmotion = intent.emotion)
             }
 
+            is HomeIntent.OnHelpClick -> {
+                sendSideEffect(HomeSideEffect.NavigateToGuide)
+                null
+            }
+
             is HomeIntent.OnRegisterEmotionClick -> {
                 sendSideEffect(HomeSideEffect.NavigateToEmotion)
                 null
