@@ -8,14 +8,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.threegap.bitnagil.navigation.home.HomeNavHost
 import com.threegap.bitnagil.presentation.emotion.EmotionScreenContainer
+import com.threegap.bitnagil.presentation.guide.GuideScreenContainer
 import com.threegap.bitnagil.presentation.login.LoginScreenContainer
 import com.threegap.bitnagil.presentation.onboarding.OnBoardingScreenContainer
 import com.threegap.bitnagil.presentation.onboarding.OnBoardingViewModel
 import com.threegap.bitnagil.presentation.onboarding.model.navarg.OnBoardingScreenArg
+import com.threegap.bitnagil.presentation.routinelist.RoutineListScreenContainer
 import com.threegap.bitnagil.presentation.setting.SettingScreenContainer
 import com.threegap.bitnagil.presentation.splash.SplashScreenContainer
 import com.threegap.bitnagil.presentation.terms.TermsAgreementScreenContainer
 import com.threegap.bitnagil.presentation.webview.BitnagilWebViewScreen
+import com.threegap.bitnagil.presentation.withdrawal.WithdrawalScreenContainer
 import com.threegap.bitnagil.presentation.writeroutine.WriteRoutineScreenContainer
 import com.threegap.bitnagil.presentation.writeroutine.WriteRoutineViewModel
 import com.threegap.bitnagil.presentation.writeroutine.model.navarg.WriteRoutineScreenArg
@@ -111,14 +114,23 @@ fun MainNavHost(
                         ),
                     )
                 },
+                navigateToGuide = {
+                    navigator.navController.navigate(Route.Guide) {
+                        launchSingleTop = true
+                    }
+                },
                 navigateToRegisterRoutine = { routineId ->
                     navigator.navController.navigate(Route.WriteRoutine(routineId = routineId))
                 },
-                navigateToEditRoutine = { routineId ->
-                    navigator.navController.navigate(Route.WriteRoutine(routineId = routineId, isRegister = false))
-                },
                 navigateToEmotion = {
                     navigator.navController.navigate(Route.Emotion)
+                },
+                navigateToRoutineList = { selectedDate ->
+                    navigator.navController.navigate(
+                        Route.RoutineList(selectedDate = selectedDate),
+                    ) {
+                        launchSingleTop = true
+                    }
                 },
             )
         }
@@ -165,6 +177,9 @@ fun MainNavHost(
                             inclusive = true
                         }
                     }
+                },
+                navigateToWithdrawal = {
+                    navigator.navController.navigate(Route.Withdrawal)
                 },
             )
         }
@@ -216,6 +231,43 @@ fun MainNavHost(
 
         composable<Route.Emotion> {
             EmotionScreenContainer(
+                navigateToBack = {
+                    if (navigator.navController.previousBackStackEntry != null) {
+                        navigator.navController.popBackStack()
+                    }
+                },
+            )
+        }
+
+        composable<Route.Withdrawal> {
+            WithdrawalScreenContainer(
+                navigateToBack = {
+                    if (navigator.navController.previousBackStackEntry != null) {
+                        navigator.navController.popBackStack()
+                    }
+                },
+                navigateToLogin = {
+                    navigator.navController.navigate(Route.Login) {
+                        popUpTo(0) {
+                            inclusive = true
+                        }
+                    }
+                },
+            )
+        }
+
+        composable<Route.RoutineList> {
+            RoutineListScreenContainer(
+                navigateToBack = {
+                    if (navigator.navController.previousBackStackEntry != null) {
+                        navigator.navController.popBackStack()
+                    }
+                },
+            )
+        }
+
+        composable<Route.Guide> {
+            GuideScreenContainer(
                 navigateToBack = {
                     if (navigator.navController.previousBackStackEntry != null) {
                         navigator.navController.popBackStack()

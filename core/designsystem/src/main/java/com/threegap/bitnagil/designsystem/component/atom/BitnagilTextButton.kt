@@ -6,6 +6,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -40,6 +41,7 @@ fun BitnagilTextButton(
     shape: Shape = RoundedCornerShape(12.dp),
     textStyle: TextStyle = BitnagilTheme.typography.body1SemiBold,
     textDecoration: TextDecoration? = null,
+    textPadding: PaddingValues = PaddingValues(0.dp),
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
@@ -77,6 +79,7 @@ fun BitnagilTextButton(
             color = textColor,
             style = textStyle,
             textDecoration = textDecoration,
+            modifier = Modifier.padding(textPadding),
         )
     }
 }
@@ -109,6 +112,26 @@ data class BitnagilTextButtonColor(
             defaultTextColor = BitnagilTheme.colors.navy500,
             pressedTextColor = BitnagilTheme.colors.navy500,
             disabledTextColor = BitnagilTheme.colors.navy500,
+        )
+
+        @Composable
+        fun cancel(): BitnagilTextButtonColor = BitnagilTextButtonColor(
+            defaultBackgroundColor = BitnagilTheme.colors.coolGray97,
+            pressedBackgroundColor = BitnagilTheme.colors.coolGray97,
+            disabledBackgroundColor = BitnagilTheme.colors.coolGray97,
+            defaultTextColor = BitnagilTheme.colors.coolGray40,
+            pressedTextColor = BitnagilTheme.colors.coolGray40,
+            disabledTextColor = BitnagilTheme.colors.coolGray40,
+        )
+
+        @Composable
+        fun delete(): BitnagilTextButtonColor = BitnagilTextButtonColor(
+            defaultBackgroundColor = BitnagilTheme.colors.error10,
+            pressedBackgroundColor = BitnagilTheme.colors.error10,
+            disabledBackgroundColor = BitnagilTheme.colors.error10,
+            defaultTextColor = BitnagilTheme.colors.white,
+            pressedTextColor = BitnagilTheme.colors.white,
+            disabledTextColor = BitnagilTheme.colors.white,
         )
     }
 }

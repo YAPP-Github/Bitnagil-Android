@@ -1,9 +1,21 @@
 package com.threegap.bitnagil.presentation.home.component.template
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.EaseInOutBack
+import androidx.compose.animation.core.EaseOut
+import androidx.compose.animation.core.EaseOutBounce
+import androidx.compose.animation.core.EaseOutQuart
+import androidx.compose.animation.core.keyframes
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -23,7 +35,9 @@ import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilIconButton
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
+import com.threegap.bitnagil.presentation.home.model.RoutinesUiModel
 import com.threegap.bitnagil.presentation.home.util.formatDayOfMonth
 import com.threegap.bitnagil.presentation.home.util.formatDayOfWeekShort
 import com.threegap.bitnagil.presentation.home.util.formatMonthYear
@@ -34,11 +48,19 @@ import java.time.LocalDate
 fun WeeklyDatePicker(
     selectedDate: LocalDate,
     weeklyDates: List<LocalDate>,
+    routines: RoutinesUiModel,
     onDateSelect: (LocalDate) -> Unit,
     onPreviousWeekClick: () -> Unit,
     onNextWeekClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val today = remember { LocalDate.now() }
+    val completionStates = remember(weeklyDates, routines) {
+        weeklyDates.associateWith { date ->
+            routines.routines[date.toString()]?.allCompleted ?: false
+        }
+    }
+
     Column(
         modifier = modifier,
     ) {
@@ -54,36 +76,26 @@ fun WeeklyDatePicker(
         ) {
             Text(
                 text = selectedDate.formatMonthYear(),
-                style = BitnagilTheme.typography.body1SemiBold,
+                style = BitnagilTheme.typography.title3SemiBold,
                 color = BitnagilTheme.colors.coolGray10,
             )
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Box(
-                    modifier = Modifier
-                        .clickableWithoutRipple(onClick = onPreviousWeekClick)
-                        .padding(14.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    BitnagilIcon(
-                        id = R.drawable.ic_back_arrow_20,
-                        tint = BitnagilTheme.colors.black,
-                    )
-                }
+                BitnagilIconButton(
+                    id = R.drawable.ic_chevron_left_md,
+                    onClick = onPreviousWeekClick,
+                    paddingValues = PaddingValues(12.dp),
+                    tint = BitnagilTheme.colors.coolGray10,
+                )
 
-                Box(
-                    modifier = Modifier
-                        .clickableWithoutRipple(onClick = onNextWeekClick)
-                        .padding(14.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    BitnagilIcon(
-                        id = R.drawable.ic_right_arrow_20,
-                        tint = BitnagilTheme.colors.black,
-                    )
-                }
+                BitnagilIconButton(
+                    id = R.drawable.ic_chevron_right_md,
+                    onClick = onNextWeekClick,
+                    paddingValues = PaddingValues(12.dp),
+                    tint = BitnagilTheme.colors.coolGray10,
+                )
             }
         }
 
@@ -100,7 +112,8 @@ fun WeeklyDatePicker(
                 DateItem(
                     date = date,
                     isSelected = selectedDate == date,
-                    isToday = date == LocalDate.now(),
+                    isToday = date == today,
+                    isCompleted = completionStates[date] ?: false,
                     onDateClick = { onDateSelect(date) },
                 )
             }
@@ -113,6 +126,7 @@ private fun DateItem(
     date: LocalDate,
     isSelected: Boolean,
     isToday: Boolean,
+    isCompleted: Boolean,
     onDateClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -123,8 +137,8 @@ private fun DateItem(
     ) {
         Text(
             text = if (!isToday) date.formatDayOfWeekShort() else "오늘",
-            style = BitnagilTheme.typography.caption1Medium,
-            color = if (!isSelected) BitnagilTheme.colors.coolGray70 else BitnagilTheme.colors.navy500,
+            style = BitnagilTheme.typography.caption1SemiBold,
+            color = if (!isSelected) BitnagilTheme.colors.coolGray70 else BitnagilTheme.colors.coolGray10,
         )
 
         Box(
@@ -132,15 +146,45 @@ private fun DateItem(
             modifier = modifier
                 .size(30.dp)
                 .background(
-                    color = if (!isSelected) Color.Transparent else BitnagilTheme.colors.lightBlue100,
+                    color = if (!isSelected) Color.Transparent else BitnagilTheme.colors.coolGray10,
                     shape = RoundedCornerShape(8.dp),
                 ),
         ) {
             Text(
                 text = date.formatDayOfMonth(),
-                style = BitnagilTheme.typography.body2Medium,
-                color = if (!isSelected) BitnagilTheme.colors.coolGray70 else BitnagilTheme.colors.navy500,
+                style = if (!isSelected) BitnagilTheme.typography.body2Medium else BitnagilTheme.typography.body2SemiBold,
+                color = if (!isSelected) BitnagilTheme.colors.coolGray70 else BitnagilTheme.colors.white,
             )
+        }
+
+        Column(
+            modifier = Modifier.size(12.dp),
+        ) {
+            AnimatedVisibility(
+                visible = isCompleted,
+                enter = scaleIn(
+                    initialScale = 0f,
+                    animationSpec = keyframes {
+                        durationMillis = 600
+                        0f at 0 using EaseOutQuart
+                        1.3f at 300 using EaseInOutBack
+                        1f at 600 using EaseOutBounce
+                    },
+                ) + fadeIn(
+                    animationSpec = tween(300, easing = EaseOut),
+                ),
+                exit = scaleOut(
+                    targetScale = 0.8f,
+                    animationSpec = tween(200),
+                ) + fadeOut(
+                    animationSpec = tween(200),
+                ),
+            ) {
+                BitnagilIcon(
+                    id = R.drawable.ic_routine_success,
+                    tint = null,
+                )
+            }
         }
     }
 }
@@ -152,8 +196,9 @@ private fun WeeklyDatePickerPreview() {
 
     WeeklyDatePicker(
         selectedDate = selectedDate,
-        onDateSelect = { selectedDate = it },
         weeklyDates = selectedDate.getCurrentWeekDays(),
+        routines = RoutinesUiModel(),
+        onDateSelect = { selectedDate = it },
         onPreviousWeekClick = { selectedDate = selectedDate.minusWeeks(1) },
         onNextWeekClick = { selectedDate = selectedDate.plusWeeks(1) },
     )

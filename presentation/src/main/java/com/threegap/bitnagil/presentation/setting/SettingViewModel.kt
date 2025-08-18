@@ -3,9 +3,7 @@ package com.threegap.bitnagil.presentation.setting
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.threegap.bitnagil.domain.auth.usecase.LogoutUseCase
-import com.threegap.bitnagil.domain.auth.usecase.WithdrawalUseCase
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
-import com.threegap.bitnagil.presentation.setting.model.ConfirmDialogType
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingIntent
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingSideEffect
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingState
@@ -20,7 +18,6 @@ import javax.inject.Inject
 class SettingViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val logoutUseCase: LogoutUseCase,
-    private val withdrawalUseCase: WithdrawalUseCase,
 ) : MviViewModel<SettingState, SettingSideEffect, SettingIntent>(
     initState = SettingState.Init,
     savedStateHandle = savedStateHandle,
@@ -48,58 +45,56 @@ class SettingViewModel @Inject constructor(
                 return state.copy(useServiceAlarm = !state.useServiceAlarm)
             }
 
-            is SettingIntent.ShowConfirmDialog -> {
-                return state.copy(showConfirmDialog = intent.type)
+            is SettingIntent.ShowLogoutConfirmDialog -> {
+                return state.copy(logoutConfirmDialogVisible = true)
             }
 
             is SettingIntent.HideConfirmDialog -> {
-                return state.copy(showConfirmDialog = null)
+                return state.copy(logoutConfirmDialogVisible = false)
             }
 
             SettingIntent.LogoutSuccess -> {
                 sendSideEffect(SettingSideEffect.NavigateToLogin)
                 return null
             }
+
             SettingIntent.LogoutLoading -> {
                 return state.copy(loading = true)
             }
+
             SettingIntent.LogoutFailure -> {
                 return state.copy(loading = false)
             }
-            SettingIntent.WithdrawalSuccess -> {
-                sendSideEffect(SettingSideEffect.NavigateToLogin)
+
+            SettingIntent.OnWithdrawalClick -> {
+                sendSideEffect(SettingSideEffect.NavigateToWithdrawal)
                 return null
-            }
-            SettingIntent.WithdrawalLoading -> {
-                return state.copy(loading = true)
-            }
-            SettingIntent.WithdrawalFailure -> {
-                return state.copy(loading = false)
             }
         }
     }
 
     fun showLogoutDialog() {
-        sendIntent(SettingIntent.ShowConfirmDialog(ConfirmDialogType.LOGOUT))
-    }
-
-    fun showWithdrawalDialog() {
-        sendIntent(SettingIntent.ShowConfirmDialog(ConfirmDialogType.WITHDRAW))
+        sendIntent(SettingIntent.ShowLogoutConfirmDialog)
     }
 
     fun hideConfirmDialog() {
         sendIntent(SettingIntent.HideConfirmDialog)
     }
 
-    fun confirmDialogAction() {
-        val currentDialogType = container.stateFlow.value.showConfirmDialog
+    fun logout() {
+        if (container.stateFlow.value.loading) return
 
         sendIntent(SettingIntent.HideConfirmDialog)
-
-        when (currentDialogType) {
-            ConfirmDialogType.LOGOUT -> executeLogout()
-            ConfirmDialogType.WITHDRAW -> executeWithdrawal()
-            null -> {}
+        sendIntent(SettingIntent.LogoutLoading)
+        viewModelScope.launch {
+            logoutUseCase().fold(
+                onSuccess = {
+                    sendIntent(SettingIntent.LogoutSuccess)
+                },
+                onFailure = {
+                    sendIntent(SettingIntent.LogoutFailure)
+                },
+            )
         }
     }
 
@@ -116,28 +111,6 @@ class SettingViewModel @Inject constructor(
         setPushAlarmJob?.cancel()
         setPushAlarmJob = viewModelScope.launch {
             delay(1000L)
-        }
-    }
-
-    private fun executeLogout() {
-        viewModelScope.launch {
-            sendIntent(SettingIntent.LogoutLoading)
-            logoutUseCase().onSuccess {
-                sendIntent(SettingIntent.LogoutSuccess)
-            }.onFailure {
-                sendIntent(SettingIntent.LogoutFailure)
-            }
-        }
-    }
-
-    private fun executeWithdrawal() {
-        viewModelScope.launch {
-            sendIntent(SettingIntent.WithdrawalLoading)
-            withdrawalUseCase().onSuccess {
-                sendIntent(SettingIntent.WithdrawalSuccess)
-            }.onFailure {
-                sendIntent(SettingIntent.WithdrawalFailure)
-            }
         }
     }
 }

@@ -1,58 +1,58 @@
 package com.threegap.bitnagil.presentation.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.threegap.bitnagil.designsystem.BitnagilTheme
-import com.threegap.bitnagil.designsystem.R
-import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.common.toast.GlobalBitnagilToast
 import com.threegap.bitnagil.presentation.home.component.template.CollapsibleHomeHeader
-import com.threegap.bitnagil.presentation.home.component.template.DeleteConfirmDialog
-import com.threegap.bitnagil.presentation.home.component.template.RoutineDetailsBottomSheet
-import com.threegap.bitnagil.presentation.home.component.template.RoutineEmptyView
+import com.threegap.bitnagil.presentation.home.component.template.EmptyRoutineView
 import com.threegap.bitnagil.presentation.home.component.template.RoutineSection
-import com.threegap.bitnagil.presentation.home.component.template.RoutineSortBottomSheet
 import com.threegap.bitnagil.presentation.home.component.template.WeeklyDatePicker
 import com.threegap.bitnagil.presentation.home.model.HomeIntent
 import com.threegap.bitnagil.presentation.home.model.HomeSideEffect
 import com.threegap.bitnagil.presentation.home.model.HomeState
-import com.threegap.bitnagil.presentation.home.model.RoutineUiModel
 import com.threegap.bitnagil.presentation.home.util.rememberCollapsibleHeaderState
 import java.time.LocalDate
 
 @Composable
 fun HomeScreenContainer(
-    viewModel: HomeViewModel = hiltViewModel(),
+    navigateToGuide: () -> Unit,
     navigateToRegisterRoutine: () -> Unit,
-    navigateToEditRoutine: (String) -> Unit,
     navigateToEmotion: () -> Unit,
+    navigateToRoutineList: (String) -> Unit,
+    viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.stateFlow.collectAsStateWithLifecycle()
 
     viewModel.sideEffectFlow.collectAsEffect { sideEffect ->
         when (sideEffect) {
+            is HomeSideEffect.NavigateToGuide -> {
+                navigateToGuide()
+            }
+
             is HomeSideEffect.NavigateToRegisterRoutine -> {
                 navigateToRegisterRoutine()
             }
@@ -61,8 +61,8 @@ fun HomeScreenContainer(
                 navigateToEmotion()
             }
 
-            is HomeSideEffect.NavigateToEditRoutine -> {
-                navigateToEditRoutine(sideEffect.routineId)
+            is HomeSideEffect.NavigateToRoutineList -> {
+                navigateToRoutineList(sideEffect.selectedDate)
             }
 
             is HomeSideEffect.ShowToastWithIcon -> {
@@ -72,52 +72,6 @@ fun HomeScreenContainer(
             is HomeSideEffect.ShowToast -> {
                 GlobalBitnagilToast.show(sideEffect.message)
             }
-        }
-    }
-
-    if (uiState.routineSortBottomSheetVisible) {
-        RoutineSortBottomSheet(
-            currentSortType = uiState.currentSortType,
-            onSortTypeChange = { sortType ->
-                viewModel.sendIntent(HomeIntent.OnSortTypeChange(sortType))
-            },
-            onDismiss = {
-                viewModel.sendIntent(HomeIntent.HideRoutineSortBottomSheet)
-            },
-        )
-    }
-
-    uiState.selectedRoutine?.let { routine ->
-        if (uiState.routineDetailsBottomSheetVisible) {
-            RoutineDetailsBottomSheet(
-                routine = routine,
-                onDismiss = { viewModel.sendIntent(HomeIntent.HideRoutineDetailsBottomSheet) },
-                onEdit = { viewModel.sendIntent(HomeIntent.NavigateToEditRoutine(routine.routineId)) },
-                onDelete = {
-                    if (routine.repeatDay.isEmpty()) {
-                        viewModel.deleteRoutineByDay(routine)
-                    } else {
-                        viewModel.sendIntent(HomeIntent.ShowDeleteConfirmDialog(routine))
-                    }
-                },
-            )
-        }
-    }
-
-    uiState.deletingRoutine?.let { routine ->
-        if (uiState.showDeleteConfirmDialog) {
-            DeleteConfirmDialog(
-                onDeleteToday = {
-                    viewModel.deleteRoutineByDay(routine)
-                    viewModel.sendIntent(HomeIntent.HideDeleteConfirmDialog)
-                },
-                onDeleteAll = {
-                    viewModel.deleteRoutine(routine.routineId)
-                },
-                onDismiss = {
-                    viewModel.sendIntent(HomeIntent.HideDeleteConfirmDialog)
-                },
-            )
         }
     }
 
@@ -135,20 +89,20 @@ fun HomeScreenContainer(
         onRoutineCompletionToggle = { routineId, isCompleted ->
             viewModel.toggleRoutineCompletion(routineId, isCompleted)
         },
-        onSubRoutineCompletionToggle = { routineId, subRoutineId, isCompleted ->
-            viewModel.toggleSubRoutineCompletion(routineId, subRoutineId, isCompleted)
+        onSubRoutineCompletionToggle = { routineId, subRoutineIndex, isCompleted ->
+            viewModel.toggleSubRoutineCompletion(routineId, subRoutineIndex, isCompleted)
         },
-        onShowRoutineSortBottomSheet = {
-            viewModel.sendIntent(HomeIntent.ShowRoutineSortBottomSheet)
-        },
-        onShowRoutineDetailsBottomSheet = { routine ->
-            viewModel.sendIntent(HomeIntent.ShowRoutineDetailsBottomSheet(routine))
+        onHelpClick = {
+            viewModel.sendIntent(HomeIntent.OnHelpClick)
         },
         onRegisterRoutineClick = {
             viewModel.sendIntent(HomeIntent.OnRegisterRoutineClick)
         },
         onRegisterEmotionClick = {
             viewModel.sendIntent(HomeIntent.OnRegisterEmotionClick)
+        },
+        onShowMoreRoutinesClick = {
+            viewModel.sendIntent((HomeIntent.OnShowMoreRoutinesClick))
         },
     )
 }
@@ -160,11 +114,11 @@ private fun HomeScreen(
     onPreviousWeekClick: () -> Unit,
     onNextWeekClick: () -> Unit,
     onRoutineCompletionToggle: (String, Boolean) -> Unit,
-    onSubRoutineCompletionToggle: (String, String, Boolean) -> Unit,
-    onShowRoutineSortBottomSheet: () -> Unit,
-    onShowRoutineDetailsBottomSheet: (RoutineUiModel) -> Unit,
+    onSubRoutineCompletionToggle: (String, Int, Boolean) -> Unit,
+    onHelpClick: () -> Unit,
     onRegisterRoutineClick: () -> Unit,
     onRegisterEmotionClick: () -> Unit,
+    onShowMoreRoutinesClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val collapsibleHeaderState = rememberCollapsibleHeaderState()
@@ -172,16 +126,7 @@ private fun HomeScreen(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(
-                brush = Brush.linearGradient(
-                    colors = listOf(
-                        BitnagilTheme.colors.homeGradientStartColor,
-                        BitnagilTheme.colors.homeGradientEndColor,
-                    ),
-                    start = Offset(0f, 0f),
-                    end = Offset(collapsibleHeaderState.screenHeight.value, collapsibleHeaderState.screenWidth.value * 2),
-                ),
-            ),
+            .background(BitnagilTheme.colors.coolGray10),
     ) {
         Column {
             Spacer(modifier = Modifier.height(collapsibleHeaderState.currentHeaderHeight))
@@ -189,12 +134,13 @@ private fun HomeScreen(
             WeeklyDatePicker(
                 selectedDate = uiState.selectedDate,
                 weeklyDates = uiState.currentWeeks,
+                routines = uiState.routines,
                 onDateSelect = onDateSelect,
                 onPreviousWeekClick = onPreviousWeekClick,
                 onNextWeekClick = onNextWeekClick,
                 modifier = Modifier
                     .background(
-                        color = BitnagilTheme.colors.white,
+                        color = BitnagilTheme.colors.coolGray99,
                         shape = RoundedCornerShape(
                             topStart = 20.dp,
                             topEnd = 20.dp,
@@ -202,79 +148,72 @@ private fun HomeScreen(
                     ),
             )
 
-            LazyColumn(
-                state = collapsibleHeaderState.lazyListState,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(BitnagilTheme.colors.white)
-                    .nestedScroll(collapsibleHeaderState.nestedScrollConnection),
-            ) {
-                if (uiState.selectedDateRoutines.isEmpty()) {
-                    item {
-                        RoutineEmptyView(
-                            onRegisterRoutineClick = onRegisterRoutineClick,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(top = 62.dp),
+            if (uiState.selectedDateRoutines.isEmpty()) {
+                EmptyRoutineView(
+                    onRegisterRoutineClick = onRegisterRoutineClick,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(BitnagilTheme.colors.coolGray99)
+                        .padding(top = 62.dp),
+                )
+            } else {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(BitnagilTheme.colors.coolGray99)
+                        .padding(start = 16.dp, end = 4.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.Top,
+                ) {
+                    Text(
+                        text = "루틴 리스트",
+                        color = BitnagilTheme.colors.coolGray60,
+                        style = BitnagilTheme.typography.body2SemiBold,
+                        modifier = Modifier.padding(top = 6.dp),
+                    )
+                    Text(
+                        text = "더보기",
+                        color = BitnagilTheme.colors.coolGray10,
+                        style = BitnagilTheme.typography.body2SemiBold,
+                        modifier = Modifier
+                            .clickableWithoutRipple { onShowMoreRoutinesClick() }
+                            .padding(vertical = 10.dp, horizontal = 12.dp),
+                    )
+                }
+
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(BitnagilTheme.colors.coolGray99)
+                        .nestedScroll(collapsibleHeaderState.nestedScrollConnection)
+                        .padding(horizontal = 16.dp),
+                    state = collapsibleHeaderState.lazyListState,
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+                    items(
+                        items = uiState.selectedDateRoutines,
+                        key = { routine -> "${routine.routineId}_${uiState.selectedDate}" },
+                    ) { routine ->
+                        RoutineSection(
+                            routine = routine,
+                            onRoutineToggle = { isCompleted ->
+                                onRoutineCompletionToggle(routine.routineId, isCompleted)
+                            },
+                            onSubRoutineToggle = { subRoutineIndex, isCompleted ->
+                                onSubRoutineCompletionToggle(routine.routineId, subRoutineIndex, isCompleted)
+                            },
                         )
                     }
-                } else {
-                    uiState.selectedDateRoutines.forEachIndexed { index, routine ->
-                        item(
-                            key = "${routine.routineId}_${uiState.selectedDate}",
-                        ) {
-                            Box(
-                                modifier = Modifier.fillMaxWidth(),
-                            ) {
-                                RoutineSection(
-                                    routine = routine,
-                                    onRoutineToggle = { isCompleted ->
-                                        onRoutineCompletionToggle(
-                                            routine.routineId,
-                                            isCompleted,
-                                        )
-                                    },
-                                    onSubRoutineToggle = { subRoutineId, isCompleted ->
-                                        onSubRoutineCompletionToggle(
-                                            routine.routineId,
-                                            subRoutineId,
-                                            isCompleted,
-                                        )
-                                    },
-                                    onMoreClick = {
-                                        onShowRoutineDetailsBottomSheet(routine)
-                                    },
-                                    modifier = Modifier
-                                        .padding(top = 23.dp, bottom = 10.dp)
-                                        .padding(horizontal = 16.dp),
-                                )
-
-                                if (index == 0) {
-                                    BitnagilIcon(
-                                        id = R.drawable.ic_arrow_down_up,
-                                        tint = BitnagilTheme.colors.navy200,
-                                        modifier = Modifier
-                                            .align(Alignment.TopEnd)
-                                            .padding(end = 4.dp)
-                                            .clickableWithoutRipple { onShowRoutineSortBottomSheet() }
-                                            .zIndex(1f),
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-                item {
-                    Spacer(modifier = Modifier.height(110.dp))
                 }
             }
         }
 
         CollapsibleHomeHeader(
             userName = uiState.userNickname,
-            emotionBallType = uiState.myEmotion,
+            todayEmotion = uiState.todayEmotion,
             collapsibleHeaderState = collapsibleHeaderState,
-            onEmotionRecordClick = onRegisterEmotionClick,
+            onHelpClick = onHelpClick,
+            onRegisterEmotion = onRegisterEmotionClick,
         )
     }
 }
@@ -289,9 +228,9 @@ private fun HomeScreenPreview() {
         onNextWeekClick = {},
         onRoutineCompletionToggle = { _, _ -> },
         onSubRoutineCompletionToggle = { _, _, _ -> },
-        onShowRoutineSortBottomSheet = {},
-        onShowRoutineDetailsBottomSheet = {},
+        onHelpClick = {},
         onRegisterRoutineClick = {},
         onRegisterEmotionClick = {},
+        onShowMoreRoutinesClick = {},
     )
 }

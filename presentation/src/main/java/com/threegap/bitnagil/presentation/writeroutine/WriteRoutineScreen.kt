@@ -7,12 +7,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
@@ -141,9 +139,7 @@ private fun WriteRoutineScreen(
             .fillMaxSize()
             .background(color = BitnagilTheme.colors.white)
             .statusBarsPadding()
-            .windowInsetsPadding(
-                WindowInsets.ime.exclude(WindowInsets.navigationBars),
-            ),
+            .windowInsetsPadding(WindowInsets.ime),
     ) {
         BitnagilTopBar(
             title = if (state.writeRoutineType == WriteRoutineType.Add) "루틴 등록" else "루틴 수정",

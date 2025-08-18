@@ -39,4 +39,13 @@ sealed interface Route {
 
     @Serializable
     data object Emotion : Route
+
+    @Serializable
+    data object Withdrawal : Route
+
+    @Serializable
+    data class RoutineList(val selectedDate: String) : Route
+
+    @Serializable
+    data object Guide : Route
 }

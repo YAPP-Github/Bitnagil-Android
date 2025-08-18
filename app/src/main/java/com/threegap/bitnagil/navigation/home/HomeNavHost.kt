@@ -39,9 +39,10 @@ fun HomeNavHost(
     navigateToOnBoarding: () -> Unit,
     navigateToNotice: () -> Unit,
     navigateToQnA: () -> Unit,
+    navigateToGuide: () -> Unit,
     navigateToRegisterRoutine: (String?) -> Unit,
-    navigateToEditRoutine: (String) -> Unit,
     navigateToEmotion: () -> Unit,
+    navigateToRoutineList: (String) -> Unit,
 ) {
     val navigator = rememberHomeNavigator()
     var showFloatingOverlay by remember { mutableStateOf(false) }
@@ -63,11 +64,14 @@ fun HomeNavHost(
                 ) {
                     composable(HomeRoute.Home.route) {
                         HomeScreenContainer(
+                            navigateToGuide = navigateToGuide,
                             navigateToRegisterRoutine = {
                                 navigateToRegisterRoutine(null)
                             },
-                            navigateToEditRoutine = navigateToEditRoutine,
                             navigateToEmotion = navigateToEmotion,
+                            navigateToRoutineList = { selectedDate ->
+                                navigateToRoutineList(selectedDate)
+                            },
                         )
                     }
 
@@ -102,11 +106,6 @@ fun HomeNavHost(
 
             BitnagilFloatingActionMenu(
                 actions = listOf(
-                    FloatingActionItem(
-                        icon = R.drawable.ic_report,
-                        text = "제보하기",
-                        onClick = { GlobalBitnagilToast.showWarning("제보하기 기능은 추후 제공될 예정입니다.") },
-                    ),
                     FloatingActionItem(
                         icon = R.drawable.ic_routine_add,
                         text = "루틴 등록",
