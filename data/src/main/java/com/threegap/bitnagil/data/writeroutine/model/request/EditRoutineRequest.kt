@@ -14,9 +14,9 @@ data class EditRoutineRequest(
     @SerialName("repeatDay")
     val repeatDay: List<String>,
     @SerialName("routineStartDate")
-    val routineStartDate: String?,
+    val routineStartDate: String,
     @SerialName("routineEndDate")
-    val routineEndDate: String?,
+    val routineEndDate: String,
     @SerialName("executionTime")
     val executionTime: String,
     @SerialName("subRoutineName")
