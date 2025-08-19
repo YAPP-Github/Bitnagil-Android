@@ -91,7 +91,7 @@ private fun LevelOption(
         Text(
             text = "난이도 $optionLevel",
             color = BitnagilTheme.colors.coolGray10,
-            style = BitnagilTheme.typography.body1SemiBold
+            style = BitnagilTheme.typography.body1SemiBold,
         )
 
         Text(
