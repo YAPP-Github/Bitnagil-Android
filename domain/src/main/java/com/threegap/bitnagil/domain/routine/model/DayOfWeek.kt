@@ -35,7 +35,7 @@ enum class DayOfWeek {
             }
 
         fun List<DayOfWeek>.formatRepeatDays(): String {
-            if (this.isEmpty()) return "반복 없음"
+            if (this.isEmpty()) return "x"
             return this.sortedBy { it.ordinal }
                 .joinToString(", ") { it.toKoreanShort() }
         }

@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
@@ -33,6 +34,13 @@ fun RoutineDetailsCard(
     onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val infoTextStyle = BitnagilTheme.typography.body2Medium.copy(
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None,
+        ),
+    )
+
     Column(
         modifier = modifier
             .background(
@@ -67,12 +75,14 @@ fun RoutineDetailsCard(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            BitnagilIconButton(
-                id = R.drawable.ic_edit,
-                onClick = onEditClick,
-                tint = null,
-                paddingValues = PaddingValues(12.dp),
-            )
+            if (!routine.routineDeletedYn) {
+                BitnagilIconButton(
+                    id = R.drawable.ic_edit,
+                    onClick = onEditClick,
+                    tint = null,
+                    paddingValues = PaddingValues(12.dp),
+                )
+            }
 
             BitnagilIconButton(
                 id = R.drawable.ic_trash,
@@ -97,14 +107,14 @@ fun RoutineDetailsCard(
                 Text(
                     text = "세부 루틴",
                     color = BitnagilTheme.colors.coolGray40,
-                    style = BitnagilTheme.typography.body2Medium,
+                    style = infoTextStyle,
                 )
 
                 routine.subRoutineNames.forEach { name ->
                     Text(
                         text = "•  $name",
                         color = BitnagilTheme.colors.coolGray40,
-                        style = BitnagilTheme.typography.body2Medium,
+                        style = infoTextStyle,
                     )
                 }
             }
@@ -124,17 +134,17 @@ fun RoutineDetailsCard(
             Text(
                 text = "반복: ${routine.repeatDay.formatRepeatDays()}",
                 color = BitnagilTheme.colors.coolGray40,
-                style = BitnagilTheme.typography.body2Medium,
+                style = infoTextStyle,
             )
             Text(
-                text = "기간: ",
+                text = "기간: ${routine.formattedDateRange}",
                 color = BitnagilTheme.colors.coolGray40,
-                style = BitnagilTheme.typography.body2Medium,
+                style = infoTextStyle,
             )
             Text(
                 text = "시간: ${routine.executionTime}",
                 color = BitnagilTheme.colors.coolGray40,
-                style = BitnagilTheme.typography.body2Medium,
+                style = infoTextStyle,
             )
         }
     }
@@ -150,6 +160,9 @@ private fun RoutineDetailsCardPreview() {
             repeatDay = listOf(DayOfWeek.MONDAY, DayOfWeek.TUESDAY),
             executionTime = "00:00:00",
             routineDate = "2025-08-15",
+            startDate = "2025-08-15",
+            endDate = "2025-08-25",
+            routineDeletedYn = false,
             subRoutineNames = listOf("어쩌구", "저쩌구", "얼씨구"),
             recommendedRoutineType = null,
         ),
