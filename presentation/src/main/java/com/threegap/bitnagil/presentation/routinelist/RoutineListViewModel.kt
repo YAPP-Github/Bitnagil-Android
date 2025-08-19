@@ -103,6 +103,14 @@ class RoutineListViewModel @Inject constructor(
                 }
                 null
             }
+
+            is RoutineListIntent.OnSuccessDeletedRoutine -> {
+                sendSideEffect(RoutineListSideEffect.ShowToast("삭제가 완료되었습니다."))
+                state.copy(
+                    isLoading = false,
+                    deleteConfirmBottomSheetVisible = false,
+                )
+            }
         }
 
         return newState
@@ -133,8 +141,7 @@ class RoutineListViewModel @Inject constructor(
         viewModelScope.launch {
             deleteRoutineUseCase(selectedRoutine.routineId).fold(
                 onSuccess = {
-                    sendIntent(RoutineListIntent.HideDeleteConfirmBottomSheet)
-                    sendIntent(RoutineListIntent.UpdateLoading(false))
+                    sendIntent(RoutineListIntent.OnSuccessDeletedRoutine)
                 },
                 onFailure = {
                     Log.e("RoutineListViewModel", "루틴 삭제 실패: ${it.message}")
@@ -150,8 +157,7 @@ class RoutineListViewModel @Inject constructor(
         viewModelScope.launch {
             deleteRoutineForDayUseCase(selectedRoutine.routineId).fold(
                 onSuccess = {
-                    sendIntent(RoutineListIntent.HideDeleteConfirmBottomSheet)
-                    sendIntent(RoutineListIntent.UpdateLoading(false))
+                    sendIntent(RoutineListIntent.OnSuccessDeletedRoutine)
                 },
                 onFailure = {
                     Log.e("RoutineListViewModel", "루틴 삭제 실패: ${it.message}")

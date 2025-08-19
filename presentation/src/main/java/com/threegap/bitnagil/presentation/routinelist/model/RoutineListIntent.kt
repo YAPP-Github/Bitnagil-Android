@@ -15,4 +15,5 @@ sealed class RoutineListIntent : MviIntent {
     data object OnRegisterRoutineClick : RoutineListIntent()
     data object OnApplyTodayClick : RoutineListIntent()
     data object OnApplyTomorrowClick : RoutineListIntent()
+    data object OnSuccessDeletedRoutine : RoutineListIntent()
 }

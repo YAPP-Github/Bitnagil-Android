@@ -22,6 +22,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
+import com.threegap.bitnagil.presentation.common.toast.GlobalBitnagilToast
 import com.threegap.bitnagil.presentation.routinelist.component.template.DeleteConfirmBottomSheet
 import com.threegap.bitnagil.presentation.routinelist.component.template.EditConfirmBottomSheet
 import com.threegap.bitnagil.presentation.routinelist.component.template.EmptyRoutineListView
@@ -44,10 +45,9 @@ fun RoutineListScreenContainer(
 
     viewModel.sideEffectFlow.collectAsEffect { sideEffect ->
         when (sideEffect) {
+            is RoutineListSideEffect.ShowToast -> GlobalBitnagilToast.showCheck(sideEffect.message)
             is RoutineListSideEffect.NavigateToBack -> navigateToBack()
-            is RoutineListSideEffect.NavigateToAddRoutine -> {
-                navigateToAddRoutine()
-            }
+            is RoutineListSideEffect.NavigateToAddRoutine -> navigateToAddRoutine()
             is RoutineListSideEffect.NavigateToEditRoutine -> {
                 navigateToEditRoutine(sideEffect.routineId, sideEffect.updateRoutineFromNowDate)
             }
