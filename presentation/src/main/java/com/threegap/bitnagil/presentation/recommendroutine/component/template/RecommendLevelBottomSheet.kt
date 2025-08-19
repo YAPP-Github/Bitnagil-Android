@@ -12,10 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.BaselineShift
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
@@ -51,7 +47,8 @@ fun RecommendLevelBottomSheet(
         ) {
             RecommendLevel.entries.forEachIndexed { index, recommendLevel ->
                 LevelOption(
-                    optionText = "난이도 ${recommendLevel.toKoreanLevel()} | ${recommendLevel.displayName}",
+                    optionLevel = recommendLevel.koreanLevel,
+                    optionText = recommendLevel.displayName,
                     isSelected = selectedRecommendLevel == recommendLevel,
                     onClick = {
                         val newLevel = if (selectedRecommendLevel == recommendLevel) null else recommendLevel
@@ -79,6 +76,7 @@ fun RecommendLevelBottomSheet(
 
 @Composable
 private fun LevelOption(
+    optionLevel: String,
     optionText: String,
     isSelected: Boolean,
     onClick: () -> Unit,
@@ -90,35 +88,16 @@ private fun LevelOption(
             .clickableWithoutRipple { onClick() }
             .padding(vertical = 8.dp),
     ) {
-        val parts = optionText.split(" | ")
-        val annotatedString = buildAnnotatedString {
-            if (parts.size >= 2) {
-                withStyle(
-                    style = BitnagilTheme.typography.body1SemiBold.toSpanStyle(),
-                ) {
-                    append(parts[0])
-                }
-
-                withStyle(
-                    style = SpanStyle(
-                        color = BitnagilTheme.colors.coolGray10,
-                        baselineShift = BaselineShift(0.1f),
-                    ),
-                ) {
-                    append(" | ")
-                }
-
-                withStyle(
-                    style = BitnagilTheme.typography.body1Regular.toSpanStyle(),
-                ) {
-                    append(parts[1])
-                }
-            }
-        }
+        Text(
+            text = "난이도 $optionLevel",
+            color = BitnagilTheme.colors.coolGray10,
+            style = BitnagilTheme.typography.body1SemiBold
+        )
 
         Text(
-            text = annotatedString,
+            text = " | $optionText",
             color = BitnagilTheme.colors.coolGray10,
+            style = BitnagilTheme.typography.body1Regular,
             modifier = Modifier.weight(1f),
         )
 
@@ -135,7 +114,8 @@ private fun LevelOption(
 @Composable
 private fun LevelOptionPreview() {
     LevelOption(
-        optionText = "난이도 상 | 가볍게 할 수 있어요",
+        optionLevel = "상",
+        optionText = "가볍게 할 수 있어요",
         isSelected = true,
         onClick = {},
     )
