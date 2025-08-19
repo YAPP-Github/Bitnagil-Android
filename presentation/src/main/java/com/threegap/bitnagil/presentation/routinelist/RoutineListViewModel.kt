@@ -73,10 +73,7 @@ class RoutineListViewModel @Inject constructor(
 
             is RoutineListIntent.OnRegisterRoutineClick -> {
                 sendSideEffect(
-                    RoutineListSideEffect.NavigateToWriteRoutine(
-                        routineId = null,
-                        applyDate = null,
-                    ),
+                    RoutineListSideEffect.NavigateToAddRoutine,
                 )
                 null
             }
@@ -85,9 +82,9 @@ class RoutineListViewModel @Inject constructor(
                 val selectedRoutine = state.selectedRoutine
                 if (selectedRoutine != null) {
                     sendSideEffect(
-                        RoutineListSideEffect.NavigateToWriteRoutine(
+                        RoutineListSideEffect.NavigateToEditRoutine(
                             routineId = selectedRoutine.routineId,
-                            applyDate = "TODAY",
+                            updateRoutineFromNowDate = true,
                         ),
                     )
                 }
@@ -98,9 +95,9 @@ class RoutineListViewModel @Inject constructor(
                 val selectedRoutine = state.selectedRoutine
                 if (selectedRoutine != null) {
                     sendSideEffect(
-                        RoutineListSideEffect.NavigateToWriteRoutine(
+                        RoutineListSideEffect.NavigateToEditRoutine(
                             routineId = selectedRoutine.routineId,
-                            applyDate = "TOMORROW",
+                            updateRoutineFromNowDate = false,
                         ),
                     )
                 }

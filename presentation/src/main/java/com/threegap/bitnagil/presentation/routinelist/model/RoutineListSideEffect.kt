@@ -4,5 +4,6 @@ import com.threegap.bitnagil.presentation.common.mviviewmodel.MviSideEffect
 
 sealed interface RoutineListSideEffect : MviSideEffect {
     data object NavigateToBack : RoutineListSideEffect
-    data class NavigateToWriteRoutine(val routineId: String?, val applyDate: String?) : RoutineListSideEffect
+    data object NavigateToAddRoutine : RoutineListSideEffect
+    data class NavigateToEditRoutine(val routineId: String, val updateRoutineFromNowDate: Boolean) : RoutineListSideEffect
 }

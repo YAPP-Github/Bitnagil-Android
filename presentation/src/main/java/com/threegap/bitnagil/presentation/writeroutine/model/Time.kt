@@ -2,6 +2,7 @@ package com.threegap.bitnagil.presentation.writeroutine.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import kotlin.text.format
 import com.threegap.bitnagil.domain.writeroutine.model.Time as DomainTime
 
 @Parcelize
@@ -30,5 +31,25 @@ data class Time(
 
     fun toDomainTime(): DomainTime {
         return DomainTime(hour = hour, minute = minute)
+    }
+
+    fun toAmPmFormattedString(): String {
+        val amPm: String
+        var displayHour = hour
+
+        if (hour == 0) { // 자정 (오전 12시)
+            amPm = "오전"
+            displayHour = 12
+        } else if (hour == 12) { // 정오 (오후 12시)
+            amPm = "오후"
+            displayHour = 12
+        } else if (hour > 12) {
+            amPm = "오후"
+            displayHour -= 12
+        } else {
+            amPm = "오전"
+        }
+
+        return "%s %d:%02d".format(amPm, displayHour, minute)
     }
 }

@@ -36,6 +36,8 @@ import java.time.LocalDate
 @Composable
 fun RoutineListScreenContainer(
     navigateToBack: () -> Unit,
+    navigateToEditRoutine: (String, Boolean) -> Unit,
+    navigateToAddRoutine: () -> Unit,
     viewModel: RoutineListViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -43,12 +45,11 @@ fun RoutineListScreenContainer(
     viewModel.sideEffectFlow.collectAsEffect { sideEffect ->
         when (sideEffect) {
             is RoutineListSideEffect.NavigateToBack -> navigateToBack()
-            is RoutineListSideEffect.NavigateToWriteRoutine -> {
-//                TODO: 네비게이션 연결하기
-//                navigateToWriteRoutine(
-//                    routineId = sideEffect.routineId,
-//                    applyDate = sideEffect.applyDate,
-//                )
+            is RoutineListSideEffect.NavigateToAddRoutine -> {
+                navigateToAddRoutine()
+            }
+            is RoutineListSideEffect.NavigateToEditRoutine -> {
+                navigateToEditRoutine(sideEffect.routineId, sideEffect.updateRoutineFromNowDate)
             }
         }
     }

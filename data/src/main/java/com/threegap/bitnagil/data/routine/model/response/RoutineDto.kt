@@ -26,6 +26,12 @@ data class RoutineDto(
     val subRoutineCompleteYn: List<Boolean>,
     @SerialName("recommendedRoutineType")
     val recommendedRoutineType: String?,
+    @SerialName("routineDeletedYn")
+    val routineDeletedYn: Boolean,
+    @SerialName("routineStartDate")
+    val routineStartDate: String,
+    @SerialName("routineEndDate")
+    val routineEndDate: String,
 )
 
 fun RoutineDto.toDomain(): Routine =
@@ -39,4 +45,7 @@ fun RoutineDto.toDomain(): Routine =
         subRoutineNames = this.subRoutineNames,
         subRoutineCompleteYn = this.subRoutineCompleteYn,
         recommendedRoutineType = RecommendedRoutineType.fromString(this.recommendedRoutineType),
+        routineDeletedYn = routineDeletedYn,
+        startDate = this.routineStartDate,
+        endDate = this.routineEndDate,
     )

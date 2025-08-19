@@ -212,7 +212,7 @@ fun MainNavHost(
             val writeScreenNavArg = if (arg.isRegister) {
                 WriteRoutineScreenArg.Add(baseRoutineId = arg.routineId)
             } else {
-                WriteRoutineScreenArg.Edit(routineId = arg.routineId!!)
+                WriteRoutineScreenArg.Edit(routineId = arg.routineId!!, updateRoutineFromNowDate = arg.isUpdateRoutineFromNowDate)
             }
 
             val viewModel = hiltViewModel<WriteRoutineViewModel, WriteRoutineViewModel.Factory> { factory ->
@@ -262,6 +262,18 @@ fun MainNavHost(
                     if (navigator.navController.previousBackStackEntry != null) {
                         navigator.navController.popBackStack()
                     }
+                },
+                navigateToAddRoutine = {
+                    navigator.navController.navigate(Route.WriteRoutine())
+                },
+                navigateToEditRoutine = { routineId, updateRoutineFromNowDate ->
+                    navigator.navController.navigate(
+                        Route.WriteRoutine(
+                            routineId = routineId,
+                            isRegister = false,
+                            isUpdateRoutineFromNowDate = updateRoutineFromNowDate,
+                        ),
+                    )
                 },
             )
         }

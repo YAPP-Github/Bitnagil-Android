@@ -8,12 +8,12 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 
 interface WriteRoutineService {
-    @POST("/api/v1/routines")
+    @POST("/api/v2/routines")
     suspend fun postRoutine(
         @Body registerRoutineRequest: RegisterRoutineRequest,
     ): BaseResponse<Unit>
 
-    @PATCH("/api/v1/routines")
+    @PATCH("/api/v2/routines")
     suspend fun patchRoutine(
         @Body editRoutineRequest: EditRoutineRequest,
     ): BaseResponse<Unit>

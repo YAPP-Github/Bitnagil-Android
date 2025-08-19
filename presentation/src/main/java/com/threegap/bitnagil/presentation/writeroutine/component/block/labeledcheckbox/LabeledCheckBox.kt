@@ -29,17 +29,21 @@ fun LabeledCheckBox(
         modifier = modifier.clickableWithoutRipple(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        Text(label, style = BitnagilTheme.typography.body2Medium.copy(color = BitnagilTheme.colors.coolGray30))
+
+        Spacer(modifier = Modifier.width(6.dp))
+
         Box(
             modifier = Modifier
-                .size(20.dp)
+                .size(18.dp)
                 .background(
                     shape = RoundedCornerShape(4.dp),
-                    color = if (checked) BitnagilTheme.colors.navy500 else BitnagilTheme.colors.coolGray99,
+                    color = if (checked) BitnagilTheme.colors.coolGray10 else BitnagilTheme.colors.coolGray99,
                 )
                 .border(
                     width = 1.dp,
                     shape = RoundedCornerShape(4.dp),
-                    color = if (checked) BitnagilTheme.colors.navy500 else BitnagilTheme.colors.coolGray95,
+                    color = if (checked) BitnagilTheme.colors.coolGray10 else BitnagilTheme.colors.coolGray95,
                 ),
             contentAlignment = Alignment.Center,
         ) {
@@ -50,9 +54,5 @@ fun LabeledCheckBox(
                 )
             }
         }
-
-        Spacer(modifier = Modifier.width(6.dp))
-
-        Text(label, style = BitnagilTheme.typography.body2Medium.copy(color = BitnagilTheme.colors.navy400))
     }
 }

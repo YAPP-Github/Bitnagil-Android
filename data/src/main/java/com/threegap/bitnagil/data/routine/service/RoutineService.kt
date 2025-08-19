@@ -18,7 +18,7 @@ interface RoutineService {
         @Query("endDate") endDate: String,
     ): BaseResponse<RoutinesResponseDto>
 
-    @GET("/api/v1/routines/{routineId}")
+    @GET("/api/v2/routines/{routineId}")
     suspend fun getRoutine(
         @Path("routineId") routineId: String,
     ): BaseResponse<RoutineDto>
