@@ -13,7 +13,7 @@ import kotlinx.parcelize.Parcelize
 data class WriteRoutineState(
     val routineName: String,
     val subRoutineNames: List<String>,
-    val selectNotUseSUbRoutines: Boolean,
+    val selectNotUseSubRoutines: Boolean,
     val repeatType: RepeatType?,
     val repeatDays: List<SelectableDay>,
     val startTime: Time?,
@@ -34,7 +34,7 @@ data class WriteRoutineState(
         val Init = WriteRoutineState(
             routineName = "",
             subRoutineNames = listOf("", "", ""),
-            selectNotUseSUbRoutines = false,
+            selectNotUseSubRoutines = false,
             repeatType = null,
             repeatDays = listOf(
                 SelectableDay(

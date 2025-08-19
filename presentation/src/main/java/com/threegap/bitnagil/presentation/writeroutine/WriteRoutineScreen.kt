@@ -185,7 +185,7 @@ private fun WriteRoutineScreen(
                             placeHolder = getSubRoutinePlaceHolder(0),
                             value = state.subRoutineNames.getOrNull(0) ?: "",
                             onValueChange = { setSubRoutineName(0, it) },
-                            enabled = !state.selectNotUseSUbRoutines,
+                            enabled = !state.selectNotUseSubRoutines,
                         )
 
                         SubRoutineField(
@@ -193,7 +193,7 @@ private fun WriteRoutineScreen(
                             placeHolder = getSubRoutinePlaceHolder(1),
                             value = state.subRoutineNames.getOrNull(1) ?: "",
                             onValueChange = { setSubRoutineName(1, it) },
-                            enabled = !state.selectNotUseSUbRoutines,
+                            enabled = !state.selectNotUseSubRoutines,
                         )
 
                         SubRoutineField(
@@ -201,12 +201,12 @@ private fun WriteRoutineScreen(
                             placeHolder = getSubRoutinePlaceHolder(2),
                             value = state.subRoutineNames.getOrNull(2) ?: "",
                             onValueChange = { setSubRoutineName(2, it) },
-                            enabled = !state.selectNotUseSUbRoutines,
+                            enabled = !state.selectNotUseSubRoutines,
                         )
 
                         LabeledCheckBox(
                             label = "세부 루틴 설정 안함",
-                            checked = state.selectNotUseSUbRoutines,
+                            checked = state.selectNotUseSubRoutines,
                             onClick = selectNotUseSubRoutines,
                         )
                     }

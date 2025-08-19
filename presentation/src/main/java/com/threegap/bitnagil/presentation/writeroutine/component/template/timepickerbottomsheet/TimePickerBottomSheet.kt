@@ -83,10 +83,6 @@ private fun TimePickerBottomSheetContent(
                 val timePicker = view.findViewById<TimePicker>(R.id.time_picker)
                 view.tag = timePicker
 
-                TimePicker(context).apply {
-                    setIs24HourView(true)
-                }
-
                 view
             },
             update = {

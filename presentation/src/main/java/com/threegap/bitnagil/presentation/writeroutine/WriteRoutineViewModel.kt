@@ -316,10 +316,10 @@ class WriteRoutineViewModel @AssistedInject constructor(
             }
 
             WriteRoutineIntent.SelectNotUseSubRoutines -> {
-                val toggledSelectNotUseSubRoutines = !state.selectNotUseSUbRoutines
+                val toggledSelectNotUseSubRoutines = !state.selectNotUseSubRoutines
 
                 return state.copy(
-                    selectNotUseSUbRoutines = toggledSelectNotUseSubRoutines,
+                    selectNotUseSubRoutines = toggledSelectNotUseSubRoutines,
                     subRoutineNames = if (toggledSelectNotUseSubRoutines) listOf("", "", "") else state.subRoutineNames,
                 )
             }
@@ -473,7 +473,7 @@ class WriteRoutineViewModel @AssistedInject constructor(
             when (val writeRoutineType = currentState.writeRoutineType) {
                 WriteRoutineType.Add -> {
                     sendIntent(WriteRoutineIntent.RegisterRoutineLoading)
-                    val subRoutines = if (currentState.selectNotUseSUbRoutines) emptyList() else currentState.subRoutineNames.filter { it.isNotEmpty() }
+                    val subRoutines = if (currentState.selectNotUseSubRoutines) emptyList() else currentState.subRoutineNames.filter { it.isNotEmpty() }
                     val noRepeatRoutine = repeatDay.isEmpty()
 
                     val registerRoutineResult = registerRoutineUseCase(
@@ -493,7 +493,7 @@ class WriteRoutineViewModel @AssistedInject constructor(
                 }
                 is WriteRoutineType.Edit -> {
                     val currentRoutineId = routineId ?: return@launch
-                    val subRoutines = if (currentState.selectNotUseSUbRoutines) emptyList() else currentState.subRoutineNames.filter { it.isNotEmpty() }
+                    val subRoutines = if (currentState.selectNotUseSubRoutines) emptyList() else currentState.subRoutineNames.filter { it.isNotEmpty() }
                     val routineUpdateType = if (writeRoutineType.updateRoutineFromNowDate) {
                         RoutineUpdateType.Today
                     } else {
