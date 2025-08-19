@@ -1,5 +1,6 @@
 package com.threegap.bitnagil.data.recommendroutine.model.response
 
+import com.threegap.bitnagil.domain.recommendroutine.model.RecommendCategory
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendLevel
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendRoutine
 import kotlinx.serialization.SerialName
@@ -17,6 +18,8 @@ data class RecommendedRoutineDto(
     val recommendedRoutineLevel: String,
     @SerialName("executionTime")
     val executionTime: String,
+    @SerialName("recommendedRoutineType")
+    val recommendedRoutineType: String,
     @SerialName("recommendedSubRoutineSearchResult")
     val recommendedSubRoutineSearchResult: List<RecommendedSubRoutineDto>,
 )
@@ -28,5 +31,6 @@ fun RecommendedRoutineDto.toDomain(): RecommendRoutine =
         description = recommendedRoutineDescription,
         level = RecommendLevel.fromString(recommendedRoutineLevel),
         executionTime = executionTime,
+        recommendedRoutineType = RecommendCategory.fromString(recommendedRoutineType),
         recommendSubRoutines = recommendedSubRoutineSearchResult.map { it.toDomain() },
     )

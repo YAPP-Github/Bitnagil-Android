@@ -6,5 +6,6 @@ data class RecommendRoutine(
     val description: String,
     val level: RecommendLevel,
     val executionTime: String,
+    val recommendedRoutineType: RecommendCategory,
     val recommendSubRoutines: List<RecommendSubRoutine>,
 )
