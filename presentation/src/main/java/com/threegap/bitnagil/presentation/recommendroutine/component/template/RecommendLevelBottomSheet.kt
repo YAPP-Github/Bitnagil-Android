@@ -12,6 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.BaselineShift
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
@@ -47,7 +51,7 @@ fun RecommendLevelBottomSheet(
         ) {
             RecommendLevel.entries.forEachIndexed { index, recommendLevel ->
                 LevelOption(
-                    optionText = recommendLevel.displayName,
+                    optionText = "난이도 ${recommendLevel.toKoreanLevel()} | ${recommendLevel.displayName}",
                     isSelected = selectedRecommendLevel == recommendLevel,
                     onClick = {
                         val newLevel = if (selectedRecommendLevel == recommendLevel) null else recommendLevel
@@ -86,37 +90,52 @@ private fun LevelOption(
             .clickableWithoutRipple { onClick() }
             .padding(vertical = 8.dp),
     ) {
+        val parts = optionText.split(" | ")
+        val annotatedString = buildAnnotatedString {
+            if (parts.size >= 2) {
+                withStyle(
+                    style = BitnagilTheme.typography.body1SemiBold.toSpanStyle(),
+                ) {
+                    append(parts[0])
+                }
+
+                withStyle(
+                    style = SpanStyle(
+                        color = BitnagilTheme.colors.coolGray10,
+                        baselineShift = BaselineShift(0.1f),
+                    ),
+                ) {
+                    append(" | ")
+                }
+
+                withStyle(
+                    style = BitnagilTheme.typography.body1Regular.toSpanStyle(),
+                ) {
+                    append(parts[1])
+                }
+            }
+        }
+
         Text(
-            text = optionText,
-            color = BitnagilTheme.colors.black,
-            style = BitnagilTheme.typography.body1Regular,
+            text = annotatedString,
+            color = BitnagilTheme.colors.coolGray10,
             modifier = Modifier.weight(1f),
         )
 
         if (isSelected) {
             BitnagilIcon(
-                id = R.drawable.ic_check,
+                id = R.drawable.ic_check_md,
                 tint = BitnagilTheme.colors.orange500,
             )
         }
     }
 }
 
-@Preview
-@Composable
-private fun RecommendLevelBottomSheetPreview() {
-    RecommendLevelBottomSheet(
-        selectedRecommendLevel = null,
-        onRecommendLevelSelected = {},
-        onDismiss = {},
-    )
-}
-
 @Preview(showBackground = true)
 @Composable
 private fun LevelOptionPreview() {
     LevelOption(
-        optionText = "가볍게 할 수 있어요",
+        optionText = "난이도 상 | 가볍게 할 수 있어요",
         isSelected = true,
         onClick = {},
     )

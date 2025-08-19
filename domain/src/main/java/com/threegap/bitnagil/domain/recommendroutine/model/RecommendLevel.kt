@@ -9,6 +9,12 @@ enum class RecommendLevel(
     LEVEL3("LEVEL3", "의지를 다 잡고 할 수 있어요"),
     ;
 
+    fun toKoreanLevel() = when (this) {
+        LEVEL1 -> "하"
+        LEVEL2 -> "중"
+        LEVEL3 -> "상"
+    }
+
     companion object {
         fun fromString(levelName: String): RecommendLevel =
             entries.find { it.level == levelName } ?: LEVEL1
