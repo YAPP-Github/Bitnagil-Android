@@ -45,6 +45,7 @@ fun RoutineDto.toDomain(): Routine =
         subRoutineNames = this.subRoutineNames,
         subRoutineCompleteYn = this.subRoutineCompleteYn,
         recommendedRoutineType = RecommendedRoutineType.fromString(this.recommendedRoutineType),
+        routineDeletedYn = routineDeletedYn,
         startDate = this.routineStartDate,
         endDate = this.routineEndDate,
     )

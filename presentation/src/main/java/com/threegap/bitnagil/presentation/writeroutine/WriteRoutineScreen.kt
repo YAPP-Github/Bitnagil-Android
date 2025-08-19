@@ -1,6 +1,5 @@
 package com.threegap.bitnagil.presentation.writeroutine
 
-import ExpandableContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,12 +32,12 @@ import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.namefield.NameField
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.selectcell.SelectCell
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.writeroutinebutton.WriteRoutineButton
+import com.threegap.bitnagil.presentation.writeroutine.component.block.expandablecontent.ExpandableContent
 import com.threegap.bitnagil.presentation.writeroutine.component.block.labeledcheckbox.LabeledCheckBox
 import com.threegap.bitnagil.presentation.writeroutine.component.block.routinedetailrow.RoutineDetailRow
 import com.threegap.bitnagil.presentation.writeroutine.component.block.subroutinefield.SubRoutineField
 import com.threegap.bitnagil.presentation.writeroutine.component.template.datepickerbottomsheet.DatePickerBottomSheet
 import com.threegap.bitnagil.presentation.writeroutine.component.template.timepickerbottomsheet.TimePickerBottomSheet
-import com.threegap.bitnagil.presentation.writeroutine.model.Date
 import com.threegap.bitnagil.presentation.writeroutine.model.Day
 import com.threegap.bitnagil.presentation.writeroutine.model.RepeatType
 import com.threegap.bitnagil.presentation.writeroutine.model.Time
@@ -77,8 +76,8 @@ fun WriteRoutineScreenContainer(
             onDateSelected = viewModel::setStartDate,
             date = state.startDate,
             onDismiss = viewModel::hideStartDatePickerBottomSheet,
-            availableStartDate = Date.now(),
-            availableEndDate = state.endDate,
+            availableStartDate = null,
+            availableEndDate = null,
         )
     }
 
@@ -88,7 +87,7 @@ fun WriteRoutineScreenContainer(
             onDateSelected = viewModel::setEndDate,
             date = state.endDate,
             onDismiss = viewModel::hideEndDatePickerBottomSheet,
-            availableStartDate = state.startDate,
+            availableStartDate = null,
             availableEndDate = null,
         )
     }
@@ -215,7 +214,7 @@ private fun WriteRoutineScreen(
 
                 ExpandableContent(
                     expand = state.repeatDaysUiExpanded,
-                    required = false,
+                    required = true,
                     iconResourceId = R.drawable.img_repeat_days,
                     title = "반복 요일",
                     placeHolder = "ex) 매주 월,화,수.목,금",
@@ -271,7 +270,7 @@ private fun WriteRoutineScreen(
 
                 ExpandableContent(
                     expand = state.periodUiExpanded,
-                    required = false,
+                    required = true,
                     iconResourceId = R.drawable.img_routine_period,
                     title = "목표 기간",
                     placeHolder = "ex) 25.08.06 - 25.08.06",

@@ -1,3 +1,5 @@
+package com.threegap.bitnagil.presentation.writeroutine.component.block.expandablecontent
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
@@ -123,7 +125,7 @@ fun ExpandableContent(
 
 @Preview(heightDp = 300)
 @Composable
-fun ExpandableContentPreview() {
+private fun ExpandableContentPreview() {
     var isExpanded by remember { mutableStateOf(true) }
     var isChecked by remember { mutableStateOf(false) }
 

@@ -302,18 +302,23 @@ class WriteRoutineViewModel @AssistedInject constructor(
             }
             is WriteRoutineIntent.SetEndDate -> {
                 return state.copy(
+                    startDate = Date.min(intent.date, state.startDate),
                     endDate = intent.date,
                 )
             }
             is WriteRoutineIntent.SetStartDate -> {
                 return state.copy(
                     startDate = intent.date,
+                    endDate = Date.max(intent.date, state.endDate),
                 )
             }
 
             WriteRoutineIntent.SelectNotUseSubRoutines -> {
+                val toggledSelectNotUseSubRoutines = !state.selectNotUseSUbRoutines
+
                 return state.copy(
-                    selectNotUseSUbRoutines = !state.selectNotUseSUbRoutines,
+                    selectNotUseSUbRoutines = toggledSelectNotUseSubRoutines,
+                    subRoutineNames = if (toggledSelectNotUseSubRoutines) listOf("", "", "") else state.subRoutineNames,
                 )
             }
         }

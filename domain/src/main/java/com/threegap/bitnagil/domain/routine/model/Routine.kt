@@ -9,6 +9,7 @@ data class Routine(
     val endDate: String,
     val routineDate: String,
     val routineCompleteYn: Boolean,
+    val routineDeletedYn: Boolean,
     val subRoutineNames: List<String>,
     val subRoutineCompleteYn: List<Boolean>,
     val recommendedRoutineType: RecommendedRoutineType?,
