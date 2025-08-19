@@ -7,9 +7,6 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendCategory
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendLevel
-import com.threegap.bitnagil.domain.recommendroutine.model.RecommendLevel.LEVEL1
-import com.threegap.bitnagil.domain.recommendroutine.model.RecommendLevel.LEVEL2
-import com.threegap.bitnagil.domain.recommendroutine.model.RecommendLevel.LEVEL3
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendRoutine
 import kotlinx.parcelize.Parcelize
 

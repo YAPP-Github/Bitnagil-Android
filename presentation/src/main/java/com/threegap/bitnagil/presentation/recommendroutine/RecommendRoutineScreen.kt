@@ -36,6 +36,7 @@ import com.threegap.bitnagil.domain.recommendroutine.model.RecommendCategory
 import com.threegap.bitnagil.presentation.recommendroutine.component.atom.RecommendCategoryChip
 import com.threegap.bitnagil.presentation.recommendroutine.component.block.EmotionRecommendRoutineButton
 import com.threegap.bitnagil.presentation.recommendroutine.component.block.RecommendRoutineItem
+import com.threegap.bitnagil.presentation.recommendroutine.component.template.EmptyRecommendRoutineView
 import com.threegap.bitnagil.presentation.recommendroutine.component.template.RecommendLevelBottomSheet
 import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutineIntent
 import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutineState
@@ -169,22 +170,28 @@ private fun RecommendRoutineScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        LazyColumn(
-            state = listState,
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(bottom = 12.dp),
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
-        ) {
-            items(
-                items = uiState.currentRoutines,
-                key = { it.id },
-            ) { routine ->
-                RecommendRoutineItem(
-                    routine = routine,
-                    onAddRoutineClick = { onRegisterRoutineClick(routine.id.toString()) },
-                )
+        if (uiState.currentRoutines.isEmpty() && uiState.selectedRecommendLevel != null) {
+            EmptyRecommendRoutineView(
+                modifier = Modifier.fillMaxSize(),
+            )
+        } else {
+            LazyColumn(
+                state = listState,
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(bottom = 12.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
+            ) {
+                items(
+                    items = uiState.currentRoutines,
+                    key = { it.id },
+                ) { routine ->
+                    RecommendRoutineItem(
+                        routine = routine,
+                        onAddRoutineClick = { onRegisterRoutineClick(routine.id.toString()) },
+                    )
+                }
             }
         }
     }
