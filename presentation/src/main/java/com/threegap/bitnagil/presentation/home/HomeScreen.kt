@@ -26,7 +26,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
-import com.threegap.bitnagil.presentation.common.toast.GlobalBitnagilToast
 import com.threegap.bitnagil.presentation.home.component.template.CollapsibleHomeHeader
 import com.threegap.bitnagil.presentation.home.component.template.EmptyRoutineView
 import com.threegap.bitnagil.presentation.home.component.template.RoutineSection
@@ -63,14 +62,6 @@ fun HomeScreenContainer(
 
             is HomeSideEffect.NavigateToRoutineList -> {
                 navigateToRoutineList(sideEffect.selectedDate)
-            }
-
-            is HomeSideEffect.ShowToastWithIcon -> {
-                GlobalBitnagilToast.showCheck(sideEffect.message)
-            }
-
-            is HomeSideEffect.ShowToast -> {
-                GlobalBitnagilToast.show(sideEffect.message)
             }
         }
     }

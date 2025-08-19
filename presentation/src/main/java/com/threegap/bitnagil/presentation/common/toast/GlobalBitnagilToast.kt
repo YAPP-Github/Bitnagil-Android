@@ -11,11 +11,11 @@ object GlobalBitnagilToast {
         _toastStateRef = WeakReference(toastState)
     }
 
-    fun show(text: String, icon: Int? = null) {
+    fun show(text: String, icon: Int) {
         _toastStateRef?.get()?.show(text, icon)
     }
 
-    fun showCheck(text: String) = show(text, R.drawable.ic_check)
+    fun showCheck(text: String) = show(text, R.drawable.ic_check_circle_orange)
 
     fun showWarning(text: String) = show(text, R.drawable.ic_warning)
 }
