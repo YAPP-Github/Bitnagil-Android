@@ -35,7 +35,7 @@ fun NameField(
         modifier = modifier
             .fillMaxWidth(),
         singleLine = true,
-        textStyle = BitnagilTheme.typography.body2SemiBold,
+        textStyle = BitnagilTheme.typography.title3SemiBold,
         decorationBox = { innerTextField ->
             Column {
                 Row(

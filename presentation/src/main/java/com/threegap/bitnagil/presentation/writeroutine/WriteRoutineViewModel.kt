@@ -250,6 +250,8 @@ class WriteRoutineViewModel @AssistedInject constructor(
                     repeatDays = repeatDays,
                     repeatType = repeatType,
                     startTime = intent.startTime,
+                    startDate = intent.startDate,
+                    endDate = intent.endDate,
                     subRoutineNames = intent.subRoutines,
                     loading = false,
                 )
