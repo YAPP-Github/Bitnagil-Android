@@ -16,8 +16,10 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,6 +36,7 @@ import com.threegap.bitnagil.domain.recommendroutine.model.RecommendCategory
 import com.threegap.bitnagil.presentation.recommendroutine.component.atom.RecommendCategoryChip
 import com.threegap.bitnagil.presentation.recommendroutine.component.block.EmotionRecommendRoutineButton
 import com.threegap.bitnagil.presentation.recommendroutine.component.block.RecommendRoutineItem
+import com.threegap.bitnagil.presentation.recommendroutine.component.template.EmptyRecommendRoutineView
 import com.threegap.bitnagil.presentation.recommendroutine.component.template.RecommendLevelBottomSheet
 import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutineIntent
 import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutineState
@@ -79,10 +82,18 @@ private fun RecommendRoutineScreen(
     onRecommendRoutineByEmotionClick: () -> Unit,
     onRegisterRoutineClick: (String) -> Unit,
 ) {
+    val listState = rememberLazyListState()
+
+    LaunchedEffect(uiState.selectedCategory) {
+        if (listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 0) {
+            listState.animateScrollToItem(0)
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(BitnagilTheme.colors.white)
+            .background(BitnagilTheme.colors.coolGray99)
             .statusBarsPadding(),
     ) {
         BitnagilTopBar(title = "추천 루틴")
@@ -107,7 +118,16 @@ private fun RecommendRoutineScreen(
             }
         }
 
-        Spacer(modifier = Modifier.height(18.dp))
+        if (uiState.shouldShowEmotionButton) {
+            Spacer(modifier = Modifier.height(20.dp))
+
+            EmotionRecommendRoutineButton(
+                onClick = onRecommendRoutineByEmotionClick,
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -118,9 +138,9 @@ private fun RecommendRoutineScreen(
                 .padding(start = 16.dp),
         ) {
             Text(
-                text = "루틴 목록",
-                color = BitnagilTheme.colors.coolGray10,
-                style = BitnagilTheme.typography.body1SemiBold,
+                text = "추천 루틴리스트",
+                color = BitnagilTheme.colors.coolGray60,
+                style = BitnagilTheme.typography.body2SemiBold,
                 modifier = Modifier.weight(1f),
             )
 
@@ -132,15 +152,15 @@ private fun RecommendRoutineScreen(
                     .clickableWithoutRipple { onShowDifficultyBottomSheet() },
             ) {
                 Text(
-                    text = uiState.selectedRecommendLevel?.displayName ?: "난이도 선택",
-                    color = BitnagilTheme.colors.coolGray60,
+                    text = "난이도 ${uiState.selectedRecommendLevel?.koreanLevel ?: "선택"}",
+                    color = BitnagilTheme.colors.coolGray40,
                     style = BitnagilTheme.typography.body2Medium,
                     modifier = Modifier.padding(start = 10.dp),
                 )
 
                 BitnagilIcon(
                     id = R.drawable.ic_down_arrow,
-                    tint = BitnagilTheme.colors.coolGray60,
+                    tint = BitnagilTheme.colors.coolGray40,
                     modifier = Modifier
                         .padding(end = 13.dp)
                         .size(16.dp),
@@ -150,27 +170,29 @@ private fun RecommendRoutineScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        Column(
-            modifier = Modifier.padding(horizontal = 16.dp),
-        ) {
+        if (uiState.currentRoutines.isEmpty() && uiState.selectedRecommendLevel != null) {
+            EmptyRecommendRoutineView(
+                modifier = Modifier.fillMaxSize(),
+            )
+        } else {
             LazyColumn(
+                state = listState,
                 verticalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(bottom = 12.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
             ) {
-                if (uiState.isDefaultCategory && uiState.emotionMarbleType == null) {
-                    item {
-                        EmotionRecommendRoutineButton(
-                            onClick = onRecommendRoutineByEmotionClick,
-                        )
-                    }
-                }
                 items(
                     items = uiState.currentRoutines,
-                    key = { "${it.id}_${it.name}" },
+                    key = { it.id },
                 ) { routine ->
                     RecommendRoutineItem(
-                        routineName = routine.name,
-                        routineDescription = routine.description,
-                        onAddRoutineClick = { onRegisterRoutineClick(routine.id.toString()) },
+                        routine = routine,
+                        onAddRoutineClick = {
+                            // todo 추천 카테고리 같이 넘겨주기
+                            onRegisterRoutineClick(routine.id.toString())
+                        },
                     )
                 }
             }
