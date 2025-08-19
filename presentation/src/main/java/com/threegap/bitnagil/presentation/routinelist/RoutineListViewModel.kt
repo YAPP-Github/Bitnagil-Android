@@ -72,9 +72,7 @@ class RoutineListViewModel @Inject constructor(
             }
 
             is RoutineListIntent.OnRegisterRoutineClick -> {
-                sendSideEffect(
-                    RoutineListSideEffect.NavigateToAddRoutine,
-                )
+                sendSideEffect(RoutineListSideEffect.NavigateToAddRoutine)
                 null
             }
 
@@ -141,6 +139,7 @@ class RoutineListViewModel @Inject constructor(
         viewModelScope.launch {
             deleteRoutineUseCase(selectedRoutine.routineId).fold(
                 onSuccess = {
+                    fetchRoutines()
                     sendIntent(RoutineListIntent.OnSuccessDeletedRoutine)
                 },
                 onFailure = {
@@ -157,6 +156,7 @@ class RoutineListViewModel @Inject constructor(
         viewModelScope.launch {
             deleteRoutineForDayUseCase(selectedRoutine.routineId).fold(
                 onSuccess = {
+                    fetchRoutines()
                     sendIntent(RoutineListIntent.OnSuccessDeletedRoutine)
                 },
                 onFailure = {
