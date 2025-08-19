@@ -1,6 +1,7 @@
 package com.threegap.bitnagil.presentation.onboarding.component.template
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,7 +39,6 @@ import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
 import com.threegap.bitnagil.presentation.common.ninepatch.ninePatchBackgroundNode
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingAbstractTextItem
-
 
 @Composable
 fun OnBoardingAbstractTemplate(
@@ -80,6 +82,7 @@ fun OnBoardingAbstractTemplate(
                 .fillMaxWidth()
                 .ninePatchBackgroundNode(R.drawable.img_texture_rectangle_4)
                 .padding(30.dp),
+            verticalArrangement = Arrangement.spacedBy(13.dp)
         ) {
             Text(
                 text = "${userName}님은 ...",
@@ -87,11 +90,11 @@ fun OnBoardingAbstractTemplate(
                 color = BitnagilTheme.colors.coolGray10,
             )
 
-            Spacer(modifier = Modifier.height(13.dp))
-
-            onBoardingAbstractTexts.forEach { onBoardingAbstractTextItemList ->
-                Spacer(modifier = Modifier.height(2.dp))
-                OnBoardingAbstractText(onBoardingAbstractTextList = onBoardingAbstractTextItemList)
+            onBoardingAbstractTexts.forEachIndexed { index, onBoardingAbstractTextItemList ->
+                OnBoardingAbstractText(
+                    onBoardingAbstractTextList = onBoardingAbstractTextItemList,
+                    iconResourceId = getIndexIconResourceId(index)
+                )
             }
         }
 
@@ -106,9 +109,19 @@ fun OnBoardingAbstractTemplate(
     }
 }
 
+private fun getIndexIconResourceId(index: Int): Int {
+    return when (index) {
+        0 -> R.drawable.img_circle_1
+        1 -> R.drawable.img_circle_2
+        2 -> R.drawable.img_circle_3
+        else -> R.drawable.img_circle_1
+    }
+}
+
 @Composable
 private fun OnBoardingAbstractText(
     onBoardingAbstractTextList: List<OnBoardingAbstractTextItem>,
+    iconResourceId: Int,
 ) {
     val annotatedString = buildAnnotatedString {
         onBoardingAbstractTextList.forEach {
@@ -127,15 +140,19 @@ private fun OnBoardingAbstractText(
     Row(
         modifier = Modifier.fillMaxWidth(),
     ) {
-        Column(
+        Image(
+            painter = painterResource(iconResourceId),
+            modifier = Modifier.padding(top = 8.dp).size(24.dp),
+            contentDescription = null,
+        )
+
+        Spacer(modifier = Modifier.width(14.dp))
+
+        UnderLinedText(
+            text = annotatedString,
+            dividerColor = BitnagilTheme.colors.coolGray90,
             modifier = Modifier.weight(1f)
-        ) {
-            UnderLinedText(
-                text = annotatedString,
-                dividerColor = BitnagilTheme.colors.coolGray90,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
+        )
     }
 }
 
@@ -148,7 +165,7 @@ private fun UnderLinedText(
     var textLayoutResult by remember { mutableStateOf<TextLayoutResult?>(null) }
     val density = LocalDensity.current
     val lineHeight = with(density) {
-        val extraSpacingInDp = 44.dp
+        val extraSpacingInDp = 39.dp
         return@with (extraSpacingInDp.value).dp.toSp()
     }
 
@@ -160,7 +177,7 @@ private fun UnderLinedText(
             lineHeightStyle = LineHeightStyle(
                 alignment = LineHeightStyle.Alignment.Center,
                 trim = LineHeightStyle.Trim.None
-            )
+            ),
         ),
         lineHeight = lineHeight,
         onTextLayout = { result ->
