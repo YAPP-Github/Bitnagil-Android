@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .navigationBarsPadding()
-                        .padding(bottom = 80.dp),
+                        .padding(bottom = if (mainNavigator.hasBottomNavigationBarRoute()) 80.dp else 16.dp),
                 )
             }
         }
