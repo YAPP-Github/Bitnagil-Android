@@ -189,7 +189,10 @@ private fun RecommendRoutineScreen(
                 ) { routine ->
                     RecommendRoutineItem(
                         routine = routine,
-                        onAddRoutineClick = { onRegisterRoutineClick(routine.id.toString()) },
+                        onAddRoutineClick = {
+                            // todo 추천 카테고리 같이 넘겨주기
+                            onRegisterRoutineClick(routine.id.toString())
+                        },
                     )
                 }
             }
