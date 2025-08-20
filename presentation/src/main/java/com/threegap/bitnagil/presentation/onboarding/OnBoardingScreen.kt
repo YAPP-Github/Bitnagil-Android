@@ -13,6 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.component.block.BitnagilProgressTopBar
 import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
+import com.threegap.bitnagil.presentation.common.toast.GlobalBitnagilToast
 import com.threegap.bitnagil.presentation.onboarding.component.template.OnBoardingAbstractTemplate
 import com.threegap.bitnagil.presentation.onboarding.component.template.OnBoardingIntroTemplate
 import com.threegap.bitnagil.presentation.onboarding.component.template.OnBoardingSelectTemplate
@@ -38,12 +39,17 @@ fun OnBoardingScreenContainer(
             OnBoardingSideEffect.NavigateToHomeScreen -> {
                 navigateToHome()
             }
+
+            is OnBoardingSideEffect.ShowToast -> {
+                GlobalBitnagilToast.showWarning(sideEffect.message)
+            }
         }
     }
 
     OnBoardingScreen(
         state = state,
         onClickNext = onBoardingViewModel::selectNext,
+        onClickLoadOnBoarding = onBoardingViewModel::loadOnBoardingItems,
         onClickPreviousInSelectOnBoarding = onBoardingViewModel::selectPrevious,
         onClickItem = onBoardingViewModel::selectItem,
         onClickRoutine = onBoardingViewModel::selectRoutine,
@@ -58,6 +64,7 @@ fun OnBoardingScreenContainer(
 private fun OnBoardingScreen(
     state: OnBoardingState,
     onClickNext: () -> Unit,
+    onClickLoadOnBoarding: () -> Unit,
     onClickPreviousInSelectOnBoarding: () -> Unit,
     onClickItem: (String) -> Unit,
     onClickRoutine: (String) -> Unit,
@@ -84,7 +91,7 @@ private fun OnBoardingScreen(
                     OnBoardingPageInfo.Intro -> {
                         OnBoardingIntroTemplate(
                             userName = state.userName,
-                            onClickNextButton = onClickNext
+                            onClickNextButton = onClickLoadOnBoarding
                         )
                     }
                     is OnBoardingPageInfo.Abstract -> {
@@ -129,6 +136,18 @@ private fun OnBoardingScreen(
                             onClickItem = onClickItem,
                         )
                     }
+
+                    is OnBoardingPageInfo.ExistedOnBoardingAbstract -> {
+                        OnBoardingAbstractTemplate(
+                            modifier = Modifier.weight(1f),
+                            title = "이전에 설정한 목표예요!\n변경하시겠어요?",
+                            onBoardingAbstractTexts = currentOnBoardingPageInfo.abstractTexts,
+                            onDispose = cancelRecommendRoutines,
+                            onClickNextButton = onClickLoadOnBoarding,
+                            nextButtonEnable = true,
+                            userName = state.userName,
+                        )
+                    }
                 }
             }
             OnBoardingState.Loading -> {
@@ -155,6 +174,7 @@ fun OnBoardingScreenPreview() {
             userName = "안드로이드"
         ),
         onClickNext = {},
+        onClickLoadOnBoarding = {},
         onClickPreviousInSelectOnBoarding = {},
         onClickItem = {},
         onClickRoutine = {},

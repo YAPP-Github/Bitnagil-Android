@@ -5,4 +5,5 @@ import com.threegap.bitnagil.presentation.common.mviviewmodel.MviSideEffect
 sealed class OnBoardingSideEffect : MviSideEffect {
     data object MoveToPreviousScreen : OnBoardingSideEffect()
     data object NavigateToHomeScreen : OnBoardingSideEffect()
+    data class ShowToast(val message: String) : OnBoardingSideEffect()
 }

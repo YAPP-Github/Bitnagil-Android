@@ -34,13 +34,13 @@ class OnBoardingRepositoryImpl @Inject constructor(
         selectedItemIdsWithOnBoardingId: List<Pair<String, List<String>>>,
     ): Result<List<OnBoardingRecommendRoutine>> {
         val timeSlot = selectedItemIdsWithOnBoardingId.find { it.first == OnBoardingDto.TimeSlot.id }?.second?.first()
-        val emotionType = selectedItemIdsWithOnBoardingId.find { it.first == OnBoardingDto.EmotionType.id }?.second?.first()
+        val emotionType = selectedItemIdsWithOnBoardingId.find { it.first == OnBoardingDto.EmotionType.id }?.second
         val realOutingFrequency = selectedItemIdsWithOnBoardingId.find { it.first == OnBoardingDto.RealOutingFrequency.id }?.second?.first()
         val targetOutingFrequency = selectedItemIdsWithOnBoardingId.find { it.first == OnBoardingDto.TargetOutingFrequency.id }?.second?.first()
 
         val request = GetOnBoardingRecommendRoutinesRequest(
             timeSlot = timeSlot ?: "",
-            emotionType = emotionType ?: "",
+            emotionType = emotionType ?: listOf(),
             realOutingFrequency = realOutingFrequency ?: "",
             targetOutingFrequency = targetOutingFrequency ?: "",
         )
@@ -61,6 +61,16 @@ class OnBoardingRepositoryImpl @Inject constructor(
             if (it.isSuccess) {
                 _onBoardingRecommendRoutineEventFlow.emit(OnBoardingRecommendRoutineEvent.AddRoutines(selectedRecommendRoutineIds))
             }
+        }
+    }
+
+    override suspend fun getUserOnBoarding(): Result<List<Pair<String, List<String>>>> {
+        return onBoardingDataSource.getUserOnBoarding().map {
+            listOf(
+                OnBoardingDto.TimeSlot.id to listOf(it.timeSlot),
+                OnBoardingDto.EmotionType.id to it.emotionTypes,
+                OnBoardingDto.TargetOutingFrequency.id to listOf(it.targetOutingFrequency),
+            )
         }
     }
 

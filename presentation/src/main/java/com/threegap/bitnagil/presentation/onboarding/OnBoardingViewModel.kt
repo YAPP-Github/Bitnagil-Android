@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingAbstractUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingsUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.GetRecommendOnBoardingRoutinesUseCase
+import com.threegap.bitnagil.domain.onboarding.usecase.GetUserOnBoardingUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.RegisterRecommendOnBoardingRoutinesUseCase
 import com.threegap.bitnagil.domain.user.usecase.FetchUserProfileUseCase
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
@@ -34,6 +35,7 @@ class OnBoardingViewModel @AssistedInject constructor(
     private val getOnBoardingAbstractUseCase: GetOnBoardingAbstractUseCase,
     private val registerRecommendOnBoardingRoutinesUseCase: RegisterRecommendOnBoardingRoutinesUseCase,
     private val fetchUserProfileUseCase: FetchUserProfileUseCase,
+    private val getUserOnBoardingUseCase: GetUserOnBoardingUseCase,
     @Assisted private val onBoardingArg: OnBoardingScreenArg,
 ) : MviViewModel<OnBoardingState, OnBoardingSideEffect, OnBoardingIntent>(
     initState = OnBoardingState.Loading,
@@ -45,31 +47,73 @@ class OnBoardingViewModel @AssistedInject constructor(
 
     // 내부에 전체 온보딩 항목 저장
     private val selectOnBoardingPageInfos = mutableListOf<OnBoardingPageInfo.SelectOnBoarding>()
+    private var existedOnBoardingAbstract: OnBoardingPageInfo.ExistedOnBoardingAbstract? = null
 
     private var loadRecommendRoutinesJob: Job? = null
 
     init {
-        loadOnBoardingItems()
+        loadInitData()
     }
 
-    private fun loadOnBoardingItems() {
+    private fun loadInitData() {
+        val onBoardingSetType = OnBoardingSetType.fromOnBoardingScreenArg(onBoardingArg)
+
+        when(onBoardingSetType) {
+            OnBoardingSetType.NEW -> {
+                loadIntro()
+            }
+            OnBoardingSetType.RESET -> {
+                loadUserOnBoarding()
+            }
+        }
+    }
+
+    private fun loadIntro() {
+        viewModelScope.launch {
+            val userName = fetchUserProfileUseCase().getOrNull()?.nickname ?: "-"
+
+            sendIntent(OnBoardingIntent.LoadIntroSuccess(userName = userName))
+        }
+    }
+
+    private fun loadUserOnBoarding() {
+        viewModelScope.launch {
+            val userName = fetchUserProfileUseCase().getOrNull()?.nickname ?: "-"
+            val userOnBoarding = getUserOnBoardingUseCase().fold(
+                onSuccess = { it },
+                onFailure = {
+                    sendIntent(OnBoardingIntent.LoadUserOnBoardingFailure(message = it.message ?: "에러가 발생했습니다. 잠시 후 시도해주세요."))
+                    return@launch
+                }
+            )
+
+            val onBoardingAbstract = getOnBoardingAbstractUseCase(selectedItemIdsWithOnBoardingId = userOnBoarding)
+
+            val abstractPagePrefixText = onBoardingAbstract.prefix
+            val abstractTexts = onBoardingAbstract.abstractTexts.map { onBoardingAbstractText ->
+                onBoardingAbstractText.textItems.map { onBoardingAbstractTextItem ->
+                    OnBoardingAbstractTextItem.fromOnBoardingAbstractTextItem(onBoardingAbstractTextItem)
+                }
+            }
+
+            sendIntent(OnBoardingIntent.LoadUserOnBoardingSuccess(
+                onBoardingAbstract = OnBoardingPageInfo.ExistedOnBoardingAbstract(
+                    prefix = abstractPagePrefixText,
+                    abstractTexts = abstractTexts,
+                ),
+                userName = userName,
+            ))
+        }
+    }
+
+    fun loadOnBoardingItems() {
         viewModelScope.launch {
             val onBoardings = getOnBoardingsUseCase()
             val onBoardingPages = onBoardings.map { onBoarding ->
                 OnBoardingPageInfo.SelectOnBoarding.fromOnBoarding(onBoarding = onBoarding)
             }
 
-            val userProfile = fetchUserProfileUseCase()
-            val userName = userProfile.fold(
-                onSuccess = {
-                    return@fold it.nickname
-                },
-                onFailure = {
-                    return@fold "-"
-                },
-            )
-
-            sendIntent(intent = OnBoardingIntent.LoadOnBoardingSuccess(onBoardingPageInfos = onBoardingPages, userName = userName))
+            sendIntent(intent = OnBoardingIntent.LoadOnBoardingSuccess(onBoardingPageInfos = onBoardingPages))
         }
     }
 
@@ -78,23 +122,42 @@ class OnBoardingViewModel @AssistedInject constructor(
         state: OnBoardingState,
     ): OnBoardingState? {
         when (intent) {
-            is OnBoardingIntent.LoadOnBoardingSuccess -> {
-                selectOnBoardingPageInfos.clear()
-                selectOnBoardingPageInfos.addAll(intent.onBoardingPageInfos)
-
-                val onBoardingSetType =  OnBoardingSetType.fromOnBoardingScreenArg(onBoardingArg)
-                val firstPage = when(onBoardingSetType) {
-                    OnBoardingSetType.NEW -> OnBoardingPageInfo.Intro
-                    OnBoardingSetType.RESET -> OnBoardingPageInfo.Intro
-                }
+            is OnBoardingIntent.LoadUserOnBoardingSuccess -> {
+                existedOnBoardingAbstract = intent.onBoardingAbstract
 
                 return OnBoardingState.Idle(
                     nextButtonEnable = true,
-                    currentOnBoardingPageInfo = firstPage,
-                    totalStep = selectOnBoardingPageInfos.size + 2,
+                    currentOnBoardingPageInfo = intent.onBoardingAbstract,
+                    totalStep = 1,
                     currentStep = 0,
-                    onBoardingSetType = onBoardingSetType,
+                    onBoardingSetType = OnBoardingSetType.RESET,
                     userName = intent.userName
+                )
+            }
+
+            is OnBoardingIntent.LoadIntroSuccess -> {
+                return OnBoardingState.Idle(
+                    nextButtonEnable = true,
+                    currentOnBoardingPageInfo = OnBoardingPageInfo.Intro,
+                    totalStep = 1,
+                    currentStep = 0,
+                    onBoardingSetType = OnBoardingSetType.NEW,
+                    userName = intent.userName
+                )
+            }
+
+            is OnBoardingIntent.LoadOnBoardingSuccess -> {
+                val currentState = state
+                if (currentState !is OnBoardingState.Idle) return null
+
+                selectOnBoardingPageInfos.clear()
+                selectOnBoardingPageInfos.addAll(intent.onBoardingPageInfos)
+
+                return currentState.copy(
+                    nextButtonEnable = false,
+                    currentOnBoardingPageInfo = intent.onBoardingPageInfos.first(),
+                    totalStep = selectOnBoardingPageInfos.size + 2,
+                    currentStep = 1,
                 )
             }
 
@@ -203,6 +266,12 @@ class OnBoardingViewModel @AssistedInject constructor(
                     currentOnBoardingPageInfo = intent.onBoardingAbstract,
                     currentStep = currentState.currentStep + 1,
                 )
+            }
+
+            is OnBoardingIntent.LoadUserOnBoardingFailure -> {
+                sendSideEffect(sideEffect = OnBoardingSideEffect.MoveToPreviousScreen)
+                sendSideEffect(sideEffect = OnBoardingSideEffect.ShowToast(message = intent.message))
+                return null
             }
         }
     }

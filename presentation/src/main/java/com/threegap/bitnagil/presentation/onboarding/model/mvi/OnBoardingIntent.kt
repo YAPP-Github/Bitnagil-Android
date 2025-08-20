@@ -5,7 +5,7 @@ import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingItem
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingPageInfo
 
 sealed class OnBoardingIntent : MviIntent {
-    data class LoadOnBoardingSuccess(val onBoardingPageInfos: List<OnBoardingPageInfo.SelectOnBoarding>, val userName: String) : OnBoardingIntent()
+    data class LoadOnBoardingSuccess(val onBoardingPageInfos: List<OnBoardingPageInfo.SelectOnBoarding>) : OnBoardingIntent()
     data class LoadOnBoardingAbstractSuccess(val onBoardingAbstract: OnBoardingPageInfo.Abstract) : OnBoardingIntent()
     data class LoadRecommendRoutinesSuccess(val routines: List<OnBoardingItem>) : OnBoardingIntent()
     data class SelectItem(val itemId: String) : OnBoardingIntent()
@@ -13,4 +13,7 @@ sealed class OnBoardingIntent : MviIntent {
     data object SelectNext : OnBoardingIntent()
     data object SelectPrevious : OnBoardingIntent()
     data object NavigateToHome : OnBoardingIntent()
+    data class LoadUserOnBoardingSuccess(val onBoardingAbstract: OnBoardingPageInfo.ExistedOnBoardingAbstract, val userName: String): OnBoardingIntent()
+    data class LoadUserOnBoardingFailure(val message: String): OnBoardingIntent()
+    data class LoadIntroSuccess(val userName: String): OnBoardingIntent()
 }
