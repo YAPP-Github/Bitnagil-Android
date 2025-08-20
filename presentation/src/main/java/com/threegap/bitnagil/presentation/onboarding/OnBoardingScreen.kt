@@ -78,11 +78,12 @@ private fun OnBoardingScreen(
             .background(BitnagilTheme.colors.white)
             .statusBarsPadding(),
     ) {
-        if (state.showProgress)
+        if (!state.hideToolbar)
             BitnagilProgressTopBar(
                 modifier = Modifier,
                 onBackClick = onClickPreviousInSelectOnBoarding,
                 progress = state.progress,
+                showProgress = state.showProgress
             )
 
         when (state) {
