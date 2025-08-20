@@ -9,6 +9,7 @@ import com.threegap.bitnagil.domain.routine.model.DayOfWeek
 import com.threegap.bitnagil.domain.routine.model.RecommendedRoutineType
 import com.threegap.bitnagil.domain.routine.model.Routine
 import com.threegap.bitnagil.presentation.home.util.formatExecutionTime12Hour
+import com.threegap.bitnagil.presentation.home.util.toShortDateFormat
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -18,9 +19,15 @@ data class RoutineUiModel(
     val repeatDay: List<DayOfWeek>,
     val executionTime: String,
     val routineDate: String,
+    val startDate: String,
+    val endDate: String,
+    val routineDeletedYn: Boolean,
     val subRoutineNames: List<String>,
     val recommendedRoutineType: RecommendedRoutineType?,
-) : Parcelable
+) : Parcelable {
+    val formattedDateRange: String
+        get() = "${startDate.toShortDateFormat()} - ${endDate.toShortDateFormat()}"
+}
 
 fun Routine.toUiModel(): RoutineUiModel =
     RoutineUiModel(
@@ -29,6 +36,9 @@ fun Routine.toUiModel(): RoutineUiModel =
         repeatDay = this.repeatDay,
         executionTime = this.executionTime.formatExecutionTime12Hour(),
         routineDate = this.routineDate,
+        startDate = this.startDate,
+        endDate = this.endDate,
+        routineDeletedYn = this.routineDeletedYn,
         subRoutineNames = this.subRoutineNames,
         recommendedRoutineType = this.recommendedRoutineType,
     )

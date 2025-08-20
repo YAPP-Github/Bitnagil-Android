@@ -11,6 +11,7 @@ private val koreanLocale = Locale.KOREAN
 private val monthYearFormatter = DateTimeFormatter.ofPattern("yyyy년 M월", koreanLocale)
 private val executionTimeFormatter12 = DateTimeFormatter.ofPattern("a h:mm", koreanLocale)
 private val executionTimeFormatter24 = DateTimeFormatter.ofPattern("HH:mm", koreanLocale)
+private val shortDateFormatter = DateTimeFormatter.ofPattern("yy.MM.dd")
 
 fun LocalDate.getCurrentWeekDays(): List<LocalDate> =
     (0..6).map { this.with(DayOfWeek.MONDAY).plusDays(it.toLong()) }
@@ -46,4 +47,12 @@ fun String.formatExecutionTime12Hour(): String =
         }
     } catch (e: Exception) {
         "시간 미정"
+    }
+
+fun String.toShortDateFormat(): String =
+    try {
+        val date = LocalDate.parse(this)
+        date.format(shortDateFormatter)
+    } catch (e: Exception) {
+        this
     }
