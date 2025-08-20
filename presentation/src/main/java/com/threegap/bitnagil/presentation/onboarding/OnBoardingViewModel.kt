@@ -58,7 +58,7 @@ class OnBoardingViewModel @AssistedInject constructor(
     private fun loadInitData() {
         val onBoardingSetType = OnBoardingSetType.fromOnBoardingScreenArg(onBoardingArg)
 
-        when(onBoardingSetType) {
+        when (onBoardingSetType) {
             OnBoardingSetType.NEW -> {
                 loadIntro()
             }
@@ -84,7 +84,7 @@ class OnBoardingViewModel @AssistedInject constructor(
                 onFailure = {
                     sendIntent(OnBoardingIntent.LoadUserOnBoardingFailure(message = it.message ?: "에러가 발생했습니다. 잠시 후 시도해주세요."))
                     return@launch
-                }
+                },
             )
 
             val onBoardingAbstract = getOnBoardingAbstractUseCase(selectedItemIdsWithOnBoardingId = userOnBoarding)
@@ -96,13 +96,15 @@ class OnBoardingViewModel @AssistedInject constructor(
                 }
             }
 
-            sendIntent(OnBoardingIntent.LoadUserOnBoardingSuccess(
-                onBoardingAbstract = OnBoardingPageInfo.ExistedOnBoardingAbstract(
-                    prefix = abstractPagePrefixText,
-                    abstractTexts = abstractTexts,
+            sendIntent(
+                OnBoardingIntent.LoadUserOnBoardingSuccess(
+                    onBoardingAbstract = OnBoardingPageInfo.ExistedOnBoardingAbstract(
+                        prefix = abstractPagePrefixText,
+                        abstractTexts = abstractTexts,
+                    ),
+                    userName = userName,
                 ),
-                userName = userName,
-            ))
+            )
         }
     }
 
@@ -131,7 +133,7 @@ class OnBoardingViewModel @AssistedInject constructor(
                     totalStep = 1,
                     currentStep = 0,
                     onBoardingSetType = OnBoardingSetType.RESET,
-                    userName = intent.userName
+                    userName = intent.userName,
                 )
             }
 
@@ -142,7 +144,7 @@ class OnBoardingViewModel @AssistedInject constructor(
                     totalStep = 1,
                     currentStep = 0,
                     onBoardingSetType = OnBoardingSetType.NEW,
-                    userName = intent.userName
+                    userName = intent.userName,
                 )
             }
 
@@ -203,7 +205,7 @@ class OnBoardingViewModel @AssistedInject constructor(
                     return currentState.copy(
                         currentStep = 0,
                         currentOnBoardingPageInfo = OnBoardingPageInfo.Intro,
-                        nextButtonEnable = true
+                        nextButtonEnable = true,
                     )
                 }
 

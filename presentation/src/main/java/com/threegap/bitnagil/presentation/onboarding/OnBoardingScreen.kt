@@ -78,13 +78,14 @@ private fun OnBoardingScreen(
             .background(BitnagilTheme.colors.white)
             .statusBarsPadding(),
     ) {
-        if (!state.hideToolbar)
+        if (!state.hideToolbar) {
             BitnagilProgressTopBar(
                 modifier = Modifier,
                 onBackClick = onClickPreviousInSelectOnBoarding,
                 progress = state.progress,
-                showProgress = state.showProgress
+                showProgress = state.showProgress,
             )
+        }
 
         when (state) {
             is OnBoardingState.Idle -> {
@@ -92,7 +93,7 @@ private fun OnBoardingScreen(
                     OnBoardingPageInfo.Intro -> {
                         OnBoardingIntroTemplate(
                             userName = state.userName,
-                            onClickNextButton = onClickLoadOnBoarding
+                            onClickNextButton = onClickLoadOnBoarding,
                         )
                     }
                     is OnBoardingPageInfo.Abstract -> {
@@ -172,7 +173,7 @@ fun OnBoardingScreenPreview() {
             totalStep = 5,
             currentStep = 1,
             onBoardingSetType = OnBoardingSetType.RESET,
-            userName = "안드로이드"
+            userName = "안드로이드",
         ),
         onClickNext = {},
         onClickLoadOnBoarding = {},

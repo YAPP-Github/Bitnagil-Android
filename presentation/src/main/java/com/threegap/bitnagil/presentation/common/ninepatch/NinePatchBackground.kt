@@ -1,12 +1,12 @@
 package com.threegap.bitnagil.presentation.common.ninepatch
 
 import android.graphics.drawable.NinePatchDrawable
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.updateBounds
 
@@ -22,7 +22,7 @@ fun Modifier.ninePatchBackgroundNode(drawableResId: Int): Modifier {
             Modifier.drawBehind {
                 ninePatchDrawable.updateBounds(0, 0, size.width.toInt(), size.height.toInt())
                 ninePatchDrawable.draw(drawContext.canvas.nativeCanvas)
-            }
+            },
         )
     } else {
         this

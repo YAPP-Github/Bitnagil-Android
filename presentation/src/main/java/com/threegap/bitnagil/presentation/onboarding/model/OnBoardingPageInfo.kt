@@ -14,7 +14,7 @@ sealed class OnBoardingPageInfo : Parcelable {
     data class ExistedOnBoardingAbstract(
         val prefix: String,
         @Stable val abstractTexts: List<List<OnBoardingAbstractTextItem>>,
-    ): OnBoardingPageInfo()
+    ) : OnBoardingPageInfo()
 
     @Parcelize
     data class SelectOnBoarding(

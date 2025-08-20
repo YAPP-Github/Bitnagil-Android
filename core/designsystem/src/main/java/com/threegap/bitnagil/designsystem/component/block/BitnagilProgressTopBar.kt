@@ -36,11 +36,12 @@ fun BitnagilProgressTopBar(
             tint = BitnagilTheme.colors.coolGray10,
         )
 
-        if (showProgress)
+        if (showProgress) {
             BitnagilProgressBar(
                 progress = progress,
                 modifier = Modifier,
             )
+        }
     }
 }
 
@@ -50,6 +51,6 @@ private fun BitnagilProgressTopBarPreview() {
     BitnagilProgressTopBar(
         progress = 1f,
         onBackClick = {},
-        showProgress = true
+        showProgress = true,
     )
 }

@@ -16,8 +16,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
-import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
 import com.threegap.bitnagil.designsystem.R
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
 import com.threegap.bitnagil.presentation.common.ninepatch.ninePatchBackgroundNode
 
 @Composable
@@ -26,20 +26,20 @@ fun OnBoardingIntroTemplate(
     onClickNextButton: () -> Unit,
 ) {
     Column(
-        modifier = Modifier.padding(horizontal = 16.dp, vertical = 20.dp)
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 20.dp),
     ) {
         Spacer(modifier = Modifier.height(64.dp))
 
         Text(
             text = "포모는 ${userName}님을 알고 싶어요!",
             style = BitnagilTheme.typography.title1Bold,
-            color = BitnagilTheme.colors.coolGray10
+            color = BitnagilTheme.colors.coolGray10,
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             Text(
                 modifier = Modifier
@@ -67,7 +67,7 @@ fun OnBoardingIntroTemplate(
                     .padding(horizontal = 27.dp, vertical = 20.dp),
                 text = "얼마나 바깥 바람을 쐬고 싶은지",
                 style = BitnagilTheme.typography.button1,
-                color = BitnagilTheme.colors.coolGray10
+                color = BitnagilTheme.colors.coolGray10,
             )
         }
 
@@ -78,7 +78,7 @@ fun OnBoardingIntroTemplate(
             contentDescription = null,
             modifier = Modifier
                 .widthIn(min = 263.dp)
-                .align(Alignment.End)
+                .align(Alignment.End),
         )
 
         Spacer(modifier = Modifier.height(40.dp))

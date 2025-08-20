@@ -74,7 +74,7 @@ fun OnBoardingAbstractTemplate(
                 .fillMaxWidth()
                 .zIndex(1f)
                 .widthIn(min = 311.dp)
-                .offset(y = 2.dp)
+                .offset(y = 2.dp),
         )
 
         Column(
@@ -82,7 +82,7 @@ fun OnBoardingAbstractTemplate(
                 .fillMaxWidth()
                 .ninePatchBackgroundNode(R.drawable.img_texture_rectangle_4)
                 .padding(30.dp),
-            verticalArrangement = Arrangement.spacedBy(13.dp)
+            verticalArrangement = Arrangement.spacedBy(13.dp),
         ) {
             Text(
                 text = "${userName}님은 ...",
@@ -93,7 +93,7 @@ fun OnBoardingAbstractTemplate(
             onBoardingAbstractTexts.forEachIndexed { index, onBoardingAbstractTextItemList ->
                 OnBoardingAbstractText(
                     onBoardingAbstractTextList = onBoardingAbstractTextItemList,
-                    iconResourceId = getIndexIconResourceId(index)
+                    iconResourceId = getIndexIconResourceId(index),
                 )
             }
         }
@@ -151,7 +151,7 @@ private fun OnBoardingAbstractText(
         UnderLinedText(
             text = annotatedString,
             dividerColor = BitnagilTheme.colors.coolGray90,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         )
     }
 }
@@ -160,7 +160,7 @@ private fun OnBoardingAbstractText(
 private fun UnderLinedText(
     text: AnnotatedString,
     dividerColor: Color,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     var textLayoutResult by remember { mutableStateOf<TextLayoutResult?>(null) }
     val density = LocalDensity.current
@@ -176,7 +176,7 @@ private fun UnderLinedText(
             lineHeight = lineHeight,
             lineHeightStyle = LineHeightStyle(
                 alignment = LineHeightStyle.Alignment.Center,
-                trim = LineHeightStyle.Trim.None
+                trim = LineHeightStyle.Trim.None,
             ),
         ),
         lineHeight = lineHeight,
@@ -200,7 +200,7 @@ private fun UnderLinedText(
                     )
                 }
             }
-        }
+        },
     )
 }
 
@@ -242,7 +242,7 @@ private fun OnBoardingAbstractTemplatePreview() {
                         text = "텍스트2",
                         isBold = false,
                     ),
-                )
+                ),
             ),
             onDispose = {},
             onClickNextButton = {},
