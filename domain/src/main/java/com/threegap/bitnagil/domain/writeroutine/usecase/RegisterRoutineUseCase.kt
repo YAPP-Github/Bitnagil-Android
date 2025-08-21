@@ -16,6 +16,7 @@ class RegisterRoutineUseCase @Inject constructor(
         startDate: Date,
         endDate: Date,
         subRoutines: List<String>,
+        recommendedRoutineType: String?,
     ): Result<Unit> {
         return writeRoutineRepository.registerRoutine(
             name = name,
@@ -24,6 +25,7 @@ class RegisterRoutineUseCase @Inject constructor(
             startDate = startDate,
             endDate = endDate,
             subRoutines = subRoutines,
+            recommendedRoutineType = recommendedRoutineType,
         )
     }
 }

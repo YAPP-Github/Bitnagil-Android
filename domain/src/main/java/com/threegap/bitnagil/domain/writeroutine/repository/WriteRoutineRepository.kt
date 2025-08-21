@@ -15,6 +15,7 @@ interface WriteRoutineRepository {
         startDate: Date,
         endDate: Date,
         subRoutines: List<String>,
+        recommendedRoutineType: String?,
     ): Result<Unit>
 
     suspend fun editRoutine(

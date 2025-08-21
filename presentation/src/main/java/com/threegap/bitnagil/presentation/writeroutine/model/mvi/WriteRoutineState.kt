@@ -29,6 +29,7 @@ data class WriteRoutineState(
     val repeatDaysUiExpanded: Boolean,
     val periodUiExpanded: Boolean,
     val startTimeUiExpanded: Boolean,
+    val recommendedRoutineType: String?,
 ) : MviState {
     companion object {
         val Init = WriteRoutineState(
@@ -79,6 +80,7 @@ data class WriteRoutineState(
             startTimeUiExpanded = false,
             startDate = Date.now(),
             endDate = Date.now(),
+            recommendedRoutineType = null,
         )
     }
 

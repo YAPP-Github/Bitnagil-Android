@@ -22,6 +22,7 @@ sealed class WriteRoutineIntent : MviIntent {
         val subRoutines: List<String>,
         val startDate: Date,
         val endDate: Date,
+        val recommendedRoutineType: String?,
     ) : WriteRoutineIntent()
     data object SelectAllTime : WriteRoutineIntent()
     data object ShowTimePickerBottomSheet : WriteRoutineIntent()
