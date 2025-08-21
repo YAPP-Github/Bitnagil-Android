@@ -202,11 +202,19 @@ class OnBoardingViewModel @AssistedInject constructor(
                 }
 
                 if (currentState.currentStep == 1) {
-                    return currentState.copy(
-                        currentStep = 0,
-                        currentOnBoardingPageInfo = OnBoardingPageInfo.Intro,
-                        nextButtonEnable = true,
-                    )
+                    return if (currentState.onBoardingSetType == OnBoardingSetType.RESET && existedOnBoardingAbstract != null) {
+                        currentState.copy(
+                            currentStep = 0,
+                            currentOnBoardingPageInfo = existedOnBoardingAbstract!!,
+                            nextButtonEnable = true,
+                        )
+                    } else {
+                        currentState.copy(
+                            currentStep = 0,
+                            currentOnBoardingPageInfo = OnBoardingPageInfo.Intro,
+                            nextButtonEnable = true,
+                        )
+                    }
                 }
 
                 val isSelectOnBoardingStep = currentState.currentStep <= selectOnBoardingPageInfos.size
