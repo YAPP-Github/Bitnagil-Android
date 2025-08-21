@@ -8,4 +8,6 @@ import kotlinx.parcelize.Parcelize
 data class SplashState(
     val userRole: UserRole? = null,
     val isAutoLoginCompleted: Boolean = false,
+    val isForceUpdateCheckCompleted: Boolean = false,
+    val forceUpdateRequired: Boolean = false,
 ) : MviState

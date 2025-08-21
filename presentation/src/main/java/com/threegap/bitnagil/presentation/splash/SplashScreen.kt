@@ -1,5 +1,6 @@
 package com.threegap.bitnagil.presentation.splash
 
+import androidx.activity.ComponentActivity
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.background
@@ -16,15 +17,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.presentation.splash.component.template.BitnagilLottieAnimation
+import com.threegap.bitnagil.presentation.splash.component.template.ForceUpdateDialog
 import com.threegap.bitnagil.presentation.splash.model.SplashSideEffect
+import com.threegap.bitnagil.presentation.splash.util.openAppInPlayStore
 import org.orbitmvi.orbit.compose.collectSideEffect
+import kotlin.system.exitProcess
 
 @Composable
 fun SplashScreenContainer(
@@ -34,6 +40,10 @@ fun SplashScreenContainer(
     navigateToHome: () -> Unit,
     viewModel: SplashViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
+    val activity = context as? ComponentActivity
+    val uiState by viewModel.stateFlow.collectAsStateWithLifecycle()
+
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
             is SplashSideEffect.NavigateToLogin -> navigateToLogin()
@@ -46,6 +56,16 @@ fun SplashScreenContainer(
     SplashScreen(
         onCompleted = viewModel::onAnimationCompleted,
     )
+
+    if (uiState.forceUpdateRequired) {
+        ForceUpdateDialog(
+            onUpdateClick = { openAppInPlayStore(activity) },
+            onDismissRequest = {
+                activity?.finishAffinity()
+                exitProcess(0)
+            },
+        )
+    }
 }
 
 @Composable

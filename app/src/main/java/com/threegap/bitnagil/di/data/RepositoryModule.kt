@@ -6,6 +6,7 @@ import com.threegap.bitnagil.data.onboarding.repositoryImpl.OnBoardingRepository
 import com.threegap.bitnagil.data.recommendroutine.repositoryImpl.RecommendRoutineRepositoryImpl
 import com.threegap.bitnagil.data.routine.repositoryImpl.RoutineRepositoryImpl
 import com.threegap.bitnagil.data.user.repositoryImpl.UserRepositoryImpl
+import com.threegap.bitnagil.data.version.repositoryImpl.VersionRepositoryImpl
 import com.threegap.bitnagil.data.writeroutine.repositoryImpl.WriteRoutineRepositoryImpl
 import com.threegap.bitnagil.domain.auth.repository.AuthRepository
 import com.threegap.bitnagil.domain.emotion.repository.EmotionRepository
@@ -13,6 +14,7 @@ import com.threegap.bitnagil.domain.onboarding.repository.OnBoardingRepository
 import com.threegap.bitnagil.domain.recommendroutine.repository.RecommendRoutineRepository
 import com.threegap.bitnagil.domain.routine.repository.RoutineRepository
 import com.threegap.bitnagil.domain.user.repository.UserRepository
+import com.threegap.bitnagil.domain.version.repository.VersionRepository
 import com.threegap.bitnagil.domain.writeroutine.repository.WriteRoutineRepository
 import dagger.Binds
 import dagger.Module
@@ -51,4 +53,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindRecommendRoutineRepository(recommendRoutineRepositoryImpl: RecommendRoutineRepositoryImpl): RecommendRoutineRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindVersionRepository(versionRepositoryImpl: VersionRepositoryImpl): VersionRepository
 }

@@ -9,4 +9,5 @@ sealed class SplashIntent : MviIntent {
     data object NavigateToHome : SplashIntent()
     data object NavigateToTermsAgreement : SplashIntent()
     data object NavigateToOnboarding : SplashIntent()
+    data class SetForceUpdateResult(val isRequired: Boolean) : SplashIntent()
 }
