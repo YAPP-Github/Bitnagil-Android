@@ -29,6 +29,7 @@ import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
+import com.threegap.bitnagil.presentation.common.toast.GlobalBitnagilToast
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.namefield.NameField
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.selectcell.SelectCell
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.writeroutinebutton.WriteRoutineButton
@@ -56,6 +57,10 @@ fun WriteRoutineScreenContainer(
         when (sideEffect) {
             WriteRoutineSideEffect.MoveToPreviousScreen -> {
                 navigateToBack()
+            }
+
+            is WriteRoutineSideEffect.ShowToast -> {
+                GlobalBitnagilToast.showCheck(sideEffect.message)
             }
         }
     }
