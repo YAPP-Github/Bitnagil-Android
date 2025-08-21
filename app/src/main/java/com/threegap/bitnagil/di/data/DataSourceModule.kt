@@ -14,6 +14,8 @@ import com.threegap.bitnagil.data.routine.datasource.RoutineRemoteDataSource
 import com.threegap.bitnagil.data.routine.datasourceImpl.RoutineRemoteDataSourceImpl
 import com.threegap.bitnagil.data.user.datasource.UserDataSource
 import com.threegap.bitnagil.data.user.datasourceImpl.UserDataSourceImpl
+import com.threegap.bitnagil.data.version.datasource.VersionDataSource
+import com.threegap.bitnagil.data.version.datasourceImpl.VersionDataSourceImpl
 import com.threegap.bitnagil.data.writeroutine.datasource.WriteRoutineDataSource
 import com.threegap.bitnagil.data.writeroutine.datasourceImpl.WriteRoutineDataSourceImpl
 import dagger.Binds
@@ -57,4 +59,8 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindRecommendRoutineDataSource(recommendRoutineDataSourceImpl: RecommendRoutineDataSourceImpl): RecommendRoutineDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindVersionDataSource(versionDataSourceImpl: VersionDataSourceImpl): VersionDataSource
 }
