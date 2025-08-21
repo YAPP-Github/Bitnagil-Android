@@ -5,10 +5,10 @@ minSdk = "28"
 targetSdk = "35"
 
 ## App Versioning
-versionCode = "4"
-versionMajor = "1"
+versionCode = "5"
+versionMajor = "2"
 versionMinor = "0"
-versionPatch = "2"
+versionPatch = "0"
 
 # Android Gradle Plugin
 androidGradlePlugin = "8.10.1"
