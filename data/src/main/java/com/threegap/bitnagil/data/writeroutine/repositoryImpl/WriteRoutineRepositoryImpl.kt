@@ -24,6 +24,7 @@ class WriteRoutineRepositoryImpl @Inject constructor(
         startDate: Date,
         endDate: Date,
         subRoutines: List<String>,
+        recommendedRoutineType: String?,
     ): Result<Unit> {
         val request = RegisterRoutineRequest(
             routineName = name,
@@ -32,6 +33,7 @@ class WriteRoutineRepositoryImpl @Inject constructor(
             routineStartDate = startDate.toFormattedString(),
             routineEndDate = endDate.toFormattedString(),
             subRoutineName = subRoutines,
+            recommendedRoutineType = recommendedRoutineType,
         )
         return writeRoutineDataSource.registerRoutine(request).also {
             if (it.isSuccess) {

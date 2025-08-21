@@ -17,4 +17,6 @@ data class RegisterRoutineRequest(
     val executionTime: String,
     @SerialName("subRoutineName")
     val subRoutineName: List<String>,
+    @SerialName("recommendedRoutineType")
+    val recommendedRoutineType: String?,
 )

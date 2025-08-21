@@ -93,6 +93,7 @@ class WriteRoutineViewModel @AssistedInject constructor(
                             ),
                             startDate = Date.fromString(routine.startDate),
                             endDate = Date.fromString(routine.endDate),
+                            recommendedRoutineType = null,
                         ),
                     )
                 },
@@ -121,6 +122,7 @@ class WriteRoutineViewModel @AssistedInject constructor(
                             ),
                             startDate = Date.now(),
                             endDate = Date.now(),
+                            recommendedRoutineType = routine.recommendedRoutineType.categoryName,
                         ),
                     )
                 },
@@ -134,7 +136,7 @@ class WriteRoutineViewModel @AssistedInject constructor(
     override suspend fun SimpleSyntax<WriteRoutineState, WriteRoutineSideEffect>.reduceState(
         intent: WriteRoutineIntent,
         state: WriteRoutineState,
-    ): WriteRoutineState {
+    ): WriteRoutineState? {
         when (intent) {
             WriteRoutineIntent.SelectAllTime -> {
                 return state.copy(
@@ -221,9 +223,7 @@ class WriteRoutineViewModel @AssistedInject constructor(
             WriteRoutineIntent.RegisterRoutineSuccess -> {
                 sendSideEffect(WriteRoutineSideEffect.MoveToPreviousScreen)
 
-                return state.copy(
-                    loading = false,
-                )
+                return null
             }
             WriteRoutineIntent.RegisterRoutineLoading -> {
                 return state.copy(
@@ -254,6 +254,7 @@ class WriteRoutineViewModel @AssistedInject constructor(
                     endDate = intent.endDate,
                     subRoutineNames = intent.subRoutines,
                     loading = false,
+                    recommendedRoutineType = intent.recommendedRoutineType,
                 )
             }
 
@@ -449,6 +450,8 @@ class WriteRoutineViewModel @AssistedInject constructor(
         viewModelScope.launch {
             val currentState = stateFlow.value
 
+            if (currentState.loading) return@launch
+
             val startTime = currentState.startTime ?: return@launch
 
             val repeatDay = when (currentState.repeatType) {
@@ -483,6 +486,7 @@ class WriteRoutineViewModel @AssistedInject constructor(
                         startDate = if (noRepeatRoutine) Date.now().toDomainDate() else currentState.startDate.toDomainDate(),
                         endDate = if (noRepeatRoutine) Date.now().toDomainDate() else currentState.endDate.toDomainDate(),
                         subRoutines = subRoutines,
+                        recommendedRoutineType = currentState.recommendedRoutineType,
                     )
 
                     if (registerRoutineResult.isSuccess) {
