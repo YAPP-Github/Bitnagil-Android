@@ -80,7 +80,9 @@ fun MainNavHost(
                     )
                 },
                 navigateToOnBoarding = {
-                    navigator.navController.navigate(Route.OnBoarding())
+                    navigator.navController.navigate(Route.OnBoarding()) {
+                        popUpTo(0) { inclusive = true }
+                    }
                 },
                 navigateToBack = {
                     if (navigator.navController.previousBackStackEntry != null) {

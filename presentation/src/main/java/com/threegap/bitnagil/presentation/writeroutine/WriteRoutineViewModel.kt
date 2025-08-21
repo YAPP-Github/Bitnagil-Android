@@ -205,6 +205,7 @@ class WriteRoutineViewModel @AssistedInject constructor(
             }
             WriteRoutineIntent.EditRoutineSuccess -> {
                 sendSideEffect(WriteRoutineSideEffect.MoveToPreviousScreen)
+                sendSideEffect(WriteRoutineSideEffect.ShowToast("루틴 수정이 완료되었습니다."))
 
                 return state.copy(
                     loading = false,

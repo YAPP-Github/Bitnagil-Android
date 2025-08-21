@@ -2,6 +2,7 @@ package com.threegap.bitnagil.presentation.recommendroutine
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.threegap.bitnagil.domain.emotion.usecase.GetEmotionChangeEventFlowUseCase
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendCategory
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendLevel
 import com.threegap.bitnagil.domain.recommendroutine.usecase.FetchRecommendRoutinesUseCase
@@ -21,6 +22,7 @@ import javax.inject.Inject
 class RecommendRoutineViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val fetchRecommendRoutinesUseCase: FetchRecommendRoutinesUseCase,
+    private val getEmotionChangeEventFlowUseCase: GetEmotionChangeEventFlowUseCase,
 ) : MviViewModel<RecommendRoutineState, RecommendRoutineSideEffect, RecommendRoutineIntent>(
     initState = RecommendRoutineState(),
     savedStateHandle = savedStateHandle,
@@ -28,6 +30,7 @@ class RecommendRoutineViewModel @Inject constructor(
 
     init {
         loadRecommendRoutines()
+        observeEmotionChangeEvent()
     }
 
     private var recommendRoutines: RecommendRoutinesUiModel = RecommendRoutinesUiModel()
@@ -87,6 +90,14 @@ class RecommendRoutineViewModel @Inject constructor(
             routines.filter { it.level == level }
         } else {
             routines
+        }
+    }
+
+    private fun observeEmotionChangeEvent() {
+        viewModelScope.launch {
+            getEmotionChangeEventFlowUseCase().collect {
+                loadRecommendRoutines()
+            }
         }
     }
 

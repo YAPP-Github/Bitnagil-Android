@@ -4,4 +4,5 @@ import com.threegap.bitnagil.presentation.common.mviviewmodel.MviSideEffect
 
 sealed class WriteRoutineSideEffect : MviSideEffect {
     data object MoveToPreviousScreen : WriteRoutineSideEffect()
+    data class ShowToast(val message: String) : WriteRoutineSideEffect()
 }
