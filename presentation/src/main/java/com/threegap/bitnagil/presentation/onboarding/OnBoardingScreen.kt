@@ -115,11 +115,7 @@ private fun OnBoardingScreen(
                             items = currentOnBoardingPageInfo.routines,
                             nextButtonEnable = state.nextButtonEnable,
                             onClickNextButton = onClickRegister,
-                            onClickItem = if (state.onBoardingSetType.canSelectRoutine) {
-                                onClickRoutine
-                            } else {
-                                null
-                            },
+                            onClickItem = onClickRoutine,
                             onClickSkip = if (state.onBoardingSetType.canSkip) {
                                 onClickSkip
                             } else {

@@ -237,7 +237,7 @@ class OnBoardingViewModel @AssistedInject constructor(
                 return currentState.copy(
                     currentOnBoardingPageInfo = recommendRoutinePageInfo,
                     currentStep = currentState.currentStep + 1,
-                    nextButtonEnable = !currentState.onBoardingSetType.canSelectRoutine,
+                    nextButtonEnable = !currentState.onBoardingSetType.mustSelectRecommendRoutine,
                 )
             }
 
