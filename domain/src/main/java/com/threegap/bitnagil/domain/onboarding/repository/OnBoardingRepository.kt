@@ -12,4 +12,5 @@ interface OnBoardingRepository {
     suspend fun getRecommendOnBoardingRouteList(selectedItemIdsWithOnBoardingId: List<Pair<String, List<String>>>): Result<List<OnBoardingRecommendRoutine>>
     suspend fun registerRecommendRoutineList(selectedRecommendRoutineIds: List<String>): Result<Unit>
     suspend fun getOnBoardingRecommendRoutineEventFlow(): Flow<OnBoardingRecommendRoutineEvent>
+    suspend fun getUserOnBoarding(): Result<List<Pair<String, List<String>>>>
 }

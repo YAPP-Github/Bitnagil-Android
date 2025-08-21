@@ -20,7 +20,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.tooling.preview.Preview
@@ -59,11 +58,7 @@ fun BitnagilProgressBar(
         if (animatedProgress > 0) {
             val progressEndX = size.width * animatedProgress
             drawLine(
-                brush = Brush.horizontalGradient(
-                    colors = listOf(color.gradientStartColor, color.gradientEndColor),
-                    startX = 0f,
-                    endX = progressEndX,
-                ),
+                color = color.progressColor,
                 start = Offset(0f, size.height / 2),
                 end = Offset(progressEndX, size.height / 2),
                 strokeWidth = strokeWidth,
@@ -75,16 +70,14 @@ fun BitnagilProgressBar(
 
 @Immutable
 data class BitnagilProgressBarColor(
-    val gradientStartColor: Color,
-    val gradientEndColor: Color,
+    val progressColor: Color,
     val backgroundColor: Color,
 ) {
     companion object {
         @Composable
         fun default(): BitnagilProgressBarColor = BitnagilProgressBarColor(
-            gradientStartColor = BitnagilTheme.colors.progressBarGradientStartColor,
-            gradientEndColor = BitnagilTheme.colors.progressBarGradientEndColor,
-            backgroundColor = BitnagilTheme.colors.white,
+            progressColor = BitnagilTheme.colors.orange500,
+            backgroundColor = BitnagilTheme.colors.coolGray97,
         )
     }
 }
