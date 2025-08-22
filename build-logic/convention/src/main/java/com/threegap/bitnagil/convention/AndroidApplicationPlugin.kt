@@ -1,6 +1,7 @@
 package com.threegap.bitnagil.convention
 
 import com.android.build.api.dsl.ApplicationExtension
+import com.threegap.bitnagil.convention.extension.configureAppVersion
 import com.threegap.bitnagil.convention.extension.configureComposeAndroid
 import com.threegap.bitnagil.convention.extension.configureKotlinAndroid
 import org.gradle.api.Plugin
@@ -21,10 +22,10 @@ class AndroidApplicationPlugin : Plugin<Project> {
         extensions.configure<ApplicationExtension> {
             configureKotlinAndroid(this)
             configureComposeAndroid(this)
+            configureAppVersion()
             with(defaultConfig) {
                 targetSdk = libs.findVersion("targetSdk").get().requiredVersion.toInt()
                 versionCode = libs.findVersion("versionCode").get().requiredVersion.toInt()
-                versionName = libs.findVersion("versionName").get().requiredVersion
             }
         }
     }

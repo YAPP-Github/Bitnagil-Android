@@ -6,6 +6,7 @@ import com.threegap.bitnagil.data.onboarding.service.OnBoardingService
 import com.threegap.bitnagil.data.recommendroutine.service.RecommendRoutineService
 import com.threegap.bitnagil.data.routine.service.RoutineService
 import com.threegap.bitnagil.data.user.service.UserService
+import com.threegap.bitnagil.data.version.service.VersionService
 import com.threegap.bitnagil.data.writeroutine.service.WriteRoutineService
 import com.threegap.bitnagil.di.core.Auth
 import com.threegap.bitnagil.di.core.NoneAuth
@@ -60,4 +61,9 @@ object ServiceModule {
     @Singleton
     fun provideRecommendRoutineService(@Auth retrofit: Retrofit): RecommendRoutineService =
         retrofit.create(RecommendRoutineService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideVersionService(@NoneAuth retrofit: Retrofit): VersionService =
+        retrofit.create(VersionService::class.java)
 }

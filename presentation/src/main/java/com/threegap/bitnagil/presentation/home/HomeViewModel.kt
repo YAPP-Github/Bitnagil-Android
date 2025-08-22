@@ -3,26 +3,21 @@ package com.threegap.bitnagil.presentation.home
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.threegap.bitnagil.domain.emotion.usecase.FetchTodayEmotionUseCase
 import com.threegap.bitnagil.domain.emotion.usecase.GetEmotionChangeEventFlowUseCase
-import com.threegap.bitnagil.domain.emotion.usecase.GetEmotionUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingRecommendRoutineEventFlowUseCase
-import com.threegap.bitnagil.domain.routine.model.RoutineCompletion
 import com.threegap.bitnagil.domain.routine.model.RoutineCompletionInfo
-import com.threegap.bitnagil.domain.routine.usecase.DeleteRoutineByDayUseCase
-import com.threegap.bitnagil.domain.routine.usecase.DeleteRoutineUseCase
+import com.threegap.bitnagil.domain.routine.model.RoutineCompletionInfos
 import com.threegap.bitnagil.domain.routine.usecase.FetchWeeklyRoutinesUseCase
 import com.threegap.bitnagil.domain.routine.usecase.RoutineCompletionUseCase
 import com.threegap.bitnagil.domain.user.usecase.FetchUserProfileUseCase
 import com.threegap.bitnagil.domain.writeroutine.usecase.GetWriteRoutineEventFlowUseCase
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
-import com.threegap.bitnagil.presentation.home.model.EmotionBallType
 import com.threegap.bitnagil.presentation.home.model.HomeIntent
 import com.threegap.bitnagil.presentation.home.model.HomeSideEffect
 import com.threegap.bitnagil.presentation.home.model.HomeState
-import com.threegap.bitnagil.presentation.home.model.RoutineSortType
 import com.threegap.bitnagil.presentation.home.model.RoutineUiModel
 import com.threegap.bitnagil.presentation.home.model.RoutinesUiModel
-import com.threegap.bitnagil.presentation.home.model.toRoutineByDayDeletion
 import com.threegap.bitnagil.presentation.home.model.toUiModel
 import com.threegap.bitnagil.presentation.home.util.getCurrentWeekDays
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,10 +37,8 @@ class HomeViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val fetchWeeklyRoutinesUseCase: FetchWeeklyRoutinesUseCase,
     private val fetchUserProfileUseCase: FetchUserProfileUseCase,
-    private val getEmotionUseCase: GetEmotionUseCase,
+    private val fetchTodayEmotionUseCase: FetchTodayEmotionUseCase,
     private val routineCompletionUseCase: RoutineCompletionUseCase,
-    private val deleteRoutineUseCase: DeleteRoutineUseCase,
-    private val deleteRoutineByDayUseCase: DeleteRoutineByDayUseCase,
     private val getWriteRoutineEventFlowUseCase: GetWriteRoutineEventFlowUseCase,
     private val getEmotionChangeEventFlowUseCase: GetEmotionChangeEventFlowUseCase,
     private val getOnBoardingRecommendRoutineEventFlowUseCase: GetOnBoardingRecommendRoutineEventFlowUseCase,
@@ -63,9 +56,9 @@ class HomeViewModel @Inject constructor(
         observeRecommendRoutineEvent()
         observeWeekChanges()
         observeRoutineUpdates()
-        fetchWeeklyRoutines(container.stateFlow.value.currentWeeks)
+        fetchWeeklyRoutines(stateFlow.value.currentWeeks)
         fetchUserProfile()
-        getMyEmotion(container.stateFlow.value.selectedDate)
+        fetchTodayEmotion(LocalDate.now())
     }
 
     override suspend fun SimpleSyntax<HomeState, HomeSideEffect>.reduceState(
@@ -110,112 +103,20 @@ class HomeViewModel @Inject constructor(
             }
 
             is HomeIntent.OnSubRoutineCompletionToggle -> {
-                updateSubRoutine(state, intent.routineId, intent.subRoutineId, intent.isCompleted)
+                updateSubRoutine(state, intent.routineId, intent.subRoutineIndex, intent.isCompleted)
             }
 
-            is HomeIntent.OnSortTypeChange -> {
-                val newSortType = if (state.currentSortType == intent.sortType) {
-                    RoutineSortType.TIME_ORDER
-                } else {
-                    intent.sortType
-                }
-                state.copy(
-                    currentSortType = newSortType,
-                )
+            is HomeIntent.LoadTodayEmotion -> {
+                state.copy(todayEmotion = intent.emotion)
             }
 
-            is HomeIntent.DeleteRoutineOptimistically -> {
-                val updatedRoutinesByDate = state.routines.routinesByDate.mapValues { (_, routineList) ->
-                    routineList.filterNot { it.routineId == intent.routineId }
-                }
-
-                state.copy(
-                    routines = RoutinesUiModel(routinesByDate = updatedRoutinesByDate),
-                    showDeleteConfirmDialog = false,
-                    deletingRoutine = null,
-                    routineDetailsBottomSheetVisible = false,
-                    selectedRoutine = null,
-                )
-            }
-
-            is HomeIntent.RestoreRoutinesAfterDeleteFailure -> {
-                state.copy(routines = intent.backupRoutines)
-            }
-
-            is HomeIntent.ConfirmRoutineDeletion -> null
-
-            is HomeIntent.ShowRoutineSortBottomSheet -> {
-                state.copy(routineSortBottomSheetVisible = true)
-            }
-
-            is HomeIntent.HideRoutineSortBottomSheet -> {
-                state.copy(routineSortBottomSheetVisible = false)
-            }
-
-            is HomeIntent.ShowRoutineDetailsBottomSheet -> {
-                state.copy(
-                    routineDetailsBottomSheetVisible = true,
-                    selectedRoutine = intent.routine,
-                )
-            }
-
-            is HomeIntent.HideRoutineDetailsBottomSheet -> {
-                state.copy(
-                    routineDetailsBottomSheetVisible = false,
-                    selectedRoutine = null,
-                )
-            }
-
-            is HomeIntent.ShowDeleteConfirmDialog -> {
-                state.copy(
-                    showDeleteConfirmDialog = true,
-                    deletingRoutine = intent.routine,
-                )
-            }
-
-            is HomeIntent.HideDeleteConfirmDialog -> {
-                state.copy(
-                    showDeleteConfirmDialog = false,
-                    deletingRoutine = null,
-                )
-            }
-
-            is HomeIntent.DeleteRoutineByDayOptimistically -> {
-                val dateKey = intent.performedDate
-                val updatedRoutinesByDate = state.routines.routinesByDate.toMutableMap()
-                val routinesForDate = updatedRoutinesByDate[dateKey]?.toMutableList()
-
-                if (routinesForDate != null) {
-                    updatedRoutinesByDate[dateKey] = routinesForDate.filterNot {
-                        it.routineId == intent.routineId
-                    }
-                }
-
-                state.copy(
-                    routines = RoutinesUiModel(routinesByDate = updatedRoutinesByDate),
-                    showDeleteConfirmDialog = false,
-                    deletingRoutine = null,
-                    routineDetailsBottomSheetVisible = false,
-                    selectedRoutine = null,
-                )
-            }
-
-            is HomeIntent.RestoreRoutinesAfterDeleteByDayFailure -> {
-                state.copy(routines = intent.backupRoutines)
-            }
-
-            is HomeIntent.ConfirmRoutineByDayDeletion -> null
-
-            is HomeIntent.LoadMyEmotion -> {
-                state.copy(myEmotion = intent.emotion)
+            is HomeIntent.OnHelpClick -> {
+                sendSideEffect(HomeSideEffect.NavigateToGuide)
+                null
             }
 
             is HomeIntent.OnRegisterEmotionClick -> {
-                if (state.myEmotion == null) {
-                    sendSideEffect(HomeSideEffect.NavigateToEmotion)
-                } else {
-                    sendSideEffect(HomeSideEffect.ShowToastWithIcon("선택한 감정 구슬이 이미 반영되었어요."))
-                }
+                sendSideEffect(HomeSideEffect.NavigateToEmotion)
                 null
             }
 
@@ -224,13 +125,13 @@ class HomeViewModel @Inject constructor(
                 null
             }
 
-            is HomeIntent.RoutineToggleCompletionFailure -> {
-                sendSideEffect(HomeSideEffect.ShowToast("루틴 완료 상태 저장에 실패했어요.\n다시 시도해 주세요."))
+            is HomeIntent.OnShowMoreRoutinesClick -> {
+                val selectedDate = stateFlow.value.selectedDate.toString()
+                sendSideEffect(HomeSideEffect.NavigateToRoutineList(selectedDate))
                 null
             }
 
-            is HomeIntent.NavigateToEditRoutine -> {
-                sendSideEffect(HomeSideEffect.NavigateToEditRoutine(intent.routineId))
+            is HomeIntent.RoutineToggleCompletionFailure -> {
                 null
             }
         }
@@ -249,7 +150,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             getEmotionChangeEventFlowUseCase().collect {
                 val currentDate = LocalDate.now()
-                getMyEmotion(currentDate)
+                fetchTodayEmotion(currentDate)
             }
         }
     }
@@ -310,8 +211,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             fetchWeeklyRoutinesUseCase(startDate, endDate).fold(
                 onSuccess = { routines ->
-                    val routinesUiModel = routines.toUiModel()
-                    sendIntent(HomeIntent.LoadWeeklyRoutines(routinesUiModel))
+                    sendIntent(HomeIntent.LoadWeeklyRoutines(routines.toUiModel()))
                     sendIntent(HomeIntent.UpdateLoading(false))
                 },
                 onFailure = { error ->
@@ -322,13 +222,12 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getMyEmotion(currentDate: LocalDate) {
+    private fun fetchTodayEmotion(currentDate: LocalDate) {
         sendIntent(HomeIntent.UpdateLoading(true))
         viewModelScope.launch {
-            getEmotionUseCase(currentDate.toString()).fold(
-                onSuccess = { emotion ->
-                    val ballType = EmotionBallType.fromDomainEmotion(emotion?.emotionType)
-                    sendIntent(HomeIntent.LoadMyEmotion(ballType))
+            fetchTodayEmotionUseCase(currentDate.toString()).fold(
+                onSuccess = { todayEmotion ->
+                    sendIntent(HomeIntent.LoadTodayEmotion(todayEmotion?.toUiModel()))
                     sendIntent(HomeIntent.UpdateLoading(false))
                 },
                 onFailure = { error ->
@@ -347,11 +246,11 @@ class HomeViewModel @Inject constructor(
         processRoutineToggleChanges(originalState, predictedUpdatedState)
     }
 
-    fun toggleSubRoutineCompletion(routineId: String, subRoutineId: String, isCompleted: Boolean) {
+    fun toggleSubRoutineCompletion(routineId: String, subRoutineIndex: Int, isCompleted: Boolean) {
         val originalState = container.stateFlow.value
-        sendIntent(HomeIntent.OnSubRoutineCompletionToggle(routineId, subRoutineId, isCompleted))
+        sendIntent(HomeIntent.OnSubRoutineCompletionToggle(routineId, subRoutineIndex, isCompleted))
 
-        val predictedUpdatedState = updateSubRoutine(originalState, routineId, subRoutineId, isCompleted)
+        val predictedUpdatedState = updateSubRoutine(originalState, routineId, subRoutineIndex, isCompleted)
         processRoutineToggleChanges(originalState, predictedUpdatedState)
     }
 
@@ -388,11 +287,10 @@ class HomeViewModel @Inject constructor(
             val routineIndex = routinesForDate.indexOfFirst { it.routineId == routineId }
             if (routineIndex == -1) return@updateRoutinesForDate false
 
-            val updatedRoutine = routinesForDate[routineIndex].copy(
-                isCompleted = isCompleted,
-                subRoutines = routinesForDate[routineIndex].subRoutines.map { subRoutine ->
-                    subRoutine.copy(isCompleted = isCompleted)
-                },
+            val routine = routinesForDate[routineIndex]
+            val updatedRoutine = routine.copy(
+                routineCompleteYn = isCompleted,
+                subRoutineCompleteYn = routine.subRoutineCompleteYn.map { isCompleted },
             )
 
             routinesForDate[routineIndex] = updatedRoutine
@@ -403,7 +301,7 @@ class HomeViewModel @Inject constructor(
     private fun updateSubRoutine(
         state: HomeState,
         routineId: String,
-        subRoutineId: String,
+        subRoutineIndex: Int,
         isCompleted: Boolean,
     ): HomeState {
         return updateRoutinesForDate(state) { routinesForDate ->
@@ -411,19 +309,20 @@ class HomeViewModel @Inject constructor(
             if (routineIndex == -1) return@updateRoutinesForDate false
 
             val routine = routinesForDate[routineIndex]
-            val updatedSubRoutines = routine.subRoutines.map { subRoutine ->
-                if (subRoutine.subRoutineId == subRoutineId) {
-                    subRoutine.copy(isCompleted = isCompleted)
-                } else {
-                    subRoutine
-                }
+
+            if (subRoutineIndex !in routine.subRoutineCompleteYn.indices) {
+                return@updateRoutinesForDate false
             }
 
-            val routineCompleted = if (isCompleted) updatedSubRoutines.all { it.isCompleted } else false
+            val updatedSubRoutineCompleteYn = routine.subRoutineCompleteYn.toMutableList().also {
+                it[subRoutineIndex] = isCompleted
+            }
+
+            val routineCompleted = updatedSubRoutineCompleteYn.all { it }
 
             val updatedRoutine = routine.copy(
-                subRoutines = updatedSubRoutines,
-                isCompleted = routineCompleted,
+                subRoutineCompleteYn = updatedSubRoutineCompleteYn,
+                routineCompleteYn = routineCompleted,
             )
 
             routinesForDate[routineIndex] = updatedRoutine
@@ -436,12 +335,18 @@ class HomeViewModel @Inject constructor(
         updateLogic: (MutableList<RoutineUiModel>) -> Boolean,
     ): HomeState {
         val dateKey = state.selectedDate.toString()
-        val routinesForDate = state.routines.routinesByDate[dateKey]?.toMutableList() ?: return state
+        val dayRoutines = state.routines.routines[dateKey] ?: return state
+        val routinesForDate = dayRoutines.routineList.toMutableList()
 
         if (!updateLogic(routinesForDate)) return state
 
-        val updatedRoutinesByDate = state.routines.routinesByDate.toMutableMap()
-        updatedRoutinesByDate[dateKey] = routinesForDate
+        val allCompleted = routinesForDate.all { it.routineCompleteYn }
+
+        val updatedRoutinesByDate = state.routines.routines.toMutableMap()
+        updatedRoutinesByDate[dateKey] = dayRoutines.copy(
+            routineList = routinesForDate,
+            allCompleted = allCompleted,
+        )
 
         return state.copy(routines = RoutinesUiModel(updatedRoutinesByDate))
     }
@@ -452,38 +357,24 @@ class HomeViewModel @Inject constructor(
         date: LocalDate,
     ): List<RoutineCompletionInfo> {
         val dateKey = date.toString()
-        val originalRoutineList = originalRoutines.routinesByDate[dateKey] ?: emptyList()
-        val updatedRoutineList = updatedRoutines.routinesByDate[dateKey] ?: emptyList()
+        val originalRoutineList = originalRoutines.routines[dateKey]?.routineList ?: emptyList()
+        val updatedRoutineList = updatedRoutines.routines[dateKey]?.routineList ?: emptyList()
 
         return buildList {
             updatedRoutineList.forEach { updatedRoutine ->
                 val originalRoutine = originalRoutineList.find { it.routineId == updatedRoutine.routineId }
 
-                if (originalRoutine?.isCompleted != updatedRoutine.isCompleted) {
+                val hasMainRoutineChanged = originalRoutine?.routineCompleteYn != updatedRoutine.routineCompleteYn
+                val hasSubRoutinesChanged = originalRoutine?.subRoutineCompleteYn != updatedRoutine.subRoutineCompleteYn
+
+                if (hasMainRoutineChanged || hasSubRoutinesChanged) {
                     add(
                         RoutineCompletionInfo(
-                            routineType = updatedRoutine.routineType,
                             routineId = updatedRoutine.routineId,
-                            historySeq = updatedRoutine.historySeq,
-                            isCompleted = updatedRoutine.isCompleted,
+                            routineCompleteYn = updatedRoutine.routineCompleteYn,
+                            subRoutineCompleteYn = updatedRoutine.subRoutineCompleteYn,
                         ),
                     )
-                }
-
-                updatedRoutine.subRoutines.forEach { updatedSubRoutine ->
-                    val originalSubRoutine = originalRoutine?.subRoutines
-                        ?.find { it.subRoutineId == updatedSubRoutine.subRoutineId }
-
-                    if (originalSubRoutine?.isCompleted != updatedSubRoutine.isCompleted) {
-                        add(
-                            RoutineCompletionInfo(
-                                routineType = updatedSubRoutine.routineType,
-                                routineId = updatedSubRoutine.subRoutineId,
-                                historySeq = updatedSubRoutine.historySeq,
-                                isCompleted = updatedSubRoutine.isCompleted,
-                            ),
-                        )
-                    }
                 }
             }
         }
@@ -495,9 +386,8 @@ class HomeViewModel @Inject constructor(
 
         if (unsyncedChanges.isEmpty()) return
 
-        val syncRequest = RoutineCompletion(
-            performedDate = dateKey,
-            routineCompletions = unsyncedChanges.toList(),
+        val syncRequest = RoutineCompletionInfos(
+            routineCompletionInfos = unsyncedChanges.toList(),
         )
 
         routineCompletionUseCase(syncRequest).fold(
@@ -515,53 +405,5 @@ class HomeViewModel @Inject constructor(
                 sendIntent(HomeIntent.UpdateLoading(false))
             },
         )
-    }
-
-    fun deleteRoutine(routineId: String) {
-        val currentRoutines = container.stateFlow.value.routines
-        sendIntent(HomeIntent.DeleteRoutineOptimistically(routineId))
-
-        viewModelScope.launch {
-            deleteRoutineUseCase(routineId).fold(
-                onSuccess = {
-                    sendIntent(HomeIntent.ConfirmRoutineDeletion(routineId))
-                },
-                onFailure = { error ->
-                    Log.e("HomeViewModel", "루틴 삭제 실패: ${error.message}")
-                    sendIntent(HomeIntent.RestoreRoutinesAfterDeleteFailure(currentRoutines))
-                },
-            )
-        }
-    }
-
-    fun deleteRoutineByDay(routineUiModel: RoutineUiModel) {
-        val currentRoutines = container.stateFlow.value.routines
-        val performedDate = container.stateFlow.value.selectedDate.toString()
-
-        sendIntent(
-            HomeIntent.DeleteRoutineByDayOptimistically(
-                routineId = routineUiModel.routineId,
-                performedDate = performedDate,
-            ),
-        )
-
-        viewModelScope.launch {
-            val routineByDayDeletion = routineUiModel.toRoutineByDayDeletion(performedDate)
-
-            deleteRoutineByDayUseCase(routineByDayDeletion).fold(
-                onSuccess = {
-                    sendIntent(
-                        HomeIntent.ConfirmRoutineByDayDeletion(
-                            routineId = routineUiModel.routineId,
-                            performedDate = performedDate,
-                        ),
-                    )
-                },
-                onFailure = {
-                    Log.e("HomeViewModel", "루틴 삭제 실패: ${it.message}")
-                    sendIntent(HomeIntent.RestoreRoutinesAfterDeleteByDayFailure(currentRoutines))
-                },
-            )
-        }
     }
 }

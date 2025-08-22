@@ -10,7 +10,6 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,13 +21,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
@@ -40,22 +38,22 @@ fun BitnagilFloatingButton(
     @DrawableRes id: Int,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    isActive: Boolean = false,
+    colors: BitnagilFloatingButtonColor = BitnagilFloatingButtonColor.default(),
 ) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
             .background(
-                color = BitnagilTheme.colors.navy500,
+                color = if (isActive) colors.activeIconBackgroundColor else colors.defaultIconBackgroundColor,
                 shape = CircleShape,
             )
             .size(52.dp)
             .clickableWithoutRipple { onClick() },
     ) {
-        Image(
-            imageVector = ImageVector.vectorResource(id),
-            contentDescription = null,
-            colorFilter = ColorFilter.tint(BitnagilTheme.colors.white),
-            modifier = Modifier.size(24.dp),
+        BitnagilIcon(
+            id = id,
+            tint = if (isActive) colors.activeIconColor else colors.defaultIconColor,
         )
     }
 }
@@ -66,8 +64,9 @@ fun BitnagilFloatingActionMenu(
     isExpanded: Boolean,
     onToggle: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
-    @DrawableRes defaultIcon: Int = R.drawable.ic_plus,
+    @DrawableRes defaultIcon: Int = R.drawable.ic_add,
     @DrawableRes activeIcon: Int = R.drawable.ic_close,
+    colors: BitnagilFloatingButtonColor = BitnagilFloatingButtonColor.default(),
 ) {
     Box(modifier = modifier) {
         AnimatedVisibility(
@@ -102,7 +101,7 @@ fun BitnagilFloatingActionMenu(
                     ),
             ) {
                 Column(
-                    modifier = Modifier.padding(vertical = 16.dp, horizontal = 22.dp),
+                    modifier = Modifier.padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(24.dp),
                 ) {
                     actions.forEach { action ->
@@ -125,6 +124,8 @@ fun BitnagilFloatingActionMenu(
             BitnagilFloatingButton(
                 id = if (isExpanded) activeIcon else defaultIcon,
                 onClick = { onToggle(!isExpanded) },
+                isActive = isExpanded,
+                colors = colors,
             )
         }
     }
@@ -135,6 +136,24 @@ data class FloatingActionItem(
     val text: String,
     val onClick: () -> Unit,
 )
+
+@Immutable
+data class BitnagilFloatingButtonColor(
+    val defaultIconColor: Color,
+    val defaultIconBackgroundColor: Color,
+    val activeIconColor: Color,
+    val activeIconBackgroundColor: Color,
+) {
+    companion object {
+        @Composable
+        fun default() = BitnagilFloatingButtonColor(
+            defaultIconColor = BitnagilTheme.colors.white,
+            defaultIconBackgroundColor = BitnagilTheme.colors.orange500,
+            activeIconColor = BitnagilTheme.colors.coolGray30,
+            activeIconBackgroundColor = BitnagilTheme.colors.white,
+        )
+    }
+}
 
 @Composable
 private fun FloatingActionMenuItem(
@@ -159,12 +178,13 @@ private fun FloatingActionMenuItem(
         BitnagilIcon(
             id = icon,
             tint = null,
+            modifier = Modifier.size(24.dp),
         )
 
         Text(
             text = text,
-            style = BitnagilTheme.typography.subtitle1Medium,
-            color = BitnagilTheme.colors.navy500,
+            style = BitnagilTheme.typography.body2Medium,
+            color = BitnagilTheme.colors.coolGray30,
         )
     }
 }
@@ -174,19 +194,14 @@ private fun FloatingActionMenuItem(
 private fun BitnagilFloatingButtonPreview() {
     Column {
         BitnagilFloatingButton(
-            id = R.drawable.ic_plus,
+            id = R.drawable.ic_add,
             onClick = {},
         )
 
         BitnagilFloatingActionMenu(
             actions = listOf(
                 FloatingActionItem(
-                    icon = R.drawable.ic_report,
-                    text = "제보하기",
-                    onClick = {},
-                ),
-                FloatingActionItem(
-                    icon = R.drawable.ic_add_routine,
+                    icon = R.drawable.ic_routine_add,
                     text = "루틴 등록",
                     onClick = {},
                 ),

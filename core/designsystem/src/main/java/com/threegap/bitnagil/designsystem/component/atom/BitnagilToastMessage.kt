@@ -8,9 +8,8 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -33,38 +32,34 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun BitnagilToastMessage(
+    @DrawableRes id: Int,
     text: String,
     modifier: Modifier = Modifier,
-    @DrawableRes id: Int? = null,
 ) {
-    Box(
+    Row(
         modifier = modifier
+            .padding(horizontal = 16.dp)
             .background(
-                color = BitnagilTheme.colors.navy400,
-                shape = RoundedCornerShape(8.dp),
+                color = BitnagilTheme.colors.coolGray30,
+                shape = RoundedCornerShape(12.dp),
             )
-            .padding(vertical = 10.dp, horizontal = 20.dp),
-        contentAlignment = Alignment.Center,
+            .fillMaxWidth()
+            .padding(vertical = 14.dp, horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            if (id != null) {
-                BitnagilIcon(
-                    id = id,
-                    tint = BitnagilTheme.colors.error,
-                    modifier = Modifier
-                        .padding(end = 4.dp)
-                        .size(24.dp),
-                )
-            }
-            Text(
-                text = text,
-                color = BitnagilTheme.colors.white,
-                style = BitnagilTheme.typography.body2Medium,
-                textAlign = TextAlign.Center,
-            )
-        }
+        BitnagilIcon(
+            id = id,
+            tint = null,
+            modifier = Modifier.size(24.dp),
+        )
+
+        Text(
+            text = text,
+            color = BitnagilTheme.colors.white,
+            style = BitnagilTheme.typography.body2Medium,
+            textAlign = TextAlign.Center,
+        )
     }
 }
 
@@ -98,17 +93,17 @@ fun BitnagilToastContainer(
 
 class BitnagilToastState {
     private var _text by mutableStateOf("")
-    private var _icon by mutableStateOf<Int?>(null)
+    private var _icon by mutableIntStateOf(0)
     private var _isVisible by mutableStateOf(false)
     private var _toastId by mutableIntStateOf(0)
     private var _lastShowTime = 0L
 
     val text: String get() = _text
-    val icon: Int? get() = _icon
+    val icon: Int get() = _icon
     val isVisible: Boolean get() = _isVisible
     val toastId: Int get() = _toastId
 
-    fun show(text: String, icon: Int? = null) {
+    fun show(text: String, icon: Int) {
         if (shouldPreventDuplicateShow(text, icon)) {
             return
         }
@@ -124,7 +119,7 @@ class BitnagilToastState {
         return _text == text && _icon == icon && currentTime - _lastShowTime < 500L
     }
 
-    private fun showToast(text: String, icon: Int?) {
+    private fun showToast(text: String, icon: Int) {
         _text = text
         _icon = icon
         _isVisible = true
@@ -139,16 +134,8 @@ fun rememberBitnagilToast(): BitnagilToastState = remember { BitnagilToastState(
 @Preview
 @Composable
 private fun BitnagilToastMessagePreview() {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        BitnagilToastMessage(
-            text = "버튼을 한 번 더 누르면 종료됩니다.",
-            id = R.drawable.ic_warning,
-        )
-
-        BitnagilToastMessage(
-            text = "루틴 완료 상태 저장에 실패했어요.\n다시 시도해 주세요.",
-        )
-    }
+    BitnagilToastMessage(
+        text = "버튼을 한 번 더 누르면 종료됩니다.",
+        id = R.drawable.ic_warning,
+    )
 }

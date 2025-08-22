@@ -10,34 +10,38 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
-import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilIconButton
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilProgressBar
-import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 
 @Composable
 fun BitnagilProgressTopBar(
     progress: Float,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
+    showProgress: Boolean,
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .height(54.dp)
-            .padding(start = 4.dp, end = 18.dp),
+            .padding(end = 76.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        horizontalArrangement = Arrangement.spacedBy(38.dp),
     ) {
-        BitnagilIcon(
-            id = R.drawable.ic_back_arrow_36,
-            modifier = Modifier.clickableWithoutRipple(onClick = onBackClick),
+        BitnagilIconButton(
+            id = R.drawable.ic_chevron_left_lg,
+            onClick = onBackClick,
+            tint = BitnagilTheme.colors.coolGray10,
         )
 
-        BitnagilProgressBar(
-            progress = progress,
-            modifier = Modifier,
-        )
+        if (showProgress) {
+            BitnagilProgressBar(
+                progress = progress,
+                modifier = Modifier,
+            )
+        }
     }
 }
 
@@ -45,7 +49,8 @@ fun BitnagilProgressTopBar(
 @Composable
 private fun BitnagilProgressTopBarPreview() {
     BitnagilProgressTopBar(
-        progress = 0.5f,
+        progress = 1f,
         onBackClick = {},
+        showProgress = true,
     )
 }

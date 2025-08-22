@@ -8,9 +8,6 @@ sealed interface Route {
     data object Splash : Route
 
     @Serializable
-    data object Intro : Route
-
-    @Serializable
     data object TermsAgreement : Route
 
     @Serializable
@@ -37,8 +34,18 @@ sealed interface Route {
     data class WriteRoutine(
         val routineId: String? = null,
         val isRegister: Boolean = true,
+        val isUpdateRoutineFromNowDate: Boolean = true,
     ) : Route
 
     @Serializable
     data object Emotion : Route
+
+    @Serializable
+    data object Withdrawal : Route
+
+    @Serializable
+    data class RoutineList(val selectedDate: String) : Route
+
+    @Serializable
+    data object Guide : Route
 }

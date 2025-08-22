@@ -13,4 +13,7 @@ sealed class OnBoardingIntent : MviIntent {
     data object SelectNext : OnBoardingIntent()
     data object SelectPrevious : OnBoardingIntent()
     data object NavigateToHome : OnBoardingIntent()
+    data class LoadUserOnBoardingSuccess(val onBoardingAbstract: OnBoardingPageInfo.ExistedOnBoardingAbstract, val userName: String) : OnBoardingIntent()
+    data class LoadUserOnBoardingFailure(val message: String) : OnBoardingIntent()
+    data class LoadIntroSuccess(val userName: String) : OnBoardingIntent()
 }

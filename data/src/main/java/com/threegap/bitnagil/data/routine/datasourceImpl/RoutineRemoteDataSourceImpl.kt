@@ -3,7 +3,6 @@ package com.threegap.bitnagil.data.routine.datasourceImpl
 import com.threegap.bitnagil.data.common.safeApiCall
 import com.threegap.bitnagil.data.common.safeUnitApiCall
 import com.threegap.bitnagil.data.routine.datasource.RoutineRemoteDataSource
-import com.threegap.bitnagil.data.routine.model.request.RoutineByDayDeletionRequestDto
 import com.threegap.bitnagil.data.routine.model.request.RoutineCompletionRequestDto
 import com.threegap.bitnagil.data.routine.model.response.RoutineDto
 import com.threegap.bitnagil.data.routine.model.response.RoutinesResponseDto
@@ -23,18 +22,18 @@ class RoutineRemoteDataSourceImpl @Inject constructor(
             routineService.routineCompletion(routineCompletionRequestDto)
         }
 
+    override suspend fun getRoutine(routineId: String): Result<RoutineDto> =
+        safeApiCall {
+            routineService.getRoutine(routineId)
+        }
+
     override suspend fun deleteRoutine(routineId: String): Result<Unit> =
         safeUnitApiCall {
             routineService.deleteRoutine(routineId)
         }
 
-    override suspend fun deleteRoutineByDay(routineByDayDeletionRequestDto: RoutineByDayDeletionRequestDto): Result<Unit> =
+    override suspend fun deleteRoutineForDay(routineId: String): Result<Unit> =
         safeUnitApiCall {
-            routineService.deleteRoutineByDay(routineByDayDeletionRequestDto)
-        }
-
-    override suspend fun getRoutine(routineId: String): Result<RoutineDto> =
-        safeApiCall {
-            routineService.getRoutine(routineId)
+            routineService.deleteRoutineForDay(routineId)
         }
 }

@@ -6,12 +6,12 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class RoutinesUiModel(
-    val routinesByDate: Map<String, List<RoutineUiModel>> = emptyMap(),
+    val routines: Map<String, DayRoutinesUiModel> = emptyMap(),
 ) : Parcelable
 
 fun Routines.toUiModel(): RoutinesUiModel =
     RoutinesUiModel(
-        routinesByDate = this.routinesByDate.mapValues { (_, routines) ->
-            routines.map { it.toUiModel() }
+        routines = this.routines.mapValues { (_, dayRoutines) ->
+            dayRoutines.toUiModel()
         },
     )

@@ -31,14 +31,14 @@ fun BitnagilOptionButton(
     ) {
         Text(
             text = title,
-            color = BitnagilTheme.colors.black,
-            style = BitnagilTheme.typography.body1Regular,
+            color = BitnagilTheme.colors.coolGray10,
+            style = BitnagilTheme.typography.body1Medium,
             modifier = Modifier.weight(1f),
         )
 
         BitnagilIcon(
-            id = R.drawable.ic_right_arrow_20,
-            tint = BitnagilTheme.colors.black,
+            id = R.drawable.ic_chevron_right_md,
+            tint = BitnagilTheme.colors.coolGray10,
             modifier = Modifier.padding(10.dp),
         )
     }

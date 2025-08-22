@@ -8,7 +8,7 @@ data class GetOnBoardingRecommendRoutinesRequest(
     @SerialName("timeSlot")
     val timeSlot: String,
     @SerialName("emotionType")
-    val emotionType: String,
+    val emotionType: List<String>,
     @SerialName("realOutingFrequency")
     val realOutingFrequency: String,
     @SerialName("targetOutingFrequency")

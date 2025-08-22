@@ -156,7 +156,7 @@ private fun TermsAgreementScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         BitnagilTextButton(
-            text = "시작하기",
+            text = "다음",
             onClick = onStartButtonClick,
             enabled = uiState.submitEnabled,
             modifier = Modifier

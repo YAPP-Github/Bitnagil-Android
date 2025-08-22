@@ -3,6 +3,7 @@ package com.threegap.bitnagil.presentation.mypage
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -25,10 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
-import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilIconButton
 import com.threegap.bitnagil.designsystem.component.block.BitnagilOptionButton
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
-import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.mypage.model.MyPageState
 
 @Composable
@@ -68,11 +68,11 @@ private fun MyPageScreen(
         BitnagilTopBar(
             title = "마이페이지",
             actions = {
-                BitnagilIcon(
+                BitnagilIconButton(
                     id = R.drawable.ic_setting,
-                    modifier = Modifier
-                        .clickableWithoutRipple(onClick = onClickSetting)
-                        .padding(6.dp),
+                    onClick = onClickSetting,
+                    tint = null,
+                    paddingValues = PaddingValues(6.dp),
                 )
             },
         )

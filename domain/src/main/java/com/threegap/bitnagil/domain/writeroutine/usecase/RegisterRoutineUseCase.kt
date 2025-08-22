@@ -1,5 +1,6 @@
 package com.threegap.bitnagil.domain.writeroutine.usecase
 
+import com.threegap.bitnagil.domain.writeroutine.model.Date
 import com.threegap.bitnagil.domain.writeroutine.model.RepeatDay
 import com.threegap.bitnagil.domain.writeroutine.model.Time
 import com.threegap.bitnagil.domain.writeroutine.repository.WriteRoutineRepository
@@ -12,13 +13,19 @@ class RegisterRoutineUseCase @Inject constructor(
         name: String,
         repeatDay: List<RepeatDay>,
         startTime: Time,
+        startDate: Date,
+        endDate: Date,
         subRoutines: List<String>,
+        recommendedRoutineType: String?,
     ): Result<Unit> {
         return writeRoutineRepository.registerRoutine(
             name = name,
             repeatDay = repeatDay,
             startTime = startTime,
+            startDate = startDate,
+            endDate = endDate,
             subRoutines = subRoutines,
+            recommendedRoutineType = recommendedRoutineType,
         )
     }
 }

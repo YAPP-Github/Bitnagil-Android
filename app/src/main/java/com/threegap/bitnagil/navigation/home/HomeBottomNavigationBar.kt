@@ -1,6 +1,5 @@
 package com.threegap.bitnagil.navigation.home
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -9,21 +8,22 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 
 @Composable
 fun HomeBottomNavigationBar(
@@ -31,26 +31,34 @@ fun HomeBottomNavigationBar(
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(color = BitnagilTheme.colors.white)
-            .padding(horizontal = 16.dp, vertical = 7.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        HomeRoute.entries.map { homeRoute ->
-            HomeBottomNavigationItem(
-                modifier = Modifier.weight(1f),
-                selectIconResourceId = homeRoute.selectIconResourceId,
-                unSelectIconResourceId = homeRoute.unSelectIconResourceId,
-                title = homeRoute.title,
-                onClick = {
-                    navController.navigate(homeRoute.route) {
-                        popUpTo(0) { inclusive = true }
-                    }
-                },
-                selected = navBackStackEntry?.destination?.route == homeRoute.route,
-            )
+    Column {
+        HorizontalDivider(
+            modifier = Modifier.fillMaxWidth(),
+            thickness = 1.dp,
+            color = BitnagilTheme.colors.coolGray98,
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(color = BitnagilTheme.colors.white)
+                .height(62.dp)
+                .padding(horizontal = 16.dp, vertical = 7.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            HomeRoute.entries.map { homeRoute ->
+                HomeBottomNavigationItem(
+                    modifier = Modifier.weight(1f),
+                    icon = homeRoute.icon,
+                    title = homeRoute.title,
+                    onClick = {
+                        navController.navigate(homeRoute.route) {
+                            popUpTo(0) { inclusive = true }
+                        }
+                    },
+                    selected = navBackStackEntry?.destination?.route == homeRoute.route,
+                )
+            }
         }
     }
 }
@@ -58,8 +66,7 @@ fun HomeBottomNavigationBar(
 @Composable
 private fun HomeBottomNavigationItem(
     modifier: Modifier = Modifier,
-    selectIconResourceId: Int,
-    unSelectIconResourceId: Int,
+    icon: Int,
     title: String,
     onClick: () -> Unit,
     selected: Boolean,
@@ -68,25 +75,26 @@ private fun HomeBottomNavigationItem(
     val isPressed by interactionSource.collectIsPressedAsState()
 
     val contentTintColor = when {
-        isPressed -> BitnagilTheme.colors.navy300
-        selected -> BitnagilTheme.colors.navy500
-        else -> BitnagilTheme.colors.navy100
+        isPressed -> BitnagilTheme.colors.coolGray10
+        selected -> BitnagilTheme.colors.coolGray10
+        else -> BitnagilTheme.colors.coolGray90
     }
-    val iconResourceId = if (selected) selectIconResourceId else unSelectIconResourceId
 
     Column(
-        modifier = modifier.clickable(
-            onClick = onClick,
-            interactionSource = interactionSource,
-            indication = null,
-        ),
+        modifier = modifier
+            .clickable(
+                onClick = onClick,
+                interactionSource = interactionSource,
+                indication = null,
+            )
+            .padding(4.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        Image(
-            painter = painterResource(id = iconResourceId),
-            contentDescription = title,
-            modifier = Modifier.padding(4.dp).size(24.dp),
-            colorFilter = ColorFilter.tint(color = contentTintColor),
+        BitnagilIcon(
+            id = icon,
+            modifier = Modifier.size(24.dp),
+            tint = contentTintColor,
         )
 
         Text(
@@ -104,6 +112,5 @@ private fun HomeBottomNavigationBarPreview() {
 
     HomeBottomNavigationBar(
         navController = navigator.navController,
-
     )
 }

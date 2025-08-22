@@ -47,6 +47,7 @@ fun RecommendLevelBottomSheet(
         ) {
             RecommendLevel.entries.forEachIndexed { index, recommendLevel ->
                 LevelOption(
+                    optionLevel = recommendLevel.koreanLevel,
                     optionText = recommendLevel.displayName,
                     isSelected = selectedRecommendLevel == recommendLevel,
                     onClick = {
@@ -75,6 +76,7 @@ fun RecommendLevelBottomSheet(
 
 @Composable
 private fun LevelOption(
+    optionLevel: String,
     optionText: String,
     isSelected: Boolean,
     onClick: () -> Unit,
@@ -87,35 +89,32 @@ private fun LevelOption(
             .padding(vertical = 8.dp),
     ) {
         Text(
-            text = optionText,
-            color = BitnagilTheme.colors.black,
+            text = "난이도 $optionLevel",
+            color = BitnagilTheme.colors.coolGray10,
+            style = BitnagilTheme.typography.body1SemiBold,
+        )
+
+        Text(
+            text = " | $optionText",
+            color = BitnagilTheme.colors.coolGray10,
             style = BitnagilTheme.typography.body1Regular,
             modifier = Modifier.weight(1f),
         )
 
         if (isSelected) {
             BitnagilIcon(
-                id = R.drawable.ic_check,
+                id = R.drawable.ic_check_md,
                 tint = BitnagilTheme.colors.orange500,
             )
         }
     }
 }
 
-@Preview
-@Composable
-private fun RecommendLevelBottomSheetPreview() {
-    RecommendLevelBottomSheet(
-        selectedRecommendLevel = null,
-        onRecommendLevelSelected = {},
-        onDismiss = {},
-    )
-}
-
 @Preview(showBackground = true)
 @Composable
 private fun LevelOptionPreview() {
     LevelOption(
+        optionLevel = "상",
         optionText = "가볍게 할 수 있어요",
         isSelected = true,
         onClick = {},

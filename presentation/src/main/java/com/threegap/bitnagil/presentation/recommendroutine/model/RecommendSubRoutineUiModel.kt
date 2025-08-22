@@ -6,8 +6,8 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class RecommendSubRoutineUiModel(
-    val id: Int,
-    val name: String,
+    val id: Int = 0,
+    val name: String = "",
 ) : Parcelable
 
 fun RecommendSubRoutine.toUiModel() =

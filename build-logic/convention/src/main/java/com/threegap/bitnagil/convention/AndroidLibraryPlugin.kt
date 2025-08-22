@@ -1,6 +1,7 @@
 package com.threegap.bitnagil.convention
 
 import com.android.build.gradle.LibraryExtension
+import com.threegap.bitnagil.convention.extension.configureAppVersion
 import com.threegap.bitnagil.convention.extension.configureKotlinAndroid
 import com.threegap.bitnagil.convention.extension.configureKotlinCoroutine
 import org.gradle.api.Plugin
@@ -17,6 +18,7 @@ class AndroidLibraryPlugin : Plugin<Project> {
         extensions.configure<LibraryExtension> {
             configureKotlinAndroid(this)
             configureKotlinCoroutine(this)
+            configureAppVersion()
         }
     }
 }

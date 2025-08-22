@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.threegap.bitnagil.domain.auth.model.UserRole
 import com.threegap.bitnagil.domain.auth.usecase.AutoLoginUseCase
+import com.threegap.bitnagil.domain.version.usecase.CheckUpdateRequirementUseCase
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
 import com.threegap.bitnagil.presentation.splash.model.SplashIntent
 import com.threegap.bitnagil.presentation.splash.model.SplashSideEffect
@@ -18,6 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    private val checkUpdateRequirementUseCase: CheckUpdateRequirementUseCase,
     private val autoLoginUseCase: AutoLoginUseCase,
 ) : MviViewModel<SplashState, SplashSideEffect, SplashIntent>(
     initState = SplashState(),
@@ -25,7 +27,7 @@ class SplashViewModel @Inject constructor(
 ) {
 
     init {
-        performAutoLogin()
+        performForceUpdateCheck()
     }
 
     override suspend fun SimpleSyntax<SplashState, SplashSideEffect>.reduceState(
@@ -40,8 +42,15 @@ class SplashViewModel @Inject constructor(
                 )
             }
 
-            is SplashIntent.NavigateToIntro -> {
-                sendSideEffect(SplashSideEffect.NavigateToIntro)
+            is SplashIntent.SetForceUpdateResult -> {
+                state.copy(
+                    forceUpdateRequired = intent.isRequired,
+                    isForceUpdateCheckCompleted = true,
+                )
+            }
+
+            is SplashIntent.NavigateToLogin -> {
+                sendSideEffect(SplashSideEffect.NavigateToLogin)
                 null
             }
 
@@ -61,6 +70,20 @@ class SplashViewModel @Inject constructor(
             }
         }
 
+    private fun performForceUpdateCheck() {
+        viewModelScope.launch {
+            val isUpdateRequired = withTimeoutOrNull(5000) {
+                checkUpdateRequirementUseCase().getOrElse { false }
+            } ?: false
+
+            sendIntent(SplashIntent.SetForceUpdateResult(isUpdateRequired))
+
+            if (!isUpdateRequired) {
+                performAutoLogin()
+            }
+        }
+    }
+
     private fun performAutoLogin() {
         viewModelScope.launch {
             try {
@@ -76,6 +99,9 @@ class SplashViewModel @Inject constructor(
 
     fun onAnimationCompleted() {
         val splashState = container.stateFlow.value
+
+        if (splashState.forceUpdateRequired) return
+
         if (!splashState.isAutoLoginCompleted) {
             viewModelScope.launch {
                 delay(100)
@@ -88,7 +114,7 @@ class SplashViewModel @Inject constructor(
             UserRole.GUEST -> sendIntent(SplashIntent.NavigateToTermsAgreement)
             UserRole.USER -> sendIntent(SplashIntent.NavigateToHome)
             UserRole.ONBOARDING -> sendIntent(SplashIntent.NavigateToOnboarding)
-            else -> sendIntent(SplashIntent.NavigateToIntro)
+            else -> sendIntent(SplashIntent.NavigateToLogin)
         }
     }
 }

@@ -15,6 +15,6 @@ data class RecommendRoutineState(
     val selectedRecommendLevel: RecommendLevel? = null,
     val emotionMarbleType: EmotionMarbleType? = null,
 ) : MviState {
-    val isDefaultCategory: Boolean
-        get() = selectedCategory == RecommendCategory.PERSONALIZED
+    val shouldShowEmotionButton: Boolean
+        get() = selectedCategory == RecommendCategory.PERSONALIZED && emotionMarbleType == null
 }

@@ -1,7 +1,6 @@
 package com.threegap.bitnagil.presentation.setting
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,9 +26,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.component.block.BitnagilOptionButton
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
+import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.setting.component.atom.settingtitle.SettingTitle
-import com.threegap.bitnagil.presentation.setting.component.block.ConfirmDialog
+import com.threegap.bitnagil.presentation.setting.component.block.LogoutConfirmDialog
+import com.threegap.bitnagil.presentation.setting.model.mvi.SettingIntent
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingSideEffect
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingState
 
@@ -39,21 +40,22 @@ fun SettingScreenContainer(
     navigateToBack: () -> Unit,
     navigateToTermsOfService: () -> Unit,
     navigateToPrivacyPolicy: () -> Unit,
-    navigateToIntro: () -> Unit,
+    navigateToLogin: () -> Unit,
+    navigateToWithdrawal: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsState()
 
     viewModel.sideEffectFlow.collectAsEffect { sideEffect ->
         when (sideEffect) {
-            SettingSideEffect.NavigateToIntro -> navigateToIntro()
+            SettingSideEffect.NavigateToLogin -> navigateToLogin()
+            SettingSideEffect.NavigateToWithdrawal -> navigateToWithdrawal()
         }
     }
 
-    state.showConfirmDialog?.let { dialogType ->
-        ConfirmDialog(
-            type = dialogType,
+    if (state.logoutConfirmDialogVisible) {
+        LogoutConfirmDialog(
             onDismiss = viewModel::hideConfirmDialog,
-            onConfirm = viewModel::confirmDialogAction,
+            onConfirm = viewModel::logout,
         )
     }
 
@@ -66,7 +68,7 @@ fun SettingScreenContainer(
         onClickTermsOfService = navigateToTermsOfService,
         onClickPrivacyPolicy = navigateToPrivacyPolicy,
         onClickLogout = viewModel::showLogoutDialog,
-        onClickWithdrawal = viewModel::showWithdrawalDialog,
+        onClickWithdrawal = { viewModel.sendIntent(SettingIntent.OnWithdrawalClick) },
     )
 }
 
@@ -116,7 +118,7 @@ private fun SettingScreen(
                     Text(
                         text = "버전 ",
                         color = BitnagilTheme.colors.black,
-                        style = BitnagilTheme.typography.body1Regular,
+                        style = BitnagilTheme.typography.body1Medium,
                     )
                     Text(
                         text = state.version,
@@ -124,30 +126,20 @@ private fun SettingScreen(
                         style = BitnagilTheme.typography.body1SemiBold,
                     )
                 }
-                if (state.version == state.latestVersion) {
-                    Text(
-                        "최신",
-                        modifier = Modifier
-                            .background(
-                                color = BitnagilTheme.colors.coolGray98,
-                                shape = RoundedCornerShape(4.dp),
-                            )
-                            .padding(horizontal = 10.dp, vertical = 5.dp),
-                        style = BitnagilTheme.typography.button2.copy(color = BitnagilTheme.colors.coolGray70),
-                    )
-                } else {
-                    Text(
-                        "업데이트",
-                        modifier = Modifier
-                            .background(
-                                color = BitnagilTheme.colors.lightBlue200,
-                                shape = RoundedCornerShape(4.dp),
-                            )
-                            .clickable(onClick = onClickUpdate)
-                            .padding(horizontal = 10.dp, vertical = 5.dp),
-                        style = BitnagilTheme.typography.button2.copy(color = BitnagilTheme.colors.navy500),
-                    )
-                }
+
+                val isLatest = state.version == state.latestVersion
+                Text(
+                    text = if (isLatest) "최신" else "업데이트",
+                    color = if (isLatest) BitnagilTheme.colors.coolGray70 else BitnagilTheme.colors.orange500,
+                    style = BitnagilTheme.typography.button2,
+                    modifier = Modifier
+                        .background(
+                            color = if (isLatest) BitnagilTheme.colors.coolGray98 else BitnagilTheme.colors.orange50,
+                            shape = RoundedCornerShape(8.dp),
+                        )
+                        .let { if (!isLatest) it.clickableWithoutRipple(onClick = onClickUpdate) else it }
+                        .padding(horizontal = 10.dp, vertical = 5.dp),
+                )
             }
 
             BitnagilOptionButton(
@@ -191,7 +183,7 @@ fun SettingScreenPreview() {
             version = "1.0.1",
             latestVersion = "1.0.0",
             loading = false,
-            showConfirmDialog = null,
+            logoutConfirmDialogVisible = false,
         ),
         toggleServiceAlarm = {},
         togglePushAlarm = {},

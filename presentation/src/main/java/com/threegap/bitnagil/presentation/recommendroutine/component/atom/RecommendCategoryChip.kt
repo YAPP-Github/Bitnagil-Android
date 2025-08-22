@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -26,19 +27,20 @@ fun RecommendCategoryChip(
         contentAlignment = Alignment.Center,
         modifier = modifier
             .background(
-                color = if (!isSelected) BitnagilTheme.colors.coolGray99 else BitnagilTheme.colors.navy500,
+                color = if (!isSelected) BitnagilTheme.colors.white else BitnagilTheme.colors.coolGray10,
                 shape = RoundedCornerShape(20.dp),
             )
+            .height(36.dp)
             .clickableWithoutRipple(onClick = onCategorySelected)
             .padding(
-                vertical = 9.dp,
+                vertical = 6.dp,
                 horizontal = 14.dp,
             ),
     ) {
         Text(
             text = categoryName,
-            color = if (!isSelected) BitnagilTheme.colors.navy100 else BitnagilTheme.colors.white,
-            style = if (!isSelected) BitnagilTheme.typography.caption1Regular else BitnagilTheme.typography.caption1SemiBold,
+            color = if (!isSelected) BitnagilTheme.colors.coolGray60 else BitnagilTheme.colors.white,
+            style = if (!isSelected) BitnagilTheme.typography.caption1Medium else BitnagilTheme.typography.caption1SemiBold,
         )
     }
 }
