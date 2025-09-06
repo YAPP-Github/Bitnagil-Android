@@ -101,6 +101,13 @@ class BitnagilTypography internal constructor(
         lineHeight = 30,
         letterSpacing = (-0.5f),
     ),
+    private val _cafe24SsurroundAir2: BitnagilTextStyle = BitnagilTextStyle(
+        fontFamily = cafe24SsurroundAir,
+        fontWeight = FontWeight.Light,
+        fontSize = 16,
+        lineHeight = 24,
+        letterSpacing = (-0.5f),
+    ),
 ) {
     private val _headline1Bold = _headline1.copy(fontWeight = FontWeight.Bold)
     private val _headline1Medium = _headline1.copy(fontWeight = FontWeight.Medium)
@@ -163,6 +170,7 @@ class BitnagilTypography internal constructor(
     val button1: TextStyle @Composable get() = _button1.toDpTextStyle
     val button2: TextStyle @Composable get() = _button2.toDpTextStyle
     val cafe24SsurroundAir: TextStyle @Composable get() = _cafe24SsurroundAir.toDpTextStyle
+    val cafe24SsurroundAir2: TextStyle @Composable get() = _cafe24SsurroundAir2.toDpTextStyle
 }
 
 internal val LocalBitnagilTypography = staticCompositionLocalOf { BitnagilTypography() }
