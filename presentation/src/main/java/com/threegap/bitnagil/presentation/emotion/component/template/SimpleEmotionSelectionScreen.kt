@@ -16,16 +16,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
-import coil3.request.ImageRequest
-import coil3.request.crossfade
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
+import com.threegap.bitnagil.presentation.emotion.component.atom.EmotionMarbleImage
+import com.threegap.bitnagil.presentation.emotion.model.EmotionImageUiModel
 import com.threegap.bitnagil.presentation.emotion.model.EmotionScreenStep
 import com.threegap.bitnagil.presentation.emotion.model.EmotionUiModel
 import com.threegap.bitnagil.presentation.emotion.model.mvi.EmotionState
@@ -65,14 +62,9 @@ fun SimpleEmotionSelectionScreen(
                             .clickableWithoutRipple { onClickEmotion(emotion.emotionType) },
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
-                        AsyncImage(
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data(emotion.imageUrl)
-                                .crossfade(true)
-                                .build(),
+                        EmotionMarbleImage(
                             modifier = Modifier.aspectRatio(1f),
-                            contentDescription = null,
-                            error = emotion.offlineBackupImageResourceId?.let { painterResource(it) },
+                            image = emotion.image,
                         )
 
                         Text(
@@ -95,27 +87,35 @@ private fun Preview() {
                 emotionTypeUiModels = listOf(
                     EmotionUiModel(
                         emotionType = "emotionType",
-                        imageUrl = "https://bitnagil-s3.s3.ap-northeast-2.amazonaws.com/home_satisfaction.png",
                         emotionMarbleName = "name1",
-                        offlineBackupImageResourceId = null,
+                        image = EmotionImageUiModel.Url(
+                            url = "https://bitnagil-s3.s3.ap-northeast-2.amazonaws.com/home_satisfaction.png",
+                            offlineBackupImageResourceId = null,
+                        ),
                     ),
                     EmotionUiModel(
                         emotionType = "emotionType",
-                        imageUrl = "https://bitnagil-s3.s3.ap-northeast-2.amazonaws.com/home_satisfaction.png",
                         emotionMarbleName = "name2",
-                        offlineBackupImageResourceId = null,
+                        image = EmotionImageUiModel.Url(
+                            url = "https://bitnagil-s3.s3.ap-northeast-2.amazonaws.com/home_satisfaction.png",
+                            offlineBackupImageResourceId = null,
+                        ),
                     ),
                     EmotionUiModel(
                         emotionType = "emotionType",
-                        imageUrl = "https://bitnagil-s3.s3.ap-northeast-2.amazonaws.com/home_satisfaction.png",
                         emotionMarbleName = "name3",
-                        offlineBackupImageResourceId = null,
+                        image = EmotionImageUiModel.Url(
+                            url = "https://bitnagil-s3.s3.ap-northeast-2.amazonaws.com/home_satisfaction.png",
+                            offlineBackupImageResourceId = null,
+                        ),
                     ),
                     EmotionUiModel(
                         emotionType = "emotionType",
-                        imageUrl = "https://bitnagil-s3.s3.ap-northeast-2.amazonaws.com/home_satisfaction.png",
                         emotionMarbleName = "name4",
-                        offlineBackupImageResourceId = null,
+                        image = EmotionImageUiModel.Url(
+                            url = "https://bitnagil-s3.s3.ap-northeast-2.amazonaws.com/home_satisfaction.png",
+                            offlineBackupImageResourceId = null,
+                        ),
                     ),
                 ),
                 isLoading = false,

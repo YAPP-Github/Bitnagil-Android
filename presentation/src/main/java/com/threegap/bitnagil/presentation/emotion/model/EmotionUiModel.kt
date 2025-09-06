@@ -9,15 +9,17 @@ import kotlinx.parcelize.Parcelize
 data class EmotionUiModel(
     val emotionType: String,
     val emotionMarbleName: String,
-    val imageUrl: String,
-    val offlineBackupImageResourceId: Int?,
+    val image: EmotionImageUiModel,
+    val selectable: Boolean = true,
 ) : Parcelable {
     companion object {
         fun fromDomain(emotion: Emotion) = EmotionUiModel(
             emotionType = emotion.emotionType,
             emotionMarbleName = emotion.emotionMarbleName,
-            imageUrl = emotion.imageUrl,
-            offlineBackupImageResourceId = getOfflineBackupImageResourceId(emotion.emotionType),
+            image = EmotionImageUiModel.Url(
+                url = emotion.imageUrl,
+                offlineBackupImageResourceId = getOfflineBackupImageResourceId(emotion.emotionType)
+            ),
         )
 
         private fun getOfflineBackupImageResourceId(emotionType: String): Int? {
@@ -31,5 +33,12 @@ data class EmotionUiModel(
                 else -> null
             }
         }
+
+        val Default = EmotionUiModel(
+            emotionType = "NONE",
+            emotionMarbleName = "구슬 선택",
+            image = EmotionImageUiModel.Resource(R.drawable.default_marble),
+            selectable = false,
+        )
     }
 }
