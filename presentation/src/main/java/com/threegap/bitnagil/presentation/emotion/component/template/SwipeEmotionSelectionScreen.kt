@@ -124,7 +124,7 @@ fun SwipeEmotionSelectionScreen(
                 EmotionMarbleImage(
                     modifier = Modifier.size(40.dp),
                     image = emotion.image,
-                    alpha = if (emotion.emotionType == currentItem.emotionType) 1f else 0.3f
+                    alpha = if (emotion.emotionType == currentItem.emotionType) 1f else 0.3f,
                 )
             }
         }
@@ -135,7 +135,7 @@ fun SwipeEmotionSelectionScreen(
             emotion = currentItem,
             showText = showText,
             enterTransition = fadeInTransition,
-            exitTransition = fadeOutTransition
+            exitTransition = fadeOutTransition,
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -197,7 +197,7 @@ private fun EmotionDescriptionText(
     exitTransition: ExitTransition,
 ) {
     Box(
-        modifier = Modifier.height(102.dp)
+        modifier = Modifier.height(102.dp),
     ) {
         AnimatedVisibility(
             visible = emotion.message != null && showText,
@@ -247,7 +247,7 @@ private fun GestureDescriptionText(
 ) {
     if (currentEmotionSelectable) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text("선택한 감정 구슬을 아래로 놓아주세요", style = BitnagilTheme.typography.body2Medium.copy(color = BitnagilTheme.colors.coolGray50))
 
@@ -262,7 +262,7 @@ private fun GestureDescriptionText(
     } else {
         Row(
             horizontalArrangement = Arrangement.spacedBy(26.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Image(
                 painter = painterResource(R.drawable.ic_double_left_arrow_24),
@@ -401,7 +401,7 @@ private fun EmotionPagerItem(
 
                         offsetY.animateTo(
                             targetValue = targetOffsetY,
-                            animationSpec = tween(durationMillis = 300)
+                            animationSpec = tween(durationMillis = 300),
                         )
                     }
                 },

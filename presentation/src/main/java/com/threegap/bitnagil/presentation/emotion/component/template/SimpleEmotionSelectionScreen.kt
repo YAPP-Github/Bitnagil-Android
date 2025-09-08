@@ -48,7 +48,7 @@ fun SimpleEmotionSelectionScreen(
 
         Box(
             modifier = Modifier.fillMaxHeight(),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(3),

@@ -12,10 +12,10 @@ import com.threegap.bitnagil.presentation.emotion.model.EmotionImageUiModel
 
 @Composable
 fun EmotionMarbleImage(
-     modifier: Modifier,
-     image: EmotionImageUiModel,
-     contentDescription: String? = null,
-     alpha: Float = 1f,
+    modifier: Modifier,
+    image: EmotionImageUiModel,
+    contentDescription: String? = null,
+    alpha: Float = 1f,
 ) {
     when (image) {
         is EmotionImageUiModel.Url -> {

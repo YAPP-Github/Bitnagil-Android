@@ -21,11 +21,11 @@ data class EmotionUiModel(
             emotionMarbleName = emotion.emotionMarbleName,
             image = EmotionImageUiModel.Url(
                 url = emotion.imageUrl,
-                offlineBackupImageResourceId = getOfflineBackupImageResourceId(emotion.emotionType)
+                offlineBackupImageResourceId = getOfflineBackupImageResourceId(emotion.emotionType),
             ),
             message = getMessage(emotion.emotionType),
             symbolBackgroundColor = getSymbolBackgroundColorString(emotion.emotionType),
-            symbolColor = getSymbolColorString(emotion.emotionType)
+            symbolColor = getSymbolColorString(emotion.emotionType),
         )
 
         private fun getOfflineBackupImageResourceId(emotionType: String): Int? {
@@ -83,7 +83,7 @@ data class EmotionUiModel(
             selectable = false,
             message = "오늘 기분 어때요?\n기록해 두면 내 루틴에 도움 돼요!",
             symbolBackgroundColor = 0xFFEAEBEC,
-            symbolColor = 0xFF171719
+            symbolColor = 0xFF171719,
         )
     }
 }
