@@ -15,6 +15,7 @@ fun EmotionMarbleImage(
      modifier: Modifier,
      image: EmotionImageUiModel,
      contentDescription: String? = null,
+     alpha: Float = 1f,
 ) {
     when (image) {
         is EmotionImageUiModel.Url -> {
@@ -25,6 +26,7 @@ fun EmotionMarbleImage(
                     .build(),
                 modifier = modifier,
                 contentDescription = null,
+                alpha = alpha,
                 error = image.offlineBackupImageResourceId?.let { painterResource(it) },
             )
         }

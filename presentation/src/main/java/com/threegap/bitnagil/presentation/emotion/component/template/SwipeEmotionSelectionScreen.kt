@@ -1,6 +1,8 @@
 package com.threegap.bitnagil.presentation.emotion.component.template
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -67,7 +69,6 @@ import com.threegap.bitnagil.presentation.emotion.model.mvi.EmotionState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
-import kotlin.math.max
 
 @Composable
 fun SwipeEmotionSelectionScreen(
@@ -75,6 +76,28 @@ fun SwipeEmotionSelectionScreen(
     onClickPreviousButton: () -> Unit,
     onSelectEmotion: (String) -> Unit,
 ) {
+    val fadeInTransition = remember { fadeIn(animationSpec = tween(150)) }
+    val fadeOutTransition = remember { fadeOut(animationSpec = tween(50)) }
+
+    val emotions = remember(state.emotionTypeUiModels) { state.emotionTypeUiModels + EmotionUiModel.Default }
+    val actualItemCount = emotions.size
+
+    val pagerState = rememberPagerState(
+        initialPage = Int.MAX_VALUE / 2 - (Int.MAX_VALUE / 2 % actualItemCount),
+        pageCount = { Int.MAX_VALUE },
+    )
+    var showText by remember { mutableStateOf(true) }
+    val currentItem = emotions[pagerState.currentPage % actualItemCount]
+
+    LaunchedEffect(pagerState.isScrollInProgress) {
+        if (pagerState.isScrollInProgress) {
+            showText = false
+        } else {
+            delay(250)
+            showText = true
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -99,47 +122,21 @@ fun SwipeEmotionSelectionScreen(
         ) {
             state.emotionTypeUiModels.forEach { emotion ->
                 EmotionMarbleImage(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .background(color = BitnagilTheme.colors.coolGray98),
+                    modifier = Modifier.size(40.dp),
                     image = emotion.image,
+                    alpha = if (emotion.emotionType == currentItem.emotionType) 1f else 0.3f
                 )
             }
         }
 
         Spacer(modifier = Modifier.height(26.dp))
 
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Box(
-                modifier = Modifier
-                    .background(Color(0xFFEFECFF), shape = RoundedCornerShape(12.dp))
-                    .padding(20.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    "평온함은 마음이 고요하고 편안해\n균형을 이루는 상태에요",
-                    style = BitnagilTheme.typography.cafe24SsurroundAir2.copy(color = Color(0xFF692BD0)),
-                    textAlign = TextAlign.Center,
-                )
-            }
-
-            Canvas(
-                modifier = Modifier
-                    .height(10.dp)
-                    .width(24.dp),
-            ) {
-                val path = Path().apply {
-                    moveTo(0f, 0f)
-                    lineTo(size.width, 0f)
-                    lineTo(size.width / 2 , size.height)
-                    lineTo(0f, 0f)
-                    close()
-                }
-                drawPath(path, color = Color(0xFFEFECFF))
-            }
-        }
+        EmotionDescriptionText(
+            emotion = currentItem,
+            showText = showText,
+            enterTransition = fadeInTransition,
+            exitTransition = fadeOutTransition
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -149,10 +146,15 @@ fun SwipeEmotionSelectionScreen(
             EmotionPager(
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(bottom = 90.dp)
                     .zIndex(1f),
-                emotions = state.emotionTypeUiModels,
+                emotions = emotions,
                 enabled = !state.isLoading,
                 onSelectEmotion = onSelectEmotion,
+                pagerState = pagerState,
+                showText = showText,
+                marbleNameTextEnterTransition = fadeInTransition,
+                marbleNameTextExitTransition = fadeOutTransition,
             )
 
             Column(
@@ -160,7 +162,7 @@ fun SwipeEmotionSelectionScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 GestureDescriptionText(
-                    currentEmotionSelectable = state.emotionTypeUiModels.any { it.selectable },
+                    currentEmotionSelectable = currentItem.selectable,
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -183,6 +185,58 @@ fun SwipeEmotionSelectionScreen(
                     .offset(x = (-20).dp, y = (-70).dp),
                 contentDescription = null,
             )
+        }
+    }
+}
+
+@Composable
+private fun EmotionDescriptionText(
+    emotion: EmotionUiModel,
+    showText: Boolean,
+    enterTransition: EnterTransition,
+    exitTransition: ExitTransition,
+) {
+    Box(
+        modifier = Modifier.height(102.dp)
+    ) {
+        AnimatedVisibility(
+            visible = emotion.message != null && showText,
+            enter = enterTransition,
+            exit = exitTransition,
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Box(
+                    modifier = Modifier
+                        .background(Color(emotion.symbolBackgroundColor), shape = RoundedCornerShape(12.dp))
+                        .padding(20.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = emotion.message ?: "",
+                        style = BitnagilTheme.typography.cafe24SsurroundAir2.copy(color = Color(emotion.symbolColor)),
+                        textAlign = TextAlign.Center,
+                        maxLines = 2,
+                        minLines = 2,
+                    )
+                }
+
+                Canvas(
+                    modifier = Modifier
+                        .height(10.dp)
+                        .width(24.dp),
+                ) {
+                    val path = Path().apply {
+                        moveTo(0f, 0f)
+                        lineTo(size.width, 0f)
+                        lineTo(size.width / 2, size.height)
+                        lineTo(0f, 0f)
+                        close()
+                    }
+                    drawPath(path, color = Color(emotion.symbolBackgroundColor))
+                }
+            }
         }
     }
 }
@@ -237,25 +291,12 @@ private fun EmotionPager(
     emotions: List<EmotionUiModel>,
     enabled: Boolean,
     onSelectEmotion: (String) -> Unit,
+    pagerState: PagerState,
+    showText: Boolean,
+    marbleNameTextEnterTransition: EnterTransition,
+    marbleNameTextExitTransition: ExitTransition,
 ) {
-    val actualItemCount = max(1, emotions.size)
-
-    val pagerState = rememberPagerState(
-        initialPage = Int.MAX_VALUE / 2 - (Int.MAX_VALUE / 2 % actualItemCount),
-        pageCount = { Int.MAX_VALUE },
-    )
-
-    var showText by remember { mutableStateOf(true) }
-    val currentItem = emotions[pagerState.currentPage % actualItemCount]
-
-    LaunchedEffect(pagerState.isScrollInProgress) {
-        if (pagerState.isScrollInProgress) {
-            showText = false
-        } else {
-            delay(500)
-            showText = true
-        }
-    }
+    val currentItem = emotions[pagerState.currentPage % emotions.size]
 
     BoxWithConstraints(
         modifier = modifier,
@@ -264,9 +305,10 @@ private fun EmotionPager(
         val density = LocalDensity.current
         val screenWidth = with(density) { constraints.maxWidth.toDp() }
 
-        val itemWidth = 140.dp
-        val contentPadding = (screenWidth - itemWidth) / 2
-        val pageSpacing = ((screenWidth - itemWidth * 2) / 2)
+        val itemSize = 140.dp
+        val centerItemYOffset = 50.dp
+        val contentPadding = (screenWidth - itemSize) / 2
+        val pageSpacing = ((screenWidth - itemSize * 2) / 2)
 
         HorizontalPager(
             modifier = Modifier.fillMaxHeight(),
@@ -275,32 +317,33 @@ private fun EmotionPager(
             contentPadding = PaddingValues(horizontal = contentPadding),
             verticalAlignment = Alignment.Top,
         ) { page ->
-            val itemIndex = page % actualItemCount
+            val itemIndex = page % emotions.size
             EmotionPagerItem(
                 emotion = emotions[itemIndex],
                 pagerState = pagerState,
                 page = page,
-                size = itemWidth,
-                maximumDraggableYOffset = constraints.maxHeight - 280.dp.dpToPx(),
-                enabled = enabled,
+                size = itemSize,
+                centerItemYOffset = centerItemYOffset.dpToPx(),
+                maximumDraggableYOffset = constraints.maxHeight - (itemSize + centerItemYOffset).dpToPx(),
+                enabled = enabled && emotions[itemIndex].selectable,
                 onSelectEmotion = onSelectEmotion,
             )
         }
 
         AnimatedVisibility(
             visible = showText,
-            enter = fadeIn(animationSpec = tween(150)),
-            exit = fadeOut(animationSpec = tween(50)),
+            enter = marbleNameTextEnterTransition,
+            exit = marbleNameTextExitTransition,
         ) {
             Box(
                 modifier = Modifier
-                    .background(Color(0x99E1D5FA), shape = RoundedCornerShape(10.dp))
+                    .background(Color(currentItem.symbolBackgroundColor), shape = RoundedCornerShape(10.dp))
                     .padding(horizontal = 16.dp, vertical = 8.dp),
             ) {
                 Text(
                     text = currentItem.emotionMarbleName,
                     style = BitnagilTheme.typography.title3SemiBold,
-                    color = Color(0xFF692BD0),
+                    color = Color(currentItem.symbolColor),
                 )
             }
         }
@@ -313,6 +356,7 @@ private fun EmotionPagerItem(
     pagerState: PagerState,
     page: Int,
     size: Dp,
+    centerItemYOffset: Float,
     maximumDraggableYOffset: Float = Float.MAX_VALUE,
     enabled: Boolean,
     onSelectEmotion: (String) -> Unit,
@@ -330,7 +374,7 @@ private fun EmotionPagerItem(
             .size(size)
             .aspectRatio(1f)
             .graphicsLayer {
-                translationY = lerp(size.value * 1f, 0f, pageOffset)
+                translationY = lerp(start = centerItemYOffset * 1f, stop = 0f, pageOffset)
             }
             .offset {
                 IntOffset(0, offsetY.value.toInt())
@@ -361,8 +405,7 @@ private fun EmotionPagerItem(
                         )
                     }
                 },
-            )
-            .background(color = BitnagilTheme.colors.coolGray98),
+            ),
     )
 }
 
@@ -380,6 +423,8 @@ private fun Preview() {
                             url = "https://bitnagil-s3.s3.ap-northeast-2.amazonaws.com/home_satisfaction.png",
                             offlineBackupImageResourceId = null,
                         ),
+                        symbolBackgroundColor = 0xFFEFECFF,
+                        symbolColor = 0xFF692BD0,
                     ),
                     EmotionUiModel(
                         emotionType = "emotionType",
@@ -388,8 +433,9 @@ private fun Preview() {
                             url = "https://bitnagil-s3.s3.ap-northeast-2.amazonaws.com/home_satisfaction.png",
                             offlineBackupImageResourceId = null,
                         ),
+                        symbolBackgroundColor = 0xFFE9FAD0,
+                        symbolColor = 0xFF609F00,
                     ),
-                    EmotionUiModel.Default
                 ),
                 isLoading = false,
                 step = EmotionScreenStep.Emotion,

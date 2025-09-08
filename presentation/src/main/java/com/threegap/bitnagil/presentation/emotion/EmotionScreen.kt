@@ -7,7 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.emotion.component.template.EmotionRecommendRoutineScreen
-import com.threegap.bitnagil.presentation.emotion.component.template.SimpleEmotionSelectionScreen
+import com.threegap.bitnagil.presentation.emotion.component.template.SwipeEmotionSelectionScreen
 import com.threegap.bitnagil.presentation.emotion.model.EmotionScreenStep
 import com.threegap.bitnagil.presentation.emotion.model.mvi.EmotionSideEffect
 
@@ -29,10 +29,10 @@ fun EmotionScreenContainer(
     }
 
     when (state.step) {
-        EmotionScreenStep.Emotion -> SimpleEmotionSelectionScreen(
+        EmotionScreenStep.Emotion -> SwipeEmotionSelectionScreen(
             state = state,
             onClickPreviousButton = navigateToBack,
-            onClickEmotion = viewModel::selectEmotion,
+            onSelectEmotion = viewModel::selectEmotion,
         )
         EmotionScreenStep.RecommendRoutines -> EmotionRecommendRoutineScreen(
             state = state,
