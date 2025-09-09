@@ -316,6 +316,7 @@ private fun EmotionPager(
             pageSpacing = pageSpacing,
             contentPadding = PaddingValues(horizontal = contentPadding),
             verticalAlignment = Alignment.Top,
+            userScrollEnabled = enabled,
         ) { page ->
             val itemIndex = page % emotions.size
             EmotionPagerItem(

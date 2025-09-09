@@ -13,6 +13,7 @@ import com.threegap.bitnagil.presentation.emotion.model.mvi.EmotionIntent
 import com.threegap.bitnagil.presentation.emotion.model.mvi.EmotionSideEffect
 import com.threegap.bitnagil.presentation.emotion.model.mvi.EmotionState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
 import javax.inject.Inject
@@ -103,22 +104,35 @@ class EmotionViewModel @Inject constructor(
                 sendSideEffect(EmotionSideEffect.NavigateToBack)
                 return null
             }
+
+            is EmotionIntent.RegisterEmotionFailure -> {
+                sendSideEffect(EmotionSideEffect.ShowToast(intent.message))
+                sendSideEffect(EmotionSideEffect.NavigateToBack)
+                return null
+            }
         }
     }
 
-    fun selectEmotion(emotionType: String) {
+    fun selectEmotion(emotionType: String, minimumDelay: Long = 0) {
         val isLoading = stateFlow.value.isLoading
         if (isLoading) return
 
         viewModelScope.launch {
             sendIntent(EmotionIntent.RegisterEmotionLoading)
+
+            if (minimumDelay > 0) {
+                delay(minimumDelay)
+            }
+
             registerEmotionUseCase(emotionType = emotionType).fold(
                 onSuccess = { emotionRecommendRoutines ->
                     val recommendRoutines = emotionRecommendRoutines.map { EmotionRecommendRoutineUiModel.fromEmotionRecommendRoutine(it) }
                     sendIntent(EmotionIntent.RegisterEmotionSuccess(recommendRoutines))
                 },
                 onFailure = {
-                    // todo 실패 케이스 정의되면 처리
+                    sendIntent(
+                        EmotionIntent.RegisterEmotionFailure(message = it.message ?: "에러가 발생했습니다. 잠시 후 시도해주세요."),
+                    )
                 },
             )
         }
