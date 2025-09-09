@@ -128,6 +128,7 @@ private fun Preview() {
                         selected = true,
                     ),
                 ),
+                showLoadingView = false,
             ),
             onClickRoutine = {},
             onClickRegisterRecommendRoutines = {},

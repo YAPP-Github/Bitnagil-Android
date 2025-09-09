@@ -60,11 +60,13 @@ class EmotionViewModel @Inject constructor(
                     recommendRoutines = intent.recommendRoutines,
                     step = EmotionScreenStep.RecommendRoutines,
                     isLoading = false,
+                    showLoadingView = false,
                 )
             }
             EmotionIntent.RegisterEmotionLoading -> {
                 return state.copy(
                     isLoading = true,
+                    showLoadingView = true,
                 )
             }
             EmotionIntent.RegisterRecommendRoutinesLoading -> {

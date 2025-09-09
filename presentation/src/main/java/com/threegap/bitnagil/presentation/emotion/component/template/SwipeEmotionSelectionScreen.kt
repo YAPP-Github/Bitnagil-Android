@@ -98,93 +98,105 @@ fun SwipeEmotionSelectionScreen(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = BitnagilTheme.colors.white)
-            .statusBarsPadding(),
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Box(
+        modifier = Modifier.fillMaxSize(),
     ) {
-        BitnagilTopBar(
-            showBackButton = true,
-            title = "오늘 감정 등록하기",
-            onBackClick = onClickPreviousButton,
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Row(
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
+                .fillMaxSize()
+                .background(color = BitnagilTheme.colors.white)
+                .statusBarsPadding(),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            state.emotionTypeUiModels.forEach { emotion ->
-                EmotionMarbleImage(
-                    modifier = Modifier.size(40.dp),
-                    image = emotion.image,
-                    alpha = if (emotion.emotionType == currentItem.emotionType) 1f else 0.3f,
+            BitnagilTopBar(
+                showBackButton = true,
+                title = "오늘 감정 등록하기",
+                onBackClick = onClickPreviousButton,
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                state.emotionTypeUiModels.forEach { emotion ->
+                    EmotionMarbleImage(
+                        modifier = Modifier.size(40.dp),
+                        image = emotion.image,
+                        alpha = if (emotion.emotionType == currentItem.emotionType) 1f else 0.3f,
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(26.dp))
+
+            EmotionDescriptionText(
+                emotion = currentItem,
+                showText = showText,
+                enterTransition = fadeInTransition,
+                exitTransition = fadeOutTransition,
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Box(
+                modifier = Modifier.weight(1f),
+            ) {
+                EmotionPager(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(bottom = 90.dp)
+                        .zIndex(1f),
+                    emotions = emotions,
+                    enabled = !state.isLoading,
+                    onSelectEmotion = onSelectEmotion,
+                    pagerState = pagerState,
+                    showText = showText,
+                    marbleNameTextEnterTransition = fadeInTransition,
+                    marbleNameTextExitTransition = fadeOutTransition,
+                )
+
+                Column(
+                    modifier = Modifier.align(Alignment.BottomCenter),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    GestureDescriptionText(
+                        currentEmotionSelectable = currentItem.selectable,
+                    )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Image(
+                        painter = painterResource(R.drawable.img_pomo_hand),
+                        contentScale = ContentScale.FillBounds,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .width(263.dp)
+                            .height(192.dp),
+                    )
+                }
+
+                Image(
+                    painter = painterResource(R.drawable.img_pomo_thumb),
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .zIndex(3f)
+                        .offset(x = (-20).dp, y = (-70).dp),
+                    contentDescription = null,
                 )
             }
         }
 
-        Spacer(modifier = Modifier.height(26.dp))
-
-        EmotionDescriptionText(
-            emotion = currentItem,
-            showText = showText,
-            enterTransition = fadeInTransition,
-            exitTransition = fadeOutTransition,
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Box(
-            modifier = Modifier.weight(1f),
+        AnimatedVisibility(
+            visible = state.showLoadingView,
+            enter = fadeIn(),
+            exit = ExitTransition.None,
         ) {
-            EmotionPager(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(bottom = 90.dp)
-                    .zIndex(1f),
-                emotions = emotions,
-                enabled = !state.isLoading,
-                onSelectEmotion = onSelectEmotion,
-                pagerState = pagerState,
-                showText = showText,
-                marbleNameTextEnterTransition = fadeInTransition,
-                marbleNameTextExitTransition = fadeOutTransition,
-            )
-
-            Column(
-                modifier = Modifier.align(Alignment.BottomCenter),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                GestureDescriptionText(
-                    currentEmotionSelectable = currentItem.selectable,
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                Image(
-                    painter = painterResource(R.drawable.img_pomo_hand),
-                    contentScale = ContentScale.FillBounds,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .width(263.dp)
-                        .height(192.dp),
-                )
-            }
-
-            Image(
-                painter = painterResource(R.drawable.img_pomo_thumb),
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .zIndex(3f)
-                    .offset(x = (-20).dp, y = (-70).dp),
-                contentDescription = null,
-            )
+            EmotionLoadingView(emotion = currentItem)
         }
     }
 }
@@ -441,6 +453,7 @@ private fun Preview() {
                 isLoading = false,
                 step = EmotionScreenStep.Emotion,
                 recommendRoutines = listOf(),
+                showLoadingView = false,
             ),
             onClickPreviousButton = {},
             onSelectEmotion = {},

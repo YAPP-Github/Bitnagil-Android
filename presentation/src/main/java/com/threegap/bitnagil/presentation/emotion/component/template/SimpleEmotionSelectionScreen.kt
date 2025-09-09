@@ -121,6 +121,7 @@ private fun Preview() {
                 isLoading = false,
                 step = EmotionScreenStep.Emotion,
                 recommendRoutines = listOf(),
+                showLoadingView = false,
             ),
             onClickEmotion = { _ -> },
             onClickPreviousButton = {},

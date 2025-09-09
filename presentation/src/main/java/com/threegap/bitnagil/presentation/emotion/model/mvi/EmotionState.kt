@@ -14,6 +14,7 @@ data class EmotionState(
     val isLoading: Boolean,
     val recommendRoutines: List<EmotionRecommendRoutineUiModel>,
     val step: EmotionScreenStep,
+    val showLoadingView: Boolean,
 ) : MviState {
     companion object {
         val Init = EmotionState(
@@ -21,6 +22,7 @@ data class EmotionState(
             isLoading = true,
             recommendRoutines = emptyList(),
             step = EmotionScreenStep.Emotion,
+            showLoadingView = false,
         )
     }
 
