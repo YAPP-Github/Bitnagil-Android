@@ -25,7 +25,7 @@ fun EmotionMarbleImage(
                     .crossfade(true)
                     .build(),
                 modifier = modifier,
-                contentDescription = null,
+                contentDescription = contentDescription,
                 alpha = alpha,
                 error = image.offlineBackupImageResourceId?.let { painterResource(it) },
             )
@@ -35,6 +35,7 @@ fun EmotionMarbleImage(
                 painter = painterResource(id = image.resourceId),
                 contentDescription = contentDescription,
                 modifier = modifier,
+                alpha = alpha,
             )
         }
     }

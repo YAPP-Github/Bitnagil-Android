@@ -42,7 +42,7 @@ data class EmotionUiModel(
 
         private fun getMessage(emotionType: String): String? {
             return when (emotionType) {
-                "CALM" -> "평온함은 마음이 고요하고 편안해\n균형을 이루는 상태에요"
+                "CALM" -> "평온함은 마음이 고요하고 편안해\n균형을 이루는 상태에요."
                 "VITALITY" -> "활기참은 생기가 가득 차\n활발하고 적극적인 상태예요."
                 "LETHARGY" -> "무기력함은 의욕이 없어 아무것도\n하기 힘든 상태예요."
                 "ANXIETY" -> "불안함은 마음이 불안정하고 쉽게\n안심하기 어려운 상태예요."

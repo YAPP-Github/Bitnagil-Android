@@ -5,6 +5,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 sealed class EmotionImageUiModel : Parcelable {
-    class Url(val url: String, val offlineBackupImageResourceId: Int?) : EmotionImageUiModel()
-    class Resource(val resourceId: Int) : EmotionImageUiModel()
+    data class Url(val url: String, val offlineBackupImageResourceId: Int?) : EmotionImageUiModel()
+    data class Resource(val resourceId: Int) : EmotionImageUiModel()
 }

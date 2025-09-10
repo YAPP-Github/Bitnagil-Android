@@ -44,7 +44,7 @@ fun EmotionRecommendRoutineScreen(
         Spacer(modifier = Modifier.height(54.dp))
 
         Text(
-            text = "오늘 감정에 따른\n루틴을 추천드릴께요!",
+            text = "오늘 감정에 따른\n루틴을 추천드릴게요!",
             color = BitnagilTheme.colors.navy500,
             style = BitnagilTheme.typography.title2Bold,
         )
