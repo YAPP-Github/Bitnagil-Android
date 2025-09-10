@@ -24,8 +24,8 @@ data class EmotionUiModel(
                 offlineBackupImageResourceId = getOfflineBackupImageResourceId(emotion.emotionType),
             ),
             message = getMessage(emotion.emotionType),
-            symbolBackgroundColor = getSymbolBackgroundColorString(emotion.emotionType),
-            symbolColor = getSymbolColorString(emotion.emotionType),
+            symbolBackgroundColor = getSymbolBackgroundColor(emotion.emotionType),
+            symbolColor = getSymbolColor(emotion.emotionType),
         )
 
         private fun getOfflineBackupImageResourceId(emotionType: String): Int? {
@@ -52,7 +52,7 @@ data class EmotionUiModel(
             }
         }
 
-        private fun getSymbolBackgroundColorString(emotionType: String): Long {
+        private fun getSymbolBackgroundColor(emotionType: String): Long {
             return when (emotionType) {
                 "CALM" -> 0xFFEFECFF
                 "VITALITY" -> 0xFFE9FAD0
@@ -64,7 +64,7 @@ data class EmotionUiModel(
             }
         }
 
-        private fun getSymbolColorString(emotionType: String): Long {
+        private fun getSymbolColor(emotionType: String): Long {
             return when (emotionType) {
                 "CALM" -> 0xFF692BD0
                 "VITALITY" -> 0xFF609F00
