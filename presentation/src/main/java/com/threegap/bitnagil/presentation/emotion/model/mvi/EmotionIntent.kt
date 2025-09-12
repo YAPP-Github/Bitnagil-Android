@@ -8,6 +8,7 @@ sealed class EmotionIntent : MviIntent {
     data class EmotionListLoadSuccess(val emotionTypeUiModels: List<EmotionUiModel>) : EmotionIntent()
     data class RegisterEmotionSuccess(val recommendRoutines: List<EmotionRecommendRoutineUiModel>) : EmotionIntent()
     data object RegisterEmotionLoading : EmotionIntent()
+    data class RegisterEmotionFailure(val message: String) : EmotionIntent()
     data object RegisterRecommendRoutinesLoading : EmotionIntent()
     data object RegisterRecommendRoutinesSuccess : EmotionIntent()
     data object RegisterRecommendRoutinesFailure : EmotionIntent()
