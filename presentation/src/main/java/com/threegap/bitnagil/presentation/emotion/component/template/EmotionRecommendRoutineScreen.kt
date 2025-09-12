@@ -44,17 +44,17 @@ fun EmotionRecommendRoutineScreen(
         Spacer(modifier = Modifier.height(54.dp))
 
         Text(
-            text = "오늘 감정에 따른\n루틴을 추천드릴게요!",
-            color = BitnagilTheme.colors.navy500,
+            text = "오늘의 감정에 맞는 루틴을 준비했어요!",
+            color = BitnagilTheme.colors.coolGray10,
             style = BitnagilTheme.typography.title2Bold,
         )
 
         Spacer(modifier = Modifier.height(10.dp))
 
         Text(
-            text = "오늘 당신의 감정 상태에 맞춰 구성된 맞춤 루틴이에요.\n원하는 루틴을 선택해서 가볍게 시작해보세요.",
+            text = "오늘의 감정에 맞춰 준비된 맞춤 루틴이에요.\n원하는 루틴을 골라 가볍게 시작해 보세요.",
             color = BitnagilTheme.colors.coolGray50,
-            style = BitnagilTheme.typography.body2Medium,
+            style = BitnagilTheme.typography.body1Medium,
         )
 
         Spacer(modifier = Modifier.height(28.dp))
