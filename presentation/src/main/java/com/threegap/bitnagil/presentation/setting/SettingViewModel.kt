@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.threegap.bitnagil.domain.auth.usecase.LogoutUseCase
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
+import com.threegap.bitnagil.presentation.common.version.VersionNameProvider
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingIntent
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingSideEffect
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingState
@@ -18,8 +19,9 @@ import javax.inject.Inject
 class SettingViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val logoutUseCase: LogoutUseCase,
+    versionNameProvider: VersionNameProvider,
 ) : MviViewModel<SettingState, SettingSideEffect, SettingIntent>(
-    initState = SettingState.Init,
+    initState = SettingState.Init.copy(version = versionNameProvider.getVersionName()),
     savedStateHandle = savedStateHandle,
 ) {
     private var setServiceAlarmJob: Job? = null
@@ -35,7 +37,6 @@ class SettingViewModel @Inject constructor(
                     useServiceAlarm = intent.useServiceAlarm,
                     usePushAlarm = intent.usePushAlarm,
                     version = intent.version,
-                    latestVersion = intent.latestVersion,
                 )
             }
             SettingIntent.TogglePushAlarm -> {

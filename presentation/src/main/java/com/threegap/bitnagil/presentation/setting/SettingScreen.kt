@@ -30,6 +30,7 @@ import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.setting.component.atom.settingtitle.SettingTitle
 import com.threegap.bitnagil.presentation.setting.component.block.LogoutConfirmDialog
+import com.threegap.bitnagil.presentation.setting.model.VersionStateUiModel
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingIntent
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingSideEffect
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingState
@@ -127,19 +128,32 @@ private fun SettingScreen(
                     )
                 }
 
-                val isLatest = state.version == state.latestVersion
-                Text(
-                    text = if (isLatest) "최신" else "업데이트",
-                    color = if (isLatest) BitnagilTheme.colors.coolGray70 else BitnagilTheme.colors.orange500,
-                    style = BitnagilTheme.typography.button2,
-                    modifier = Modifier
-                        .background(
-                            color = if (isLatest) BitnagilTheme.colors.coolGray98 else BitnagilTheme.colors.orange50,
-                            shape = RoundedCornerShape(8.dp),
-                        )
-                        .let { if (!isLatest) it.clickableWithoutRipple(onClick = onClickUpdate) else it }
-                        .padding(horizontal = 10.dp, vertical = 5.dp),
-                )
+                when(state.versionState) {
+                    VersionStateUiModel.Latest -> Text(
+                        text = "최신",
+                        color = BitnagilTheme.colors.coolGray70,
+                        style = BitnagilTheme.typography.button2,
+                        modifier = Modifier
+                            .background(
+                                color = BitnagilTheme.colors.coolGray98,
+                                shape = RoundedCornerShape(8.dp),
+                            )
+                            .clickableWithoutRipple(onClick = onClickUpdate)
+                            .padding(horizontal = 10.dp, vertical = 5.dp),
+                    )
+                    VersionStateUiModel.NEED_UPDATE -> Text(
+                        text = "업데이트",
+                        color = BitnagilTheme.colors.orange500,
+                        style = BitnagilTheme.typography.button2,
+                        modifier = Modifier
+                            .background(
+                                color = BitnagilTheme.colors.orange50,
+                                shape = RoundedCornerShape(8.dp),
+                            )
+                            .padding(horizontal = 10.dp, vertical = 5.dp),
+                    )
+                    VersionStateUiModel.NONE -> {}
+                }
             }
 
             BitnagilOptionButton(
@@ -181,7 +195,7 @@ fun SettingScreenPreview() {
             useServiceAlarm = true,
             usePushAlarm = false,
             version = "1.0.1",
-            latestVersion = "1.0.0",
+            versionState = VersionStateUiModel.NONE,
             loading = false,
             logoutConfirmDialogVisible = false,
         ),
