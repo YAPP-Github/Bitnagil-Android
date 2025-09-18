@@ -56,8 +56,6 @@ fun HomeBottomNavigationBar(
                         if (currentRoute != homeRoute.route) {
                             navController.navigate(homeRoute.route) {
                                 popUpTo(0) { inclusive = true }
-                                launchSingleTop = true
-                                restoreState = true
                             }
                         }
                     },
