@@ -30,6 +30,7 @@ fun HomeBottomNavigationBar(
     navController: NavController,
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
     Column {
         HorizontalDivider(
@@ -52,11 +53,15 @@ fun HomeBottomNavigationBar(
                     icon = homeRoute.icon,
                     title = homeRoute.title,
                     onClick = {
-                        navController.navigate(homeRoute.route) {
-                            popUpTo(0) { inclusive = true }
+                        if (currentRoute != homeRoute.route) {
+                            navController.navigate(homeRoute.route) {
+                                popUpTo(0) { inclusive = true }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
                         }
                     },
-                    selected = navBackStackEntry?.destination?.route == homeRoute.route,
+                    selected = currentRoute == homeRoute.route,
                 )
             }
         }
