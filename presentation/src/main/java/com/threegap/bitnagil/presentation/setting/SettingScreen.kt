@@ -1,5 +1,6 @@
 package com.threegap.bitnagil.presentation.setting
 
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -28,6 +30,7 @@ import com.threegap.bitnagil.designsystem.component.block.BitnagilOptionButton
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
+import com.threegap.bitnagil.presentation.common.playstore.openAppInPlayStore
 import com.threegap.bitnagil.presentation.setting.component.atom.settingtitle.SettingTitle
 import com.threegap.bitnagil.presentation.setting.component.block.LogoutConfirmDialog
 import com.threegap.bitnagil.presentation.setting.model.VersionStateUiModel
@@ -44,6 +47,8 @@ fun SettingScreenContainer(
     navigateToLogin: () -> Unit,
     navigateToWithdrawal: () -> Unit,
 ) {
+    val context = LocalContext.current
+    val activity = context as? ComponentActivity
     val state by viewModel.stateFlow.collectAsState()
 
     viewModel.sideEffectFlow.collectAsEffect { sideEffect ->
@@ -64,7 +69,7 @@ fun SettingScreenContainer(
         state = state,
         toggleServiceAlarm = viewModel::toggleServiceAlarm,
         togglePushAlarm = viewModel::togglePushAlarm,
-        onClickUpdate = {},
+        onClickUpdate = { openAppInPlayStore(activity = activity, shouldFinishApp = false) },
         onClickBack = navigateToBack,
         onClickTermsOfService = navigateToTermsOfService,
         onClickPrivacyPolicy = navigateToPrivacyPolicy,
@@ -128,7 +133,7 @@ private fun SettingScreen(
                     )
                 }
 
-                when(state.versionState) {
+                when (state.versionState) {
                     VersionStateUiModel.Latest -> Text(
                         text = "최신",
                         color = BitnagilTheme.colors.coolGray70,
@@ -138,7 +143,6 @@ private fun SettingScreen(
                                 color = BitnagilTheme.colors.coolGray98,
                                 shape = RoundedCornerShape(8.dp),
                             )
-                            .clickableWithoutRipple(onClick = onClickUpdate)
                             .padding(horizontal = 10.dp, vertical = 5.dp),
                     )
                     VersionStateUiModel.NEED_UPDATE -> Text(
@@ -150,6 +154,7 @@ private fun SettingScreen(
                                 color = BitnagilTheme.colors.orange50,
                                 shape = RoundedCornerShape(8.dp),
                             )
+                            .clickableWithoutRipple(onClick = onClickUpdate)
                             .padding(horizontal = 10.dp, vertical = 5.dp),
                     )
                     VersionStateUiModel.NONE -> {}

@@ -1,15 +1,16 @@
-package com.threegap.bitnagil.presentation.splash.util
+package com.threegap.bitnagil.presentation.common.playstore
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import androidx.activity.ComponentActivity
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
+import com.threegap.bitnagil.presentation.BuildConfig
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.system.exitProcess
 
-private const val PACKAGE_NAME = "com.threegap.bitnagil"
+private const val PACKAGE_NAME = BuildConfig.APPLICATION_ID
 private const val GOOGLE_PLAY_PACKAGE = "com.android.vending"
 private const val APP_EXIT_DELAY = 500L
 
