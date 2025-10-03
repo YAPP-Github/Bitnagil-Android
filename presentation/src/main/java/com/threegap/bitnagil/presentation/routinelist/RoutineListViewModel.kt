@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.threegap.bitnagil.domain.routine.usecase.DeleteRoutineForDayUseCase
 import com.threegap.bitnagil.domain.routine.usecase.DeleteRoutineUseCase
 import com.threegap.bitnagil.domain.routine.usecase.FetchWeeklyRoutinesUseCase
+import com.threegap.bitnagil.domain.writeroutine.usecase.GetWriteRoutineEventFlowUseCase
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
 import com.threegap.bitnagil.presentation.home.util.getCurrentWeekDays
 import com.threegap.bitnagil.presentation.routinelist.model.RoutineListIntent
@@ -24,6 +25,7 @@ class RoutineListViewModel @Inject constructor(
     private val fetchWeeklyRoutinesUseCase: FetchWeeklyRoutinesUseCase,
     private val deleteRoutineUseCase: DeleteRoutineUseCase,
     private val deleteRoutineForDayUseCase: DeleteRoutineForDayUseCase,
+    private val getWriteRoutineEventFlowUseCase: GetWriteRoutineEventFlowUseCase,
 ) : MviViewModel<RoutineListState, RoutineListSideEffect, RoutineListIntent>(
     savedStateHandle = savedStateHandle,
     initState = RoutineListState(
@@ -38,6 +40,7 @@ class RoutineListViewModel @Inject constructor(
 
     init {
         fetchRoutines()
+        observeRoutineChanges()
     }
 
     override suspend fun SimpleSyntax<RoutineListState, RoutineListSideEffect>.reduceState(
@@ -112,6 +115,14 @@ class RoutineListViewModel @Inject constructor(
         }
 
         return newState
+    }
+
+    private fun observeRoutineChanges() {
+        viewModelScope.launch {
+            getWriteRoutineEventFlowUseCase().collect {
+                fetchRoutines()
+            }
+        }
     }
 
     private fun fetchRoutines() {
