@@ -15,7 +15,7 @@ import com.threegap.bitnagil.presentation.emotion.model.mvi.EmotionState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
+import org.orbitmvi.orbit.syntax.Syntax
 import javax.inject.Inject
 
 @HiltViewModel
@@ -47,7 +47,7 @@ class EmotionViewModel @Inject constructor(
         }
     }
 
-    override suspend fun SimpleSyntax<EmotionState, EmotionSideEffect>.reduceState(intent: EmotionIntent, state: EmotionState): EmotionState? {
+    override suspend fun Syntax<EmotionState, EmotionSideEffect>.reduceState(intent: EmotionIntent, state: EmotionState): EmotionState? {
         when (intent) {
             is EmotionIntent.EmotionListLoadSuccess -> {
                 return state.copy(

@@ -22,13 +22,14 @@ import com.threegap.bitnagil.presentation.home.model.toUiModel
 import com.threegap.bitnagil.presentation.home.util.getCurrentWeekDays
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
+import org.orbitmvi.orbit.syntax.Syntax
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -61,7 +62,7 @@ class HomeViewModel @Inject constructor(
         fetchTodayEmotion(LocalDate.now())
     }
 
-    override suspend fun SimpleSyntax<HomeState, HomeSideEffect>.reduceState(
+    override suspend fun Syntax<HomeState, HomeSideEffect>.reduceState(
         intent: HomeIntent,
         state: HomeState,
     ): HomeState? {
