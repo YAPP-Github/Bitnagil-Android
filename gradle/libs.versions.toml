@@ -50,7 +50,7 @@ espressoCore = "3.6.1"
 
 ## Other
 material = "1.12.0"
-orbit = "6.1.0"
+orbit = "10.0.0"
 javax = "1"
 kakaoLogin = "2.21.4"
 lottie-compose = "6.6.0"
