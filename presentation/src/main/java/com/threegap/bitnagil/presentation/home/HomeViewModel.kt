@@ -22,7 +22,6 @@ import com.threegap.bitnagil.presentation.home.model.toUiModel
 import com.threegap.bitnagil.presentation.home.util.getCurrentWeekDays
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
