@@ -26,7 +26,6 @@ class MviViewModelTest {
                 containerHost.sendIntent(SampleIntent.Decrease(number = 2))
                 containerHost.sendIntent(SampleIntent.Increase(number = 3))
 
-                expectState { SampleState() }
                 expectState { SampleState(count = 1) }
                 expectState { SampleState(count = -1) }
                 expectState { SampleState(count = 2) }
@@ -42,7 +41,6 @@ class MviViewModelTest {
                 containerHost.sendIntent(SampleIntent.Decrease(number = 2))
                 containerHost.sendIntent(SampleIntent.Increase(number = 3))
 
-                expectState { SampleState() }
                 expectState { SampleState(count = 1) }
                 expectSideEffect(SampleSideEffect.ShowToast("Clear"))
                 expectState { SampleState() }
