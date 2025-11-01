@@ -15,7 +15,7 @@ import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutin
 import com.threegap.bitnagil.presentation.recommendroutine.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
+import org.orbitmvi.orbit.syntax.Syntax
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,7 +35,7 @@ class RecommendRoutineViewModel @Inject constructor(
 
     private var recommendRoutines: RecommendRoutinesUiModel = RecommendRoutinesUiModel()
 
-    override suspend fun SimpleSyntax<RecommendRoutineState, RecommendRoutineSideEffect>.reduceState(
+    override suspend fun Syntax<RecommendRoutineState, RecommendRoutineSideEffect>.reduceState(
         intent: RecommendRoutineIntent,
         state: RecommendRoutineState,
     ): RecommendRoutineState? = when (intent) {

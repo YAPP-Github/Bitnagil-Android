@@ -9,7 +9,7 @@ import com.threegap.bitnagil.presentation.withdrawal.model.WithdrawalSideEffect
 import com.threegap.bitnagil.presentation.withdrawal.model.WithdrawalState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
+import org.orbitmvi.orbit.syntax.Syntax
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,7 +20,7 @@ class WithdrawalViewModel @Inject constructor(
     savedStateHandle = savedStateHandle,
     initState = WithdrawalState(),
 ) {
-    override suspend fun SimpleSyntax<WithdrawalState, WithdrawalSideEffect>.reduceState(
+    override suspend fun Syntax<WithdrawalState, WithdrawalSideEffect>.reduceState(
         intent: WithdrawalIntent,
         state: WithdrawalState,
     ): WithdrawalState? {

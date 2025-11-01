@@ -6,7 +6,7 @@ import com.threegap.bitnagil.presentation.guide.model.GuideIntent
 import com.threegap.bitnagil.presentation.guide.model.GuideSideEffect
 import com.threegap.bitnagil.presentation.guide.model.GuideState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
+import org.orbitmvi.orbit.syntax.Syntax
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,7 +16,7 @@ class GuideViewModel @Inject constructor(
     initState = GuideState(),
     savedStateHandle = savedStateHandle,
 ) {
-    override suspend fun SimpleSyntax<GuideState, GuideSideEffect>.reduceState(
+    override suspend fun Syntax<GuideState, GuideSideEffect>.reduceState(
         intent: GuideIntent,
         state: GuideState,
     ): GuideState? {

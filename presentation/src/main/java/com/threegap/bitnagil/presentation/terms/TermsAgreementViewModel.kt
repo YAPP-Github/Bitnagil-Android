@@ -11,7 +11,7 @@ import com.threegap.bitnagil.presentation.terms.model.TermsAgreementSideEffect
 import com.threegap.bitnagil.presentation.terms.model.TermsAgreementState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
+import org.orbitmvi.orbit.syntax.Syntax
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,7 +22,7 @@ class TermsAgreementViewModel @Inject constructor(
     initState = TermsAgreementState(),
     savedStateHandle = savedStateHandle,
 ) {
-    override suspend fun SimpleSyntax<TermsAgreementState, TermsAgreementSideEffect>.reduceState(
+    override suspend fun Syntax<TermsAgreementState, TermsAgreementSideEffect>.reduceState(
         intent: TermsAgreementIntent,
         state: TermsAgreementState,
     ): TermsAgreementState? = when (intent) {

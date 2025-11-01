@@ -11,7 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
+import org.orbitmvi.orbit.syntax.Syntax
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,7 +25,7 @@ class SettingViewModel @Inject constructor(
     private var setServiceAlarmJob: Job? = null
     private var setPushAlarmJob: Job? = null
 
-    override suspend fun SimpleSyntax<SettingState, SettingSideEffect>.reduceState(
+    override suspend fun Syntax<SettingState, SettingSideEffect>.reduceState(
         intent: SettingIntent,
         state: SettingState,
     ): SettingState? {

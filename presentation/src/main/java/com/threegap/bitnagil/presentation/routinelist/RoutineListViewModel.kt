@@ -15,7 +15,7 @@ import com.threegap.bitnagil.presentation.routinelist.model.RoutineListState
 import com.threegap.bitnagil.presentation.routinelist.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
+import org.orbitmvi.orbit.syntax.Syntax
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -43,7 +43,7 @@ class RoutineListViewModel @Inject constructor(
         observeRoutineChanges()
     }
 
-    override suspend fun SimpleSyntax<RoutineListState, RoutineListSideEffect>.reduceState(
+    override suspend fun Syntax<RoutineListState, RoutineListSideEffect>.reduceState(
         intent: RoutineListIntent,
         state: RoutineListState,
     ): RoutineListState? {
