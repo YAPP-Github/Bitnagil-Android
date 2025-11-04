@@ -77,11 +77,11 @@ fun HomeScreenContainer(
         onNextWeekClick = {
             viewModel.sendIntent(HomeIntent.OnNextWeekClick)
         },
-        onRoutineCompletionToggle = { routineId, isCompleted ->
-            viewModel.toggleRoutineCompletion(routineId, isCompleted)
+        onRoutineCompletionToggle = { routineId ->
+            viewModel.toggleRoutineCompletion(routineId)
         },
-        onSubRoutineCompletionToggle = { routineId, subRoutineIndex, isCompleted ->
-            viewModel.toggleSubRoutineCompletion(routineId, subRoutineIndex, isCompleted)
+        onSubRoutineCompletionToggle = { routineId, subRoutineIndex ->
+            viewModel.toggleSubRoutineCompletion(routineId, subRoutineIndex)
         },
         onHelpClick = {
             viewModel.sendIntent(HomeIntent.OnHelpClick)
@@ -104,8 +104,8 @@ private fun HomeScreen(
     onDateSelect: (LocalDate) -> Unit,
     onPreviousWeekClick: () -> Unit,
     onNextWeekClick: () -> Unit,
-    onRoutineCompletionToggle: (String, Boolean) -> Unit,
-    onSubRoutineCompletionToggle: (String, Int, Boolean) -> Unit,
+    onRoutineCompletionToggle: (String) -> Unit,
+    onSubRoutineCompletionToggle: (String, Int) -> Unit,
     onHelpClick: () -> Unit,
     onRegisterRoutineClick: () -> Unit,
     onRegisterEmotionClick: () -> Unit,
@@ -187,11 +187,9 @@ private fun HomeScreen(
                     ) { routine ->
                         RoutineSection(
                             routine = routine,
-                            onRoutineToggle = { isCompleted ->
-                                onRoutineCompletionToggle(routine.id, isCompleted)
-                            },
-                            onSubRoutineToggle = { subRoutineIndex, isCompleted ->
-                                onSubRoutineCompletionToggle(routine.id, subRoutineIndex, isCompleted)
+                            onRoutineToggle = { onRoutineCompletionToggle(routine.id) },
+                            onSubRoutineToggle = { subRoutineIndex ->
+                                onSubRoutineCompletionToggle(routine.id, subRoutineIndex)
                             },
                         )
                     }
@@ -217,8 +215,8 @@ private fun HomeScreenPreview() {
         onDateSelect = {},
         onPreviousWeekClick = {},
         onNextWeekClick = {},
-        onRoutineCompletionToggle = { _, _ -> },
-        onSubRoutineCompletionToggle = { _, _, _ -> },
+        onRoutineCompletionToggle = { _ -> },
+        onSubRoutineCompletionToggle = { _, _ -> },
         onHelpClick = {},
         onRegisterRoutineClick = {},
         onRegisterEmotionClick = {},

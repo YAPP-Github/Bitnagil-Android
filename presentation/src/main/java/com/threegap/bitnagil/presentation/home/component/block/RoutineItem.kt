@@ -24,8 +24,8 @@ import com.threegap.bitnagil.presentation.home.model.RoutineUiModel
 @Composable
 fun RoutineItem(
     routine: RoutineUiModel,
-    onRoutineToggle: (Boolean) -> Unit,
-    onSubRoutineToggle: (Int, Boolean) -> Unit,
+    onRoutineToggle: () -> Unit,
+    onSubRoutineToggle: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -43,7 +43,7 @@ fun RoutineItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickableWithoutRipple { onRoutineToggle(!routine.isCompleted) },
+                .clickableWithoutRipple { onRoutineToggle() },
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -73,9 +73,7 @@ fun RoutineItem(
             SubRoutinesItem(
                 subRoutineNames = routine.subRoutineNames,
                 subRoutineCompleteYn = routine.subRoutineIsCompleted,
-                onSubRoutineToggle = { index, isCompleted ->
-                    onSubRoutineToggle(index, isCompleted)
-                },
+                onSubRoutineToggle = { index -> onSubRoutineToggle(index) },
             )
         }
     }
@@ -97,7 +95,7 @@ private fun RoutineItemPreview() {
             recommendedRoutineType = null,
         ),
         onRoutineToggle = { },
-        onSubRoutineToggle = { _, _ -> },
+        onSubRoutineToggle = { _ -> },
     )
 }
 
@@ -117,6 +115,6 @@ private fun NoneSubRoutineRoutineItemPreview() {
             recommendedRoutineType = null,
         ),
         onRoutineToggle = {},
-        onSubRoutineToggle = { _, _ -> },
+        onSubRoutineToggle = { _ -> },
     )
 }

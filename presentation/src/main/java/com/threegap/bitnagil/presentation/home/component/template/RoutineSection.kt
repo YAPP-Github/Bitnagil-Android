@@ -17,8 +17,8 @@ import com.threegap.bitnagil.presentation.home.util.formatExecutionTime24Hour
 @Composable
 fun RoutineSection(
     routine: RoutineUiModel,
-    onRoutineToggle: (Boolean) -> Unit,
-    onSubRoutineToggle: (Int, Boolean) -> Unit,
+    onRoutineToggle: () -> Unit,
+    onSubRoutineToggle: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(

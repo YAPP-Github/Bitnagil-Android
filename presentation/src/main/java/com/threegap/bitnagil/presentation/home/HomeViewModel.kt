@@ -99,11 +99,11 @@ class HomeViewModel @Inject constructor(
             }
 
             is HomeIntent.OnRoutineCompletionToggle -> {
-                updateMainRoutine(state, intent.routineId, intent.isCompleted)
+                updateMainRoutine(state, intent.routineId)
             }
 
             is HomeIntent.OnSubRoutineCompletionToggle -> {
-                updateSubRoutine(state, intent.routineId, intent.subRoutineIndex, intent.isCompleted)
+                updateSubRoutine(state, intent.routineId, intent.subRoutineIndex)
             }
 
             is HomeIntent.LoadTodayEmotion -> {
@@ -238,19 +238,19 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun toggleRoutineCompletion(routineId: String, isCompleted: Boolean) {
+    fun toggleRoutineCompletion(routineId: String) {
         val originalState = container.stateFlow.value
-        sendIntent(HomeIntent.OnRoutineCompletionToggle(routineId, isCompleted))
+        sendIntent(HomeIntent.OnRoutineCompletionToggle(routineId))
 
-        val predictedUpdatedState = updateMainRoutine(originalState, routineId, isCompleted)
+        val predictedUpdatedState = updateMainRoutine(originalState, routineId)
         processRoutineToggleChanges(originalState, predictedUpdatedState)
     }
 
-    fun toggleSubRoutineCompletion(routineId: String, subRoutineIndex: Int, isCompleted: Boolean) {
+    fun toggleSubRoutineCompletion(routineId: String, subRoutineIndex: Int) {
         val originalState = container.stateFlow.value
-        sendIntent(HomeIntent.OnSubRoutineCompletionToggle(routineId, subRoutineIndex, isCompleted))
+        sendIntent(HomeIntent.OnSubRoutineCompletionToggle(routineId, subRoutineIndex))
 
-        val predictedUpdatedState = updateSubRoutine(originalState, routineId, subRoutineIndex, isCompleted)
+        val predictedUpdatedState = updateSubRoutine(originalState, routineId, subRoutineIndex)
         processRoutineToggleChanges(originalState, predictedUpdatedState)
     }
 
@@ -281,16 +281,17 @@ class HomeViewModel @Inject constructor(
     private fun updateMainRoutine(
         state: HomeState,
         routineId: String,
-        isCompleted: Boolean,
     ): HomeState {
         return updateRoutinesForDate(state) { routinesForDate ->
             val routineIndex = routinesForDate.indexOfFirst { it.id == routineId }
             if (routineIndex == -1) return@updateRoutinesForDate false
 
             val routine = routinesForDate[routineIndex]
+            val newIsCompleted = !routine.isCompleted
+
             val updatedRoutine = routine.copy(
-                isCompleted = isCompleted,
-                subRoutineIsCompleted = routine.subRoutineIsCompleted.map { isCompleted },
+                isCompleted = newIsCompleted,
+                subRoutineIsCompleted = routine.subRoutineIsCompleted.map { newIsCompleted },
             )
 
             routinesForDate[routineIndex] = updatedRoutine
@@ -302,20 +303,20 @@ class HomeViewModel @Inject constructor(
         state: HomeState,
         routineId: String,
         subRoutineIndex: Int,
-        isCompleted: Boolean,
     ): HomeState {
         return updateRoutinesForDate(state) { routinesForDate ->
             val routineIndex = routinesForDate.indexOfFirst { it.id == routineId }
             if (routineIndex == -1) return@updateRoutinesForDate false
 
             val routine = routinesForDate[routineIndex]
+            val newIsCompleted = !routine.subRoutineIsCompleted[subRoutineIndex]
 
             if (subRoutineIndex !in routine.subRoutineIsCompleted.indices) {
                 return@updateRoutinesForDate false
             }
 
             val updatedSubRoutineCompleteYn = routine.subRoutineIsCompleted.toMutableList().also {
-                it[subRoutineIndex] = isCompleted
+                it[subRoutineIndex] = newIsCompleted
             }
 
             val routineCompleted = updatedSubRoutineCompleteYn.all { it }
