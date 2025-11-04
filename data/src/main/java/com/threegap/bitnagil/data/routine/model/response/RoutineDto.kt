@@ -36,16 +36,16 @@ data class RoutineDto(
 
 fun RoutineDto.toDomain(): Routine =
     Routine(
-        routineId = this.routineId,
-        routineName = this.routineName,
-        repeatDay = this.repeatDay.map { DayOfWeek.fromString(it) },
+        id = this.routineId,
+        name = this.routineName,
+        repeatDays = this.repeatDay.map { DayOfWeek.fromString(it) },
         executionTime = this.executionTime,
         routineDate = this.routineDate,
-        routineCompleteYn = this.routineCompleteYn,
+        isComplete = this.routineCompleteYn,
         subRoutineNames = this.subRoutineNames,
-        subRoutineCompleteYn = this.subRoutineCompleteYn,
+        subRoutineIsCompleted = this.subRoutineCompleteYn,
         recommendedRoutineType = RecommendedRoutineType.fromString(this.recommendedRoutineType),
-        routineDeletedYn = routineDeletedYn,
+        isDeleted = routineDeletedYn,
         startDate = this.routineStartDate,
         endDate = this.routineEndDate,
     )

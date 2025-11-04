@@ -7,7 +7,7 @@ sealed class HomeIntent : MviIntent {
     data class UpdateLoading(val isLoading: Boolean) : HomeIntent()
     data class LoadUserProfile(val nickname: String) : HomeIntent()
     data class LoadTodayEmotion(val emotion: TodayEmotionUiModel?) : HomeIntent()
-    data class LoadWeeklyRoutines(val routines: RoutinesUiModel) : HomeIntent()
+    data class LoadWeeklyRoutines(val routines: RoutineScheduleUiModel) : HomeIntent()
     data class OnDateSelect(val date: LocalDate) : HomeIntent()
     data class OnRoutineCompletionToggle(val routineId: String, val isCompleted: Boolean) : HomeIntent()
     data class OnSubRoutineCompletionToggle(val routineId: String, val subRoutineIndex: Int, val isCompleted: Boolean) : HomeIntent()

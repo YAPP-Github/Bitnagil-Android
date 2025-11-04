@@ -14,6 +14,6 @@ data class DayRoutinesDto(
 
 fun DayRoutinesDto.toDomain(): DayRoutines =
     DayRoutines(
-        routineList = routineList.map { it.toDomain() },
-        allCompleted = allCompleted,
+        routines = routineList.map { it.toDomain() },
+        isAllCompleted = allCompleted,
     )

@@ -31,14 +31,14 @@ data class RoutineUiModel(
 
 fun Routine.toUiModel(): RoutineUiModel =
     RoutineUiModel(
-        routineId = this.routineId,
-        routineName = this.routineName,
-        repeatDay = this.repeatDay,
+        routineId = this.id,
+        routineName = this.name,
+        repeatDay = this.repeatDays,
         executionTime = this.executionTime.formatExecutionTime12Hour(),
         routineDate = this.routineDate,
         startDate = this.startDate,
         endDate = this.endDate,
-        routineDeletedYn = this.routineDeletedYn,
+        routineDeletedYn = this.isDeleted,
         subRoutineNames = this.subRoutineNames,
         recommendedRoutineType = this.recommendedRoutineType,
     )

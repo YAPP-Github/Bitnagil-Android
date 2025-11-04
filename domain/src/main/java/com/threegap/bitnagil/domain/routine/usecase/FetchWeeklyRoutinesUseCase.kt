@@ -1,12 +1,12 @@
 package com.threegap.bitnagil.domain.routine.usecase
 
-import com.threegap.bitnagil.domain.routine.model.Routines
+import com.threegap.bitnagil.domain.routine.model.RoutineSchedule
 import com.threegap.bitnagil.domain.routine.repository.RoutineRepository
 import javax.inject.Inject
 
 class FetchWeeklyRoutinesUseCase @Inject constructor(
     private val routineRepository: RoutineRepository,
 ) {
-    suspend operator fun invoke(startDate: String, endDate: String): Result<Routines> =
+    suspend operator fun invoke(startDate: String, endDate: String): Result<RoutineSchedule> =
         routineRepository.fetchWeeklyRoutines(startDate, endDate)
 }

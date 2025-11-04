@@ -1,16 +1,16 @@
 package com.threegap.bitnagil.domain.routine.model
 
 data class Routine(
-    val routineId: String,
-    val routineName: String,
-    val repeatDay: List<DayOfWeek>,
+    val id: String,
+    val name: String,
+    val repeatDays: List<DayOfWeek>,
     val executionTime: String,
     val startDate: String,
     val endDate: String,
     val routineDate: String,
-    val routineCompleteYn: Boolean,
-    val routineDeletedYn: Boolean,
+    val isCompleted: Boolean,
+    val isDeleted: Boolean,
     val subRoutineNames: List<String>,
-    val subRoutineCompleteYn: List<Boolean>,
+    val subRoutineIsCompleted: List<Boolean>,
     val recommendedRoutineType: RecommendedRoutineType?,
 )

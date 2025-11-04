@@ -11,5 +11,5 @@ data class DayRoutinesUiModel(
 
 fun DayRoutines.toUiModel(): DayRoutinesUiModel =
     DayRoutinesUiModel(
-        routineList = routineList.map { it.toUiModel() },
+        routineList = routines.map { it.toUiModel() },
     )

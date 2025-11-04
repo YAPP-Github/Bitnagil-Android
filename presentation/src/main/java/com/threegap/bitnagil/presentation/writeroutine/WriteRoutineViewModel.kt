@@ -83,8 +83,8 @@ class WriteRoutineViewModel @AssistedInject constructor(
                 onSuccess = { routine ->
                     sendIntent(
                         WriteRoutineIntent.SetRoutine(
-                            name = routine.routineName,
-                            repeatDays = routine.repeatDay.map { Day.fromDayOfWeek(it) },
+                            name = routine.name,
+                            repeatDays = routine.repeatDays.map { Day.fromDayOfWeek(it) },
                             startTime = Time.fromDomainTimeString(routine.executionTime),
                             subRoutines = listOf(
                                 routine.subRoutineNames.getOrNull(0) ?: "",

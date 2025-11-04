@@ -16,8 +16,8 @@ import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
 import com.threegap.bitnagil.presentation.home.model.HomeIntent
 import com.threegap.bitnagil.presentation.home.model.HomeSideEffect
 import com.threegap.bitnagil.presentation.home.model.HomeState
+import com.threegap.bitnagil.presentation.home.model.RoutineScheduleUiModel
 import com.threegap.bitnagil.presentation.home.model.RoutineUiModel
-import com.threegap.bitnagil.presentation.home.model.RoutinesUiModel
 import com.threegap.bitnagil.presentation.home.model.toUiModel
 import com.threegap.bitnagil.presentation.home.util.getCurrentWeekDays
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -47,7 +47,7 @@ class HomeViewModel @Inject constructor(
     savedStateHandle = savedStateHandle,
 ) {
     private val pendingChangesByDate = mutableMapOf<String, MutableList<RoutineCompletionInfo>>()
-    private val backupStatesByDate = mutableMapOf<String, RoutinesUiModel>()
+    private val backupStatesByDate = mutableMapOf<String, RoutineScheduleUiModel>()
     private val routineSyncTrigger = MutableSharedFlow<LocalDate>()
 
     init {
@@ -284,13 +284,13 @@ class HomeViewModel @Inject constructor(
         isCompleted: Boolean,
     ): HomeState {
         return updateRoutinesForDate(state) { routinesForDate ->
-            val routineIndex = routinesForDate.indexOfFirst { it.routineId == routineId }
+            val routineIndex = routinesForDate.indexOfFirst { it.id == routineId }
             if (routineIndex == -1) return@updateRoutinesForDate false
 
             val routine = routinesForDate[routineIndex]
             val updatedRoutine = routine.copy(
-                routineCompleteYn = isCompleted,
-                subRoutineCompleteYn = routine.subRoutineCompleteYn.map { isCompleted },
+                isCompleted = isCompleted,
+                subRoutineIsCompleted = routine.subRoutineIsCompleted.map { isCompleted },
             )
 
             routinesForDate[routineIndex] = updatedRoutine
@@ -305,24 +305,24 @@ class HomeViewModel @Inject constructor(
         isCompleted: Boolean,
     ): HomeState {
         return updateRoutinesForDate(state) { routinesForDate ->
-            val routineIndex = routinesForDate.indexOfFirst { it.routineId == routineId }
+            val routineIndex = routinesForDate.indexOfFirst { it.id == routineId }
             if (routineIndex == -1) return@updateRoutinesForDate false
 
             val routine = routinesForDate[routineIndex]
 
-            if (subRoutineIndex !in routine.subRoutineCompleteYn.indices) {
+            if (subRoutineIndex !in routine.subRoutineIsCompleted.indices) {
                 return@updateRoutinesForDate false
             }
 
-            val updatedSubRoutineCompleteYn = routine.subRoutineCompleteYn.toMutableList().also {
+            val updatedSubRoutineCompleteYn = routine.subRoutineIsCompleted.toMutableList().also {
                 it[subRoutineIndex] = isCompleted
             }
 
             val routineCompleted = updatedSubRoutineCompleteYn.all { it }
 
             val updatedRoutine = routine.copy(
-                subRoutineCompleteYn = updatedSubRoutineCompleteYn,
-                routineCompleteYn = routineCompleted,
+                subRoutineIsCompleted = updatedSubRoutineCompleteYn,
+                isCompleted = routineCompleted,
             )
 
             routinesForDate[routineIndex] = updatedRoutine
@@ -335,44 +335,44 @@ class HomeViewModel @Inject constructor(
         updateLogic: (MutableList<RoutineUiModel>) -> Boolean,
     ): HomeState {
         val dateKey = state.selectedDate.toString()
-        val dayRoutines = state.routines.routines[dateKey] ?: return state
-        val routinesForDate = dayRoutines.routineList.toMutableList()
+        val dayRoutines = state.routines.dailyRoutines[dateKey] ?: return state
+        val routinesForDate = dayRoutines.routines.toMutableList()
 
         if (!updateLogic(routinesForDate)) return state
 
-        val allCompleted = routinesForDate.all { it.routineCompleteYn }
+        val allCompleted = routinesForDate.all { it.isCompleted }
 
-        val updatedRoutinesByDate = state.routines.routines.toMutableMap()
+        val updatedRoutinesByDate = state.routines.dailyRoutines.toMutableMap()
         updatedRoutinesByDate[dateKey] = dayRoutines.copy(
-            routineList = routinesForDate,
-            allCompleted = allCompleted,
+            routines = routinesForDate,
+            isAllCompleted = allCompleted,
         )
 
-        return state.copy(routines = RoutinesUiModel(updatedRoutinesByDate))
+        return state.copy(routines = RoutineScheduleUiModel(updatedRoutinesByDate))
     }
 
     private fun calculateStateChanges(
-        originalRoutines: RoutinesUiModel,
-        updatedRoutines: RoutinesUiModel,
+        originalRoutines: RoutineScheduleUiModel,
+        updatedRoutines: RoutineScheduleUiModel,
         date: LocalDate,
     ): List<RoutineCompletionInfo> {
         val dateKey = date.toString()
-        val originalRoutineList = originalRoutines.routines[dateKey]?.routineList ?: emptyList()
-        val updatedRoutineList = updatedRoutines.routines[dateKey]?.routineList ?: emptyList()
+        val originalRoutineList = originalRoutines.dailyRoutines[dateKey]?.routines ?: emptyList()
+        val updatedRoutineList = updatedRoutines.dailyRoutines[dateKey]?.routines ?: emptyList()
 
         return buildList {
             updatedRoutineList.forEach { updatedRoutine ->
-                val originalRoutine = originalRoutineList.find { it.routineId == updatedRoutine.routineId }
+                val originalRoutine = originalRoutineList.find { it.id == updatedRoutine.id }
 
-                val hasMainRoutineChanged = originalRoutine?.routineCompleteYn != updatedRoutine.routineCompleteYn
-                val hasSubRoutinesChanged = originalRoutine?.subRoutineCompleteYn != updatedRoutine.subRoutineCompleteYn
+                val hasMainRoutineChanged = originalRoutine?.isCompleted != updatedRoutine.isCompleted
+                val hasSubRoutinesChanged = originalRoutine?.subRoutineIsCompleted != updatedRoutine.subRoutineIsCompleted
 
                 if (hasMainRoutineChanged || hasSubRoutinesChanged) {
                     add(
                         RoutineCompletionInfo(
-                            routineId = updatedRoutine.routineId,
-                            routineCompleteYn = updatedRoutine.routineCompleteYn,
-                            subRoutineCompleteYn = updatedRoutine.subRoutineCompleteYn,
+                            routineId = updatedRoutine.id,
+                            routineCompleteYn = updatedRoutine.isCompleted,
+                            subRoutineCompleteYn = updatedRoutine.subRoutineIsCompleted,
                         ),
                     )
                 }

@@ -183,15 +183,15 @@ private fun HomeScreen(
                 ) {
                     items(
                         items = uiState.selectedDateRoutines,
-                        key = { routine -> "${routine.routineId}_${uiState.selectedDate}" },
+                        key = { routine -> "${routine.id}_${uiState.selectedDate}" },
                     ) { routine ->
                         RoutineSection(
                             routine = routine,
                             onRoutineToggle = { isCompleted ->
-                                onRoutineCompletionToggle(routine.routineId, isCompleted)
+                                onRoutineCompletionToggle(routine.id, isCompleted)
                             },
                             onSubRoutineToggle = { subRoutineIndex, isCompleted ->
-                                onSubRoutineCompletionToggle(routine.routineId, subRoutineIndex, isCompleted)
+                                onSubRoutineCompletionToggle(routine.id, subRoutineIndex, isCompleted)
                             },
                         )
                     }
