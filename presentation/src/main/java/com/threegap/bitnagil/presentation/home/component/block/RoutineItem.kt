@@ -19,11 +19,13 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
-import com.threegap.bitnagil.presentation.home.model.RoutineUiModel
 
 @Composable
 fun RoutineItem(
-    routine: RoutineUiModel,
+    name: String,
+    isCompleted: Boolean,
+    subRoutineNames: List<String>,
+    subRoutineIsCompleted: List<Boolean>,
     onRoutineToggle: () -> Unit,
     onSubRoutineToggle: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -48,14 +50,14 @@ fun RoutineItem(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = routine.name,
+                text = name,
                 style = BitnagilTheme.typography.body1SemiBold,
                 color = BitnagilTheme.colors.coolGray10,
                 modifier = Modifier.weight(1f),
             )
 
             BitnagilIcon(
-                id = if (routine.isCompleted) R.drawable.ic_check_circle else R.drawable.ic_check_default,
+                id = if (isCompleted) R.drawable.ic_check_circle else R.drawable.ic_check_default,
                 tint = null,
                 modifier = Modifier
                     .padding(start = 10.dp)
@@ -63,7 +65,7 @@ fun RoutineItem(
             )
         }
 
-        if (routine.subRoutineNames.isNotEmpty()) {
+        if (subRoutineNames.isNotEmpty()) {
             HorizontalDivider(
                 thickness = 1.dp,
                 color = BitnagilTheme.colors.coolGray97,
@@ -71,8 +73,8 @@ fun RoutineItem(
             )
 
             SubRoutinesItem(
-                subRoutineNames = routine.subRoutineNames,
-                subRoutineCompleteYn = routine.subRoutineIsCompleted,
+                subRoutineNames = subRoutineNames,
+                subRoutineCompleteYn = subRoutineIsCompleted,
                 onSubRoutineToggle = { index -> onSubRoutineToggle(index) },
             )
         }
@@ -83,17 +85,10 @@ fun RoutineItem(
 @Composable
 private fun RoutineItemPreview() {
     RoutineItem(
-        routine = RoutineUiModel(
-            id = "uuid1",
-            name = "개운하게 일어나기",
-            repeatDays = emptyList(),
-            executionTime = "20:30:00",
-            routineDate = "2025-08-15",
-            isCompleted = false,
-            subRoutineNames = listOf("물 마시기", "스트레칭하기", "심호흡하기"),
-            subRoutineIsCompleted = listOf(true, false, true),
-            recommendedRoutineType = null,
-        ),
+        name = "개운하게 일어나기",
+        isCompleted = false,
+        subRoutineNames = listOf("물 마시기", "스트레칭하기", "심호흡하기"),
+        subRoutineIsCompleted = listOf(true, false, true),
         onRoutineToggle = { },
         onSubRoutineToggle = { _ -> },
     )
@@ -103,17 +98,10 @@ private fun RoutineItemPreview() {
 @Composable
 private fun NoneSubRoutineRoutineItemPreview() {
     RoutineItem(
-        routine = RoutineUiModel(
-            id = "uuid1",
-            name = "개운하게 일어나기",
-            repeatDays = emptyList(),
-            executionTime = "20:30:00",
-            routineDate = "2025-08-15",
-            isCompleted = false,
-            subRoutineNames = emptyList(),
-            subRoutineIsCompleted = emptyList(),
-            recommendedRoutineType = null,
-        ),
+        name = "개운하게 일어나기",
+        isCompleted = false,
+        subRoutineNames = emptyList(),
+        subRoutineIsCompleted = emptyList(),
         onRoutineToggle = {},
         onSubRoutineToggle = { _ -> },
     )
