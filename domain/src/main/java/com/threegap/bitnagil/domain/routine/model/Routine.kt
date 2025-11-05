@@ -11,6 +11,6 @@ data class Routine(
     val isCompleted: Boolean,
     val isDeleted: Boolean,
     val subRoutineNames: List<String>,
-    val subRoutineIsCompleted: List<Boolean>,
+    val subRoutineCompletionStates: List<Boolean>,
     val recommendedRoutineType: RecommendedRoutineType?,
 )

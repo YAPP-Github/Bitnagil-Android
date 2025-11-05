@@ -37,7 +37,7 @@ fun RoutineSection(
             name = routine.name,
             isCompleted = routine.isCompleted,
             subRoutineNames = routine.subRoutineNames,
-            subRoutineIsCompleted = routine.subRoutineIsCompleted,
+            subRoutineIsCompleted = routine.subRoutineCompletionStates,
             onRoutineToggle = onRoutineToggle,
             onSubRoutineToggle = onSubRoutineToggle,
             modifier = Modifier.fillMaxWidth(),
@@ -57,10 +57,10 @@ private fun RoutineSectionPreview() {
             routineDate = "2023-10-27",
             isCompleted = false,
             subRoutineNames = listOf("Make bed", "Brush teeth", "Meditate"),
-            subRoutineIsCompleted = listOf(true, false, false),
-            recommendedRoutineType = null
+            subRoutineCompletionStates = listOf(true, false, false),
+            recommendedRoutineType = null,
         ),
         onRoutineToggle = {},
-        onSubRoutineToggle = {}
+        onSubRoutineToggle = {},
     )
 }

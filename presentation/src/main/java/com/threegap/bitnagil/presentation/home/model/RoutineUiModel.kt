@@ -15,7 +15,7 @@ data class RoutineUiModel(
     val routineDate: String,
     val isCompleted: Boolean,
     val subRoutineNames: List<String>,
-    val subRoutineIsCompleted: List<Boolean>,
+    val subRoutineCompletionStates: List<Boolean>,
     val recommendedRoutineType: RecommendedRoutineType?,
 ) : Parcelable
 
@@ -28,6 +28,6 @@ fun Routine.toUiModel(): RoutineUiModel =
         routineDate = this.routineDate,
         isCompleted = this.isCompleted,
         subRoutineNames = this.subRoutineNames,
-        subRoutineIsCompleted = this.subRoutineIsCompleted,
+        subRoutineCompletionStates = this.subRoutineCompletionStates,
         recommendedRoutineType = this.recommendedRoutineType,
     )

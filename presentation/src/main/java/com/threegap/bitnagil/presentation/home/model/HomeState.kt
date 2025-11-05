@@ -12,8 +12,8 @@ data class HomeState(
     val todayEmotion: TodayEmotionUiModel? = null,
     val selectedDate: LocalDate = LocalDate.now(),
     val currentWeeks: List<LocalDate> = LocalDate.now().getCurrentWeekDays(),
-    val routines: RoutineScheduleUiModel = RoutineScheduleUiModel(),
+    val routineSchedule: RoutineScheduleUiModel = RoutineScheduleUiModel(),
 ) : MviState {
     val selectedDateRoutines: List<RoutineUiModel>
-        get() = routines.dailyRoutines[selectedDate.toString()]?.routines ?: emptyList()
+        get() = routineSchedule.dailyRoutines[selectedDate.toString()]?.routines ?: emptyList()
 }
