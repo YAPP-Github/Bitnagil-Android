@@ -128,10 +128,8 @@ class RoutineListViewModel @Inject constructor(
     private fun fetchRoutines() {
         sendIntent(RoutineListIntent.UpdateLoading(true))
         val currentWeek = stateFlow.value.selectedDate.getCurrentWeekDays()
-        val startDate = currentWeek.first().toString()
-        val endDate = currentWeek.last().toString()
         viewModelScope.launch {
-            fetchWeeklyRoutinesUseCase(startDate, endDate).fold(
+            fetchWeeklyRoutinesUseCase(currentWeek).fold(
                 onSuccess = { routines ->
                     sendIntent(RoutineListIntent.LoadRoutines(routines.toUiModel()))
                     sendIntent(RoutineListIntent.UpdateLoading(false))
