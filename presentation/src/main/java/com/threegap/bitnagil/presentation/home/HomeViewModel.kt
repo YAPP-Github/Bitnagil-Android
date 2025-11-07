@@ -103,6 +103,31 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun navigateToGuide() {
+        intent {
+            postSideEffect(HomeSideEffect.NavigateToGuide)
+        }
+    }
+
+    fun navigateToEmotion() {
+        intent {
+            postSideEffect(HomeSideEffect.NavigateToEmotion)
+        }
+    }
+
+    fun navigateToRegisterRoutine() {
+        intent {
+            postSideEffect(HomeSideEffect.NavigateToRegisterRoutine)
+        }
+    }
+
+    fun navigateToRoutineList() {
+        intent {
+            val selectedDate = state.selectedDate.toString()
+            postSideEffect(HomeSideEffect.NavigateToRoutineList(selectedDate))
+        }
+    }
+
     private fun observeWriteRoutineEvent() {
         viewModelScope.launch {
             getWriteRoutineEventFlowUseCase().collect {
