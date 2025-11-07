@@ -1,19 +1,27 @@
 package com.threegap.bitnagil.presentation.home.model
 
-import com.threegap.bitnagil.presentation.common.mviviewmodel.MviState
 import com.threegap.bitnagil.presentation.home.util.getCurrentWeekDays
-import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
 
-@Parcelize
 data class HomeState(
-    val isLoading: Boolean = false,
-    val userNickname: String = "",
-    val todayEmotion: TodayEmotionUiModel? = null,
-    val selectedDate: LocalDate = LocalDate.now(),
-    val currentWeeks: List<LocalDate> = LocalDate.now().getCurrentWeekDays(),
-    val routineSchedule: RoutineScheduleUiModel = RoutineScheduleUiModel(),
-) : MviState {
+    val isLoading: Boolean,
+    val userNickname: String,
+    val todayEmotion: TodayEmotionUiModel?,
+    val selectedDate: LocalDate,
+    val currentWeeks: List<LocalDate>,
+    val routineSchedule: RoutineScheduleUiModel,
+) {
     val selectedDateRoutines: List<RoutineUiModel>
         get() = routineSchedule.dailyRoutines[selectedDate.toString()]?.routines ?: emptyList()
+
+    companion object {
+        val INIT = HomeState(
+            isLoading = false,
+            userNickname = "",
+            todayEmotion = null,
+            selectedDate = LocalDate.now(),
+            currentWeeks = LocalDate.now().getCurrentWeekDays(),
+            routineSchedule = RoutineScheduleUiModel(),
+        )
+    }
 }

@@ -2,6 +2,7 @@ package com.threegap.bitnagil.presentation.home
 
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.threegap.bitnagil.domain.emotion.usecase.FetchTodayEmotionUseCase
 import com.threegap.bitnagil.domain.emotion.usecase.GetEmotionChangeEventFlowUseCase
@@ -13,7 +14,6 @@ import com.threegap.bitnagil.domain.routine.usecase.RoutineCompletionUseCase
 import com.threegap.bitnagil.domain.user.usecase.FetchUserProfileUseCase
 import com.threegap.bitnagil.domain.writeroutine.usecase.GetWriteRoutineEventFlowUseCase
 import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
-import com.threegap.bitnagil.presentation.home.model.HomeIntent
 import com.threegap.bitnagil.presentation.home.model.HomeSideEffect
 import com.threegap.bitnagil.presentation.home.model.HomeState
 import com.threegap.bitnagil.presentation.home.model.RoutineScheduleUiModel
@@ -28,13 +28,15 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import org.orbitmvi.orbit.Container
+import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.Syntax
+import org.orbitmvi.orbit.viewmodel.container
 import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
     private val fetchWeeklyRoutinesUseCase: FetchWeeklyRoutinesUseCase,
     private val fetchUserProfileUseCase: FetchUserProfileUseCase,
     private val fetchTodayEmotionUseCase: FetchTodayEmotionUseCase,
@@ -42,10 +44,11 @@ class HomeViewModel @Inject constructor(
     private val getWriteRoutineEventFlowUseCase: GetWriteRoutineEventFlowUseCase,
     private val getEmotionChangeEventFlowUseCase: GetEmotionChangeEventFlowUseCase,
     private val getOnBoardingRecommendRoutineEventFlowUseCase: GetOnBoardingRecommendRoutineEventFlowUseCase,
-) : MviViewModel<HomeState, HomeSideEffect, HomeIntent>(
-    initState = HomeState(),
-    savedStateHandle = savedStateHandle,
-) {
+    private val toggleRoutineUseCase: ToggleRoutineUseCase,
+) : ContainerHost<HomeState, HomeSideEffect>, ViewModel() {
+
+    override val container: Container<HomeState, HomeSideEffect> = container(initialState = HomeState.INIT)
+
     private val pendingChangesByDate = mutableMapOf<String, MutableList<RoutineCompletionInfo>>()
     private val backupStatesByDate = mutableMapOf<String, RoutineScheduleUiModel>()
     private val routineSyncTrigger = MutableSharedFlow<LocalDate>()
@@ -56,92 +59,54 @@ class HomeViewModel @Inject constructor(
         observeRecommendRoutineEvent()
         observeWeekChanges()
         observeRoutineUpdates()
-        fetchWeeklyRoutines(stateFlow.value.currentWeeks)
+        fetchWeeklyRoutines(container.stateFlow.value.currentWeeks)
         fetchUserProfile()
         fetchTodayEmotion(LocalDate.now())
     }
 
-    override suspend fun Syntax<HomeState, HomeSideEffect>.reduceState(
-        intent: HomeIntent,
-        state: HomeState,
-    ): HomeState? {
-        val newState = when (intent) {
-            is HomeIntent.UpdateLoading -> {
-                state.copy(isLoading = intent.isLoading)
+    fun selectDate(data: LocalDate) {
+        intent {
+            reduce { state.copy(selectedDate = data) }
+        }
+    }
+
+    fun getNextWeek() {
+        intent {
+            val newWeek = state.selectedDate.plusWeeks(1).getCurrentWeekDays()
+            reduce { state.copy(currentWeeks = newWeek, selectedDate = newWeek.first()) }
+        }
+    }
+
+    fun getPreviousWeek() {
+        intent {
+            val newWeek = state.selectedDate.minusWeeks(1).getCurrentWeekDays()
+            reduce { state.copy(currentWeeks = newWeek, selectedDate = newWeek.first()) }
+        }
+    }
+
+
+
+
+
             }
 
-            is HomeIntent.LoadUserProfile -> {
-                state.copy(userNickname = intent.nickname)
+
             }
 
-            is HomeIntent.LoadWeeklyRoutines -> {
-                state.copy(routines = intent.routines)
             }
 
-            is HomeIntent.OnDateSelect -> {
-                state.copy(selectedDate = intent.date)
             }
 
-            is HomeIntent.OnNextWeekClick -> {
-                val newWeek = state.selectedDate.plusWeeks(1).getCurrentWeekDays()
-                state.copy(
-                    currentWeeks = newWeek,
-                    selectedDate = newWeek.first(),
-                )
             }
 
-            is HomeIntent.OnPreviousWeekClick -> {
-                val newWeek = state.selectedDate.minusWeeks(1).getCurrentWeekDays()
-                state.copy(
-                    currentWeeks = newWeek,
-                    selectedDate = newWeek.first(),
-                )
-            }
-
-            is HomeIntent.OnRoutineCompletionToggle -> {
-                updateMainRoutine(state, intent.routineId)
-            }
-
-            is HomeIntent.OnSubRoutineCompletionToggle -> {
-                updateSubRoutine(state, intent.routineId, intent.subRoutineIndex)
-            }
-
-            is HomeIntent.LoadTodayEmotion -> {
-                state.copy(todayEmotion = intent.emotion)
-            }
-
-            is HomeIntent.OnHelpClick -> {
-                sendSideEffect(HomeSideEffect.NavigateToGuide)
-                null
-            }
-
-            is HomeIntent.OnRegisterEmotionClick -> {
-                sendSideEffect(HomeSideEffect.NavigateToEmotion)
-                null
-            }
-
-            is HomeIntent.OnRegisterRoutineClick -> {
-                sendSideEffect(HomeSideEffect.NavigateToRegisterRoutine)
-                null
-            }
-
-            is HomeIntent.OnShowMoreRoutinesClick -> {
-                val selectedDate = stateFlow.value.selectedDate.toString()
-                sendSideEffect(HomeSideEffect.NavigateToRoutineList(selectedDate))
-                null
-            }
-
-            is HomeIntent.RoutineToggleCompletionFailure -> {
-                null
             }
         }
-        return newState
     }
 
     private fun observeWriteRoutineEvent() {
         viewModelScope.launch {
             getWriteRoutineEventFlowUseCase().collect {
-                fetchWeeklyRoutines(stateFlow.value.currentWeeks)
+                fetchWeeklyRoutines(container.stateFlow.value.currentWeeks)
             }
         }
     }
@@ -158,7 +123,7 @@ class HomeViewModel @Inject constructor(
     private fun observeRecommendRoutineEvent() {
         viewModelScope.launch {
             getOnBoardingRecommendRoutineEventFlowUseCase().collect {
-                fetchWeeklyRoutines(stateFlow.value.currentWeeks)
+                fetchWeeklyRoutines(container.stateFlow.value.currentWeeks)
             }
         }
     }
@@ -189,50 +154,45 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun fetchUserProfile() {
-        sendIntent(HomeIntent.UpdateLoading(true))
-        viewModelScope.launch {
+        intent {
+            reduce { state.copy(isLoading = true) }
             fetchUserProfileUseCase().fold(
                 onSuccess = {
-                    sendIntent(HomeIntent.LoadUserProfile(it.nickname))
-                    sendIntent(HomeIntent.UpdateLoading(false))
+                    reduce { state.copy(userNickname = it.nickname, isLoading = false) }
                 },
-                onFailure = { error ->
-                    Log.e("HomeViewModel", "유저 정보 가져오기 실패: ${error.message}")
-                    sendIntent(HomeIntent.UpdateLoading(false))
+                onFailure = {
+                    Log.e("HomeViewModel", "유저 정보 가져오기 실패: ${it.message}")
+                    reduce { state.copy(isLoading = false) }
                 },
             )
         }
     }
 
     private fun fetchWeeklyRoutines(currentWeeks: List<LocalDate>) {
-        sendIntent(HomeIntent.UpdateLoading(true))
-        val startDate = currentWeeks.first().toString()
-        val endDate = currentWeeks.last().toString()
-        viewModelScope.launch {
-            fetchWeeklyRoutinesUseCase(startDate, endDate).fold(
-                onSuccess = { routines ->
-                    sendIntent(HomeIntent.LoadWeeklyRoutines(routines.toUiModel()))
-                    sendIntent(HomeIntent.UpdateLoading(false))
+        intent {
+            reduce { state.copy(isLoading = true) }
+            fetchWeeklyRoutinesUseCase(currentWeeks).fold(
+                onSuccess = {
+                    reduce { state.copy(isLoading = false, routineSchedule = it.toUiModel()) }
                 },
-                onFailure = { error ->
-                    Log.e("HomeViewModel", "루틴 가져오기 실패: ${error.message}")
-                    sendIntent(HomeIntent.UpdateLoading(false))
+                onFailure = {
+                    Log.e("HomeViewModel", "루틴 가져오기 실패: ${it.message}")
+                    reduce { state.copy(isLoading = false) }
                 },
             )
         }
     }
 
     private fun fetchTodayEmotion(currentDate: LocalDate) {
-        sendIntent(HomeIntent.UpdateLoading(true))
-        viewModelScope.launch {
+        intent {
+            reduce { state.copy(isLoading = true) }
             fetchTodayEmotionUseCase(currentDate.toString()).fold(
-                onSuccess = { todayEmotion ->
-                    sendIntent(HomeIntent.LoadTodayEmotion(todayEmotion?.toUiModel()))
-                    sendIntent(HomeIntent.UpdateLoading(false))
+                onSuccess = {
+                    reduce { state.copy(isLoading = false, todayEmotion = it?.toUiModel()) }
                 },
-                onFailure = { error ->
-                    Log.e("HomeViewModel", "나의 감정 실패: ${error.message}")
-                    sendIntent(HomeIntent.UpdateLoading(false))
+                onFailure = {
+                    Log.e("HomeViewModel", "나의 감정 실패: ${it.message}")
+                    reduce { state.copy(isLoading = false) }
                 },
             )
         }
