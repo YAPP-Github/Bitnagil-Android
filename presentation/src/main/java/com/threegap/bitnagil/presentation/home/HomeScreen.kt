@@ -64,7 +64,7 @@ fun HomeScreenContainer(
         onHelpClick = viewModel::navigateToGuide,
         onRegisterRoutineClick = viewModel::navigateToRegisterRoutine,
         onRegisterEmotionClick = viewModel::navigateToEmotion,
-        onShowMoreRoutinesClick = viewModel::navigateToRoutineList
+        onShowMoreRoutinesClick = viewModel::navigateToRoutineList,
     )
 }
 
