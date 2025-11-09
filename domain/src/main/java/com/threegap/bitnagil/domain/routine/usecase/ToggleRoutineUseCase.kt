@@ -21,6 +21,7 @@ class ToggleRoutineUseCase @Inject constructor() {
         val newSubRoutineStates = subRoutineStates.map { newIsCompleted }
 
         return RoutineToggleState(
+            isCompleted = newIsCompleted,
             subRoutinesIsCompleted = newSubRoutineStates,
         )
     }
@@ -37,16 +38,17 @@ class ToggleRoutineUseCase @Inject constructor() {
         index: Int,
         subRoutineStates: List<Boolean>,
     ): RoutineToggleState? {
-        if (index !in subRoutineStates.indices) {
-            return null
-        }
+        if (index !in subRoutineStates.indices) return null
 
         val newState = !subRoutineStates[index]
         val newSubRoutineStates = subRoutineStates.toMutableList().apply {
             this[index] = newState
         }
 
+        val allCompleted = newSubRoutineStates.all { it }
+
         return RoutineToggleState(
+            isCompleted = allCompleted,
             subRoutinesIsCompleted = newSubRoutineStates,
         )
     }
