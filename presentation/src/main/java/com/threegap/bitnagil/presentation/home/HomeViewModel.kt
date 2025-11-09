@@ -264,7 +264,9 @@ class HomeViewModel @Inject constructor(
     private suspend fun fetchWeeklyRoutines(currentWeeks: List<LocalDate>) {
         subIntent {
             reduce { state.copy(loadingCount = state.loadingCount + 1) }
-            fetchWeeklyRoutinesUseCase(currentWeeks).fold(
+            val startDate = currentWeeks.first().toString()
+            val endDate = currentWeeks.last().toString()
+            fetchWeeklyRoutinesUseCase(startDate, endDate).fold(
                 onSuccess = {
                     reduce { state.copy(routineSchedule = it.toUiModel(), loadingCount = state.loadingCount - 1) }
                 },
