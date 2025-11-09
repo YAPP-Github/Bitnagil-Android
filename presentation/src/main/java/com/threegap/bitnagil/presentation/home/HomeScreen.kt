@@ -22,18 +22,17 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
-import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.home.component.template.CollapsibleHomeHeader
 import com.threegap.bitnagil.presentation.home.component.template.EmptyRoutineView
 import com.threegap.bitnagil.presentation.home.component.template.RoutineSection
 import com.threegap.bitnagil.presentation.home.component.template.WeeklyDatePicker
-import com.threegap.bitnagil.presentation.home.model.HomeIntent
 import com.threegap.bitnagil.presentation.home.model.HomeSideEffect
 import com.threegap.bitnagil.presentation.home.model.HomeState
 import com.threegap.bitnagil.presentation.home.util.rememberCollapsibleHeaderState
+import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 import java.time.LocalDate
 
 @Composable
@@ -44,57 +43,28 @@ fun HomeScreenContainer(
     navigateToRoutineList: (String) -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
-    val uiState by viewModel.stateFlow.collectAsStateWithLifecycle()
+    val uiState by viewModel.collectAsState()
 
-    viewModel.sideEffectFlow.collectAsEffect { sideEffect ->
+    viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
-            is HomeSideEffect.NavigateToGuide -> {
-                navigateToGuide()
-            }
-
-            is HomeSideEffect.NavigateToRegisterRoutine -> {
-                navigateToRegisterRoutine()
-            }
-
-            is HomeSideEffect.NavigateToEmotion -> {
-                navigateToEmotion()
-            }
-
-            is HomeSideEffect.NavigateToRoutineList -> {
-                navigateToRoutineList(sideEffect.selectedDate)
-            }
+            is HomeSideEffect.NavigateToGuide -> navigateToGuide()
+            is HomeSideEffect.NavigateToRegisterRoutine -> navigateToRegisterRoutine()
+            is HomeSideEffect.NavigateToEmotion -> navigateToEmotion()
+            is HomeSideEffect.NavigateToRoutineList -> navigateToRoutineList(sideEffect.selectedDate)
         }
     }
 
     HomeScreen(
         uiState = uiState,
-        onDateSelect = { date ->
-            viewModel.sendIntent(HomeIntent.OnDateSelect(date))
-        },
-        onPreviousWeekClick = {
-            viewModel.sendIntent(HomeIntent.OnPreviousWeekClick)
-        },
-        onNextWeekClick = {
-            viewModel.sendIntent(HomeIntent.OnNextWeekClick)
-        },
-        onRoutineCompletionToggle = { routineId, isCompleted ->
-            viewModel.toggleRoutineCompletion(routineId, isCompleted)
-        },
-        onSubRoutineCompletionToggle = { routineId, subRoutineIndex, isCompleted ->
-            viewModel.toggleSubRoutineCompletion(routineId, subRoutineIndex, isCompleted)
-        },
-        onHelpClick = {
-            viewModel.sendIntent(HomeIntent.OnHelpClick)
-        },
-        onRegisterRoutineClick = {
-            viewModel.sendIntent(HomeIntent.OnRegisterRoutineClick)
-        },
-        onRegisterEmotionClick = {
-            viewModel.sendIntent(HomeIntent.OnRegisterEmotionClick)
-        },
-        onShowMoreRoutinesClick = {
-            viewModel.sendIntent((HomeIntent.OnShowMoreRoutinesClick))
-        },
+        onDateSelect = viewModel::selectDate,
+        onPreviousWeekClick = viewModel::getPreviousWeek,
+        onNextWeekClick = viewModel::getNextWeek,
+        onRoutineToggle = viewModel::toggleRoutine,
+        onSubRoutineToggle = viewModel::toggleSubRoutine,
+        onHelpClick = viewModel::navigateToGuide,
+        onRegisterRoutineClick = viewModel::navigateToRegisterRoutine,
+        onRegisterEmotionClick = viewModel::navigateToEmotion,
+        onShowMoreRoutinesClick = viewModel::navigateToRoutineList,
     )
 }
 
@@ -104,8 +74,8 @@ private fun HomeScreen(
     onDateSelect: (LocalDate) -> Unit,
     onPreviousWeekClick: () -> Unit,
     onNextWeekClick: () -> Unit,
-    onRoutineCompletionToggle: (String, Boolean) -> Unit,
-    onSubRoutineCompletionToggle: (String, Int, Boolean) -> Unit,
+    onRoutineToggle: (String) -> Unit,
+    onSubRoutineToggle: (String, Int) -> Unit,
     onHelpClick: () -> Unit,
     onRegisterRoutineClick: () -> Unit,
     onRegisterEmotionClick: () -> Unit,
@@ -125,7 +95,7 @@ private fun HomeScreen(
             WeeklyDatePicker(
                 selectedDate = uiState.selectedDate,
                 weeklyDates = uiState.currentWeeks,
-                routines = uiState.routines,
+                routines = uiState.routineSchedule,
                 onDateSelect = onDateSelect,
                 onPreviousWeekClick = onPreviousWeekClick,
                 onNextWeekClick = onNextWeekClick,
@@ -183,15 +153,13 @@ private fun HomeScreen(
                 ) {
                     items(
                         items = uiState.selectedDateRoutines,
-                        key = { routine -> "${routine.routineId}_${uiState.selectedDate}" },
+                        key = { routine -> "${routine.id}_${uiState.selectedDate}" },
                     ) { routine ->
                         RoutineSection(
                             routine = routine,
-                            onRoutineToggle = { isCompleted ->
-                                onRoutineCompletionToggle(routine.routineId, isCompleted)
-                            },
-                            onSubRoutineToggle = { subRoutineIndex, isCompleted ->
-                                onSubRoutineCompletionToggle(routine.routineId, subRoutineIndex, isCompleted)
+                            onRoutineToggle = { onRoutineToggle(routine.id) },
+                            onSubRoutineToggle = { subRoutineIndex ->
+                                onSubRoutineToggle(routine.id, subRoutineIndex)
                             },
                         )
                     }
@@ -213,12 +181,12 @@ private fun HomeScreen(
 @Composable
 private fun HomeScreenPreview() {
     HomeScreen(
-        uiState = HomeState(),
+        uiState = HomeState.INIT,
         onDateSelect = {},
         onPreviousWeekClick = {},
         onNextWeekClick = {},
-        onRoutineCompletionToggle = { _, _ -> },
-        onSubRoutineCompletionToggle = { _, _, _ -> },
+        onRoutineToggle = { _ -> },
+        onSubRoutineToggle = { _, _ -> },
         onHelpClick = {},
         onRegisterRoutineClick = {},
         onRegisterEmotionClick = {},
