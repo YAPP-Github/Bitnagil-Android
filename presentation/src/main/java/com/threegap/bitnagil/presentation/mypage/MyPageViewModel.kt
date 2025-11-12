@@ -1,57 +1,37 @@
 package com.threegap.bitnagil.presentation.mypage
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.ViewModel
 import com.threegap.bitnagil.domain.user.usecase.FetchUserProfileUseCase
-import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
-import com.threegap.bitnagil.presentation.mypage.model.MyPageIntent
 import com.threegap.bitnagil.presentation.mypage.model.MyPageSideEffect
 import com.threegap.bitnagil.presentation.mypage.model.MyPageState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
-import org.orbitmvi.orbit.syntax.Syntax
+import org.orbitmvi.orbit.Container
+import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
     private val fetchUserProfileUseCase: FetchUserProfileUseCase,
-) : MviViewModel<MyPageState, MyPageSideEffect, MyPageIntent>(
-    MyPageState.Init,
-    savedStateHandle,
-) {
+) : ContainerHost<MyPageState, MyPageSideEffect>, ViewModel() {
+    override val container: Container<MyPageState, MyPageSideEffect> = container(initialState = MyPageState.Init)
+
     init {
         loadMyPageInfo()
     }
 
-    private fun loadMyPageInfo() {
-        viewModelScope.launch {
-            fetchUserProfileUseCase().fold(
-                onSuccess = {
-                    sendIntent(
-                        MyPageIntent.LoadMyPageSuccess(
-                            name = it.nickname,
-                            profileUrl = "profileUrl",
-                        ),
+    private fun loadMyPageInfo() = intent {
+        fetchUserProfileUseCase().fold(
+            onSuccess = {
+                reduce {
+                    state.copy(
+                        name = it.nickname,
+                        profileUrl = "profileUrl",
                     )
-                },
-                onFailure = {
-                },
-            )
-        }
-    }
-
-    override suspend fun Syntax<MyPageState, MyPageSideEffect>.reduceState(
-        intent: MyPageIntent,
-        state: MyPageState,
-    ): MyPageState {
-        when (intent) {
-            is MyPageIntent.LoadMyPageSuccess -> {
-                return state.copy(
-                    name = intent.name,
-                    profileUrl = intent.profileUrl,
-                )
-            }
-        }
+                }
+            },
+            onFailure = {
+            },
+        )
     }
 }
