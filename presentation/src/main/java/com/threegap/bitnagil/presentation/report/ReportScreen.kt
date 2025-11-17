@@ -1,0 +1,293 @@
+package com.threegap.bitnagil.presentation.report
+
+import android.Manifest
+import android.content.Context
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.core.content.FileProvider
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButtonColor
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextField
+import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
+import com.threegap.bitnagil.presentation.common.premission.rememberPermissionHandler
+import com.threegap.bitnagil.presentation.report.component.AddPhotoButton
+import com.threegap.bitnagil.presentation.report.component.CurrentLocationInput
+import com.threegap.bitnagil.presentation.report.component.ImageSourceBottomSheet
+import com.threegap.bitnagil.presentation.report.component.PhotoItem
+import com.threegap.bitnagil.presentation.report.component.ReportCategoryBottomSheet
+import com.threegap.bitnagil.presentation.report.component.ReportCategorySelector
+import com.threegap.bitnagil.presentation.report.component.ReportField
+import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
+import java.io.File
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
+@Composable
+fun ReportScreenContainer(
+    navigateToBack: () -> Unit,
+    viewModel: ReportViewModel = hiltViewModel(),
+) {
+    val context = LocalContext.current
+    val uiState by viewModel.collectAsState()
+
+    viewModel.collectSideEffect { sideEffect ->
+        when (sideEffect) {
+            is ReportSideEffect.NavigateToBack -> navigateToBack()
+        }
+    }
+
+    var pendingCameraPhotoUri by remember { mutableStateOf<Uri?>(null) }
+
+    val pickMultipleMediaLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickMultipleVisualMedia(ReportViewModel.MAX_IMAGE_COUNT),
+        onResult = viewModel::addImages,
+    )
+
+    val takePictureLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture(),
+        onResult = { success ->
+            if (success) {
+                pendingCameraPhotoUri?.let { uri ->
+                    viewModel.addImages(listOf(uri))
+                }
+            }
+            pendingCameraPhotoUri = null
+        },
+    )
+
+    fun createImageUri(context: Context): Uri {
+        val cameraDir = File(context.cacheDir, "camera").apply { if (!exists()) mkdirs() }
+        val imageFile = File(cameraDir, "camera_${System.currentTimeMillis()}.jpg")
+        return FileProvider.getUriForFile(context, "${context.packageName}.provider", imageFile)
+    }
+
+    val cameraPermissionHandler = rememberPermissionHandler(
+        permission = Manifest.permission.CAMERA,
+        dialogDescription = "카메라 권한이 비활성화됐어요.\n설정에서 허용해 주세요.",
+        onGranted = {
+            val imageUri = createImageUri(context)
+            pendingCameraPhotoUri = imageUri
+            takePictureLauncher.launch(imageUri)
+        },
+    )
+
+    val locationPermissionHandler = rememberPermissionHandler(
+        permission = Manifest.permission.ACCESS_FINE_LOCATION,
+        dialogDescription = "위치 권한이 비활성화됐어요.\n설정에서 허용해 주세요.",
+        onGranted = viewModel::fetchCurrentAddress,
+    )
+
+    cameraPermissionHandler.PermissionDialogs()
+    locationPermissionHandler.PermissionDialogs()
+
+    if (uiState.imageSourceBottomSheetVisible) {
+        ImageSourceBottomSheet(
+            onCameraClick = {
+                if (uiState.canAddMoreImages) cameraPermissionHandler.requestPermission()
+            },
+            onAlbumClick = {
+                if (uiState.canAddMoreImages) {
+                    pickMultipleMediaLauncher.launch(
+                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
+                    )
+                }
+            },
+            onDismiss = viewModel::hideImageSourceBottomSheet,
+        )
+    }
+
+    if (uiState.reportCategoryBottomSheetVisible) {
+        ReportCategoryBottomSheet(
+            selectedCategory = uiState.selectedCategory,
+            onSelected = viewModel::selectReportCategory,
+            onDismiss = viewModel::hideReportCategoryBottomSheet,
+        )
+    }
+
+    ReportScreen(
+        uiState = uiState,
+        onReportTitle = viewModel::updateReportTitle,
+        onReportDescriptionChange = viewModel::updateReportDescription,
+        onShowImageSourceBottomSheet = viewModel::showImageSourceBottomSheet,
+        onShowReportCategoryBottomSheet = viewModel::showReportCategoryBottomSheet,
+        onRemoveImage = viewModel::removeImage,
+        onGetCurrentLocationClick = locationPermissionHandler::requestPermission,
+        onBackClick = viewModel::navigateToBack,
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ReportScreen(
+    uiState: ReportState,
+    onReportTitle: (String) -> Unit,
+    onReportDescriptionChange: (String) -> Unit,
+    onShowImageSourceBottomSheet: () -> Unit,
+    onShowReportCategoryBottomSheet: () -> Unit,
+    onRemoveImage: (Uri) -> Unit,
+    onGetCurrentLocationClick: () -> Unit,
+    onBackClick: () -> Unit,
+) {
+    val scrollState = rememberScrollState()
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+            .windowInsetsPadding(WindowInsets.ime),
+    ) {
+        BitnagilTopBar(
+            title = "제보하기",
+            showBackButton = true,
+            onBackClick = onBackClick,
+        )
+
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .verticalScroll(state = scrollState)
+                .padding(top = 32.dp)
+                .padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(28.dp),
+        ) {
+            ReportField(title = "사진 첨부") {
+                Row(
+                    verticalAlignment = Alignment.Bottom,
+                ) {
+                    AddPhotoButton(
+                        onClick = onShowImageSourceBottomSheet,
+                        imageCount = uiState.reportImages.size,
+                        maxImageCount = ReportViewModel.MAX_IMAGE_COUNT,
+                    )
+
+                    LazyRow(
+                        modifier = Modifier.weight(1f),
+                        horizontalArrangement = Arrangement.spacedBy(14.dp),
+                        contentPadding = PaddingValues(horizontal = 14.dp),
+                    ) {
+                        items(uiState.reportImages) { uri ->
+                            PhotoItem(
+                                uri = uri,
+                                onRemove = onRemoveImage,
+                            )
+                        }
+                    }
+                }
+            }
+
+            ReportField(title = "제목") {
+                BitnagilTextField(
+                    value = uiState.reportTitle,
+                    onValueChange = onReportTitle,
+                    singleLine = true,
+                    placeholder = {
+                        Text(
+                            text = "제보 제목을 작성해주세요.",
+                            style = BitnagilTheme.typography.body2Medium,
+                            color = BitnagilTheme.colors.coolGray80,
+                        )
+                    },
+                )
+            }
+
+            ReportField(title = "카테고리") {
+                ReportCategorySelector(
+                    title = uiState.selectedCategory?.title,
+                    onClick = onShowReportCategoryBottomSheet,
+                )
+            }
+
+            ReportField(title = "상세 제보 내용") {
+                BitnagilTextField(
+                    value = uiState.reportDescription,
+                    onValueChange = onReportDescriptionChange,
+                    modifier = Modifier.height(88.dp),
+                    placeholder = {
+                        Text(
+                            text = "어떤 위험인지 간단히 설명해주세요.(100자 내외)",
+                            style = BitnagilTheme.typography.body2Medium,
+                            color = BitnagilTheme.colors.coolGray80,
+                        )
+                    },
+                )
+
+                Text(
+                    text = "${uiState.reportDescription.length} / 150",
+                    style = BitnagilTheme.typography.caption1Medium,
+                    color = BitnagilTheme.colors.coolGray80,
+                    textAlign = TextAlign.End,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+
+            ReportField(title = " 신고 위치") {
+                CurrentLocationInput(
+                    currentLocation = uiState.currentAddress,
+                    onClick = onGetCurrentLocationClick,
+                )
+            }
+        }
+
+        BitnagilTextButton(
+            text = "제보하기",
+            onClick = {},
+            colors = BitnagilTextButtonColor.default(
+                disabledBackgroundColor = BitnagilTheme.colors.coolGray98,
+                disabledTextColor = BitnagilTheme.colors.coolGray90,
+            ),
+            enabled = false,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(14.dp),
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun Preview() {
+    ReportScreen(
+        uiState = ReportState.Init,
+        onReportTitle = {},
+        onReportDescriptionChange = {},
+        onRemoveImage = {},
+        onShowImageSourceBottomSheet = {},
+        onShowReportCategoryBottomSheet = {},
+        onGetCurrentLocationClick = {},
+        onBackClick = {},
+    )
+}
