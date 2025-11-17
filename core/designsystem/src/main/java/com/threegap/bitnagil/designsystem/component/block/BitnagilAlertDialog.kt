@@ -29,7 +29,7 @@ fun BitnagilAlertDialog(
     confirmButtonText: String,
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     BasicAlertDialog(
         modifier = modifier,
