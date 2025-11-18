@@ -1,5 +1,9 @@
 package com.threegap.bitnagil.di.data
 
+import com.threegap.bitnagil.data.address.datasource.AddressDataSource
+import com.threegap.bitnagil.data.address.datasource.LocationDataSource
+import com.threegap.bitnagil.data.address.datasourceImpl.AddressDataSourceImpl
+import com.threegap.bitnagil.data.address.datasourceImpl.LocationDataSourceImpl
 import com.threegap.bitnagil.data.auth.datasource.AuthLocalDataSource
 import com.threegap.bitnagil.data.auth.datasource.AuthRemoteDataSource
 import com.threegap.bitnagil.data.auth.datasourceimpl.AuthLocalDataSourceImpl
@@ -63,4 +67,12 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindVersionDataSource(versionDataSourceImpl: VersionDataSourceImpl): VersionDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindLocationDataSource(locationDataSourceImpl: LocationDataSourceImpl): LocationDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindAddressDataSource(addressDataSourceImpl: AddressDataSourceImpl): AddressDataSource
 }

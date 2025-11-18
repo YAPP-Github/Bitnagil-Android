@@ -2,6 +2,7 @@ package com.threegap.bitnagil.presentation.report
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
+import com.threegap.bitnagil.domain.address.usecase.FetchCurrentAddressUseCase
 import com.threegap.bitnagil.presentation.report.model.ReportCategory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
@@ -10,7 +11,9 @@ import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.viewmodel.container
 
 @HiltViewModel
-class ReportViewModel @Inject constructor() : ViewModel(), ContainerHost<ReportState, ReportSideEffect> {
+class ReportViewModel @Inject constructor(
+    private val fetchCurrentAddressUseCase: FetchCurrentAddressUseCase,
+) : ViewModel(), ContainerHost<ReportState, ReportSideEffect> {
 
     override val container: Container<ReportState, ReportSideEffect> = container(initialState = ReportState.Init)
 
@@ -57,7 +60,20 @@ class ReportViewModel @Inject constructor() : ViewModel(), ContainerHost<ReportS
     }
 
     fun fetchCurrentAddress() {
-        // TODO
+        intent {
+            fetchCurrentAddressUseCase().fold(
+                onSuccess = {
+                    reduce {
+                        state.copy(
+                            currentLatitude = it.latitude,
+                            currentLongitude = it.longitude,
+                            currentAddress = it.roadAddress,
+                        )
+                    }
+                },
+                onFailure = {},
+            )
+        }
     }
 
     fun addImages(uris: List<Uri>) {

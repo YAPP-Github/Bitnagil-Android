@@ -1,5 +1,6 @@
 package com.threegap.bitnagil.di.data
 
+import com.threegap.bitnagil.data.address.service.AddressService
 import com.threegap.bitnagil.data.auth.service.AuthService
 import com.threegap.bitnagil.data.emotion.service.EmotionService
 import com.threegap.bitnagil.data.onboarding.service.OnBoardingService
@@ -9,6 +10,7 @@ import com.threegap.bitnagil.data.user.service.UserService
 import com.threegap.bitnagil.data.version.service.VersionService
 import com.threegap.bitnagil.data.writeroutine.service.WriteRoutineService
 import com.threegap.bitnagil.di.core.Auth
+import com.threegap.bitnagil.di.core.Kakao
 import com.threegap.bitnagil.di.core.NoneAuth
 import com.threegap.bitnagil.network.token.ReissueService
 import dagger.Module
@@ -66,4 +68,9 @@ object ServiceModule {
     @Singleton
     fun provideVersionService(@NoneAuth retrofit: Retrofit): VersionService =
         retrofit.create(VersionService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideAddressService(@Kakao retrofit: Retrofit): AddressService =
+        retrofit.create(AddressService::class.java)
 }
