@@ -21,7 +21,6 @@ dependencies {
     implementation(libs.lottie.compose)
     implementation(libs.bundles.coil)
     implementation(libs.accompanist.permissions)
-    implementation(libs.play.services.location)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlin.coroutines.test)
