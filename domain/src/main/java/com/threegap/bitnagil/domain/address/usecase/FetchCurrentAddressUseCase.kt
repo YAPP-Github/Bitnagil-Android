@@ -11,8 +11,8 @@ class FetchCurrentAddressUseCase @Inject constructor(
         return addressRepository.fetchCurrentLocation()
             .mapCatching { location ->
                 val roadAddress = addressRepository.fetchCurrentAddress(
-                    latitude = location.latitude,
                     longitude = location.longitude,
+                    latitude = location.latitude,
                 ).getOrThrow()
 
                 CurrentAddress(

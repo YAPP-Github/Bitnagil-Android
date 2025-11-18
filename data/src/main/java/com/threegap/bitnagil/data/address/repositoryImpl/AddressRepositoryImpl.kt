@@ -16,8 +16,8 @@ class AddressRepositoryImpl @Inject constructor(
         return locationDataSource.fetchCurrentLocation()
     }
 
-    override suspend fun fetchCurrentAddress(latitude: Double, longitude: Double): Result<String> {
-        return addressDataSource.fetchCurrentAddress(latitude, longitude)
+    override suspend fun fetchCurrentAddress(longitude: Double, latitude: Double): Result<String> {
+        return addressDataSource.fetchCurrentAddress(longitude = longitude, latitude = latitude)
             .mapCatching {
                 it.toAddress() ?: throw Exception("Address not found")
             }
