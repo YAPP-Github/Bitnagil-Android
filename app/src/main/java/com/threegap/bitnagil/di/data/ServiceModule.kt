@@ -3,6 +3,7 @@ package com.threegap.bitnagil.di.data
 import com.threegap.bitnagil.data.address.service.AddressService
 import com.threegap.bitnagil.data.auth.service.AuthService
 import com.threegap.bitnagil.data.emotion.service.EmotionService
+import com.threegap.bitnagil.data.file.service.FileService
 import com.threegap.bitnagil.data.onboarding.service.OnBoardingService
 import com.threegap.bitnagil.data.recommendroutine.service.RecommendRoutineService
 import com.threegap.bitnagil.data.routine.service.RoutineService
@@ -73,4 +74,9 @@ object ServiceModule {
     @Singleton
     fun provideAddressService(@Kakao retrofit: Retrofit): AddressService =
         retrofit.create(AddressService::class.java)
+
+    @Provides
+    @Singleton
+    fun fileService(@Auth retrofit: Retrofit): FileService =
+        retrofit.create(FileService::class.java)
 }
