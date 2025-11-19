@@ -10,7 +10,8 @@ import com.threegap.bitnagil.data.auth.datasourceimpl.AuthLocalDataSourceImpl
 import com.threegap.bitnagil.data.auth.datasourceimpl.AuthRemoteDataSourceImpl
 import com.threegap.bitnagil.data.emotion.datasource.EmotionDataSource
 import com.threegap.bitnagil.data.emotion.datasourceImpl.EmotionDataSourceImpl
-import com.threegap.bitnagil.data.file.repositoryImpl.FileRepositoryImpl
+import com.threegap.bitnagil.data.file.datasource.FileDataSource
+import com.threegap.bitnagil.data.file.datasourceImpl.FileDataSourceImpl
 import com.threegap.bitnagil.data.onboarding.datasource.OnBoardingDataSource
 import com.threegap.bitnagil.data.onboarding.datasourceImpl.OnBoardingDataSourceImpl
 import com.threegap.bitnagil.data.recommendroutine.datasource.RecommendRoutineDataSource
@@ -23,7 +24,6 @@ import com.threegap.bitnagil.data.version.datasource.VersionDataSource
 import com.threegap.bitnagil.data.version.datasourceImpl.VersionDataSourceImpl
 import com.threegap.bitnagil.data.writeroutine.datasource.WriteRoutineDataSource
 import com.threegap.bitnagil.data.writeroutine.datasourceImpl.WriteRoutineDataSourceImpl
-import com.threegap.bitnagil.domain.file.repository.FileRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -80,5 +80,5 @@ abstract class DataSourceModule {
 
     @Binds
     @Singleton
-    abstract fun bindFileRepository(impl: FileRepositoryImpl): FileRepository
+    abstract fun bindFileDataSource(impl: FileDataSourceImpl): FileDataSource
 }
