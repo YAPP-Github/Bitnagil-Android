@@ -48,4 +48,7 @@ sealed interface Route {
 
     @Serializable
     data object Guide : Route
+
+    @Serializable
+    data object Report : Route
 }
