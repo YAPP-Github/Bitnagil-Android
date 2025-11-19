@@ -6,6 +6,7 @@ import com.threegap.bitnagil.data.emotion.service.EmotionService
 import com.threegap.bitnagil.data.file.service.FileService
 import com.threegap.bitnagil.data.onboarding.service.OnBoardingService
 import com.threegap.bitnagil.data.recommendroutine.service.RecommendRoutineService
+import com.threegap.bitnagil.data.report.service.ReportService
 import com.threegap.bitnagil.data.routine.service.RoutineService
 import com.threegap.bitnagil.data.user.service.UserService
 import com.threegap.bitnagil.data.version.service.VersionService
@@ -77,6 +78,11 @@ object ServiceModule {
 
     @Provides
     @Singleton
-    fun fileService(@Auth retrofit: Retrofit): FileService =
+    fun provideFileService(@Auth retrofit: Retrofit): FileService =
         retrofit.create(FileService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideReportService(@Auth retrofit: Retrofit): ReportService =
+        retrofit.create(ReportService::class.java)
 }

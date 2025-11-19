@@ -16,6 +16,8 @@ import com.threegap.bitnagil.data.onboarding.datasource.OnBoardingDataSource
 import com.threegap.bitnagil.data.onboarding.datasourceImpl.OnBoardingDataSourceImpl
 import com.threegap.bitnagil.data.recommendroutine.datasource.RecommendRoutineDataSource
 import com.threegap.bitnagil.data.recommendroutine.datasourceImpl.RecommendRoutineDataSourceImpl
+import com.threegap.bitnagil.data.report.datasource.ReportDataSource
+import com.threegap.bitnagil.data.report.datasourceImpl.ReportDataSourceImpl
 import com.threegap.bitnagil.data.routine.datasource.RoutineRemoteDataSource
 import com.threegap.bitnagil.data.routine.datasourceImpl.RoutineRemoteDataSourceImpl
 import com.threegap.bitnagil.data.user.datasource.UserDataSource
@@ -81,4 +83,8 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindFileDataSource(impl: FileDataSourceImpl): FileDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindReportDataSource(impl: ReportDataSourceImpl): ReportDataSource
 }
