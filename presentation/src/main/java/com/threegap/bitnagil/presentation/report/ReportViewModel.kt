@@ -53,7 +53,7 @@ class ReportViewModel @Inject constructor(
         }
     }
 
-    fun selectReportCategory(category: ReportCategory) {
+    fun selectReportCategory(category: ReportCategoryUi) {
         intent {
             reduce { state.copy(selectedCategory = category) }
         }
@@ -109,7 +109,7 @@ data class ReportState(
     val reportImages: List<Uri>,
     val reportTitle: String,
     val reportDescription: String,
-    val selectedCategory: ReportCategory?,
+    val selectedCategory: ReportCategoryUi?,
     val imageSourceBottomSheetVisible: Boolean,
     val reportCategoryBottomSheetVisible: Boolean,
     val currentAddress: String?,
