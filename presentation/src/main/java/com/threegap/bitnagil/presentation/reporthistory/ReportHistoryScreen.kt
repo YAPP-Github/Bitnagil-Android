@@ -20,10 +20,12 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilChip
@@ -31,20 +33,46 @@ import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.reporthistory.component.block.ReportHistoryItem
+import com.threegap.bitnagil.presentation.reporthistory.component.template.ReportCategoryBottomSheet
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportCategory
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportHistoriesPerDayUiModel
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportHistoryState
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportHistoryUiModel
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportProcess
+import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
-fun ReportHistoryScreenContainer() {
+fun ReportHistoryScreenContainer(
+    viewModel: ReportHistoryViewModel = hiltViewModel(),
+    navigateToBack: () -> Unit,
+    navigateToReportDetail: (String) -> Unit,
+) {
+    val state by viewModel.collectAsState()
+
+    if (state.showSelectReportCategoryBottomSheet)
+        ReportCategoryBottomSheet(
+            selectedCategory = state.selectedReportCategory,
+            onDismiss = viewModel::hideReportCategoryBottomSheet,
+            onSelected = viewModel::selectReportCategory
+        )
+
+    ReportHistoryScreen(
+        state = state,
+        onClickPreviousButton = navigateToBack,
+        onClickReportProcessChip = viewModel::selectReportProcess,
+        onClickReportCategoryButton = viewModel::showReportCategoryBottomSheet,
+        onClickReportItem = navigateToReportDetail
+    )
 }
 
 @Composable
 private fun ReportHistoryScreen(
     modifier: Modifier = Modifier,
     state: ReportHistoryState,
+    onClickPreviousButton: () -> Unit,
+    onClickReportProcessChip: (ReportProcess) -> Unit,
+    onClickReportCategoryButton: () -> Unit,
+    onClickReportItem: (String) -> Unit,
 ) {
     val horizontalScreenState = rememberScrollState()
 
@@ -57,7 +85,7 @@ private fun ReportHistoryScreen(
         BitnagilTopBar(
             title = "내 제보 기록",
             showBackButton = true,
-            onBackClick = {},
+            onBackClick = onClickPreviousButton,
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -72,7 +100,9 @@ private fun ReportHistoryScreen(
                 BitnagilChip(
                     title = reportProcessWithCount.process.title,
                     isSelected = state.selectedReportProcess == reportProcessWithCount.process,
-                    onCategorySelected = {},
+                    onCategorySelected = {
+                        onClickReportProcessChip(reportProcessWithCount.process)
+                    },
                     count = if (reportProcessWithCount.count == 0) null else reportProcessWithCount.count,
                 )
             }
@@ -83,14 +113,16 @@ private fun ReportHistoryScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Box(
-            modifier = Modifier.fillMaxWidth().weight(1f),
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
         ) {
             if (state.filteredReportHistoriesPerDays.isNotEmpty())
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(horizontal = 16.dp),
                 ) {
-                    state.reportHistoriesPerDays.forEach { reportHistoriesPerDay ->
+                    state.filteredReportHistoriesPerDays.forEach { reportHistoriesPerDay ->
                         stickyHeader {
                             Box(
                                 modifier = Modifier
@@ -110,7 +142,9 @@ private fun ReportHistoryScreen(
                             ReportHistoryItem(
                                 modifier = Modifier.padding(bottom = if (index == reportHistoriesPerDay.reports.lastIndex) 24.dp else 10.dp),
                                 report = report,
-                                onClick = {},
+                                onClick = {
+                                    onClickReportItem(report.id)
+                                },
                             )
                         }
                     }
@@ -132,7 +166,7 @@ private fun ReportHistoryScreen(
                     modifier = Modifier
                         .height(40.dp)
                         .align(Alignment.TopEnd)
-                        .clickableWithoutRipple { },
+                        .clickableWithoutRipple(onClick = onClickReportCategoryButton),
                 ) {
                     Text(
                         text = state.selectedReportCategory?.title ?: "카테고리",
@@ -183,6 +217,10 @@ private fun ReportHistoryScreenPreview() {
                     )
                 },
             ),
+            onClickPreviousButton = {},
+            onClickReportProcessChip = {},
+            onClickReportCategoryButton = {},
+            onClickReportItem = {},
         )
     }
 }

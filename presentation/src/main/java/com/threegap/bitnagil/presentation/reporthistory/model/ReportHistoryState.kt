@@ -1,11 +1,10 @@
 package com.threegap.bitnagil.presentation.reporthistory.model
 
 data class ReportHistoryState(
-    val reportProcesses: List<ReportProcess>,
-    val reportCategories: List<ReportCategory>,
     val selectedReportCategory: ReportCategory?,
     val selectedReportProcess: ReportProcess,
     val reportHistoriesPerDays: List<ReportHistoriesPerDayUiModel>,
+    val showSelectReportCategoryBottomSheet: Boolean,
 ) {
     val filteredReportHistoriesPerDays: List<ReportHistoriesPerDayUiModel> = reportHistoriesPerDays
         .map { reportHistoriesPerDay ->
@@ -54,11 +53,10 @@ data class ReportHistoryState(
 
     companion object {
         val Init = ReportHistoryState(
-            reportProcesses = listOf(),
-            reportCategories = listOf(),
             selectedReportCategory = null,
             selectedReportProcess = ReportProcess.Total,
             reportHistoriesPerDays = listOf(),
+            showSelectReportCategoryBottomSheet = false
         )
     }
 }
