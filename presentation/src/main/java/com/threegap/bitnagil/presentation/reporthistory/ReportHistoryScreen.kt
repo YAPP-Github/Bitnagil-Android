@@ -77,69 +77,78 @@ private fun ReportHistoryScreen(
                 )
             }
 
-            // chip list
-
             Spacer(modifier = Modifier.width(8.dp))
         }
 
         Spacer(modifier = Modifier.height(24.dp))
 
         Box(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.fillMaxWidth().weight(1f),
         ) {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(horizontal = 16.dp),
-            ) {
-                state.reportHistoriesPerDays.forEach { reportHistoriesPerDay ->
-                    stickyHeader {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(40.dp)
-                                .background(color = BitnagilTheme.colors.coolGray99),
-                        ) {
-                            Text(
-                                text = reportHistoriesPerDay.date.toString(),
-                                modifier = Modifier.align(Alignment.CenterStart),
-                                style = BitnagilTheme.typography.body2SemiBold,
+            if (state.filteredReportHistoriesPerDays.isNotEmpty())
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(horizontal = 16.dp),
+                ) {
+                    state.reportHistoriesPerDays.forEach { reportHistoriesPerDay ->
+                        stickyHeader {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(40.dp)
+                                    .background(color = BitnagilTheme.colors.coolGray99),
+                            ) {
+                                Text(
+                                    text = reportHistoriesPerDay.date.toString(),
+                                    modifier = Modifier.align(Alignment.CenterStart),
+                                    style = BitnagilTheme.typography.body2SemiBold,
+                                )
+                            }
+                        }
+
+                        itemsIndexed(reportHistoriesPerDay.reports) { index, report ->
+                            ReportHistoryItem(
+                                modifier = Modifier.padding(bottom = if (index == reportHistoriesPerDay.reports.lastIndex) 24.dp else 10.dp),
+                                report = report,
+                                onClick = {},
                             )
                         }
                     }
-
-                    itemsIndexed(reportHistoriesPerDay.reports) { index, report ->
-                        ReportHistoryItem(
-                            modifier = Modifier.padding(bottom = if (index == reportHistoriesPerDay.reports.lastIndex) 24.dp else 10.dp),
-                            report = report,
-                            onClick = {},
-                        )
-                    }
                 }
-            }
+            else
+                Column(
+                    modifier = Modifier.align(Alignment.Center),
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(text = "제보한 내역이 없어요.", style = BitnagilTheme.typography.subtitle1SemiBold)
+                    Text(text = "원하는 카테고리로 제보를 시작해 보세요.", style = BitnagilTheme.typography.body2Regular, color = BitnagilTheme.colors.coolGray70)
+                }
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(5.dp),
-                modifier = Modifier
-                    .height(40.dp)
-                    .align(Alignment.TopEnd)
-                    .clickableWithoutRipple { },
-            ) {
-                Text(
-                    text = "카테고리",
-                    color = BitnagilTheme.colors.coolGray40,
-                    style = BitnagilTheme.typography.body2Medium,
-                    modifier = Modifier.padding(start = 10.dp),
-                )
-
-                BitnagilIcon(
-                    id = R.drawable.ic_down_arrow,
-                    tint = BitnagilTheme.colors.coolGray40,
+            if (state.showCategorySelectButton)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(5.dp),
                     modifier = Modifier
-                        .padding(end = 13.dp)
-                        .size(16.dp),
-                )
-            }
+                        .height(40.dp)
+                        .align(Alignment.TopEnd)
+                        .clickableWithoutRipple { },
+                ) {
+                    Text(
+                        text = state.selectedReportCategory?.title ?: "카테고리",
+                        color = BitnagilTheme.colors.coolGray40,
+                        style = BitnagilTheme.typography.body2Medium,
+                        modifier = Modifier.padding(start = 10.dp),
+                    )
+
+                    BitnagilIcon(
+                        id = R.drawable.ic_down_arrow,
+                        tint = BitnagilTheme.colors.coolGray40,
+                        modifier = Modifier
+                            .padding(end = 13.dp)
+                            .size(16.dp),
+                    )
+                }
         }
     }
 }
