@@ -11,7 +11,7 @@ import com.threegap.bitnagil.presentation.common.file.convertUriToImageFile
 import com.threegap.bitnagil.presentation.report.model.ReportCategoryUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import jakarta.inject.Inject
+import javax.inject.Inject
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
