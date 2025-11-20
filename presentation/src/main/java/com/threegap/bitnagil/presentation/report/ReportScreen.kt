@@ -132,12 +132,13 @@ fun ReportScreenContainer(
 
     ReportScreen(
         uiState = uiState,
-        onReportTitle = viewModel::updateReportTitle,
-        onReportDescriptionChange = viewModel::updateReportDescription,
+        onReportTitleChange = viewModel::updateReportTitle,
+        onReportContentChange = viewModel::updateReportContent,
         onShowImageSourceBottomSheet = viewModel::showImageSourceBottomSheet,
         onShowReportCategoryBottomSheet = viewModel::showReportCategoryBottomSheet,
         onRemoveImage = viewModel::removeImage,
         onGetCurrentLocationClick = locationPermissionHandler::requestPermission,
+        onSubmitClick = viewModel::submitReportWithImages,
         onBackClick = viewModel::navigateToBack,
     )
 }
@@ -146,12 +147,13 @@ fun ReportScreenContainer(
 @Composable
 private fun ReportScreen(
     uiState: ReportState,
-    onReportTitle: (String) -> Unit,
-    onReportDescriptionChange: (String) -> Unit,
+    onReportTitleChange: (String) -> Unit,
+    onReportContentChange: (String) -> Unit,
     onShowImageSourceBottomSheet: () -> Unit,
     onShowReportCategoryBottomSheet: () -> Unit,
     onRemoveImage: (Uri) -> Unit,
     onGetCurrentLocationClick: () -> Unit,
+    onSubmitClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
@@ -204,7 +206,7 @@ private fun ReportScreen(
             ReportField(title = "제목") {
                 BitnagilTextField(
                     value = uiState.reportTitle,
-                    onValueChange = onReportTitle,
+                    onValueChange = onReportTitleChange,
                     singleLine = true,
                     placeholder = {
                         Text(
@@ -225,8 +227,8 @@ private fun ReportScreen(
 
             ReportField(title = "상세 제보 내용") {
                 BitnagilTextField(
-                    value = uiState.reportDescription,
-                    onValueChange = onReportDescriptionChange,
+                    value = uiState.reportContent,
+                    onValueChange = onReportContentChange,
                     modifier = Modifier.height(88.dp),
                     placeholder = {
                         Text(
@@ -238,7 +240,7 @@ private fun ReportScreen(
                 )
 
                 Text(
-                    text = "${uiState.reportDescription.length} / 150",
+                    text = "${uiState.reportContent.length} / 150",
                     style = BitnagilTheme.typography.caption1Medium,
                     color = BitnagilTheme.colors.coolGray80,
                     textAlign = TextAlign.End,
@@ -256,12 +258,12 @@ private fun ReportScreen(
 
         BitnagilTextButton(
             text = "제보하기",
-            onClick = {},
+            onClick = onSubmitClick,
             colors = BitnagilTextButtonColor.default(
                 disabledBackgroundColor = BitnagilTheme.colors.coolGray98,
                 disabledTextColor = BitnagilTheme.colors.coolGray90,
             ),
-            enabled = false,
+            enabled = uiState.isSubmittable,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(14.dp),
@@ -274,12 +276,13 @@ private fun ReportScreen(
 private fun Preview() {
     ReportScreen(
         uiState = ReportState.Init,
-        onReportTitle = {},
-        onReportDescriptionChange = {},
+        onReportTitleChange = {},
+        onReportContentChange = {},
         onRemoveImage = {},
         onShowImageSourceBottomSheet = {},
         onShowReportCategoryBottomSheet = {},
         onGetCurrentLocationClick = {},
+        onSubmitClick = {},
         onBackClick = {},
     )
 }
