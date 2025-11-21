@@ -24,14 +24,14 @@ import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButtonColor
-import com.threegap.bitnagil.presentation.report.ReportState
 import com.threegap.bitnagil.presentation.report.component.CompleteReportCard
+import com.threegap.bitnagil.presentation.report.model.ReportState
 
 @Composable
 fun CompleteReportContent(
     uiState: ReportState,
     onConfirmClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
 
@@ -47,32 +47,32 @@ fun CompleteReportContent(
             tint = null,
             modifier = Modifier
                 .padding(bottom = 12.dp)
-                .size(40.dp)
+                .size(40.dp),
         )
 
         Text(
             text = "제보가 완료되었습니다.",
             color = BitnagilTheme.colors.coolGray10,
             style = BitnagilTheme.typography.title2Bold,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = 16.dp),
         )
 
         Text(
             text = "빛나길에서 접수 후 완료되면\n신고를 진행합니다.",
             color = BitnagilTheme.colors.coolGray40,
             style = BitnagilTheme.typography.body1Medium,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
 
         Box(
-            contentAlignment = Alignment.TopCenter
+            contentAlignment = Alignment.TopCenter,
         ) {
             Image(
                 painter = painterResource(R.drawable.onboarding_character),
                 contentDescription = null,
                 modifier = Modifier
                     .padding(top = 34.dp)
-                    .size(134.dp, 148.dp)
+                    .size(134.dp, 148.dp),
             )
 
             CompleteReportCard(
@@ -109,6 +109,6 @@ fun CompleteReportContent(
 private fun Preview() {
     CompleteReportContent(
         uiState = ReportState.Init,
-        onConfirmClick = {}
+        onConfirmClick = {},
     )
 }

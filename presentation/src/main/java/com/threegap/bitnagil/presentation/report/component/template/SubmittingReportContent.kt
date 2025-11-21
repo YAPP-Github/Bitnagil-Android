@@ -20,7 +20,7 @@ import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 
 @Composable
 fun SubmittingReportContent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
@@ -31,28 +31,28 @@ fun SubmittingReportContent(
         BitnagilIcon(
             id = R.drawable.ic_loading,
             tint = null,
-            modifier = Modifier.padding(bottom = 12.dp)
+            modifier = Modifier.padding(bottom = 12.dp),
         )
 
         Text(
             text = "제보중...",
             color = BitnagilTheme.colors.coolGray10,
             style = BitnagilTheme.typography.title2Bold,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = 16.dp),
         )
 
         Text(
             text = "포모가 열심\n제보하고 있어요",
             color = BitnagilTheme.colors.coolGray40,
             style = BitnagilTheme.typography.body1Medium,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
 
         Spacer(modifier = Modifier.height(72.dp))
 
         Image(
             painter = painterResource(R.drawable.img_pomo_loading),
-            contentDescription = null
+            contentDescription = null,
         )
     }
 }

@@ -5,6 +5,12 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -50,6 +56,12 @@ import com.threegap.bitnagil.presentation.report.component.PhotoItem
 import com.threegap.bitnagil.presentation.report.component.ReportCategoryBottomSheet
 import com.threegap.bitnagil.presentation.report.component.ReportCategorySelector
 import com.threegap.bitnagil.presentation.report.component.ReportField
+import com.threegap.bitnagil.presentation.report.component.template.CompleteReportContent
+import com.threegap.bitnagil.presentation.report.component.template.SubmittingReportContent
+import com.threegap.bitnagil.presentation.report.model.ReportSideEffect
+import com.threegap.bitnagil.presentation.report.model.ReportState
+import com.threegap.bitnagil.presentation.report.model.SubmitState
+import com.threegap.bitnagil.presentation.report.model.uiTitle
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
@@ -130,17 +142,48 @@ fun ReportScreenContainer(
         )
     }
 
-    ReportScreen(
-        uiState = uiState,
-        onReportTitleChange = viewModel::updateReportTitle,
-        onReportContentChange = viewModel::updateReportContent,
-        onShowImageSourceBottomSheet = viewModel::showImageSourceBottomSheet,
-        onShowReportCategoryBottomSheet = viewModel::showReportCategoryBottomSheet,
-        onRemoveImage = viewModel::removeImage,
-        onGetCurrentLocationClick = locationPermissionHandler::requestPermission,
-        onSubmitClick = viewModel::submitReportWithImages,
-        onBackClick = viewModel::navigateToBack,
-    )
+    AnimatedContent(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding(),
+        targetState = uiState.submitState,
+        label = "ReportSlideAnimation",
+        transitionSpec = {
+            (
+                slideIntoContainer(
+                    animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+                    towards = AnimatedContentTransitionScope.SlideDirection.Start,
+                ) togetherWith slideOutOfContainer(
+                    animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+                    towards = AnimatedContentTransitionScope.SlideDirection.Start,
+                )
+                )
+                .using(SizeTransform(clip = true))
+        },
+    ) { submitState ->
+        when (submitState) {
+            SubmitState.IDLE -> {
+                ReportScreen(
+                    uiState = uiState,
+                    onReportTitleChange = viewModel::updateReportTitle,
+                    onReportContentChange = viewModel::updateReportContent,
+                    onShowImageSourceBottomSheet = viewModel::showImageSourceBottomSheet,
+                    onShowReportCategoryBottomSheet = viewModel::showReportCategoryBottomSheet,
+                    onRemoveImage = viewModel::removeImage,
+                    onGetCurrentLocationClick = locationPermissionHandler::requestPermission,
+                    onSubmitClick = viewModel::submitReportWithImages,
+                    onBackClick = viewModel::navigateToBack,
+                )
+            }
+            SubmitState.SUBMITTING -> SubmittingReportContent()
+            SubmitState.COMPLETE -> {
+                CompleteReportContent(
+                    uiState = uiState,
+                    onConfirmClick = viewModel::navigateToBack,
+                )
+            }
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -161,7 +204,6 @@ private fun ReportScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .statusBarsPadding()
             .windowInsetsPadding(WindowInsets.ime),
     ) {
         BitnagilTopBar(
