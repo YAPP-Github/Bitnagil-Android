@@ -6,18 +6,23 @@ import androidx.lifecycle.ViewModel
 import com.threegap.bitnagil.domain.address.usecase.FetchCurrentAddressUseCase
 import com.threegap.bitnagil.domain.file.usecase.UploadReportImagesUseCase
 import com.threegap.bitnagil.domain.report.model.Report
+import com.threegap.bitnagil.domain.report.model.ReportCategory
 import com.threegap.bitnagil.domain.report.usecase.SubmitReportUseCase
 import com.threegap.bitnagil.presentation.common.file.convertUriToImageFile
-import com.threegap.bitnagil.presentation.report.model.ReportCategoryUi
+import com.threegap.bitnagil.presentation.report.model.ReportSideEffect
+import com.threegap.bitnagil.presentation.report.model.ReportState
+import com.threegap.bitnagil.presentation.report.model.ReportState.Companion.MAX_IMAGE_COUNT
+import com.threegap.bitnagil.presentation.report.model.SubmitState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.viewmodel.container
+import javax.inject.Inject
 
 @HiltViewModel
 class ReportViewModel @Inject constructor(
@@ -62,10 +67,11 @@ class ReportViewModel @Inject constructor(
     fun hideReportCategoryBottomSheet() {
         intent {
             reduce { state.copy(reportCategoryBottomSheetVisible = false) }
+            postSideEffect(ReportSideEffect.FocusOnContent)
         }
     }
 
-    fun selectReportCategory(category: ReportCategoryUi) {
+    fun selectReportCategory(category: ReportCategory) {
         intent {
             reduce { state.copy(selectedCategory = category) }
         }
@@ -121,104 +127,58 @@ class ReportViewModel @Inject constructor(
 
             reduce { state.copy(submitState = SubmitState.SUBMITTING) }
 
-            val imageFiles = coroutineScope {
-                state.reportImages
-                    .map { uri ->
-                        async {
-                            convertUriToImageFile(uri = uri, prefix = "report", context = context)
+            coroutineScope {
+                val minDelayJob = async {
+                    delay(1000L)
+                }
+
+                val processingJob = async {
+                    val imageFiles = state.reportImages
+                        .map { uri ->
+                            async { convertUriToImageFile(uri, "report", context) }
                         }
+                        .awaitAll()
+                        .filterNotNull()
+
+                    if (imageFiles.size < state.reportImages.size) {
+                        return@async Result.failure(Exception("Image conversion failed"))
                     }
-                    .awaitAll()
-                    .filterNotNull()
+
+                    val uploadedPaths = uploadReportImagesUseCase(imageFiles)
+                        .getOrElse { return@async Result.failure(it) }
+
+                    val submitResult = submitReportUseCase(
+                        Report(
+                            title = state.reportTitle,
+                            content = state.reportContent,
+                            category = category,
+                            address = address,
+                            latitude = latitude,
+                            longitude = longitude,
+                            imageUrls = uploadedPaths,
+                        ),
+                    )
+
+                    submitResult.map { uploadedPaths }
+                }
+
+                minDelayJob.await()
+                val result = processingJob.await()
+
+                result.fold(
+                    onSuccess = { paths ->
+                        reduce {
+                            state.copy(
+                                submitState = SubmitState.COMPLETE,
+                                uploadedImagePaths = paths,
+                            )
+                        }
+                    },
+                    onFailure = { error ->
+                        reduce { state.copy(submitState = SubmitState.IDLE) }
+                    },
+                )
             }
-
-            if (imageFiles.size < state.reportImages.size) {
-                reduce { state.copy(submitState = SubmitState.ERROR) }
-                return@intent
-            }
-
-            val uploadedPaths = uploadReportImagesUseCase(imageFiles).getOrElse { error ->
-                reduce { state.copy(submitState = SubmitState.ERROR) }
-                return@intent
-            }
-
-            reduce { state.copy(uploadedImagePaths = uploadedPaths) }
-
-            submitReportUseCase(
-                Report(
-                    title = state.reportTitle,
-                    content = state.reportContent,
-                    category = category.toDomain(),
-                    address = address,
-                    latitude = latitude,
-                    longitude = longitude,
-                    imageUrls = uploadedPaths,
-                ),
-            ).fold(
-                onSuccess = {
-                    reduce { state.copy(submitState = SubmitState.SUCCESS) }
-                },
-                onFailure = { it ->
-                    reduce { state.copy(submitState = SubmitState.ERROR) }
-                },
-            )
         }
     }
-
-    companion object {
-        const val MAX_IMAGE_COUNT = 3
-    }
-}
-
-data class ReportState(
-    val reportImages: List<Uri>,
-    val reportTitle: String,
-    val reportContent: String,
-    val selectedCategory: ReportCategoryUi?,
-    val imageSourceBottomSheetVisible: Boolean,
-    val reportCategoryBottomSheetVisible: Boolean,
-    val currentAddress: String?,
-    val currentLatitude: Double?,
-    val currentLongitude: Double?,
-    val uploadedImagePaths: List<String>,
-    val submitState: SubmitState,
-) {
-    val canAddMoreImages: Boolean
-        get() = reportImages.size < ReportViewModel.MAX_IMAGE_COUNT
-
-    val isSubmittable: Boolean
-        get() = reportImages.isNotEmpty() &&
-            reportTitle.isNotEmpty() &&
-            reportContent.isNotEmpty() &&
-            selectedCategory != null &&
-            currentAddress != null &&
-            currentLatitude != null &&
-            currentLongitude != null
-
-    companion object {
-        val Init = ReportState(
-            reportImages = emptyList(),
-            reportTitle = "",
-            reportContent = "",
-            selectedCategory = null,
-            imageSourceBottomSheetVisible = false,
-            reportCategoryBottomSheetVisible = false,
-            currentAddress = null,
-            currentLatitude = null,
-            currentLongitude = null,
-            uploadedImagePaths = emptyList(),
-            submitState = SubmitState.IDLE,
-        )
-    }
-}
-
-enum class SubmitState {
-    IDLE,
-    SUBMITTING,
-    SUCCESS,
-    ERROR,
-}
-
-sealed interface ReportSideEffect {
-    data object NavigateToBack : ReportSideEffect
 }
