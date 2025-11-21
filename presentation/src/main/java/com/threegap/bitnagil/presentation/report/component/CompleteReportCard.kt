@@ -63,7 +63,7 @@ fun CompleteReportCard(
         }
 
         CompleteReportCardItem(
-            title = "키테고리",
+            title = "카테고리",
         ) {
             Text(
                 text = category?.uiTitle ?: "카테고리 없음",

@@ -23,7 +23,6 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
-import com.threegap.bitnagil.domain.recommendroutine.model.RecommendLevel
 import com.threegap.bitnagil.domain.report.model.ReportCategory
 import com.threegap.bitnagil.presentation.report.model.iconRes
 import com.threegap.bitnagil.presentation.report.model.uiDescription
@@ -51,7 +50,8 @@ fun ReportCategoryBottomSheet(
         Column(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 28.dp),
         ) {
-            ReportCategory.entries.forEachIndexed { index, category ->
+            val categories = ReportCategory.entries
+            categories.forEachIndexed { index, category ->
                 ReportCategoryItem(
                     icon = category.iconRes,
                     title = category.uiTitle,
@@ -67,7 +67,7 @@ fun ReportCategoryBottomSheet(
                     },
                 )
 
-                if (index < RecommendLevel.entries.size) {
+                if (index < categories.lastIndex) {
                     HorizontalDivider(
                         color = BitnagilTheme.colors.coolGray97,
                     )

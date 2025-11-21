@@ -2,7 +2,6 @@ package com.threegap.bitnagil.presentation.report.model
 
 import android.net.Uri
 import com.threegap.bitnagil.domain.report.model.ReportCategory
-import com.threegap.bitnagil.presentation.report.ReportViewModel
 
 data class ReportState(
     val reportImages: List<Uri>,
@@ -18,7 +17,7 @@ data class ReportState(
     val submitState: SubmitState,
 ) {
     val canAddMoreImages: Boolean
-        get() = reportImages.size < ReportViewModel.Companion.MAX_IMAGE_COUNT
+        get() = reportImages.size < MAX_IMAGE_COUNT
 
     val isSubmittable: Boolean
         get() = reportImages.isNotEmpty() &&
@@ -30,6 +29,8 @@ data class ReportState(
             currentLongitude != null
 
     companion object {
+        const val MAX_IMAGE_COUNT = 3
+
         val Init = ReportState(
             reportImages = emptyList(),
             reportTitle = "",

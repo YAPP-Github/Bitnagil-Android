@@ -11,6 +11,7 @@ import com.threegap.bitnagil.domain.report.usecase.SubmitReportUseCase
 import com.threegap.bitnagil.presentation.common.file.convertUriToImageFile
 import com.threegap.bitnagil.presentation.report.model.ReportSideEffect
 import com.threegap.bitnagil.presentation.report.model.ReportState
+import com.threegap.bitnagil.presentation.report.model.ReportState.Companion.MAX_IMAGE_COUNT
 import com.threegap.bitnagil.presentation.report.model.SubmitState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -119,12 +120,12 @@ class ReportViewModel @Inject constructor(
 
     fun submitReportWithImages() {
         intent {
-            reduce { state.copy(submitState = SubmitState.SUBMITTING) }
-
             val category = state.selectedCategory ?: return@intent
             val address = state.currentAddress ?: return@intent
             val latitude = state.currentLatitude ?: return@intent
             val longitude = state.currentLongitude ?: return@intent
+
+            reduce { state.copy(submitState = SubmitState.SUBMITTING) }
 
             coroutineScope {
                 val minDelayJob = async {
@@ -173,13 +174,11 @@ class ReportViewModel @Inject constructor(
                             )
                         }
                     },
-                    onFailure = { error -> },
+                    onFailure = { error ->
+                        reduce { state.copy(submitState = SubmitState.IDLE) }
+                    },
                 )
             }
         }
-    }
-
-    companion object {
-        const val MAX_IMAGE_COUNT = 3
     }
 }

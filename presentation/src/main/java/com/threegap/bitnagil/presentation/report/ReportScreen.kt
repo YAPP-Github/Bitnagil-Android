@@ -66,6 +66,7 @@ import com.threegap.bitnagil.presentation.report.component.template.CompleteRepo
 import com.threegap.bitnagil.presentation.report.component.template.SubmittingReportContent
 import com.threegap.bitnagil.presentation.report.model.ReportSideEffect
 import com.threegap.bitnagil.presentation.report.model.ReportState
+import com.threegap.bitnagil.presentation.report.model.ReportState.Companion.MAX_IMAGE_COUNT
 import com.threegap.bitnagil.presentation.report.model.SubmitState
 import com.threegap.bitnagil.presentation.report.model.uiTitle
 import kotlinx.coroutines.delay
@@ -95,7 +96,7 @@ fun ReportScreenContainer(
     var pendingCameraPhotoUri by remember { mutableStateOf<Uri?>(null) }
 
     val pickMultipleMediaLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickMultipleVisualMedia(ReportViewModel.MAX_IMAGE_COUNT),
+        contract = ActivityResultContracts.PickMultipleVisualMedia(MAX_IMAGE_COUNT),
         onResult = viewModel::addImages,
     )
 
@@ -242,7 +243,7 @@ private fun ReportScreen(
                     AddPhotoButton(
                         onClick = onShowImageSourceBottomSheet,
                         imageCount = uiState.reportImages.size,
-                        maxImageCount = ReportViewModel.MAX_IMAGE_COUNT,
+                        maxImageCount = MAX_IMAGE_COUNT,
                     )
 
                     LazyRow(
@@ -324,7 +325,7 @@ private fun ReportScreen(
                 )
             }
 
-            ReportField(title = " 신고 위치") {
+            ReportField(title = "신고 위치") {
                 CurrentLocationInput(
                     currentLocation = uiState.currentAddress,
                     onClick = onGetCurrentLocationClick,
