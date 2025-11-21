@@ -3,15 +3,17 @@ package com.threegap.bitnagil.di.data
 import com.threegap.bitnagil.data.address.service.AddressService
 import com.threegap.bitnagil.data.auth.service.AuthService
 import com.threegap.bitnagil.data.emotion.service.EmotionService
+import com.threegap.bitnagil.data.file.service.FileService
 import com.threegap.bitnagil.data.onboarding.service.OnBoardingService
 import com.threegap.bitnagil.data.recommendroutine.service.RecommendRoutineService
+import com.threegap.bitnagil.data.report.service.ReportService
 import com.threegap.bitnagil.data.routine.service.RoutineService
 import com.threegap.bitnagil.data.user.service.UserService
 import com.threegap.bitnagil.data.version.service.VersionService
 import com.threegap.bitnagil.data.writeroutine.service.WriteRoutineService
-import com.threegap.bitnagil.di.core.Auth
-import com.threegap.bitnagil.di.core.Kakao
-import com.threegap.bitnagil.di.core.NoneAuth
+import com.threegap.bitnagil.network.Auth
+import com.threegap.bitnagil.network.Kakao
+import com.threegap.bitnagil.network.NoneAuth
 import com.threegap.bitnagil.network.token.ReissueService
 import dagger.Module
 import dagger.Provides
@@ -73,4 +75,14 @@ object ServiceModule {
     @Singleton
     fun provideAddressService(@Kakao retrofit: Retrofit): AddressService =
         retrofit.create(AddressService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideFileService(@Auth retrofit: Retrofit): FileService =
+        retrofit.create(FileService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideReportService(@Auth retrofit: Retrofit): ReportService =
+        retrofit.create(ReportService::class.java)
 }

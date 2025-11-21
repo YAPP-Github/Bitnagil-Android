@@ -3,8 +3,10 @@ package com.threegap.bitnagil.di.data
 import com.threegap.bitnagil.data.address.repositoryImpl.AddressRepositoryImpl
 import com.threegap.bitnagil.data.auth.repositoryimpl.AuthRepositoryImpl
 import com.threegap.bitnagil.data.emotion.repositoryImpl.EmotionRepositoryImpl
+import com.threegap.bitnagil.data.file.repositoryImpl.FileRepositoryImpl
 import com.threegap.bitnagil.data.onboarding.repositoryImpl.OnBoardingRepositoryImpl
 import com.threegap.bitnagil.data.recommendroutine.repositoryImpl.RecommendRoutineRepositoryImpl
+import com.threegap.bitnagil.data.report.repositoryImpl.ReportRepositoryImpl
 import com.threegap.bitnagil.data.routine.repositoryImpl.RoutineRepositoryImpl
 import com.threegap.bitnagil.data.user.repositoryImpl.UserRepositoryImpl
 import com.threegap.bitnagil.data.version.repositoryImpl.VersionRepositoryImpl
@@ -12,8 +14,10 @@ import com.threegap.bitnagil.data.writeroutine.repositoryImpl.WriteRoutineReposi
 import com.threegap.bitnagil.domain.address.repository.AddressRepository
 import com.threegap.bitnagil.domain.auth.repository.AuthRepository
 import com.threegap.bitnagil.domain.emotion.repository.EmotionRepository
+import com.threegap.bitnagil.domain.file.repository.FileRepository
 import com.threegap.bitnagil.domain.onboarding.repository.OnBoardingRepository
 import com.threegap.bitnagil.domain.recommendroutine.repository.RecommendRoutineRepository
+import com.threegap.bitnagil.domain.report.repository.ReportRepository
 import com.threegap.bitnagil.domain.routine.repository.RoutineRepository
 import com.threegap.bitnagil.domain.user.repository.UserRepository
 import com.threegap.bitnagil.domain.version.repository.VersionRepository
@@ -63,4 +67,12 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindAddressRepository(addressRepositoryImpl: AddressRepositoryImpl): AddressRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindFileRepository(impl: FileRepositoryImpl): FileRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindReportRepository(impl: ReportRepositoryImpl): ReportRepository
 }

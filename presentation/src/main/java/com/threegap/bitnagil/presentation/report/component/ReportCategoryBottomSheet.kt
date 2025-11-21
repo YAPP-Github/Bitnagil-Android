@@ -24,15 +24,15 @@ import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendLevel
-import com.threegap.bitnagil.presentation.report.model.ReportCategory
+import com.threegap.bitnagil.presentation.report.model.ReportCategoryUi
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReportCategoryBottomSheet(
-    selectedCategory: ReportCategory?,
+    selectedCategory: ReportCategoryUi?,
     onDismiss: () -> Unit,
-    onSelected: (ReportCategory) -> Unit,
+    onSelected: (ReportCategoryUi) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -48,7 +48,7 @@ fun ReportCategoryBottomSheet(
         Column(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 28.dp),
         ) {
-            ReportCategory.entries.forEachIndexed { index, category ->
+            ReportCategoryUi.entries.forEachIndexed { index, category ->
                 ReportCategoryItem(
                     icon = category.icon,
                     title = category.title,
@@ -124,7 +124,7 @@ private fun ReportCategoryItem(
 @Composable
 private fun ReportCategoryBottomSheetPreview() {
     ReportCategoryBottomSheet(
-        selectedCategory = ReportCategory.WATERFACILITY,
+        selectedCategory = ReportCategoryUi.WATERFACILITY,
         onDismiss = {},
         onSelected = {},
     )

@@ -5,6 +5,9 @@ import android.content.Intent
 import com.threegap.bitnagil.BuildConfig
 import com.threegap.bitnagil.MainActivity
 import com.threegap.bitnagil.datastore.auth.storage.AuthTokenDataStore
+import com.threegap.bitnagil.network.Auth
+import com.threegap.bitnagil.network.Kakao
+import com.threegap.bitnagil.network.NoneAuth
 import com.threegap.bitnagil.network.auth.AuthInterceptor
 import com.threegap.bitnagil.network.auth.TokenAuthenticator
 import com.threegap.bitnagil.network.token.ReissueService

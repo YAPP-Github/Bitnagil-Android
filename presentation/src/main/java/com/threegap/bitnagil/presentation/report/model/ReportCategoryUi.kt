@@ -2,8 +2,9 @@ package com.threegap.bitnagil.presentation.report.model
 
 import androidx.annotation.DrawableRes
 import com.threegap.bitnagil.designsystem.R
+import com.threegap.bitnagil.domain.report.model.ReportCategory
 
-enum class ReportCategory(
+enum class ReportCategoryUi(
     @DrawableRes val icon: Int,
     val title: String,
     val description: String,
@@ -29,4 +30,13 @@ enum class ReportCategory(
         description = "벤치 파손, 휴지통 넘침 등",
     ),
     ;
+
+    fun toDomain(): ReportCategory {
+        return when (this) {
+            TRANSPORTATION -> ReportCategory.TRANSPORTATION
+            LIGHTING -> ReportCategory.LIGHTING
+            WATERFACILITY -> ReportCategory.WATERFACILITY
+            AMENITY -> ReportCategory.AMENITY
+        }
+    }
 }

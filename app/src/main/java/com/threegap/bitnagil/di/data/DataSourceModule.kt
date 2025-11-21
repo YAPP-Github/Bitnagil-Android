@@ -10,10 +10,14 @@ import com.threegap.bitnagil.data.auth.datasourceimpl.AuthLocalDataSourceImpl
 import com.threegap.bitnagil.data.auth.datasourceimpl.AuthRemoteDataSourceImpl
 import com.threegap.bitnagil.data.emotion.datasource.EmotionDataSource
 import com.threegap.bitnagil.data.emotion.datasourceImpl.EmotionDataSourceImpl
+import com.threegap.bitnagil.data.file.datasource.FileDataSource
+import com.threegap.bitnagil.data.file.datasourceImpl.FileDataSourceImpl
 import com.threegap.bitnagil.data.onboarding.datasource.OnBoardingDataSource
 import com.threegap.bitnagil.data.onboarding.datasourceImpl.OnBoardingDataSourceImpl
 import com.threegap.bitnagil.data.recommendroutine.datasource.RecommendRoutineDataSource
 import com.threegap.bitnagil.data.recommendroutine.datasourceImpl.RecommendRoutineDataSourceImpl
+import com.threegap.bitnagil.data.report.datasource.ReportDataSource
+import com.threegap.bitnagil.data.report.datasourceImpl.ReportDataSourceImpl
 import com.threegap.bitnagil.data.routine.datasource.RoutineRemoteDataSource
 import com.threegap.bitnagil.data.routine.datasourceImpl.RoutineRemoteDataSourceImpl
 import com.threegap.bitnagil.data.user.datasource.UserDataSource
@@ -75,4 +79,12 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindAddressDataSource(addressDataSourceImpl: AddressDataSourceImpl): AddressDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindFileDataSource(impl: FileDataSourceImpl): FileDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindReportDataSource(impl: ReportDataSourceImpl): ReportDataSource
 }

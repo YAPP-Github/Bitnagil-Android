@@ -1,7 +1,6 @@
 package com.threegap.bitnagil.presentation.report
 
 import android.Manifest
-import android.content.Context
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -35,7 +34,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.threegap.bitnagil.designsystem.BitnagilTheme
@@ -43,6 +41,7 @@ import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButtonColor
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextField
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
+import com.threegap.bitnagil.presentation.common.file.createCameraImageUri
 import com.threegap.bitnagil.presentation.common.premission.rememberPermissionHandler
 import com.threegap.bitnagil.presentation.report.component.AddPhotoButton
 import com.threegap.bitnagil.presentation.report.component.CurrentLocationInput
@@ -53,7 +52,6 @@ import com.threegap.bitnagil.presentation.report.component.ReportCategorySelecto
 import com.threegap.bitnagil.presentation.report.component.ReportField
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
-import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
@@ -89,17 +87,11 @@ fun ReportScreenContainer(
         },
     )
 
-    fun createImageUri(context: Context): Uri {
-        val cameraDir = File(context.cacheDir, "camera").apply { if (!exists()) mkdirs() }
-        val imageFile = File(cameraDir, "camera_${System.currentTimeMillis()}.jpg")
-        return FileProvider.getUriForFile(context, "${context.packageName}.provider", imageFile)
-    }
-
     val cameraPermissionHandler = rememberPermissionHandler(
         permission = Manifest.permission.CAMERA,
         dialogDescription = "카메라 권한이 비활성화됐어요.\n설정에서 허용해 주세요.",
         onGranted = {
-            val imageUri = createImageUri(context)
+            val imageUri = context.createCameraImageUri()
             pendingCameraPhotoUri = imageUri
             takePictureLauncher.launch(imageUri)
         },
@@ -140,12 +132,13 @@ fun ReportScreenContainer(
 
     ReportScreen(
         uiState = uiState,
-        onReportTitle = viewModel::updateReportTitle,
-        onReportDescriptionChange = viewModel::updateReportDescription,
+        onReportTitleChange = viewModel::updateReportTitle,
+        onReportContentChange = viewModel::updateReportContent,
         onShowImageSourceBottomSheet = viewModel::showImageSourceBottomSheet,
         onShowReportCategoryBottomSheet = viewModel::showReportCategoryBottomSheet,
         onRemoveImage = viewModel::removeImage,
         onGetCurrentLocationClick = locationPermissionHandler::requestPermission,
+        onSubmitClick = viewModel::submitReportWithImages,
         onBackClick = viewModel::navigateToBack,
     )
 }
@@ -154,12 +147,13 @@ fun ReportScreenContainer(
 @Composable
 private fun ReportScreen(
     uiState: ReportState,
-    onReportTitle: (String) -> Unit,
-    onReportDescriptionChange: (String) -> Unit,
+    onReportTitleChange: (String) -> Unit,
+    onReportContentChange: (String) -> Unit,
     onShowImageSourceBottomSheet: () -> Unit,
     onShowReportCategoryBottomSheet: () -> Unit,
     onRemoveImage: (Uri) -> Unit,
     onGetCurrentLocationClick: () -> Unit,
+    onSubmitClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
@@ -212,7 +206,7 @@ private fun ReportScreen(
             ReportField(title = "제목") {
                 BitnagilTextField(
                     value = uiState.reportTitle,
-                    onValueChange = onReportTitle,
+                    onValueChange = onReportTitleChange,
                     singleLine = true,
                     placeholder = {
                         Text(
@@ -233,8 +227,8 @@ private fun ReportScreen(
 
             ReportField(title = "상세 제보 내용") {
                 BitnagilTextField(
-                    value = uiState.reportDescription,
-                    onValueChange = onReportDescriptionChange,
+                    value = uiState.reportContent,
+                    onValueChange = onReportContentChange,
                     modifier = Modifier.height(88.dp),
                     placeholder = {
                         Text(
@@ -246,7 +240,7 @@ private fun ReportScreen(
                 )
 
                 Text(
-                    text = "${uiState.reportDescription.length} / 150",
+                    text = "${uiState.reportContent.length} / 150",
                     style = BitnagilTheme.typography.caption1Medium,
                     color = BitnagilTheme.colors.coolGray80,
                     textAlign = TextAlign.End,
@@ -264,12 +258,12 @@ private fun ReportScreen(
 
         BitnagilTextButton(
             text = "제보하기",
-            onClick = {},
+            onClick = onSubmitClick,
             colors = BitnagilTextButtonColor.default(
                 disabledBackgroundColor = BitnagilTheme.colors.coolGray98,
                 disabledTextColor = BitnagilTheme.colors.coolGray90,
             ),
-            enabled = false,
+            enabled = uiState.isSubmittable,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(14.dp),
@@ -282,12 +276,13 @@ private fun ReportScreen(
 private fun Preview() {
     ReportScreen(
         uiState = ReportState.Init,
-        onReportTitle = {},
-        onReportDescriptionChange = {},
+        onReportTitleChange = {},
+        onReportContentChange = {},
         onRemoveImage = {},
         onShowImageSourceBottomSheet = {},
         onShowReportCategoryBottomSheet = {},
         onGetCurrentLocationClick = {},
+        onSubmitClick = {},
         onBackClick = {},
     )
 }

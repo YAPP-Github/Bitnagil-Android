@@ -1,18 +1,30 @@
 package com.threegap.bitnagil.presentation.report
 
+import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import com.threegap.bitnagil.domain.address.usecase.FetchCurrentAddressUseCase
-import com.threegap.bitnagil.presentation.report.model.ReportCategory
+import com.threegap.bitnagil.domain.file.usecase.UploadReportImagesUseCase
+import com.threegap.bitnagil.domain.report.model.Report
+import com.threegap.bitnagil.domain.report.usecase.SubmitReportUseCase
+import com.threegap.bitnagil.presentation.common.file.convertUriToImageFile
+import com.threegap.bitnagil.presentation.report.model.ReportCategoryUi
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jakarta.inject.Inject
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.viewmodel.container
 
 @HiltViewModel
 class ReportViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val fetchCurrentAddressUseCase: FetchCurrentAddressUseCase,
+    private val uploadReportImagesUseCase: UploadReportImagesUseCase,
+    private val submitReportUseCase: SubmitReportUseCase,
 ) : ViewModel(), ContainerHost<ReportState, ReportSideEffect> {
 
     override val container: Container<ReportState, ReportSideEffect> = container(initialState = ReportState.Init)
@@ -23,9 +35,9 @@ class ReportViewModel @Inject constructor(
         }
     }
 
-    fun updateReportDescription(description: String) {
+    fun updateReportContent(content: String) {
         intent {
-            reduce { state.copy(reportDescription = description) }
+            reduce { state.copy(reportContent = content) }
         }
     }
 
@@ -53,7 +65,7 @@ class ReportViewModel @Inject constructor(
         }
     }
 
-    fun selectReportCategory(category: ReportCategory) {
+    fun selectReportCategory(category: ReportCategoryUi) {
         intent {
             reduce { state.copy(selectedCategory = category) }
         }
@@ -100,6 +112,59 @@ class ReportViewModel @Inject constructor(
         }
     }
 
+    fun submitReportWithImages() {
+        intent {
+            val category = state.selectedCategory ?: return@intent
+            val address = state.currentAddress ?: return@intent
+            val latitude = state.currentLatitude ?: return@intent
+            val longitude = state.currentLongitude ?: return@intent
+
+            reduce { state.copy(submitState = SubmitState.SUBMITTING) }
+
+            val imageFiles = coroutineScope {
+                state.reportImages
+                    .map { uri ->
+                        async {
+                            convertUriToImageFile(uri = uri, prefix = "report", context = context)
+                        }
+                    }
+                    .awaitAll()
+                    .filterNotNull()
+            }
+
+            if (imageFiles.size < state.reportImages.size) {
+                reduce { state.copy(submitState = SubmitState.ERROR) }
+                return@intent
+            }
+
+            val uploadedPaths = uploadReportImagesUseCase(imageFiles).getOrElse { error ->
+                reduce { state.copy(submitState = SubmitState.ERROR) }
+                return@intent
+            }
+
+            reduce { state.copy(uploadedImagePaths = uploadedPaths) }
+
+            submitReportUseCase(
+                Report(
+                    title = state.reportTitle,
+                    content = state.reportContent,
+                    category = category.toDomain(),
+                    address = address,
+                    latitude = latitude,
+                    longitude = longitude,
+                    imageUrls = uploadedPaths,
+                ),
+            ).fold(
+                onSuccess = {
+                    reduce { state.copy(submitState = SubmitState.SUCCESS) }
+                },
+                onFailure = { it ->
+                    reduce { state.copy(submitState = SubmitState.ERROR) }
+                },
+            )
+        }
+    }
+
     companion object {
         const val MAX_IMAGE_COUNT = 3
     }
@@ -108,30 +173,50 @@ class ReportViewModel @Inject constructor(
 data class ReportState(
     val reportImages: List<Uri>,
     val reportTitle: String,
-    val reportDescription: String,
-    val selectedCategory: ReportCategory?,
+    val reportContent: String,
+    val selectedCategory: ReportCategoryUi?,
     val imageSourceBottomSheetVisible: Boolean,
     val reportCategoryBottomSheetVisible: Boolean,
     val currentAddress: String?,
     val currentLatitude: Double?,
     val currentLongitude: Double?,
+    val uploadedImagePaths: List<String>,
+    val submitState: SubmitState,
 ) {
     val canAddMoreImages: Boolean
         get() = reportImages.size < ReportViewModel.MAX_IMAGE_COUNT
+
+    val isSubmittable: Boolean
+        get() = reportImages.isNotEmpty() &&
+            reportTitle.isNotEmpty() &&
+            reportContent.isNotEmpty() &&
+            selectedCategory != null &&
+            currentAddress != null &&
+            currentLatitude != null &&
+            currentLongitude != null
 
     companion object {
         val Init = ReportState(
             reportImages = emptyList(),
             reportTitle = "",
-            reportDescription = "",
+            reportContent = "",
             selectedCategory = null,
             imageSourceBottomSheetVisible = false,
             reportCategoryBottomSheetVisible = false,
             currentAddress = null,
             currentLatitude = null,
             currentLongitude = null,
+            uploadedImagePaths = emptyList(),
+            submitState = SubmitState.IDLE,
         )
     }
+}
+
+enum class SubmitState {
+    IDLE,
+    SUBMITTING,
+    SUCCESS,
+    ERROR,
 }
 
 sealed interface ReportSideEffect {
