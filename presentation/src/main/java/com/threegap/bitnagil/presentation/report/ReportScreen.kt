@@ -26,6 +26,8 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -36,7 +38,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -62,6 +68,7 @@ import com.threegap.bitnagil.presentation.report.model.ReportSideEffect
 import com.threegap.bitnagil.presentation.report.model.ReportState
 import com.threegap.bitnagil.presentation.report.model.SubmitState
 import com.threegap.bitnagil.presentation.report.model.uiTitle
+import kotlinx.coroutines.delay
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
@@ -73,10 +80,15 @@ fun ReportScreenContainer(
 ) {
     val context = LocalContext.current
     val uiState by viewModel.collectAsState()
+    val contentFocusRequester = remember { FocusRequester() }
 
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
             is ReportSideEffect.NavigateToBack -> navigateToBack()
+            is ReportSideEffect.FocusOnContent -> {
+                delay(100)
+                contentFocusRequester.requestFocus()
+            }
         }
     }
 
@@ -165,6 +177,7 @@ fun ReportScreenContainer(
             SubmitState.IDLE -> {
                 ReportScreen(
                     uiState = uiState,
+                    contentFocusRequester = contentFocusRequester,
                     onReportTitleChange = viewModel::updateReportTitle,
                     onReportContentChange = viewModel::updateReportContent,
                     onShowImageSourceBottomSheet = viewModel::showImageSourceBottomSheet,
@@ -190,6 +203,7 @@ fun ReportScreenContainer(
 @Composable
 private fun ReportScreen(
     uiState: ReportState,
+    contentFocusRequester: FocusRequester,
     onReportTitleChange: (String) -> Unit,
     onReportContentChange: (String) -> Unit,
     onShowImageSourceBottomSheet: () -> Unit,
@@ -200,6 +214,7 @@ private fun ReportScreen(
     onBackClick: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
+    val focusManager = LocalFocusManager.current
 
     Column(
         modifier = Modifier
@@ -250,6 +265,12 @@ private fun ReportScreen(
                     value = uiState.reportTitle,
                     onValueChange = onReportTitleChange,
                     singleLine = true,
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            focusManager.clearFocus()
+                            onShowReportCategoryBottomSheet()
+                        },
+                    ),
                     placeholder = {
                         Text(
                             text = "제보 제목을 작성해주세요.",
@@ -263,7 +284,10 @@ private fun ReportScreen(
             ReportField(title = "카테고리") {
                 ReportCategorySelector(
                     title = uiState.selectedCategory?.uiTitle,
-                    onClick = onShowReportCategoryBottomSheet,
+                    onClick = {
+                        focusManager.clearFocus()
+                        onShowReportCategoryBottomSheet()
+                    },
                 )
             }
 
@@ -271,7 +295,17 @@ private fun ReportScreen(
                 BitnagilTextField(
                     value = uiState.reportContent,
                     onValueChange = onReportContentChange,
-                    modifier = Modifier.height(88.dp),
+                    modifier = Modifier
+                        .height(88.dp)
+                        .focusRequester(contentFocusRequester),
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done,
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            focusManager.clearFocus()
+                        },
+                    ),
                     placeholder = {
                         Text(
                             text = "어떤 위험인지 간단히 설명해주세요.(100자 내외)",
@@ -318,6 +352,7 @@ private fun ReportScreen(
 private fun Preview() {
     ReportScreen(
         uiState = ReportState.Init,
+        contentFocusRequester = remember { FocusRequester() },
         onReportTitleChange = {},
         onReportContentChange = {},
         onRemoveImage = {},

@@ -66,6 +66,7 @@ class ReportViewModel @Inject constructor(
     fun hideReportCategoryBottomSheet() {
         intent {
             reduce { state.copy(reportCategoryBottomSheetVisible = false) }
+            postSideEffect(ReportSideEffect.FocusOnContent)
         }
     }
 
