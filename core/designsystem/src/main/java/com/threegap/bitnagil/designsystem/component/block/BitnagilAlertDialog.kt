@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.setting.component.block
+package com.threegap.bitnagil.designsystem.component.block
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,7 +22,11 @@ import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButtonColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LogoutConfirmDialog(
+fun BitnagilAlertDialog(
+    title: String,
+    description: String,
+    dismissButtonText: String,
+    confirmButtonText: String,
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
     modifier: Modifier = Modifier,
@@ -45,7 +49,7 @@ fun LogoutConfirmDialog(
             verticalArrangement = Arrangement.Center,
         ) {
             Text(
-                text = "로그아웃할까요?",
+                text = title,
                 color = BitnagilTheme.colors.coolGray10,
                 style = BitnagilTheme.typography.subtitle1SemiBold,
             )
@@ -53,7 +57,7 @@ fun LogoutConfirmDialog(
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "이 기기에서 계정이 로그아웃되고, 다시\n로그인해야 서비스를 계속 이용할 수 있어요.",
+                text = description,
                 color = BitnagilTheme.colors.coolGray40,
                 style = BitnagilTheme.typography.body2Medium,
             )
@@ -65,7 +69,7 @@ fun LogoutConfirmDialog(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 BitnagilTextButton(
-                    text = "취소",
+                    text = dismissButtonText,
                     onClick = onDismiss,
                     colors = BitnagilTextButtonColor.cancel(),
                     textStyle = BitnagilTheme.typography.body2Medium,
@@ -73,7 +77,7 @@ fun LogoutConfirmDialog(
                 )
 
                 BitnagilTextButton(
-                    text = "로그아웃",
+                    text = confirmButtonText,
                     onClick = onConfirm,
                     textStyle = BitnagilTheme.typography.body2Medium,
                     modifier = Modifier.weight(1f),
@@ -85,8 +89,12 @@ fun LogoutConfirmDialog(
 
 @Preview
 @Composable
-private fun LogoutConfirmDialogPreview() {
-    LogoutConfirmDialog(
+private fun Preview() {
+    BitnagilAlertDialog(
+        title = "로그아웃 할까요?",
+        description = "이 기기에서 계정이 로그아웃되고, 다시\n로그인해야 서비스를 계속 이용할 수 있어요.",
+        dismissButtonText = "취소",
+        confirmButtonText = "로그아웃",
         onDismiss = {},
         onConfirm = {},
     )

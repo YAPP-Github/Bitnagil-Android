@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.di.core
+package com.threegap.bitnagil.network
 
 import javax.inject.Qualifier
 
@@ -9,3 +9,7 @@ annotation class NoneAuth
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class Auth
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class Kakao

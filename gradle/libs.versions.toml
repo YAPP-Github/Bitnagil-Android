@@ -55,6 +55,8 @@ javax = "1"
 kakaoLogin = "2.21.4"
 lottie-compose = "6.6.0"
 coil = "3.3.0"
+accompanist = "0.37.3"
+playServicesLocation = "21.3.0"
 
 [libraries]
 ## Android Gradle Plugin
@@ -89,6 +91,7 @@ compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4
 ## Kotlin
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
+kotlinx-coroutines-play = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutines" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 
 ## Hilt
@@ -126,6 +129,10 @@ coil-network = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", versi
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 kakao-v2-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakaoLogin" }
 lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie-compose" }
+
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
+
 
 [bundles]
 androidx-core = [
