@@ -220,7 +220,7 @@ private fun ReportScreen(
 
             ReportField(title = "카테고리") {
                 ReportCategorySelector(
-                    title = uiState.selectedCategory?.title,
+                    title = uiState.selectedCategory?.uiTitle,
                     onClick = onShowReportCategoryBottomSheet,
                 )
             }

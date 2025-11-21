@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel
 import com.threegap.bitnagil.domain.address.usecase.FetchCurrentAddressUseCase
 import com.threegap.bitnagil.domain.file.usecase.UploadReportImagesUseCase
 import com.threegap.bitnagil.domain.report.model.Report
+import com.threegap.bitnagil.domain.report.model.ReportCategory
 import com.threegap.bitnagil.domain.report.usecase.SubmitReportUseCase
 import com.threegap.bitnagil.presentation.common.file.convertUriToImageFile
-import com.threegap.bitnagil.presentation.report.model.ReportCategoryUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -65,7 +65,7 @@ class ReportViewModel @Inject constructor(
         }
     }
 
-    fun selectReportCategory(category: ReportCategoryUi) {
+    fun selectReportCategory(category: ReportCategory) {
         intent {
             reduce { state.copy(selectedCategory = category) }
         }

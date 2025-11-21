@@ -24,15 +24,18 @@ import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendLevel
-import com.threegap.bitnagil.presentation.report.model.ReportCategoryUi
+import com.threegap.bitnagil.domain.report.model.ReportCategory
+import com.threegap.bitnagil.presentation.report.model.iconRes
+import com.threegap.bitnagil.presentation.report.model.uiDescription
+import com.threegap.bitnagil.presentation.report.model.uiTitle
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReportCategoryBottomSheet(
-    selectedCategory: ReportCategoryUi?,
+    selectedCategory: ReportCategory?,
     onDismiss: () -> Unit,
-    onSelected: (ReportCategoryUi) -> Unit,
+    onSelected: (ReportCategory) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -48,11 +51,11 @@ fun ReportCategoryBottomSheet(
         Column(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 28.dp),
         ) {
-            ReportCategoryUi.entries.forEachIndexed { index, category ->
+            ReportCategory.entries.forEachIndexed { index, category ->
                 ReportCategoryItem(
-                    icon = category.icon,
-                    title = category.title,
-                    description = category.description,
+                    icon = category.iconRes,
+                    title = category.uiTitle,
+                    description = category.uiDescription,
                     isSelected = selectedCategory == category,
                     onClick = {
                         onSelected(category)
@@ -124,7 +127,7 @@ private fun ReportCategoryItem(
 @Composable
 private fun ReportCategoryBottomSheetPreview() {
     ReportCategoryBottomSheet(
-        selectedCategory = ReportCategoryUi.WATERFACILITY,
+        selectedCategory = ReportCategory.WATERFACILITY,
         onDismiss = {},
         onSelected = {},
     )
