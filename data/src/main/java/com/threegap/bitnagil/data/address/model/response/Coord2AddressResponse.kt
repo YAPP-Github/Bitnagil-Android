@@ -70,6 +70,6 @@ data class RoadAddress(
 fun Coord2AddressResponse.toAddress(): String? {
     return this.documents
         .firstOrNull()
-        ?.roadAddress
+        ?.address
         ?.addressName
 }
