@@ -44,6 +44,7 @@ fun HomeNavHost(
     navigateToEmotion: () -> Unit,
     navigateToRoutineList: (String) -> Unit,
     navigateToReport: () -> Unit,
+    navigateToReportHistory: () -> Unit,
 ) {
     val navigator = rememberHomeNavigator()
     var showFloatingOverlay by remember { mutableStateOf(false) }
@@ -89,6 +90,7 @@ fun HomeNavHost(
                             navigateToOnBoarding = navigateToOnBoarding,
                             navigateToNotice = navigateToNotice,
                             navigateToQnA = navigateToQnA,
+                            navigateToReportHistory = navigateToReportHistory,
                         )
                     }
                 }

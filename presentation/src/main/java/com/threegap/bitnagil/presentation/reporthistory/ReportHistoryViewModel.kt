@@ -1,6 +1,7 @@
 package com.threegap.bitnagil.presentation.reporthistory
 
 import androidx.lifecycle.ViewModel
+import com.threegap.bitnagil.domain.report.usecase.GetReportHistoriesUseCase
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportCategory
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportHistoriesPerDayUiModel
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportHistorySideEffect
@@ -14,7 +15,9 @@ import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 @HiltViewModel
-class ReportHistoryViewModel @Inject constructor() : ContainerHost<ReportHistoryState, ReportHistorySideEffect>, ViewModel() {
+class ReportHistoryViewModel @Inject constructor(
+    private val getReportHistoriesUseCase: GetReportHistoriesUseCase,
+) : ContainerHost<ReportHistoryState, ReportHistorySideEffect>, ViewModel() {
     override val container: Container<ReportHistoryState, ReportHistorySideEffect> = container(initialState = ReportHistoryState.Init)
 
     init {
@@ -22,33 +25,30 @@ class ReportHistoryViewModel @Inject constructor() : ContainerHost<ReportHistory
     }
 
     private fun loadReportHistories() = intent {
-        reduce {
-            state.copy(
-                reportHistoriesPerDays = List(10) {
-                    ReportHistoriesPerDayUiModel(
-                        date = java.time.LocalDate.now(),
-                        reports = listOf(
-                            ReportHistoryUiModel(
-                                id = "1",
-                                title = "제보 1",
-                                imageUrl = "-",
-                                location = "서울특별시 성북구 안암로 106",
-                                process = ReportProcess.Reported,
-                                category = ReportCategory.Amenities,
-                            ),
-                            ReportHistoryUiModel(
-                                id = "1",
-                                title = "제보 1",
-                                imageUrl = "-",
-                                location = "서울특별시 성북구 안암로 106",
-                                process = ReportProcess.Progress,
-                                category = ReportCategory.Amenities,
-                            ),
-                        ),
+        getReportHistoriesUseCase.invoke().fold(
+            onSuccess = { reportHistoriesPerDate ->
+                val reportHistoriesPerDays = reportHistoriesPerDate
+                    .map { reportHistoryPerDateMap ->
+                        ReportHistoriesPerDayUiModel(
+                            date = reportHistoryPerDateMap.key,
+                            reports = reportHistoryPerDateMap.value.map {
+                                ReportHistoryUiModel.fromDomain(it)
+                            },
+                        )
+                    }
+                    .sortedByDescending { reportHistoryPerDate ->
+                        reportHistoryPerDate.date
+                    }
+
+                reduce {
+                    state.copy(
+                        reportHistoriesPerDays = reportHistoriesPerDays,
                     )
-                },
-            )
-        }
+                }
+            },
+            onFailure = {
+            },
+        )
     }
 
     fun selectReportCategory(reportCategory: ReportCategory) = intent {
@@ -56,7 +56,7 @@ class ReportHistoryViewModel @Inject constructor() : ContainerHost<ReportHistory
 
         reduce {
             state.copy(
-                selectedReportCategory = if (currentSelectedReportCategory == reportCategory) null else reportCategory
+                selectedReportCategory = if (currentSelectedReportCategory == reportCategory) null else reportCategory,
             )
         }
     }
@@ -64,7 +64,7 @@ class ReportHistoryViewModel @Inject constructor() : ContainerHost<ReportHistory
     fun selectReportProcess(reportProcess: ReportProcess) = intent {
         reduce {
             state.copy(
-                selectedReportProcess = reportProcess
+                selectedReportProcess = reportProcess,
             )
         }
     }
@@ -72,7 +72,7 @@ class ReportHistoryViewModel @Inject constructor() : ContainerHost<ReportHistory
     fun showReportCategoryBottomSheet() = intent {
         reduce {
             state.copy(
-                showSelectReportCategoryBottomSheet = true
+                showSelectReportCategoryBottomSheet = true,
             )
         }
     }
@@ -80,7 +80,7 @@ class ReportHistoryViewModel @Inject constructor() : ContainerHost<ReportHistory
     fun hideReportCategoryBottomSheet() = intent {
         reduce {
             state.copy(
-                showSelectReportCategoryBottomSheet = false
+                showSelectReportCategoryBottomSheet = false,
             )
         }
     }

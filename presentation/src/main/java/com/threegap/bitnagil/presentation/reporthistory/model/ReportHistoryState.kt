@@ -17,7 +17,7 @@ data class ReportHistoryState(
                         ReportProcess.Complete -> it.process == ReportProcess.Complete
                     }
 
-                    val categoryMatched = when(selectedReportCategory) {
+                    val categoryMatched = when (selectedReportCategory) {
                         ReportCategory.TrafficFacilities -> it.category == ReportCategory.TrafficFacilities
                         ReportCategory.LightingFacilities -> it.category == ReportCategory.LightingFacilities
                         ReportCategory.WaterFacilities -> it.category == ReportCategory.WaterFacilities
@@ -56,7 +56,7 @@ data class ReportHistoryState(
             selectedReportCategory = null,
             selectedReportProcess = ReportProcess.Total,
             reportHistoriesPerDays = listOf(),
-            showSelectReportCategoryBottomSheet = false
+            showSelectReportCategoryBottomSheet = false,
         )
     }
 }

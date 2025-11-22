@@ -14,6 +14,7 @@ import com.threegap.bitnagil.presentation.onboarding.OnBoardingScreenContainer
 import com.threegap.bitnagil.presentation.onboarding.OnBoardingViewModel
 import com.threegap.bitnagil.presentation.onboarding.model.navarg.OnBoardingScreenArg
 import com.threegap.bitnagil.presentation.report.ReportScreenContainer
+import com.threegap.bitnagil.presentation.reporthistory.ReportHistoryScreenContainer
 import com.threegap.bitnagil.presentation.routinelist.RoutineListScreenContainer
 import com.threegap.bitnagil.presentation.setting.SettingScreenContainer
 import com.threegap.bitnagil.presentation.splash.SplashScreenContainer
@@ -137,6 +138,11 @@ fun MainNavHost(
                 },
                 navigateToReport = {
                     navigator.navController.navigate(Route.Report) {
+                        launchSingleTop = true
+                    }
+                },
+                navigateToReportHistory = {
+                    navigator.navController.navigate(Route.ReportHistory) {
                         launchSingleTop = true
                     }
                 },
@@ -302,6 +308,18 @@ fun MainNavHost(
                     if (navigator.navController.previousBackStackEntry != null) {
                         navigator.navController.popBackStack()
                     }
+                },
+            )
+        }
+
+        composable<Route.ReportHistory> {
+            ReportHistoryScreenContainer(
+                navigateToBack = {
+                    if (navigator.navController.previousBackStackEntry != null) {
+                        navigator.navController.popBackStack()
+                    }
+                },
+                navigateToReportDetail = {
                 },
             )
         }

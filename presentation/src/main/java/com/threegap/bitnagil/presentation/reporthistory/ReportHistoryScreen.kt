@@ -49,19 +49,20 @@ fun ReportHistoryScreenContainer(
 ) {
     val state by viewModel.collectAsState()
 
-    if (state.showSelectReportCategoryBottomSheet)
+    if (state.showSelectReportCategoryBottomSheet) {
         ReportCategoryBottomSheet(
             selectedCategory = state.selectedReportCategory,
             onDismiss = viewModel::hideReportCategoryBottomSheet,
-            onSelected = viewModel::selectReportCategory
+            onSelected = viewModel::selectReportCategory,
         )
+    }
 
     ReportHistoryScreen(
         state = state,
         onClickPreviousButton = navigateToBack,
         onClickReportProcessChip = viewModel::selectReportProcess,
         onClickReportCategoryButton = viewModel::showReportCategoryBottomSheet,
-        onClickReportItem = navigateToReportDetail
+        onClickReportItem = navigateToReportDetail,
     )
 }
 
@@ -117,7 +118,7 @@ private fun ReportHistoryScreen(
                 .fillMaxWidth()
                 .weight(1f),
         ) {
-            if (state.filteredReportHistoriesPerDays.isNotEmpty())
+            if (state.filteredReportHistoriesPerDays.isNotEmpty()) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(horizontal = 16.dp),
@@ -149,17 +150,18 @@ private fun ReportHistoryScreen(
                         }
                     }
                 }
-            else
+            } else {
                 Column(
                     modifier = Modifier.align(Alignment.Center),
                     verticalArrangement = Arrangement.spacedBy(2.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(text = "제보한 내역이 없어요.", style = BitnagilTheme.typography.subtitle1SemiBold)
                     Text(text = "원하는 카테고리로 제보를 시작해 보세요.", style = BitnagilTheme.typography.body2Regular, color = BitnagilTheme.colors.coolGray70)
                 }
+            }
 
-            if (state.showCategorySelectButton)
+            if (state.showCategorySelectButton) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(5.dp),
@@ -183,6 +185,7 @@ private fun ReportHistoryScreen(
                             .size(16.dp),
                     )
                 }
+            }
         }
     }
 }
