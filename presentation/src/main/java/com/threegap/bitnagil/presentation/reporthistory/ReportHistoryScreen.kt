@@ -39,6 +39,7 @@ import com.threegap.bitnagil.presentation.reporthistory.model.ReportHistoriesPer
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportHistoryState
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportHistoryUiModel
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportProcess
+import com.threegap.bitnagil.presentation.reporthistory.util.toPresentationFormat
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -132,7 +133,7 @@ private fun ReportHistoryScreen(
                                     .background(color = BitnagilTheme.colors.coolGray99),
                             ) {
                                 Text(
-                                    text = reportHistoriesPerDay.date.toString(),
+                                    text = reportHistoriesPerDay.date.toPresentationFormat(),
                                     modifier = Modifier.align(Alignment.CenterStart),
                                     style = BitnagilTheme.typography.body2SemiBold,
                                 )
