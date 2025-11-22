@@ -100,12 +100,11 @@ private fun ReportHistoryScreen(
 
             state.reportProcessWithCounts.forEach { reportProcessWithCount ->
                 BitnagilChip(
-                    title = reportProcessWithCount.process.title,
+                    title = reportProcessWithCount.titleWithCount,
                     isSelected = state.selectedReportProcess == reportProcessWithCount.process,
                     onCategorySelected = {
                         onClickReportProcessChip(reportProcessWithCount.process)
                     },
-                    count = if (reportProcessWithCount.count == 0) null else reportProcessWithCount.count,
                 )
             }
 

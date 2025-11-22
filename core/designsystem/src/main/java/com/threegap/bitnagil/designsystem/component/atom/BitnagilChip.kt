@@ -22,10 +22,7 @@ fun BitnagilChip(
     isSelected: Boolean,
     onCategorySelected: () -> Unit,
     modifier: Modifier = Modifier,
-    count: Int? = null,
 ) {
-    val chipTitle = if (count == null) title else "$title $count"
-
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
@@ -41,7 +38,7 @@ fun BitnagilChip(
             ),
     ) {
         Text(
-            text = chipTitle,
+            text = title,
             color = if (!isSelected) BitnagilTheme.colors.coolGray60 else BitnagilTheme.colors.white,
             style = if (!isSelected) BitnagilTheme.typography.caption1Medium else BitnagilTheme.typography.caption1SemiBold,
         )
@@ -58,13 +55,6 @@ private fun RecommendCategoryChipStatesPreview() {
             title = "맞춤 추천",
             isSelected = true,
             onCategorySelected = {},
-        )
-
-        BitnagilChip(
-            title = "나가봐요",
-            isSelected = false,
-            onCategorySelected = {},
-            count = 1,
         )
     }
 }

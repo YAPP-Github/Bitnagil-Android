@@ -25,7 +25,7 @@ class ReportHistoryViewModel @Inject constructor(
     }
 
     private fun loadReportHistories() = intent {
-        getReportHistoriesUseCase.invoke().fold(
+        getReportHistoriesUseCase().fold(
             onSuccess = { reportHistoriesPerDate ->
                 val reportHistoriesPerDays = reportHistoriesPerDate
                     .map { reportHistoryPerDateMap ->
