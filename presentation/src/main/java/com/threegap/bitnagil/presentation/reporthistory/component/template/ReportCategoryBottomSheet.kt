@@ -23,7 +23,6 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
-import com.threegap.bitnagil.domain.recommendroutine.model.RecommendLevel
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportCategory
 import kotlinx.coroutines.launch
 
@@ -64,7 +63,7 @@ fun ReportCategoryBottomSheet(
                     },
                 )
 
-                if (index < RecommendLevel.entries.size) {
+                if (index < ReportCategory.entries.lastIndex) {
                     HorizontalDivider(
                         color = BitnagilTheme.colors.coolGray97,
                     )
