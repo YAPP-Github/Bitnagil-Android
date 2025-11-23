@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ReportDetailScreenArg(
-    val reportId: Int,
+    val reportId: String,
 )

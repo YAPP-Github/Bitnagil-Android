@@ -16,8 +16,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,12 +31,19 @@ import com.threegap.bitnagil.presentation.reportdetail.component.atom.ReportProc
 import com.threegap.bitnagil.presentation.reportdetail.component.block.ReportDetailLabeledContent
 import com.threegap.bitnagil.presentation.reportdetail.model.mvi.ReportDetailState
 import com.threegap.bitnagil.presentation.reportdetail.util.toPresentationFormatInReportDetail
+import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun ReportDetailScreenContainer(
-
+    viewModel: ReportDetailViewModel,
+    navigateToBack: () -> Unit,
 ) {
+    val state by viewModel.collectAsState()
 
+    ReportDetailScreen(
+        state = state,
+        onClickPreviousButton = navigateToBack,
+    )
 }
 
 @Composable
@@ -82,6 +91,7 @@ private fun ReportDetailScreen(
                         .size(74.dp)
                         .clip(shape = RoundedCornerShape(9.dp))
                         .background(color = BitnagilTheme.colors.black),
+                    contentScale = ContentScale.Crop,
                     contentDescription = null,
                 )
             }
