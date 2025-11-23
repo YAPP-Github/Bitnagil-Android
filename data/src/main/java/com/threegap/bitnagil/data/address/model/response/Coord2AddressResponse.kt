@@ -20,7 +20,7 @@ data class Meta(
 @Serializable
 data class Document(
     @SerialName("road_address")
-    val roadAddress: RoadAddress,
+    val roadAddress: RoadAddress?,
     @SerialName("address")
     val address: Address,
 )
