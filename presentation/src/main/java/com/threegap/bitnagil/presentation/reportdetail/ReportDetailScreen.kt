@@ -57,10 +57,8 @@ private fun ReportDetailScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .verticalScroll(verticalScrollState)
             .background(color = BitnagilTheme.colors.white)
-            .statusBarsPadding()
-            .padding(horizontal = 20.dp),
+            .statusBarsPadding(),
     ) {
         BitnagilTopBar(
             title = "제보하기",
@@ -68,63 +66,70 @@ private fun ReportDetailScreen(
             onBackClick = onClickPreviousButton,
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .verticalScroll(verticalScrollState)
+                .padding(horizontal = 20.dp),
+        ) {
+            Spacer(modifier = Modifier.height(20.dp))
 
-        ReportProcessBadge(reportProcess = state.reportProcess)
+            ReportProcessBadge(reportProcess = state.reportProcess)
 
-        Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(6.dp))
 
-        Text(
-            text = state.date.toPresentationFormatInReportDetail(),
-            style = BitnagilTheme.typography.subtitle1SemiBold,
-        )
+            Text(
+                text = state.date.toPresentationFormatInReportDetail(),
+                style = BitnagilTheme.typography.subtitle1SemiBold,
+            )
 
-        Spacer(modifier = Modifier.height(14.dp))
+            Spacer(modifier = Modifier.height(14.dp))
 
-        Row {
-            state.imageUrls.forEach { imageUrl ->
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(imageUrl)
-                        .build(),
-                    modifier = Modifier
-                        .size(74.dp)
-                        .clip(shape = RoundedCornerShape(9.dp))
-                        .background(color = BitnagilTheme.colors.black),
-                    contentScale = ContentScale.Crop,
-                    contentDescription = null,
+            Row {
+                state.imageUrls.forEach { imageUrl ->
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(imageUrl)
+                            .build(),
+                        modifier = Modifier
+                            .size(74.dp)
+                            .clip(shape = RoundedCornerShape(9.dp))
+                            .background(color = BitnagilTheme.colors.black),
+                        contentScale = ContentScale.Crop,
+                        contentDescription = null,
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(28.dp),
+            ) {
+                ReportDetailLabeledContent(
+                    label = "제목",
+                    content = state.reportTitle,
+                )
+
+                ReportDetailLabeledContent(
+                    label = "카테고리",
+                    content = state.reportCategory.title,
+                )
+
+                ReportDetailLabeledContent(
+                    label = "상세 제목 내용",
+                    content = state.reportContent,
+                )
+
+                ReportDetailLabeledContent(
+                    label = "내 위치",
+                    content = state.location,
                 )
             }
+
+            Spacer(modifier = Modifier.height(36.dp))
         }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(28.dp),
-        ) {
-            ReportDetailLabeledContent(
-                label = "제목",
-                content = state.reportTitle,
-            )
-
-            ReportDetailLabeledContent(
-                label = "카테고리",
-                content = state.reportCategory.title,
-            )
-
-            ReportDetailLabeledContent(
-                label = "상세 제목 내용",
-                content = state.reportContent,
-            )
-
-            ReportDetailLabeledContent(
-                label = "내 위치",
-                content = state.location,
-            )
-        }
-
-        Spacer(modifier = Modifier.height(36.dp))
     }
 }
 
