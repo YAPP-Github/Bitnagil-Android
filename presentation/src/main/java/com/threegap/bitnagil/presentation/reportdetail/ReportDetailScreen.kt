@@ -85,7 +85,9 @@ private fun ReportDetailScreen(
 
             Spacer(modifier = Modifier.height(14.dp))
 
-            Row {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
                 state.imageUrls.forEach { imageUrl ->
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
@@ -143,6 +145,7 @@ private fun ReportDetailScreenPreview() {
                     "consectetur adipiscing elit," +
                     " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
                     "Nisl tincidunt eget nullam non.",
+                imageUrls = listOf("", ""),
             ),
             onClickPreviousButton = {},
         )
