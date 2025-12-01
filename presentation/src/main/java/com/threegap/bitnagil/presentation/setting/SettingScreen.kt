@@ -30,10 +30,11 @@ import com.threegap.bitnagil.designsystem.component.block.BitnagilOptionButton
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
+import com.threegap.bitnagil.presentation.common.playstore.UpdateAvailableState
 import com.threegap.bitnagil.presentation.common.playstore.openAppInPlayStore
+import com.threegap.bitnagil.presentation.common.playstore.updateAvailable
 import com.threegap.bitnagil.presentation.setting.component.atom.settingtitle.SettingTitle
 import com.threegap.bitnagil.presentation.setting.component.block.LogoutConfirmDialog
-import com.threegap.bitnagil.presentation.setting.model.VersionStateUiModel
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingIntent
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingSideEffect
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingState
@@ -50,6 +51,7 @@ fun SettingScreenContainer(
     val context = LocalContext.current
     val activity = context as? ComponentActivity
     val state by viewModel.stateFlow.collectAsState()
+    val updateAvailableState = updateAvailable()
 
     viewModel.sideEffectFlow.collectAsEffect { sideEffect ->
         when (sideEffect) {
@@ -67,6 +69,7 @@ fun SettingScreenContainer(
 
     SettingScreen(
         state = state,
+        updateAvailableState = updateAvailableState,
         toggleServiceAlarm = viewModel::toggleServiceAlarm,
         togglePushAlarm = viewModel::togglePushAlarm,
         onClickUpdate = { openAppInPlayStore(activity = activity, shouldFinishApp = false) },
@@ -81,6 +84,7 @@ fun SettingScreenContainer(
 @Composable
 private fun SettingScreen(
     state: SettingState,
+    updateAvailableState: UpdateAvailableState,
     toggleServiceAlarm: () -> Unit,
     togglePushAlarm: () -> Unit,
     onClickUpdate: () -> Unit,
@@ -133,8 +137,8 @@ private fun SettingScreen(
                     )
                 }
 
-                when (state.versionState) {
-                    VersionStateUiModel.Latest -> Text(
+                when (updateAvailableState) {
+                    UpdateAvailableState.Latest -> Text(
                         text = "최신",
                         color = BitnagilTheme.colors.coolGray70,
                         style = BitnagilTheme.typography.button2,
@@ -145,7 +149,7 @@ private fun SettingScreen(
                             )
                             .padding(horizontal = 10.dp, vertical = 5.dp),
                     )
-                    VersionStateUiModel.NEED_UPDATE -> Text(
+                    UpdateAvailableState.NEED_UPDATE -> Text(
                         text = "업데이트",
                         color = BitnagilTheme.colors.orange500,
                         style = BitnagilTheme.typography.button2,
@@ -157,7 +161,7 @@ private fun SettingScreen(
                             .clickableWithoutRipple(onClick = onClickUpdate)
                             .padding(horizontal = 10.dp, vertical = 5.dp),
                     )
-                    VersionStateUiModel.NONE -> {}
+                    UpdateAvailableState.NONE -> {}
                 }
             }
 
@@ -200,10 +204,10 @@ fun SettingScreenPreview() {
             useServiceAlarm = true,
             usePushAlarm = false,
             version = "1.0.1",
-            versionState = VersionStateUiModel.NONE,
             loading = false,
             logoutConfirmDialogVisible = false,
         ),
+        updateAvailableState = UpdateAvailableState.Latest,
         toggleServiceAlarm = {},
         togglePushAlarm = {},
         onClickUpdate = {},

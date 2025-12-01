@@ -1,13 +1,26 @@
 package com.threegap.bitnagil.presentation.common.playstore
 
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.threegap.bitnagil.presentation.BuildConfig
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 import kotlin.system.exitProcess
 
 private const val PACKAGE_NAME = BuildConfig.APPLICATION_ID
@@ -67,5 +80,34 @@ private fun finishAppWithDelay(activity: ComponentActivity) {
         delay(APP_EXIT_DELAY)
         activity.finishAffinity()
         exitProcess(0)
+    }
+}
+
+@Composable
+fun updateAvailable(): UpdateAvailableState {
+    val context = LocalContext.current
+    var isUpdateAvailable by remember { mutableStateOf(UpdateAvailableState.NONE) }
+
+    LaunchedEffect(Unit) {
+        isUpdateAvailable = context.checkForUpdateAvailability()
+    }
+
+    return isUpdateAvailable
+}
+
+private suspend fun Context.checkForUpdateAvailability(): UpdateAvailableState = suspendCoroutine { continuation ->
+    val appUpdateManager = AppUpdateManagerFactory.create(this)
+    val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+
+    appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+        val isAvailable = appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
+            appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+
+        val state = if (isAvailable) UpdateAvailableState.NEED_UPDATE else UpdateAvailableState.Latest
+        continuation.resume(state)
+    }
+
+    appUpdateInfoTask.addOnFailureListener {
+        continuation.resume(UpdateAvailableState.NONE)
     }
 }
