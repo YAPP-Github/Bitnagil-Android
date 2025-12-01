@@ -1,6 +1,6 @@
 package com.threegap.bitnagil.presentation.setting.model.mvi
 
-import com.threegap.bitnagil.presentation.common.mviviewmodel.MviState
+import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -10,7 +10,7 @@ data class SettingState(
     val version: String,
     val loading: Boolean,
     val logoutConfirmDialogVisible: Boolean,
-) : MviState {
+) : Parcelable {
     companion object {
         val Init = SettingState(
             useServiceAlarm = false,

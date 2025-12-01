@@ -17,7 +17,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,15 +28,15 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.component.block.BitnagilOptionButton
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
-import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.common.playstore.UpdateAvailableState
 import com.threegap.bitnagil.presentation.common.playstore.openAppInPlayStore
 import com.threegap.bitnagil.presentation.common.playstore.updateAvailable
 import com.threegap.bitnagil.presentation.setting.component.atom.settingtitle.SettingTitle
 import com.threegap.bitnagil.presentation.setting.component.block.LogoutConfirmDialog
-import com.threegap.bitnagil.presentation.setting.model.mvi.SettingIntent
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingSideEffect
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingState
+import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun SettingScreenContainer(
@@ -50,10 +49,10 @@ fun SettingScreenContainer(
 ) {
     val context = LocalContext.current
     val activity = context as? ComponentActivity
-    val state by viewModel.stateFlow.collectAsState()
+    val state by viewModel.collectAsState()
     val updateAvailableState = updateAvailable()
 
-    viewModel.sideEffectFlow.collectAsEffect { sideEffect ->
+    viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
             SettingSideEffect.NavigateToLogin -> navigateToLogin()
             SettingSideEffect.NavigateToWithdrawal -> navigateToWithdrawal()
@@ -77,7 +76,7 @@ fun SettingScreenContainer(
         onClickTermsOfService = navigateToTermsOfService,
         onClickPrivacyPolicy = navigateToPrivacyPolicy,
         onClickLogout = viewModel::showLogoutDialog,
-        onClickWithdrawal = { viewModel.sendIntent(SettingIntent.OnWithdrawalClick) },
+        onClickWithdrawal = viewModel::navigateToWithdrawal,
     )
 }
 
