@@ -13,6 +13,11 @@ import com.threegap.bitnagil.presentation.login.LoginScreenContainer
 import com.threegap.bitnagil.presentation.onboarding.OnBoardingScreenContainer
 import com.threegap.bitnagil.presentation.onboarding.OnBoardingViewModel
 import com.threegap.bitnagil.presentation.onboarding.model.navarg.OnBoardingScreenArg
+import com.threegap.bitnagil.presentation.report.ReportScreenContainer
+import com.threegap.bitnagil.presentation.reportdetail.ReportDetailScreenContainer
+import com.threegap.bitnagil.presentation.reportdetail.ReportDetailViewModel
+import com.threegap.bitnagil.presentation.reportdetail.model.navarg.ReportDetailScreenArg
+import com.threegap.bitnagil.presentation.reporthistory.ReportHistoryScreenContainer
 import com.threegap.bitnagil.presentation.routinelist.RoutineListScreenContainer
 import com.threegap.bitnagil.presentation.setting.SettingScreenContainer
 import com.threegap.bitnagil.presentation.splash.SplashScreenContainer
@@ -131,6 +136,16 @@ fun MainNavHost(
                     navigator.navController.navigate(
                         Route.RoutineList(selectedDate = selectedDate),
                     ) {
+                        launchSingleTop = true
+                    }
+                },
+                navigateToReport = {
+                    navigator.navController.navigate(Route.Report) {
+                        launchSingleTop = true
+                    }
+                },
+                navigateToReportHistory = {
+                    navigator.navController.navigate(Route.ReportHistory) {
                         launchSingleTop = true
                     }
                 },
@@ -282,6 +297,48 @@ fun MainNavHost(
 
         composable<Route.Guide> {
             GuideScreenContainer(
+                navigateToBack = {
+                    if (navigator.navController.previousBackStackEntry != null) {
+                        navigator.navController.popBackStack()
+                    }
+                },
+            )
+        }
+
+        composable<Route.Report> {
+            ReportScreenContainer(
+                navigateToBack = {
+                    if (navigator.navController.previousBackStackEntry != null) {
+                        navigator.navController.popBackStack()
+                    }
+                },
+            )
+        }
+
+        composable<Route.ReportHistory> {
+            ReportHistoryScreenContainer(
+                navigateToBack = {
+                    if (navigator.navController.previousBackStackEntry != null) {
+                        navigator.navController.popBackStack()
+                    }
+                },
+                navigateToReportDetail = { reportId ->
+                    navigator.navController.navigate(Route.ReportDetail(reportId = reportId)) {
+                        launchSingleTop = true
+                    }
+                },
+            )
+        }
+
+        composable<Route.ReportDetail> { navBackStackEntry ->
+            val arg = navBackStackEntry.toRoute<Route.ReportDetail>()
+            val reportDetailScreenArg = ReportDetailScreenArg(reportId = arg.reportId)
+            val viewModel = hiltViewModel<ReportDetailViewModel, ReportDetailViewModel.Factory> { factory ->
+                factory.create(reportDetailScreenArg)
+            }
+
+            ReportDetailScreenContainer(
+                viewModel = viewModel,
                 navigateToBack = {
                     if (navigator.navController.previousBackStackEntry != null) {
                         navigator.navController.popBackStack()

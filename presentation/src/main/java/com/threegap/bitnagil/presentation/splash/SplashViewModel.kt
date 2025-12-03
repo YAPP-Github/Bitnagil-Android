@@ -13,7 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
-import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
+import org.orbitmvi.orbit.syntax.Syntax
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,7 +30,7 @@ class SplashViewModel @Inject constructor(
         performForceUpdateCheck()
     }
 
-    override suspend fun SimpleSyntax<SplashState, SplashSideEffect>.reduceState(
+    override suspend fun Syntax<SplashState, SplashSideEffect>.reduceState(
         intent: SplashIntent,
         state: SplashState,
     ): SplashState? =

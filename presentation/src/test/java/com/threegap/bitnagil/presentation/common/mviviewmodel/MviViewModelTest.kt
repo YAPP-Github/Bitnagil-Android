@@ -6,7 +6,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.parcelize.Parcelize
 import org.junit.Before
 import org.junit.Test
-import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
+import org.orbitmvi.orbit.syntax.Syntax
 import org.orbitmvi.orbit.test.test
 
 @ExperimentalCoroutinesApi
@@ -26,7 +26,6 @@ class MviViewModelTest {
                 containerHost.sendIntent(SampleIntent.Decrease(number = 2))
                 containerHost.sendIntent(SampleIntent.Increase(number = 3))
 
-                expectState { SampleState() }
                 expectState { SampleState(count = 1) }
                 expectState { SampleState(count = -1) }
                 expectState { SampleState(count = 2) }
@@ -42,7 +41,6 @@ class MviViewModelTest {
                 containerHost.sendIntent(SampleIntent.Decrease(number = 2))
                 containerHost.sendIntent(SampleIntent.Increase(number = 3))
 
-                expectState { SampleState() }
                 expectState { SampleState(count = 1) }
                 expectSideEffect(SampleSideEffect.ShowToast("Clear"))
                 expectState { SampleState() }
@@ -56,7 +54,7 @@ class MviViewModelTest {
         initState: SampleState,
         savedStateHandle: SavedStateHandle,
     ) : MviViewModel<SampleState, SampleSideEffect, SampleIntent>(initState, savedStateHandle) {
-        override suspend fun SimpleSyntax<SampleState, SampleSideEffect>.reduceState(
+        override suspend fun Syntax<SampleState, SampleSideEffect>.reduceState(
             intent: SampleIntent,
             state: SampleState,
         ): SampleState? {

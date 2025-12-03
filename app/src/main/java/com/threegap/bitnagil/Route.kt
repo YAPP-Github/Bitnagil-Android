@@ -48,4 +48,13 @@ sealed interface Route {
 
     @Serializable
     data object Guide : Route
+
+    @Serializable
+    data object Report : Route
+
+    @Serializable
+    data object ReportHistory : Route
+
+    @Serializable
+    data class ReportDetail(val reportId: String) : Route
 }

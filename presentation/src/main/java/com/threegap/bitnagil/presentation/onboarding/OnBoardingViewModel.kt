@@ -25,7 +25,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
+import org.orbitmvi.orbit.syntax.Syntax
 
 @HiltViewModel(assistedFactory = OnBoardingViewModel.Factory::class)
 class OnBoardingViewModel @AssistedInject constructor(
@@ -119,7 +119,7 @@ class OnBoardingViewModel @AssistedInject constructor(
         }
     }
 
-    override suspend fun SimpleSyntax<OnBoardingState, OnBoardingSideEffect>.reduceState(
+    override suspend fun Syntax<OnBoardingState, OnBoardingSideEffect>.reduceState(
         intent: OnBoardingIntent,
         state: OnBoardingState,
     ): OnBoardingState? {

@@ -1,6 +1,6 @@
 package com.threegap.bitnagil.data.routine.model.response
 
-import com.threegap.bitnagil.domain.routine.model.DayRoutines
+import com.threegap.bitnagil.domain.routine.model.DailyRoutines
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -12,8 +12,8 @@ data class DayRoutinesDto(
     val allCompleted: Boolean,
 )
 
-fun DayRoutinesDto.toDomain(): DayRoutines =
-    DayRoutines(
-        routineList = routineList.map { it.toDomain() },
-        allCompleted = allCompleted,
+fun DayRoutinesDto.toDomain(): DailyRoutines =
+    DailyRoutines(
+        routines = routineList.map { it.toDomain() },
+        isAllCompleted = allCompleted,
     )

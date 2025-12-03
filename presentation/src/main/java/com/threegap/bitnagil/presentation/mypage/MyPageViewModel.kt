@@ -9,7 +9,7 @@ import com.threegap.bitnagil.presentation.mypage.model.MyPageSideEffect
 import com.threegap.bitnagil.presentation.mypage.model.MyPageState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
+import org.orbitmvi.orbit.syntax.Syntax
 import javax.inject.Inject
 
 @HiltViewModel
@@ -41,7 +41,7 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    override suspend fun SimpleSyntax<MyPageState, MyPageSideEffect>.reduceState(
+    override suspend fun Syntax<MyPageState, MyPageSideEffect>.reduceState(
         intent: MyPageIntent,
         state: MyPageState,
     ): MyPageState {

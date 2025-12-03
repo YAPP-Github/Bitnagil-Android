@@ -37,7 +37,7 @@ import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIconButton
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
-import com.threegap.bitnagil.presentation.home.model.RoutinesUiModel
+import com.threegap.bitnagil.presentation.home.model.RoutineScheduleUiModel
 import com.threegap.bitnagil.presentation.home.util.formatDayOfMonth
 import com.threegap.bitnagil.presentation.home.util.formatDayOfWeekShort
 import com.threegap.bitnagil.presentation.home.util.formatMonthYear
@@ -48,7 +48,7 @@ import java.time.LocalDate
 fun WeeklyDatePicker(
     selectedDate: LocalDate,
     weeklyDates: List<LocalDate>,
-    routines: RoutinesUiModel,
+    routines: RoutineScheduleUiModel,
     onDateSelect: (LocalDate) -> Unit,
     onPreviousWeekClick: () -> Unit,
     onNextWeekClick: () -> Unit,
@@ -57,7 +57,7 @@ fun WeeklyDatePicker(
     val today = remember { LocalDate.now() }
     val completionStates = remember(weeklyDates, routines) {
         weeklyDates.associateWith { date ->
-            routines.routines[date.toString()]?.allCompleted ?: false
+            routines.dailyRoutines[date.toString()]?.isAllCompleted ?: false
         }
     }
 
@@ -197,7 +197,7 @@ private fun WeeklyDatePickerPreview() {
     WeeklyDatePicker(
         selectedDate = selectedDate,
         weeklyDates = selectedDate.getCurrentWeekDays(),
-        routines = RoutinesUiModel(),
+        routines = RoutineScheduleUiModel(),
         onDateSelect = { selectedDate = it },
         onPreviousWeekClick = { selectedDate = selectedDate.minusWeeks(1) },
         onNextWeekClick = { selectedDate = selectedDate.plusWeeks(1) },

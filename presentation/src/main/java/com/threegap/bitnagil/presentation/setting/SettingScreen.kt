@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.component.block.BitnagilAlertDialog
 import com.threegap.bitnagil.designsystem.component.block.BitnagilOptionButton
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
@@ -32,6 +33,7 @@ import com.threegap.bitnagil.presentation.common.playstore.UpdateAvailableState
 import com.threegap.bitnagil.presentation.common.playstore.openAppInPlayStore
 import com.threegap.bitnagil.presentation.common.playstore.updateAvailable
 import com.threegap.bitnagil.presentation.setting.component.atom.settingtitle.SettingTitle
+import com.threegap.bitnagil.presentation.setting.model.mvi.SettingIntent
 import com.threegap.bitnagil.presentation.setting.component.block.LogoutConfirmDialog
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingSideEffect
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingState
@@ -60,7 +62,11 @@ fun SettingScreenContainer(
     }
 
     if (state.logoutConfirmDialogVisible) {
-        LogoutConfirmDialog(
+        BitnagilAlertDialog(
+            title = "로그아웃 할까요?",
+            description = "이 기기에서 계정이 로그아웃되고, 다시\n로그인해야 서비스를 계속 이용할 수 있어요.",
+            dismissButtonText = "취소",
+            confirmButtonText = "로그아웃",
             onDismiss = viewModel::hideConfirmDialog,
             onConfirm = viewModel::logout,
         )

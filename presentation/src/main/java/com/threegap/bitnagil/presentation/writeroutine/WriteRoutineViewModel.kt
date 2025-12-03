@@ -25,7 +25,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
+import org.orbitmvi.orbit.syntax.Syntax
 
 @HiltViewModel(assistedFactory = WriteRoutineViewModel.Factory::class)
 class WriteRoutineViewModel @AssistedInject constructor(
@@ -83,8 +83,8 @@ class WriteRoutineViewModel @AssistedInject constructor(
                 onSuccess = { routine ->
                     sendIntent(
                         WriteRoutineIntent.SetRoutine(
-                            name = routine.routineName,
-                            repeatDays = routine.repeatDay.map { Day.fromDayOfWeek(it) },
+                            name = routine.name,
+                            repeatDays = routine.repeatDays.map { Day.fromDayOfWeek(it) },
                             startTime = Time.fromDomainTimeString(routine.executionTime),
                             subRoutines = listOf(
                                 routine.subRoutineNames.getOrNull(0) ?: "",
@@ -133,7 +133,7 @@ class WriteRoutineViewModel @AssistedInject constructor(
         }
     }
 
-    override suspend fun SimpleSyntax<WriteRoutineState, WriteRoutineSideEffect>.reduceState(
+    override suspend fun Syntax<WriteRoutineState, WriteRoutineSideEffect>.reduceState(
         intent: WriteRoutineIntent,
         state: WriteRoutineState,
     ): WriteRoutineState? {

@@ -44,6 +44,17 @@ android {
             name = "KAKAO_NATIVE_APP_KEY",
             value = "\"$kakaoNativeAppKey\"",
         )
+
+        val kakaoRestApiKey =
+            (properties["kakao.rest.api.key"] as? String)
+                ?: System.getenv("KAKAO_REST_API_KEY")
+                ?: throw GradleException("KAKAO_REST_API_KEY 값이 없습니다.")
+
+        buildConfigField(
+            type = "String",
+            name = "KAKAO_REST_API_KEY",
+            value = "\"$kakaoRestApiKey\"",
+        )
     }
 
     buildTypes {

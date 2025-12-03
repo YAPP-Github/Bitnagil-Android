@@ -20,6 +20,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.lottie.compose)
     implementation(libs.bundles.coil)
+    implementation(libs.accompanist.permissions)
     implementation(libs.bundles.app.update)
 
     testImplementation(libs.junit)

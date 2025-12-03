@@ -11,7 +11,7 @@ import com.threegap.bitnagil.presentation.login.model.LoginSideEffect
 import com.threegap.bitnagil.presentation.login.model.LoginState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
+import org.orbitmvi.orbit.syntax.Syntax
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,7 +22,7 @@ class LoginViewModel @Inject constructor(
     initState = LoginState(),
     savedStateHandle = savedStateHandle,
 ) {
-    override suspend fun SimpleSyntax<LoginState, LoginSideEffect>.reduceState(
+    override suspend fun Syntax<LoginState, LoginSideEffect>.reduceState(
         intent: LoginIntent,
         state: LoginState,
     ): LoginState? =

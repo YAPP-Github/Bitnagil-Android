@@ -19,13 +19,15 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
-import com.threegap.bitnagil.presentation.home.model.RoutineUiModel
 
 @Composable
 fun RoutineItem(
-    routine: RoutineUiModel,
-    onRoutineToggle: (Boolean) -> Unit,
-    onSubRoutineToggle: (Int, Boolean) -> Unit,
+    name: String,
+    isCompleted: Boolean,
+    subRoutineNames: List<String>,
+    subRoutineIsCompleted: List<Boolean>,
+    onRoutineToggle: () -> Unit,
+    onSubRoutineToggle: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -43,19 +45,19 @@ fun RoutineItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickableWithoutRipple { onRoutineToggle(!routine.routineCompleteYn) },
+                .clickableWithoutRipple { onRoutineToggle() },
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = routine.routineName,
+                text = name,
                 style = BitnagilTheme.typography.body1SemiBold,
                 color = BitnagilTheme.colors.coolGray10,
                 modifier = Modifier.weight(1f),
             )
 
             BitnagilIcon(
-                id = if (routine.routineCompleteYn) R.drawable.ic_check_circle else R.drawable.ic_check_default,
+                id = if (isCompleted) R.drawable.ic_check_circle else R.drawable.ic_check_default,
                 tint = null,
                 modifier = Modifier
                     .padding(start = 10.dp)
@@ -63,7 +65,7 @@ fun RoutineItem(
             )
         }
 
-        if (routine.subRoutineNames.isNotEmpty()) {
+        if (subRoutineNames.isNotEmpty()) {
             HorizontalDivider(
                 thickness = 1.dp,
                 color = BitnagilTheme.colors.coolGray97,
@@ -71,11 +73,9 @@ fun RoutineItem(
             )
 
             SubRoutinesItem(
-                subRoutineNames = routine.subRoutineNames,
-                subRoutineCompleteYn = routine.subRoutineCompleteYn,
-                onSubRoutineToggle = { index, isCompleted ->
-                    onSubRoutineToggle(index, isCompleted)
-                },
+                subRoutineNames = subRoutineNames,
+                subRoutineCompleteYn = subRoutineIsCompleted,
+                onSubRoutineToggle = { index -> onSubRoutineToggle(index) },
             )
         }
     }
@@ -85,19 +85,12 @@ fun RoutineItem(
 @Composable
 private fun RoutineItemPreview() {
     RoutineItem(
-        routine = RoutineUiModel(
-            routineId = "uuid1",
-            routineName = "개운하게 일어나기",
-            repeatDay = emptyList(),
-            executionTime = "20:30:00",
-            routineDate = "2025-08-15",
-            routineCompleteYn = false,
-            subRoutineNames = listOf("물 마시기", "스트레칭하기", "심호흡하기"),
-            subRoutineCompleteYn = listOf(true, false, true),
-            recommendedRoutineType = null,
-        ),
+        name = "개운하게 일어나기",
+        isCompleted = false,
+        subRoutineNames = listOf("물 마시기", "스트레칭하기", "심호흡하기"),
+        subRoutineIsCompleted = listOf(true, false, true),
         onRoutineToggle = { },
-        onSubRoutineToggle = { _, _ -> },
+        onSubRoutineToggle = { _ -> },
     )
 }
 
@@ -105,18 +98,11 @@ private fun RoutineItemPreview() {
 @Composable
 private fun NoneSubRoutineRoutineItemPreview() {
     RoutineItem(
-        routine = RoutineUiModel(
-            routineId = "uuid1",
-            routineName = "개운하게 일어나기",
-            repeatDay = emptyList(),
-            executionTime = "20:30:00",
-            routineDate = "2025-08-15",
-            routineCompleteYn = false,
-            subRoutineNames = emptyList(),
-            subRoutineCompleteYn = emptyList(),
-            recommendedRoutineType = null,
-        ),
+        name = "개운하게 일어나기",
+        isCompleted = false,
+        subRoutineNames = emptyList(),
+        subRoutineIsCompleted = emptyList(),
         onRoutineToggle = {},
-        onSubRoutineToggle = { _, _ -> },
+        onSubRoutineToggle = { _ -> },
     )
 }
