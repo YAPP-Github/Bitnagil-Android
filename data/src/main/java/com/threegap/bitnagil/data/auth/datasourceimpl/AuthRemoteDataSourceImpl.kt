@@ -3,6 +3,7 @@ package com.threegap.bitnagil.data.auth.datasourceimpl
 import com.threegap.bitnagil.data.auth.datasource.AuthRemoteDataSource
 import com.threegap.bitnagil.data.auth.model.request.LoginRequestDto
 import com.threegap.bitnagil.data.auth.model.request.TermsAgreementRequestDto
+import com.threegap.bitnagil.data.auth.model.request.WithdrawalReasonResponse
 import com.threegap.bitnagil.data.auth.model.response.LoginResponseDto
 import com.threegap.bitnagil.data.auth.service.AuthService
 import com.threegap.bitnagil.data.common.safeApiCall
@@ -27,9 +28,9 @@ class AuthRemoteDataSourceImpl @Inject constructor(
             authService.postLogout()
         }
 
-    override suspend fun withdrawal(): Result<Unit> =
+    override suspend fun withdrawal(reason: String): Result<Unit> =
         safeUnitApiCall {
-            authService.postWithdrawal()
+            authService.postWithdrawal(WithdrawalReasonResponse(reason))
         }
 
     override suspend fun reissueToken(refreshToken: String): Result<LoginResponseDto> =

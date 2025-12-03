@@ -2,6 +2,7 @@ package com.threegap.bitnagil.data.auth.service
 
 import com.threegap.bitnagil.data.auth.model.request.LoginRequestDto
 import com.threegap.bitnagil.data.auth.model.request.TermsAgreementRequestDto
+import com.threegap.bitnagil.data.auth.model.request.WithdrawalReasonResponse
 import com.threegap.bitnagil.data.auth.model.response.LoginResponseDto
 import com.threegap.bitnagil.network.model.BaseResponse
 import retrofit2.http.Body
@@ -23,7 +24,7 @@ interface AuthService {
     ): BaseResponse<Unit>
 
     @POST("/api/v1/auth/withdrawal")
-    suspend fun postWithdrawal(): BaseResponse<Unit>
+    suspend fun postWithdrawal(@Body request: WithdrawalReasonResponse): BaseResponse<Unit>
 
     @POST("/api/v1/auth/logout")
     suspend fun postLogout(): BaseResponse<Unit>
