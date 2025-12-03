@@ -108,7 +108,7 @@ class RoutineListViewModel @Inject constructor(
             deleteRoutineUseCase(selectedRoutine.routineId).fold(
                 onSuccess = {
                     fetchRoutines()
-                    reduce { state.copy(isLoading = false, deleteConfirmBottomSheetVisible = false) }
+                    reduce { state.copy(deleteConfirmBottomSheetVisible = false) }
                     postSideEffect(RoutineListSideEffect.ShowToast("삭제가 완료되었습니다."))
                 },
                 onFailure = {
@@ -126,7 +126,7 @@ class RoutineListViewModel @Inject constructor(
             deleteRoutineForDayUseCase(selectedRoutine.routineId).fold(
                 onSuccess = {
                     fetchRoutines()
-                    reduce { state.copy(isLoading = false, deleteConfirmBottomSheetVisible = false) }
+                    reduce { state.copy(deleteConfirmBottomSheetVisible = false) }
                     postSideEffect(RoutineListSideEffect.ShowToast("삭제가 완료되었습니다."))
                 },
                 onFailure = {
