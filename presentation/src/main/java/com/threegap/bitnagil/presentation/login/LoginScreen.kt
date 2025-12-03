@@ -37,21 +37,16 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun LoginScreenContainer(
+    viewModel: LoginViewModel = hiltViewModel(),
     navigateToHome: () -> Unit,
     navigateToTermsAgreement: () -> Unit,
-    viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
 
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
-            is LoginSideEffect.NavigateToHome -> {
-                navigateToHome()
-            }
-
-            is LoginSideEffect.NavigateToTermsAgreement -> {
-                navigateToTermsAgreement()
-            }
+            is LoginSideEffect.NavigateToHome -> navigateToHome()
+            is LoginSideEffect.NavigateToTermsAgreement -> navigateToTermsAgreement()
         }
     }
 
@@ -82,7 +77,6 @@ private fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
-            .background(BitnagilTheme.colors.white)
             .statusBarsPadding(),
     ) {
         Spacer(modifier = Modifier.height(screenHeight * 0.114f))
@@ -136,7 +130,7 @@ private fun LoginScreen(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun LoginScreenPreview() {
     BitnagilTheme {
