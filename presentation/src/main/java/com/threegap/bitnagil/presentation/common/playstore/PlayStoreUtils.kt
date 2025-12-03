@@ -19,8 +19,8 @@ import com.google.android.play.core.install.model.UpdateAvailability
 import com.threegap.bitnagil.presentation.BuildConfig
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 import kotlin.system.exitProcess
 
 private const val PACKAGE_NAME = BuildConfig.APPLICATION_ID
@@ -95,19 +95,25 @@ fun updateAvailable(): UpdateAvailableState {
     return isUpdateAvailable
 }
 
-private suspend fun Context.checkForUpdateAvailability(): UpdateAvailableState = suspendCoroutine { continuation ->
+private suspend fun Context.checkForUpdateAvailability(): UpdateAvailableState = suspendCancellableCoroutine { continuation ->
     val appUpdateManager = AppUpdateManagerFactory.create(this)
     val appUpdateInfoTask = appUpdateManager.appUpdateInfo
 
     appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
-        val isAvailable = appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
-            appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+        if (!continuation.isActive) return@addOnSuccessListener
 
-        val state = if (isAvailable) UpdateAvailableState.NEED_UPDATE else UpdateAvailableState.Latest
+        val isAvailable = appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+
+        val isAllowed = appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE) ||
+            appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)
+
+        val state = if (isAvailable && isAllowed) UpdateAvailableState.NEED_UPDATE else UpdateAvailableState.Latest
         continuation.resume(state)
     }
 
     appUpdateInfoTask.addOnFailureListener {
-        continuation.resume(UpdateAvailableState.NONE)
+        if (continuation.isActive) {
+            continuation.resume(UpdateAvailableState.NONE)
+        }
     }
 }
