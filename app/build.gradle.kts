@@ -61,6 +61,10 @@ android {
 
     buildTypes {
         debug {
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-DEBUG"
+            isDebuggable = true
+
             val devUrl = properties["bitnagil.dev.url"] as? String
                 ?: System.getenv("BITNAGIL_DEV_URL")
                 ?: throw GradleException("bitnagil.dev.url 값이 없습니다.")
