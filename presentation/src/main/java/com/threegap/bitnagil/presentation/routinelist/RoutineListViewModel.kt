@@ -103,8 +103,8 @@ class RoutineListViewModel @Inject constructor(
 
     fun deleteRoutineCompletely() {
         intent {
-            reduce { state.copy(isLoading = true) }
             val selectedRoutine = state.selectedRoutine ?: return@intent
+            reduce { state.copy(isLoading = true) }
             deleteRoutineUseCase(selectedRoutine.routineId).fold(
                 onSuccess = {
                     fetchRoutines()
