@@ -1,10 +1,13 @@
 package com.threegap.bitnagil.presentation.login.model
 
-import com.threegap.bitnagil.presentation.common.mviviewmodel.MviState
-import kotlinx.parcelize.Parcelize
-
-@Parcelize
 data class LoginState(
-    val isLoading: Boolean = false,
-    val isGuest: Boolean = false,
-) : MviState
+    val isLoading: Boolean,
+    val isGuest: Boolean,
+) {
+    companion object {
+        val INIT = LoginState(
+            isLoading = false,
+            isGuest = false,
+        )
+    }
+}

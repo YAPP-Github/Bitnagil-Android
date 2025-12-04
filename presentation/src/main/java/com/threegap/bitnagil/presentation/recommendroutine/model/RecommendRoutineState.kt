@@ -3,18 +3,26 @@ package com.threegap.bitnagil.presentation.recommendroutine.model
 import com.threegap.bitnagil.domain.recommendroutine.model.EmotionMarbleType
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendCategory
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendLevel
-import com.threegap.bitnagil.presentation.common.mviviewmodel.MviState
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
 data class RecommendRoutineState(
-    val isLoading: Boolean = false,
-    val currentRoutines: List<RecommendRoutineUiModel> = emptyList(),
-    val selectedCategory: RecommendCategory = RecommendCategory.PERSONALIZED,
-    val recommendLevelBottomSheetVisible: Boolean = false,
-    val selectedRecommendLevel: RecommendLevel? = null,
-    val emotionMarbleType: EmotionMarbleType? = null,
-) : MviState {
+    val isLoading: Boolean,
+    val currentRoutines: List<RecommendRoutineUiModel>,
+    val selectedCategory: RecommendCategory,
+    val recommendLevelBottomSheetVisible: Boolean,
+    val selectedRecommendLevel: RecommendLevel?,
+    val emotionMarbleType: EmotionMarbleType?,
+) {
     val shouldShowEmotionButton: Boolean
         get() = selectedCategory == RecommendCategory.PERSONALIZED && emotionMarbleType == null
+
+    companion object {
+        val INIT = RecommendRoutineState(
+            isLoading = false,
+            currentRoutines = emptyList(),
+            selectedCategory = RecommendCategory.PERSONALIZED,
+            recommendLevelBottomSheetVisible = false,
+            selectedRecommendLevel = null,
+            emotionMarbleType = null,
+        )
+    }
 }

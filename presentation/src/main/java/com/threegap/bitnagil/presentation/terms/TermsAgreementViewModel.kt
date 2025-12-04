@@ -1,116 +1,94 @@
 package com.threegap.bitnagil.presentation.terms
 
 import android.util.Log
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.ViewModel
 import com.threegap.bitnagil.domain.auth.model.TermsAgreement
 import com.threegap.bitnagil.domain.auth.usecase.SubmitTermsAgreementUseCase
-import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
-import com.threegap.bitnagil.presentation.terms.model.TermsAgreementIntent
 import com.threegap.bitnagil.presentation.terms.model.TermsAgreementSideEffect
 import com.threegap.bitnagil.presentation.terms.model.TermsAgreementState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
-import org.orbitmvi.orbit.syntax.Syntax
+import org.orbitmvi.orbit.Container
+import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 @HiltViewModel
 class TermsAgreementViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
     private val submitTermsAgreementUseCase: SubmitTermsAgreementUseCase,
-) : MviViewModel<TermsAgreementState, TermsAgreementSideEffect, TermsAgreementIntent>(
-    initState = TermsAgreementState(),
-    savedStateHandle = savedStateHandle,
-) {
-    override suspend fun Syntax<TermsAgreementState, TermsAgreementSideEffect>.reduceState(
-        intent: TermsAgreementIntent,
-        state: TermsAgreementState,
-    ): TermsAgreementState? = when (intent) {
-        is TermsAgreementIntent.SetLoading -> {
-            state.copy(isLoading = intent.isLoading)
-        }
+) : ContainerHost<TermsAgreementState, TermsAgreementSideEffect>, ViewModel() {
 
-        is TermsAgreementIntent.ToggleAllAgreements -> {
-            if (state.isLoading) {
-                null
-            } else {
+    override val container: Container<TermsAgreementState, TermsAgreementSideEffect> = container(initialState = TermsAgreementState.INIT)
+
+    fun updateAllAgreements(agreed: Boolean) {
+        intent {
+            if (state.isLoading) return@intent
+            reduce {
                 state.copy(
-                    agreedTermsOfService = intent.agreed,
-                    agreedPrivacyPolicy = intent.agreed,
-                    agreedOverFourteen = intent.agreed,
+                    agreedTermsOfService = agreed,
+                    agreedPrivacyPolicy = agreed,
+                    agreedOverFourteen = agreed,
                 )
             }
         }
+    }
 
-        is TermsAgreementIntent.ToggleTermsOfService -> {
-            if (state.isLoading) {
-                null
-            } else {
-                state.copy(agreedTermsOfService = intent.agreed)
-            }
+    fun updateTermsOfService() {
+        intent {
+            if (state.isLoading) return@intent
+            reduce { state.copy(agreedTermsOfService = !state.agreedTermsOfService) }
         }
+    }
 
-        is TermsAgreementIntent.TogglePrivacyPolicy -> {
-            if (state.isLoading) {
-                null
-            } else {
-                state.copy(agreedPrivacyPolicy = intent.agreed)
-            }
+    fun updatePrivacyPolicy() {
+        intent {
+            if (state.isLoading) return@intent
+            reduce { state.copy(agreedPrivacyPolicy = !state.agreedPrivacyPolicy) }
         }
+    }
 
-        is TermsAgreementIntent.ToggleOverFourteen -> {
-            if (state.isLoading) {
-                null
-            } else {
-                state.copy(agreedOverFourteen = intent.agreed)
-            }
-        }
-
-        is TermsAgreementIntent.ShowTermsOfService -> {
-            sendSideEffect(TermsAgreementSideEffect.NavigateToTermsOfService)
-            null
-        }
-
-        is TermsAgreementIntent.ShowPrivacyPolicy -> {
-            sendSideEffect(TermsAgreementSideEffect.NavigateToPrivacyPolicy)
-            null
-        }
-
-        is TermsAgreementIntent.SubmitSuccess -> {
-            sendSideEffect(TermsAgreementSideEffect.NavigateToOnBoarding)
-            state.copy(isLoading = false)
-        }
-
-        is TermsAgreementIntent.SubmitFailure -> {
-            state.copy(isLoading = false)
-        }
-
-        is TermsAgreementIntent.BackButtonClick -> {
-            sendSideEffect(TermsAgreementSideEffect.NavigateToBack)
-            null
+    fun updateOverFourteen() {
+        intent {
+            if (state.isLoading) return@intent
+            reduce { state.copy(agreedOverFourteen = !state.agreedOverFourteen) }
         }
     }
 
     fun submitTermsAgreement() {
-        sendIntent(TermsAgreementIntent.SetLoading(true))
-        viewModelScope.launch {
-            val currentState = container.stateFlow.value
+        intent {
+            reduce { state.copy(isLoading = true) }
             val agreement = TermsAgreement(
-                agreedToTermsOfService = currentState.agreedTermsOfService,
-                agreedToPrivacyPolicy = currentState.agreedPrivacyPolicy,
-                isOverFourteen = currentState.agreedOverFourteen,
+                agreedToTermsOfService = state.agreedTermsOfService,
+                agreedToPrivacyPolicy = state.agreedPrivacyPolicy,
+                isOverFourteen = state.agreedOverFourteen,
             )
+            submitTermsAgreementUseCase(agreement).fold(
+                onSuccess = {
+                    reduce { state.copy(isLoading = false) }
+                    postSideEffect(TermsAgreementSideEffect.NavigateToOnBoarding)
+                },
+                onFailure = { error ->
+                    Log.e("TermsAgreement", "Submit failed: ${error.message}")
+                    reduce { state.copy(isLoading = false) }
+                },
+            )
+        }
+    }
 
-            submitTermsAgreementUseCase(agreement)
-                .fold(
-                    onSuccess = {
-                        sendIntent(TermsAgreementIntent.SubmitSuccess)
-                    },
-                    onFailure = { error ->
-                        Log.e("TermsAgreement", "Submit failed: ${error.message}")
-                        sendIntent(TermsAgreementIntent.SubmitFailure)
-                    },
-                )
+    fun navigateToTermsOfService() {
+        intent {
+            postSideEffect(TermsAgreementSideEffect.NavigateToTermsOfService)
+        }
+    }
+
+    fun navigateToPrivacyPolicy() {
+        intent {
+            postSideEffect(TermsAgreementSideEffect.NavigateToPrivacyPolicy)
+        }
+    }
+
+    fun navigateToBack() {
+        intent {
+            postSideEffect(TermsAgreementSideEffect.NavigateToBack)
         }
     }
 }
