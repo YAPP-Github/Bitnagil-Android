@@ -31,7 +31,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
@@ -40,22 +39,22 @@ import com.threegap.bitnagil.designsystem.component.atom.BitnagilSelectButtonCol
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
-import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.withdrawal.component.WithdrawalConfirmDialog
-import com.threegap.bitnagil.presentation.withdrawal.model.WithdrawalIntent
 import com.threegap.bitnagil.presentation.withdrawal.model.WithdrawalReason
 import com.threegap.bitnagil.presentation.withdrawal.model.WithdrawalSideEffect
 import com.threegap.bitnagil.presentation.withdrawal.model.WithdrawalState
+import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun WithdrawalScreenContainer(
+    viewModel: WithdrawalViewModel = hiltViewModel(),
     navigateToBack: () -> Unit,
     navigateToLogin: () -> Unit,
-    viewModel: WithdrawalViewModel = hiltViewModel(),
 ) {
-    val uiState by viewModel.container.stateFlow.collectAsStateWithLifecycle()
+    val uiState by viewModel.collectAsState()
 
-    viewModel.sideEffectFlow.collectAsEffect { sideEffect ->
+    viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
             is WithdrawalSideEffect.NavigateToBack -> navigateToBack()
             is WithdrawalSideEffect.NavigateToLogin -> navigateToLogin()
@@ -64,16 +63,16 @@ fun WithdrawalScreenContainer(
 
     if (uiState.showSuccessDialog) {
         WithdrawalConfirmDialog(
-            onConfirm = { viewModel.sendIntent(WithdrawalIntent.OnSuccessDialogConfirm) },
+            onConfirm = viewModel::navigateToLogin,
         )
     }
 
     WithdrawalScreen(
         uiState = uiState,
-        onTermsToggle = { viewModel.sendIntent(WithdrawalIntent.OnTermsToggle) },
-        onReasonSelect = { viewModel.sendIntent(WithdrawalIntent.OnReasonSelected(it)) },
-        onCustomReasonChanged = { viewModel.sendIntent(WithdrawalIntent.OnCustomReasonChanged(it)) },
-        onBackClick = { viewModel.sendIntent(WithdrawalIntent.OnBackClick) },
+        onTermsToggle = viewModel::onTermsToggle,
+        onReasonSelect = viewModel::updateSelectedReason,
+        onCustomReasonChanged = viewModel::updateCustomReason,
+        onBackClick = viewModel::navigateToBack,
         onWithdrawalClick = viewModel::withdrawal,
     )
 }
@@ -94,7 +93,6 @@ private fun WithdrawalScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(BitnagilTheme.colors.white)
             .statusBarsPadding()
             .windowInsetsPadding(WindowInsets.ime),
     ) {
@@ -221,13 +219,11 @@ private fun WithdrawalScreen(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun WithdrawalScreenPreview() {
     WithdrawalScreen(
-        uiState = WithdrawalState(
-            isTermsChecked = true,
-        ),
+        uiState = WithdrawalState.INIT,
         onTermsToggle = {},
         onReasonSelect = {},
         onCustomReasonChanged = {},
