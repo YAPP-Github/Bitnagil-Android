@@ -4,6 +4,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class WithdrawalReasonResponse(
+data class WithdrawalReasonRequest(
     @SerialName("reasonOfWithdrawal") val reasonOfWithdrawal: String,
 )
