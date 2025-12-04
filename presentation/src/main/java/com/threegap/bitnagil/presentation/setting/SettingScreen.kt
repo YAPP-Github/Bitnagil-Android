@@ -141,7 +141,7 @@ private fun SettingScreen(
                 }
 
                 when (updateAvailableState) {
-                    UpdateAvailableState.Latest -> Text(
+                    UpdateAvailableState.LATEST -> Text(
                         text = "최신",
                         color = BitnagilTheme.colors.coolGray70,
                         style = BitnagilTheme.typography.button2,
@@ -210,7 +210,7 @@ fun SettingScreenPreview() {
             loading = false,
             logoutConfirmDialogVisible = false,
         ),
-        updateAvailableState = UpdateAvailableState.Latest,
+        updateAvailableState = UpdateAvailableState.LATEST,
         toggleServiceAlarm = {},
         togglePushAlarm = {},
         onClickUpdate = {},

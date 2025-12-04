@@ -107,7 +107,7 @@ private suspend fun Context.checkForUpdateAvailability(): UpdateAvailableState =
         val isAllowed = appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE) ||
             appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)
 
-        val state = if (isAvailable && isAllowed) UpdateAvailableState.NEED_UPDATE else UpdateAvailableState.Latest
+        val state = if (isAvailable && isAllowed) UpdateAvailableState.NEED_UPDATE else UpdateAvailableState.LATEST
         continuation.resume(state)
     }
 
