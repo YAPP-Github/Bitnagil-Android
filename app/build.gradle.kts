@@ -33,8 +33,6 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.threegap.bitnagil"
-
         val kakaoNativeAppKey =
             (properties["kakao.native.app.key"] as? String)
                 ?: System.getenv("KAKAO_NATIVE_APP_KEY")
