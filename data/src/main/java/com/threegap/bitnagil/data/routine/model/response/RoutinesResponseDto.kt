@@ -1,6 +1,6 @@
 package com.threegap.bitnagil.data.routine.model.response
 
-import com.threegap.bitnagil.domain.routine.model.Routines
+import com.threegap.bitnagil.domain.routine.model.RoutineSchedule
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -11,8 +11,8 @@ data class RoutinesResponseDto(
 )
 
 fun RoutinesResponseDto.toDomain() =
-    Routines(
-        routines = this.routines.mapValues { (_, dayRoutinesDto) ->
+    RoutineSchedule(
+        dailyRoutines = this.routines.mapValues { (_, dayRoutinesDto) ->
             dayRoutinesDto.toDomain()
         },
     )

@@ -20,7 +20,7 @@ import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 fun SubRoutinesItem(
     subRoutineNames: List<String>,
     subRoutineCompleteYn: List<Boolean>,
-    onSubRoutineToggle: (Int, Boolean) -> Unit,
+    onSubRoutineToggle: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val minSize = minOf(subRoutineNames.size, subRoutineCompleteYn.size)
@@ -38,7 +38,7 @@ fun SubRoutinesItem(
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickableWithoutRipple { onSubRoutineToggle(index, !isCompleted) },
+                    .clickableWithoutRipple { onSubRoutineToggle(index) },
             ) {
                 BitnagilIcon(
                     id = if (isCompleted) R.drawable.ic_check_circle else R.drawable.ic_check_default,
@@ -63,6 +63,6 @@ private fun SubRoutinesItemPreview() {
     SubRoutinesItem(
         subRoutineNames = listOf("물 마시기", "스트레칭하기", "심호흡하기"),
         subRoutineCompleteYn = listOf(true, false, true),
-        onSubRoutineToggle = { _, _ -> },
+        onSubRoutineToggle = { _ -> },
     )
 }

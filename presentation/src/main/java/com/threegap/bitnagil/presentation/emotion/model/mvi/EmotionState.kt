@@ -1,7 +1,7 @@
 package com.threegap.bitnagil.presentation.emotion.model.mvi
 
+import android.os.Parcelable
 import androidx.compose.runtime.Immutable
-import com.threegap.bitnagil.presentation.common.mviviewmodel.MviState
 import com.threegap.bitnagil.presentation.emotion.model.EmotionRecommendRoutineUiModel
 import com.threegap.bitnagil.presentation.emotion.model.EmotionScreenStep
 import com.threegap.bitnagil.presentation.emotion.model.EmotionUiModel
@@ -15,7 +15,7 @@ data class EmotionState(
     val recommendRoutines: List<EmotionRecommendRoutineUiModel>,
     val step: EmotionScreenStep,
     val showLoadingView: Boolean,
-) : MviState {
+) : Parcelable {
     companion object {
         val Init = EmotionState(
             emotionTypeUiModels = emptyList(),

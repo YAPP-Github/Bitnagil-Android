@@ -7,7 +7,7 @@ interface AuthRepository {
     suspend fun login(socialAccessToken: String, socialType: String): Result<AuthSession>
     suspend fun submitAgreement(termsAgreement: TermsAgreement): Result<Unit>
     suspend fun logout(): Result<Unit>
-    suspend fun withdrawal(): Result<Unit>
+    suspend fun withdrawal(reason: String): Result<Unit>
 
     suspend fun reissueToken(refreshToken: String): Result<AuthSession>
     suspend fun getRefreshToken(): String?

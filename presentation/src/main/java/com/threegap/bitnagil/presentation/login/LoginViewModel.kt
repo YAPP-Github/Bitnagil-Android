@@ -1,88 +1,59 @@
 package com.threegap.bitnagil.presentation.login
 
 import android.util.Log
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.ViewModel
 import com.kakao.sdk.auth.model.OAuthToken
 import com.threegap.bitnagil.domain.auth.usecase.LoginUseCase
-import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
-import com.threegap.bitnagil.presentation.login.model.LoginIntent
 import com.threegap.bitnagil.presentation.login.model.LoginSideEffect
 import com.threegap.bitnagil.presentation.login.model.LoginState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
-import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
+import org.orbitmvi.orbit.Container
+import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
     private val loginUseCase: LoginUseCase,
-) : MviViewModel<LoginState, LoginSideEffect, LoginIntent>(
-    initState = LoginState(),
-    savedStateHandle = savedStateHandle,
-) {
-    override suspend fun SimpleSyntax<LoginState, LoginSideEffect>.reduceState(
-        intent: LoginIntent,
-        state: LoginState,
-    ): LoginState? =
-        when (intent) {
-            is LoginIntent.SetLoading -> {
-                state.copy(isLoading = intent.isLoading)
-            }
+) : ContainerHost<LoginState, LoginSideEffect>, ViewModel() {
 
-            is LoginIntent.LoginSuccess -> {
-                sendSideEffect(
-                    if (intent.isGuest) {
-                        LoginSideEffect.NavigateToTermsAgreement
-                    } else {
-                        LoginSideEffect.NavigateToHome
-                    },
-                )
-                state.copy(
-                    isGuest = intent.isGuest,
-                    isLoading = false,
-                )
-            }
-
-            is LoginIntent.KakaoTalkLoginCancel -> {
-                state.copy(isLoading = false)
-            }
-
-            is LoginIntent.LoginFailure -> {
-                state.copy(isLoading = false)
-            }
-        }
+    override val container: Container<LoginState, LoginSideEffect> = container(initialState = LoginState.INIT)
 
     fun kakaoLogin(token: OAuthToken?, error: Throwable?) {
-        viewModelScope.launch {
-            sendIntent(LoginIntent.SetLoading(true))
+        intent {
+            reduce { state.copy(isLoading = true) }
             when {
-                token != null -> {
-                    processKakaoLoginSuccess(token)
-                }
+                token != null -> processKakaoLoginSuccess(token)
 
                 error != null -> {
+                    reduce { state.copy(isLoading = false) }
                     Log.e("KakaoLogin", "카카오 로그인 실패", error)
-                    sendIntent(LoginIntent.LoginFailure)
                 }
             }
         }
     }
 
     private suspend fun processKakaoLoginSuccess(token: OAuthToken) {
-        loginUseCase(
-            socialAccessToken = token.accessToken,
-            socialType = "KAKAO",
-        ).fold(
-            onSuccess = {
-                val isGuest = it.role.isGuest()
-                sendIntent(LoginIntent.LoginSuccess(isGuest = isGuest))
-            },
-            onFailure = { e ->
-                sendIntent(LoginIntent.LoginFailure)
-                Log.e("Login", "${e.message}")
-            },
-        )
+        subIntent {
+            loginUseCase(socialAccessToken = token.accessToken, socialType = KAKAO).fold(
+                onSuccess = {
+                    val isGuest = it.role.isGuest()
+                    if (isGuest) {
+                        postSideEffect(LoginSideEffect.NavigateToTermsAgreement)
+                    } else {
+                        postSideEffect(LoginSideEffect.NavigateToHome)
+                    }
+                    reduce { state.copy(isLoading = false) }
+                },
+                onFailure = { e ->
+                    reduce { state.copy(isLoading = false) }
+                    Log.e("Login", "${e.message}")
+                },
+            )
+        }
+    }
+
+    companion object {
+        private const val KAKAO = "KAKAO"
     }
 }

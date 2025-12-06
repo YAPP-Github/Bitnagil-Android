@@ -1,8 +1,6 @@
 package com.threegap.bitnagil.presentation.home.model
 
-import com.threegap.bitnagil.presentation.common.mviviewmodel.MviSideEffect
-
-sealed interface HomeSideEffect : MviSideEffect {
+sealed interface HomeSideEffect {
     data object NavigateToGuide : HomeSideEffect
     data object NavigateToRegisterRoutine : HomeSideEffect
     data object NavigateToEmotion : HomeSideEffect

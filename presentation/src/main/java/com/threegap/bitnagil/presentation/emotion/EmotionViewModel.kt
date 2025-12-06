@@ -1,179 +1,135 @@
 package com.threegap.bitnagil.presentation.emotion
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.threegap.bitnagil.domain.emotion.usecase.GetEmotionsUseCase
 import com.threegap.bitnagil.domain.emotion.usecase.RegisterEmotionUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.RegisterRecommendOnBoardingRoutinesUseCase
-import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
 import com.threegap.bitnagil.presentation.emotion.model.EmotionRecommendRoutineUiModel
 import com.threegap.bitnagil.presentation.emotion.model.EmotionScreenStep
 import com.threegap.bitnagil.presentation.emotion.model.EmotionUiModel
-import com.threegap.bitnagil.presentation.emotion.model.mvi.EmotionIntent
 import com.threegap.bitnagil.presentation.emotion.model.mvi.EmotionSideEffect
 import com.threegap.bitnagil.presentation.emotion.model.mvi.EmotionState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
+import org.orbitmvi.orbit.Container
+import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 @HiltViewModel
 class EmotionViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
     private val getEmotionsUseCase: GetEmotionsUseCase,
     private val registerEmotionUseCase: RegisterEmotionUseCase,
     private val registerRecommendOnBoardingRoutinesUseCase: RegisterRecommendOnBoardingRoutinesUseCase,
-) : MviViewModel<EmotionState, EmotionSideEffect, EmotionIntent>(
-    savedStateHandle = savedStateHandle,
-    initState = EmotionState.Init,
-) {
+    savedStateHandle: SavedStateHandle,
+) : ContainerHost<EmotionState, EmotionSideEffect>, ViewModel() {
+
+    override val container: Container<EmotionState, EmotionSideEffect> = container(initialState = EmotionState.Init, savedStateHandle = savedStateHandle)
+
     init {
         loadEmotions()
     }
 
-    private fun loadEmotions() {
-        viewModelScope.launch {
+    private fun loadEmotions() =
+        intent {
             getEmotionsUseCase().fold(
                 onSuccess = { emotions ->
-                    sendIntent(
-                        EmotionIntent.EmotionListLoadSuccess(emotionTypeUiModels = emotions.map { EmotionUiModel.fromDomain(it) }),
-                    )
+                    reduce {
+                        state.copy(
+                            emotionTypeUiModels = emotions.map { EmotionUiModel.fromDomain(it) },
+                            isLoading = false,
+                        )
+                    }
                 },
                 onFailure = {
                     // todo 실패 케이스 정의되면 처리
                 },
             )
         }
-    }
 
-    override suspend fun SimpleSyntax<EmotionState, EmotionSideEffect>.reduceState(intent: EmotionIntent, state: EmotionState): EmotionState? {
-        when (intent) {
-            is EmotionIntent.EmotionListLoadSuccess -> {
-                return state.copy(
-                    emotionTypeUiModels = intent.emotionTypeUiModels,
-                    isLoading = false,
-                )
-            }
-            is EmotionIntent.RegisterEmotionSuccess -> {
-                return state.copy(
-                    recommendRoutines = intent.recommendRoutines,
-                    step = EmotionScreenStep.RecommendRoutines,
-                    isLoading = false,
-                    showLoadingView = false,
-                )
-            }
-            EmotionIntent.RegisterEmotionLoading -> {
-                return state.copy(
+    fun selectEmotion(emotionType: String, minimumDelay: Long = 0) =
+        intent {
+            val isLoading = state.isLoading
+            if (isLoading) return@intent
+
+            reduce {
+                state.copy(
                     isLoading = true,
                     showLoadingView = true,
                 )
             }
-            EmotionIntent.RegisterRecommendRoutinesLoading -> {
-                return state.copy(
-                    isLoading = true,
-                )
-            }
-            EmotionIntent.RegisterRecommendRoutinesFailure -> {
-                return state.copy(
-                    isLoading = false,
-                )
-            }
-            EmotionIntent.RegisterRecommendRoutinesSuccess -> {
-                sendSideEffect(EmotionSideEffect.NavigateToBack)
-                return null
-            }
-            EmotionIntent.BackToSelectEmotionStep -> {
-                return state.copy(
-                    recommendRoutines = listOf(),
-                    step = EmotionScreenStep.Emotion,
-                    isLoading = false,
-                )
-            }
 
-            is EmotionIntent.SelectRecommendRoutine -> {
-                val selectChangedRecommendRoutines = state.recommendRoutines.map {
-                    if (it.id == intent.recommendRoutineId) {
-                        it.copy(selected = !it.selected)
-                    } else {
-                        it
-                    }
+            viewModelScope.launch {
+                if (minimumDelay > 0) {
+                    delay(minimumDelay)
                 }
-                return state.copy(recommendRoutines = selectChangedRecommendRoutines)
-            }
 
-            EmotionIntent.NavigateToBack -> {
-                sendSideEffect(EmotionSideEffect.NavigateToBack)
-                return null
-            }
-
-            is EmotionIntent.RegisterEmotionFailure -> {
-                sendSideEffect(EmotionSideEffect.ShowToast(intent.message))
-                sendSideEffect(EmotionSideEffect.NavigateToBack)
-                return null
+                registerEmotionUseCase(emotionType = emotionType).fold(
+                    onSuccess = { emotionRecommendRoutines ->
+                        val recommendRoutines = emotionRecommendRoutines.map { EmotionRecommendRoutineUiModel.fromEmotionRecommendRoutine(it) }
+                        reduce {
+                            state.copy(
+                                recommendRoutines = recommendRoutines,
+                                step = EmotionScreenStep.RecommendRoutines,
+                                isLoading = false,
+                                showLoadingView = false,
+                            )
+                        }
+                    },
+                    onFailure = {
+                        postSideEffect(EmotionSideEffect.ShowToast(message = it.message ?: "에러가 발생했습니다. 잠시 후 시도해주세요."))
+                        postSideEffect(EmotionSideEffect.NavigateToBack)
+                    },
+                )
             }
         }
-    }
 
-    fun selectEmotion(emotionType: String, minimumDelay: Long = 0) {
-        val isLoading = stateFlow.value.isLoading
-        if (isLoading) return
-
-        viewModelScope.launch {
-            sendIntent(EmotionIntent.RegisterEmotionLoading)
-
-            if (minimumDelay > 0) {
-                delay(minimumDelay)
+    fun selectRecommendRoutine(recommendRoutineId: String) =
+        intent {
+            val selectChangedRecommendRoutines = state.recommendRoutines.map {
+                if (it.id == recommendRoutineId) {
+                    it.copy(selected = !it.selected)
+                } else {
+                    it
+                }
             }
+            reduce { state.copy(recommendRoutines = selectChangedRecommendRoutines) }
+        }
 
-            registerEmotionUseCase(emotionType = emotionType).fold(
-                onSuccess = { emotionRecommendRoutines ->
-                    val recommendRoutines = emotionRecommendRoutines.map { EmotionRecommendRoutineUiModel.fromEmotionRecommendRoutine(it) }
-                    sendIntent(EmotionIntent.RegisterEmotionSuccess(recommendRoutines))
-                },
-                onFailure = {
-                    sendIntent(
-                        EmotionIntent.RegisterEmotionFailure(message = it.message ?: "에러가 발생했습니다. 잠시 후 시도해주세요."),
+    fun moveToPrev() =
+        intent {
+            when (state.step) {
+                EmotionScreenStep.Emotion -> postSideEffect(EmotionSideEffect.NavigateToBack)
+                EmotionScreenStep.RecommendRoutines -> reduce {
+                    state.copy(
+                        recommendRoutines = listOf(),
+                        step = EmotionScreenStep.Emotion,
+                        isLoading = false,
                     )
-                },
-            )
-        }
-    }
-
-    fun selectRecommendRoutine(recommendRoutineId: String) {
-        viewModelScope.launch {
-            sendIntent(EmotionIntent.SelectRecommendRoutine(recommendRoutineId))
-        }
-    }
-
-    fun moveToPrev() {
-        viewModelScope.launch {
-            val currentState = stateFlow.value
-
-            when (currentState.step) {
-                EmotionScreenStep.Emotion -> sendIntent(EmotionIntent.NavigateToBack)
-                EmotionScreenStep.RecommendRoutines -> sendIntent(EmotionIntent.BackToSelectEmotionStep)
+                }
             }
         }
-    }
 
-    fun registerRecommendRoutines() {
-        val isLoading = stateFlow.value.isLoading
-        if (isLoading) return
+    fun registerRecommendRoutines() =
+        intent {
+            val isLoading = state.isLoading
+            if (isLoading) return@intent
 
-        viewModelScope.launch {
-            sendIntent(EmotionIntent.RegisterRecommendRoutinesLoading)
+            viewModelScope.launch {
+                reduce { state.copy(isLoading = true) }
 
-            val currentState = stateFlow.value
-            val selectedRecommendRoutineIds = currentState.recommendRoutines.filter { it.selected }.map { it.id }
-            registerRecommendOnBoardingRoutinesUseCase(selectedRecommendRoutineIds).fold(
-                onSuccess = {
-                    sendIntent(EmotionIntent.RegisterRecommendRoutinesSuccess)
-                },
-                onFailure = {
-                    sendIntent(EmotionIntent.RegisterRecommendRoutinesFailure)
-                },
-            )
+                val selectedRecommendRoutineIds = state.recommendRoutines.filter { it.selected }.map { it.id }
+                registerRecommendOnBoardingRoutinesUseCase(selectedRecommendRoutineIds).fold(
+                    onSuccess = {
+                        postSideEffect(EmotionSideEffect.NavigateToBack)
+                    },
+                    onFailure = {
+                        reduce { state.copy(isLoading = false) }
+                    },
+                )
+            }
         }
-    }
 }

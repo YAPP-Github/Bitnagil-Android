@@ -1,13 +1,11 @@
 package com.threegap.bitnagil.presentation.recommendroutine
 
-import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.threegap.bitnagil.domain.emotion.usecase.GetEmotionChangeEventFlowUseCase
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendCategory
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendLevel
 import com.threegap.bitnagil.domain.recommendroutine.usecase.FetchRecommendRoutinesUseCase
-import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
-import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutineIntent
 import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutineSideEffect
 import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutineState
 import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutineUiModel
@@ -15,18 +13,19 @@ import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutin
 import com.threegap.bitnagil.presentation.recommendroutine.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
+import org.orbitmvi.orbit.Container
+import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 @HiltViewModel
 class RecommendRoutineViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
     private val fetchRecommendRoutinesUseCase: FetchRecommendRoutinesUseCase,
     private val getEmotionChangeEventFlowUseCase: GetEmotionChangeEventFlowUseCase,
-) : MviViewModel<RecommendRoutineState, RecommendRoutineSideEffect, RecommendRoutineIntent>(
-    initState = RecommendRoutineState(),
-    savedStateHandle = savedStateHandle,
-) {
+) : ContainerHost<RecommendRoutineState, RecommendRoutineSideEffect>, ViewModel() {
+
+    override val container: Container<RecommendRoutineState, RecommendRoutineSideEffect> =
+        container(initialState = RecommendRoutineState.INIT)
 
     init {
         loadRecommendRoutines()
@@ -35,49 +34,37 @@ class RecommendRoutineViewModel @Inject constructor(
 
     private var recommendRoutines: RecommendRoutinesUiModel = RecommendRoutinesUiModel()
 
-    override suspend fun SimpleSyntax<RecommendRoutineState, RecommendRoutineSideEffect>.reduceState(
-        intent: RecommendRoutineIntent,
-        state: RecommendRoutineState,
-    ): RecommendRoutineState? = when (intent) {
-        is RecommendRoutineIntent.UpdateLoading -> {
-            state.copy(isLoading = intent.isLoading)
+    fun updateRoutineCategory(category: RecommendCategory) {
+        intent {
+            reduce {
+                state.copy(
+                    selectedCategory = category,
+                    currentRoutines = getCurrentRoutines(category, state.selectedRecommendLevel),
+                )
+            }
         }
+    }
 
-        is RecommendRoutineIntent.LoadRecommendRoutines -> {
-            state.copy(
-                isLoading = false,
-                currentRoutines = getCurrentRoutines(state.selectedCategory, state.selectedRecommendLevel),
-                emotionMarbleType = recommendRoutines.emotionMarbleType,
-            )
+    fun showRecommendLevelBottomSheet() {
+        intent {
+            reduce { state.copy(recommendLevelBottomSheetVisible = true) }
         }
+    }
 
-        is RecommendRoutineIntent.OnCategorySelected -> {
-            state.copy(
-                selectedCategory = intent.category,
-                currentRoutines = getCurrentRoutines(intent.category, state.selectedRecommendLevel),
-            )
+    fun hideRecommendLevelBottomSheet() {
+        intent {
+            reduce { state.copy(recommendLevelBottomSheetVisible = false) }
         }
+    }
 
-        is RecommendRoutineIntent.ShowRecommendLevelBottomSheet -> {
-            state.copy(recommendLevelBottomSheetVisible = true)
-        }
-
-        is RecommendRoutineIntent.HideRecommendLevelBottomSheet -> {
-            state.copy(recommendLevelBottomSheetVisible = false)
-        }
-
-        is RecommendRoutineIntent.OnRecommendLevelSelected -> {
-            state.copy(
-                selectedRecommendLevel = intent.recommendLevel,
-                currentRoutines = getCurrentRoutines(state.selectedCategory, intent.recommendLevel),
-            )
-        }
-
-        RecommendRoutineIntent.ClearRecommendLevelFilter -> {
-            state.copy(
-                selectedRecommendLevel = null,
-                currentRoutines = getCurrentRoutines(state.selectedCategory, null),
-            )
+    fun updateRecommendLevel(recommendLevel: RecommendLevel?) {
+        intent {
+            reduce {
+                state.copy(
+                    selectedRecommendLevel = recommendLevel,
+                    currentRoutines = getCurrentRoutines(state.selectedCategory, recommendLevel),
+                )
+            }
         }
     }
 
@@ -102,17 +89,35 @@ class RecommendRoutineViewModel @Inject constructor(
     }
 
     private fun loadRecommendRoutines() {
-        sendIntent(RecommendRoutineIntent.UpdateLoading(true))
-        viewModelScope.launch {
+        intent {
+            reduce { state.copy(isLoading = true) }
             fetchRecommendRoutinesUseCase().fold(
                 onSuccess = {
-                    recommendRoutines = it.toUiModel()
-                    sendIntent(RecommendRoutineIntent.LoadRecommendRoutines)
+                    reduce {
+                        recommendRoutines = it.toUiModel()
+                        state.copy(
+                            isLoading = false,
+                            currentRoutines = getCurrentRoutines(state.selectedCategory, state.selectedRecommendLevel),
+                            emotionMarbleType = recommendRoutines.emotionMarbleType,
+                        )
+                    }
                 },
                 onFailure = {
-                    sendIntent(RecommendRoutineIntent.UpdateLoading(false))
+                    reduce { state.copy(isLoading = false) }
                 },
             )
+        }
+    }
+
+    fun navigateToEmotion() {
+        intent {
+            postSideEffect(RecommendRoutineSideEffect.NavigateToEmotion)
+        }
+    }
+
+    fun navigateToRegisterRoutine(routineId: String) {
+        intent {
+            postSideEffect(RecommendRoutineSideEffect.NavigateToRegisterRoutine(routineId))
         }
     }
 }

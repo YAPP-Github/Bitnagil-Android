@@ -14,7 +14,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,6 +29,7 @@ import com.threegap.bitnagil.designsystem.component.atom.BitnagilIconButton
 import com.threegap.bitnagil.designsystem.component.block.BitnagilOptionButton
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.presentation.mypage.model.MyPageState
+import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun MyPageScreenContainer(
@@ -38,8 +38,9 @@ fun MyPageScreenContainer(
     navigateToNotice: () -> Unit,
     navigateToQnA: () -> Unit,
     navigateToOnBoarding: () -> Unit,
+    navigateToReportHistory: () -> Unit,
 ) {
-    val state by myPageViewModel.stateFlow.collectAsState()
+    val state by myPageViewModel.collectAsState()
 
     MyPageScreen(
         state = state,
@@ -47,6 +48,7 @@ fun MyPageScreenContainer(
         onClickNotice = navigateToNotice,
         onClickResetOnBoarding = navigateToOnBoarding,
         onClickQnA = navigateToQnA,
+        onClickReportHistory = navigateToReportHistory,
     )
 }
 
@@ -57,6 +59,7 @@ private fun MyPageScreen(
     onClickNotice: () -> Unit,
     onClickResetOnBoarding: () -> Unit,
     onClickQnA: () -> Unit,
+    onClickReportHistory: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -101,6 +104,11 @@ private fun MyPageScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         BitnagilOptionButton(
+            title = "내 제보 기록",
+            onClick = onClickReportHistory,
+        )
+
+        BitnagilOptionButton(
             title = "내 목표 재설정",
             onClick = onClickResetOnBoarding,
         )
@@ -127,6 +135,7 @@ fun MyPageScreenPreview() {
             onClickNotice = { },
             onClickResetOnBoarding = { },
             onClickQnA = { },
+            onClickReportHistory = { },
         )
     }
 }

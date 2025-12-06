@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -101,7 +102,7 @@ fun BitnagilFloatingActionMenu(
                     ),
             ) {
                 Column(
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier.padding(vertical = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(24.dp),
                 ) {
                     actions.forEach { action ->
@@ -173,6 +174,8 @@ private fun FloatingActionMenuItem(
         horizontalArrangement = Arrangement.spacedBy(14.dp),
         modifier = modifier
             .scale(scale)
+            .padding(horizontal = 16.dp)
+            .width(112.dp)
             .clickableWithoutRipple { onClick() },
     ) {
         BitnagilIcon(

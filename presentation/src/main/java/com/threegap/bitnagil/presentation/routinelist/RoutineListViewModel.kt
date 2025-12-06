@@ -2,20 +2,22 @@ package com.threegap.bitnagil.presentation.routinelist
 
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.threegap.bitnagil.domain.routine.usecase.DeleteRoutineForDayUseCase
 import com.threegap.bitnagil.domain.routine.usecase.DeleteRoutineUseCase
 import com.threegap.bitnagil.domain.routine.usecase.FetchWeeklyRoutinesUseCase
 import com.threegap.bitnagil.domain.writeroutine.usecase.GetWriteRoutineEventFlowUseCase
-import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
 import com.threegap.bitnagil.presentation.home.util.getCurrentWeekDays
-import com.threegap.bitnagil.presentation.routinelist.model.RoutineListIntent
 import com.threegap.bitnagil.presentation.routinelist.model.RoutineListSideEffect
 import com.threegap.bitnagil.presentation.routinelist.model.RoutineListState
+import com.threegap.bitnagil.presentation.routinelist.model.RoutineUiModel
 import com.threegap.bitnagil.presentation.routinelist.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
+import org.orbitmvi.orbit.Container
+import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.viewmodel.container
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -26,95 +28,51 @@ class RoutineListViewModel @Inject constructor(
     private val deleteRoutineUseCase: DeleteRoutineUseCase,
     private val deleteRoutineForDayUseCase: DeleteRoutineForDayUseCase,
     private val getWriteRoutineEventFlowUseCase: GetWriteRoutineEventFlowUseCase,
-) : MviViewModel<RoutineListState, RoutineListSideEffect, RoutineListIntent>(
-    savedStateHandle = savedStateHandle,
-    initState = RoutineListState(
-        selectedDate = savedStateHandle.get<String>("selectedDate")
-            ?.takeIf { it.isNotBlank() }
-            ?.let { dateString ->
-                runCatching { LocalDate.parse(dateString) }.getOrNull()
-            }
-            ?: LocalDate.now(),
-    ),
-) {
+) : ContainerHost<RoutineListState, RoutineListSideEffect>, ViewModel() {
+
+    override val container: Container<RoutineListState, RoutineListSideEffect> = container(initialState = RoutineListState.INIT)
+
+    private val selectedDate = savedStateHandle.get<String>("selectedDate")
+        ?.takeIf { it.isNotBlank() }
+        ?.let { dateString ->
+            runCatching { LocalDate.parse(dateString) }.getOrNull()
+        }
+        ?: LocalDate.now()
 
     init {
+        updateDate(selectedDate)
         fetchRoutines()
         observeRoutineChanges()
     }
 
-    override suspend fun SimpleSyntax<RoutineListState, RoutineListSideEffect>.reduceState(
-        intent: RoutineListIntent,
-        state: RoutineListState,
-    ): RoutineListState? {
-        val newState = when (intent) {
-            is RoutineListIntent.UpdateLoading -> state.copy(isLoading = intent.isLoading)
-            is RoutineListIntent.LoadRoutines -> state.copy(routines = intent.routines)
-            is RoutineListIntent.OnDateSelect -> state.copy(selectedDate = intent.date)
-
-            is RoutineListIntent.ShowDeleteConfirmBottomSheet -> {
-                state.copy(
-                    selectedRoutine = intent.routine,
-                    deleteConfirmBottomSheetVisible = true,
-                )
-            }
-
-            is RoutineListIntent.ShowEditConfirmBottomSheet -> {
-                state.copy(
-                    selectedRoutine = intent.routine,
-                    editConfirmBottomSheetVisible = true,
-                )
-            }
-
-            is RoutineListIntent.HideDeleteConfirmBottomSheet -> state.copy(deleteConfirmBottomSheetVisible = false)
-            is RoutineListIntent.HideEditConfirmBottomSheet -> state.copy(editConfirmBottomSheetVisible = false)
-
-            is RoutineListIntent.NavigateToBack -> {
-                sendSideEffect(RoutineListSideEffect.NavigateToBack)
-                null
-            }
-
-            is RoutineListIntent.OnRegisterRoutineClick -> {
-                sendSideEffect(RoutineListSideEffect.NavigateToAddRoutine)
-                null
-            }
-
-            is RoutineListIntent.OnApplyTodayClick -> {
-                val selectedRoutine = state.selectedRoutine
-                if (selectedRoutine != null) {
-                    sendSideEffect(
-                        RoutineListSideEffect.NavigateToEditRoutine(
-                            routineId = selectedRoutine.routineId,
-                            updateRoutineFromNowDate = true,
-                        ),
-                    )
-                }
-                null
-            }
-
-            is RoutineListIntent.OnApplyTomorrowClick -> {
-                val selectedRoutine = state.selectedRoutine
-                if (selectedRoutine != null) {
-                    sendSideEffect(
-                        RoutineListSideEffect.NavigateToEditRoutine(
-                            routineId = selectedRoutine.routineId,
-                            updateRoutineFromNowDate = false,
-                        ),
-                    )
-                }
-                null
-            }
-
-            is RoutineListIntent.OnSuccessDeletedRoutine -> {
-                sendSideEffect(RoutineListSideEffect.ShowToast("삭제가 완료되었습니다."))
-                state.copy(
-                    isLoading = false,
-                    deleteConfirmBottomSheetVisible = false,
-                )
-            }
+    fun updateDate(selectedDate: LocalDate) {
+        intent {
+            reduce { state.copy(selectedDate = selectedDate) }
         }
+    }
 
-        return newState
+    fun showDeleteConfirmBottomSheet(routine: RoutineUiModel) {
+        intent {
+            reduce { state.copy(selectedRoutine = routine, deleteConfirmBottomSheetVisible = true) }
+        }
+    }
+
+    fun hideDeleteConfirmBottomSheet() {
+        intent {
+            reduce { state.copy(deleteConfirmBottomSheetVisible = false) }
+        }
+    }
+
+    fun showEditConfirmBottomSheet(routine: RoutineUiModel) {
+        intent {
+            reduce { state.copy(selectedRoutine = routine, editConfirmBottomSheetVisible = true) }
+        }
+    }
+
+    fun hideEditConfirmBottomSheet() {
+        intent {
+            reduce { state.copy(editConfirmBottomSheetVisible = false) }
+        }
     }
 
     private fun observeRoutineChanges() {
@@ -126,55 +84,80 @@ class RoutineListViewModel @Inject constructor(
     }
 
     private fun fetchRoutines() {
-        sendIntent(RoutineListIntent.UpdateLoading(true))
-        val currentWeek = stateFlow.value.selectedDate.getCurrentWeekDays()
-        val startDate = currentWeek.first().toString()
-        val endDate = currentWeek.last().toString()
-        viewModelScope.launch {
+        intent {
+            reduce { state.copy(isLoading = true) }
+            val currentWeek = state.selectedDate.getCurrentWeekDays()
+            val startDate = currentWeek.first().toString()
+            val endDate = currentWeek.last().toString()
             fetchWeeklyRoutinesUseCase(startDate, endDate).fold(
-                onSuccess = { routines ->
-                    sendIntent(RoutineListIntent.LoadRoutines(routines.toUiModel()))
-                    sendIntent(RoutineListIntent.UpdateLoading(false))
+                onSuccess = { routineSchedule ->
+                    reduce { state.copy(isLoading = false, routines = routineSchedule.toUiModel()) }
                 },
                 onFailure = {
                     Log.e("RoutineListViewModel", "루틴 가져오기 실패: ${it.message}")
-                    sendIntent(RoutineListIntent.UpdateLoading(false))
+                    reduce { state.copy(isLoading = false) }
                 },
             )
         }
     }
 
     fun deleteRoutineCompletely() {
-        sendIntent(RoutineListIntent.UpdateLoading(true))
-        val selectedRoutine = stateFlow.value.selectedRoutine!!
-        viewModelScope.launch {
+        intent {
+            val selectedRoutine = state.selectedRoutine ?: return@intent
+            reduce { state.copy(isLoading = true) }
             deleteRoutineUseCase(selectedRoutine.routineId).fold(
                 onSuccess = {
                     fetchRoutines()
-                    sendIntent(RoutineListIntent.OnSuccessDeletedRoutine)
+                    reduce { state.copy(deleteConfirmBottomSheetVisible = false) }
+                    postSideEffect(RoutineListSideEffect.ShowToast("삭제가 완료되었습니다."))
                 },
                 onFailure = {
                     Log.e("RoutineListViewModel", "루틴 삭제 실패: ${it.message}")
-                    sendIntent(RoutineListIntent.UpdateLoading(false))
+                    reduce { state.copy(isLoading = false) }
                 },
             )
         }
     }
 
     fun deleteRoutineForToday() {
-        sendIntent(RoutineListIntent.UpdateLoading(true))
-        val selectedRoutine = stateFlow.value.selectedRoutine!!
-        viewModelScope.launch {
+        intent {
+            reduce { state.copy(isLoading = true) }
+            val selectedRoutine = state.selectedRoutine ?: return@intent
             deleteRoutineForDayUseCase(selectedRoutine.routineId).fold(
                 onSuccess = {
                     fetchRoutines()
-                    sendIntent(RoutineListIntent.OnSuccessDeletedRoutine)
+                    reduce { state.copy(deleteConfirmBottomSheetVisible = false) }
+                    postSideEffect(RoutineListSideEffect.ShowToast("삭제가 완료되었습니다."))
                 },
                 onFailure = {
                     Log.e("RoutineListViewModel", "루틴 삭제 실패: ${it.message}")
-                    sendIntent(RoutineListIntent.UpdateLoading(false))
+                    reduce { state.copy(isLoading = false) }
                 },
             )
+        }
+    }
+
+    fun navigateToAddRoutine() {
+        intent {
+            postSideEffect(RoutineListSideEffect.NavigateToAddRoutine)
+        }
+    }
+
+    fun navigateToEditRoutine(updateFromNow: Boolean) {
+        intent {
+            val selectedRoutine = state.selectedRoutine ?: return@intent
+            postSideEffect(
+                RoutineListSideEffect.NavigateToEditRoutine(
+                    routineId = selectedRoutine.routineId,
+                    updateRoutineFromNowDate = updateFromNow,
+                ),
+            )
+        }
+    }
+
+    fun navigateToBack() {
+        intent {
+            postSideEffect(RoutineListSideEffect.NavigateToBack)
         }
     }
 }

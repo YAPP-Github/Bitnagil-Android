@@ -29,8 +29,8 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun withdrawal(): Result<Unit> {
-        return authRemoteDataSource.withdrawal().also {
+    override suspend fun withdrawal(reason: String): Result<Unit> {
+        return authRemoteDataSource.withdrawal(reason).also {
             if (it.isSuccess) authLocalDataSource.clearAuthToken()
         }
     }

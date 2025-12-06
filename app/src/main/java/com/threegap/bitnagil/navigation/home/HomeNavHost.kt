@@ -43,6 +43,8 @@ fun HomeNavHost(
     navigateToRegisterRoutine: (String?) -> Unit,
     navigateToEmotion: () -> Unit,
     navigateToRoutineList: (String) -> Unit,
+    navigateToReport: () -> Unit,
+    navigateToReportHistory: () -> Unit,
 ) {
     val navigator = rememberHomeNavigator()
     var showFloatingOverlay by remember { mutableStateOf(false) }
@@ -88,6 +90,7 @@ fun HomeNavHost(
                             navigateToOnBoarding = navigateToOnBoarding,
                             navigateToNotice = navigateToNotice,
                             navigateToQnA = navigateToQnA,
+                            navigateToReportHistory = navigateToReportHistory,
                         )
                     }
                 }
@@ -106,6 +109,11 @@ fun HomeNavHost(
 
             BitnagilFloatingActionMenu(
                 actions = listOf(
+                    FloatingActionItem(
+                        icon = R.drawable.ic_complaint,
+                        text = "제보하기",
+                        onClick = { navigateToReport() },
+                    ),
                     FloatingActionItem(
                         icon = R.drawable.ic_routine_add,
                         text = "루틴 등록",
