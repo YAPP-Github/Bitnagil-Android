@@ -14,7 +14,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,6 +29,7 @@ import com.threegap.bitnagil.designsystem.component.atom.BitnagilIconButton
 import com.threegap.bitnagil.designsystem.component.block.BitnagilOptionButton
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.presentation.mypage.model.MyPageState
+import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun MyPageScreenContainer(
@@ -40,7 +40,7 @@ fun MyPageScreenContainer(
     navigateToOnBoarding: () -> Unit,
     navigateToReportHistory: () -> Unit,
 ) {
-    val state by myPageViewModel.stateFlow.collectAsState()
+    val state by myPageViewModel.collectAsState()
 
     MyPageScreen(
         state = state,

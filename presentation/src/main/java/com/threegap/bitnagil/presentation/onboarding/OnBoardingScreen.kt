@@ -5,14 +5,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.component.block.BitnagilProgressTopBar
-import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.common.toast.GlobalBitnagilToast
 import com.threegap.bitnagil.presentation.onboarding.component.template.OnBoardingAbstractTemplate
 import com.threegap.bitnagil.presentation.onboarding.component.template.OnBoardingIntroTemplate
@@ -22,6 +20,8 @@ import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingPageInfo
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingSetType
 import com.threegap.bitnagil.presentation.onboarding.model.mvi.OnBoardingSideEffect
 import com.threegap.bitnagil.presentation.onboarding.model.mvi.OnBoardingState
+import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun OnBoardingScreenContainer(
@@ -29,9 +29,9 @@ fun OnBoardingScreenContainer(
     navigateToHome: () -> Unit,
     navigateToBack: () -> Unit,
 ) {
-    val state by onBoardingViewModel.stateFlow.collectAsState()
+    val state by onBoardingViewModel.collectAsState()
 
-    onBoardingViewModel.sideEffectFlow.collectAsEffect { sideEffect ->
+    onBoardingViewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
             OnBoardingSideEffect.MoveToPreviousScreen -> {
                 navigateToBack()

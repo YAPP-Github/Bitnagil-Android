@@ -1,6 +1,6 @@
 package com.threegap.bitnagil.presentation.writeroutine.model.mvi
 
-import com.threegap.bitnagil.presentation.common.mviviewmodel.MviState
+import android.os.Parcelable
 import com.threegap.bitnagil.presentation.writeroutine.model.Date
 import com.threegap.bitnagil.presentation.writeroutine.model.Day
 import com.threegap.bitnagil.presentation.writeroutine.model.RepeatType
@@ -30,7 +30,7 @@ data class WriteRoutineState(
     val periodUiExpanded: Boolean,
     val startTimeUiExpanded: Boolean,
     val recommendedRoutineType: String?,
-) : MviState {
+) : Parcelable {
     companion object {
         val Init = WriteRoutineState(
             routineName = "",

@@ -1,6 +1,5 @@
 package com.threegap.bitnagil.presentation.terms
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,73 +14,45 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.presentation.terms.component.TermsAgreementItem
 import com.threegap.bitnagil.presentation.terms.component.ToggleAllAgreementsItem
-import com.threegap.bitnagil.presentation.terms.model.TermsAgreementIntent
 import com.threegap.bitnagil.presentation.terms.model.TermsAgreementSideEffect
 import com.threegap.bitnagil.presentation.terms.model.TermsAgreementState
+import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun TermsAgreementScreenContainer(
+    viewModel: TermsAgreementViewModel = hiltViewModel(),
     navigateToTermsOfService: () -> Unit,
     navigateToPrivacyPolicy: () -> Unit,
     navigateToOnBoarding: () -> Unit,
     navigateToBack: () -> Unit,
-    viewmodel: TermsAgreementViewModel = hiltViewModel(),
 ) {
-    val uiState by viewmodel.stateFlow.collectAsStateWithLifecycle()
+    val uiState by viewModel.collectAsState()
 
-    viewmodel.collectSideEffect { sideEffect ->
+    viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
-            is TermsAgreementSideEffect.NavigateToPrivacyPolicy -> {
-                navigateToPrivacyPolicy()
-            }
-
-            is TermsAgreementSideEffect.NavigateToTermsOfService -> {
-                navigateToTermsOfService()
-            }
-
-            is TermsAgreementSideEffect.NavigateToOnBoarding -> {
-                navigateToOnBoarding()
-            }
-
-            is TermsAgreementSideEffect.NavigateToBack -> {
-                navigateToBack()
-            }
+            is TermsAgreementSideEffect.NavigateToPrivacyPolicy -> navigateToPrivacyPolicy()
+            is TermsAgreementSideEffect.NavigateToTermsOfService -> navigateToTermsOfService()
+            is TermsAgreementSideEffect.NavigateToOnBoarding -> navigateToOnBoarding()
+            is TermsAgreementSideEffect.NavigateToBack -> navigateToBack()
         }
     }
 
     TermsAgreementScreen(
         uiState = uiState,
-        onToggleAllAgreements = {
-            viewmodel.sendIntent(TermsAgreementIntent.ToggleAllAgreements(it))
-        },
-        onToggleTermsOfService = {
-            viewmodel.sendIntent(TermsAgreementIntent.ToggleTermsOfService(it))
-        },
-        onTogglePrivacyPolicy = {
-            viewmodel.sendIntent(TermsAgreementIntent.TogglePrivacyPolicy(it))
-        },
-        onToggleOverFourteen = {
-            viewmodel.sendIntent(TermsAgreementIntent.ToggleOverFourteen(it))
-        },
-        onShowTermsOfService = {
-            viewmodel.sendIntent(TermsAgreementIntent.ShowTermsOfService)
-        },
-        onShowPrivacyPolicy = {
-            viewmodel.sendIntent(TermsAgreementIntent.ShowPrivacyPolicy)
-        },
-        onStartButtonClick = {
-            viewmodel.submitTermsAgreement()
-        },
-        onBackButtonClick = {
-            viewmodel.sendIntent(TermsAgreementIntent.BackButtonClick)
-        },
+        onToggleAllAgreements = viewModel::updateAllAgreements,
+        onToggleTermsOfService = viewModel::updateTermsOfService,
+        onTogglePrivacyPolicy = viewModel::updatePrivacyPolicy,
+        onToggleOverFourteen = viewModel::updateOverFourteen,
+        onShowTermsOfService = viewModel::navigateToTermsOfService,
+        onShowPrivacyPolicy = viewModel::navigateToPrivacyPolicy,
+        onStartButtonClick = viewModel::submitTermsAgreement,
+        onBackButtonClick = viewModel::navigateToBack,
     )
 }
 
@@ -89,9 +60,9 @@ fun TermsAgreementScreenContainer(
 private fun TermsAgreementScreen(
     uiState: TermsAgreementState,
     onToggleAllAgreements: (Boolean) -> Unit,
-    onToggleTermsOfService: (Boolean) -> Unit,
-    onTogglePrivacyPolicy: (Boolean) -> Unit,
-    onToggleOverFourteen: (Boolean) -> Unit,
+    onToggleTermsOfService: () -> Unit,
+    onTogglePrivacyPolicy: () -> Unit,
+    onToggleOverFourteen: () -> Unit,
     onShowTermsOfService: () -> Unit,
     onShowPrivacyPolicy: () -> Unit,
     onStartButtonClick: () -> Unit,
@@ -101,7 +72,6 @@ private fun TermsAgreementScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(BitnagilTheme.colors.white)
             .statusBarsPadding(),
     ) {
         BitnagilTopBar(
@@ -117,7 +87,7 @@ private fun TermsAgreementScreen(
         ) {
             Text(
                 text = "빛나길 이용을 위해\n필수 약관에 동의해 주세요.",
-                color = BitnagilTheme.colors.navy500,
+                color = BitnagilTheme.colors.coolGray10,
                 style = BitnagilTheme.typography.title2Bold,
             )
 
@@ -132,7 +102,7 @@ private fun TermsAgreementScreen(
 
             TermsAgreementItem(
                 title = "(필수) 서비스 이용약관 동의",
-                onCheckedChange = { onToggleTermsOfService(!uiState.agreedTermsOfService) },
+                onCheckedChange = { onToggleTermsOfService() },
                 isChecked = uiState.agreedTermsOfService,
                 showMore = true,
                 onClickShowMore = onShowTermsOfService,
@@ -140,7 +110,7 @@ private fun TermsAgreementScreen(
 
             TermsAgreementItem(
                 title = "(필수) 개인정보 수집·이용 동의",
-                onCheckedChange = { onTogglePrivacyPolicy(!uiState.agreedPrivacyPolicy) },
+                onCheckedChange = { onTogglePrivacyPolicy() },
                 isChecked = uiState.agreedPrivacyPolicy,
                 showMore = true,
                 onClickShowMore = onShowPrivacyPolicy,
@@ -148,7 +118,7 @@ private fun TermsAgreementScreen(
 
             TermsAgreementItem(
                 title = "(필수) 만 14세 이상입니다.",
-                onCheckedChange = { onToggleOverFourteen(!uiState.agreedOverFourteen) },
+                onCheckedChange = { onToggleOverFourteen() },
                 isChecked = uiState.agreedOverFourteen,
             )
         }
@@ -167,11 +137,11 @@ private fun TermsAgreementScreen(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun TermsAgreementScreenPreview() {
     TermsAgreementScreen(
-        uiState = TermsAgreementState(),
+        uiState = TermsAgreementState.INIT,
         onToggleAllAgreements = {},
         onToggleTermsOfService = {},
         onTogglePrivacyPolicy = {},

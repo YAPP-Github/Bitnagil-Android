@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,7 +27,6 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
-import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
 import com.threegap.bitnagil.presentation.common.toast.GlobalBitnagilToast
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.namefield.NameField
 import com.threegap.bitnagil.presentation.writeroutine.component.atom.selectcell.SelectCell
@@ -45,15 +43,17 @@ import com.threegap.bitnagil.presentation.writeroutine.model.Time
 import com.threegap.bitnagil.presentation.writeroutine.model.WriteRoutineType
 import com.threegap.bitnagil.presentation.writeroutine.model.mvi.WriteRoutineSideEffect
 import com.threegap.bitnagil.presentation.writeroutine.model.mvi.WriteRoutineState
+import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun WriteRoutineScreenContainer(
     viewModel: WriteRoutineViewModel = hiltViewModel(),
     navigateToBack: () -> Unit,
 ) {
-    val state by viewModel.stateFlow.collectAsState()
+    val state by viewModel.collectAsState()
 
-    viewModel.sideEffectFlow.collectAsEffect { sideEffect ->
+    viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
             WriteRoutineSideEffect.MoveToPreviousScreen -> {
                 navigateToBack()

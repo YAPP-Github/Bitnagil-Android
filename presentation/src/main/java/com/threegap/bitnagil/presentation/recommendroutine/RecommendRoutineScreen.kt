@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
@@ -38,39 +37,40 @@ import com.threegap.bitnagil.presentation.recommendroutine.component.block.Emoti
 import com.threegap.bitnagil.presentation.recommendroutine.component.block.RecommendRoutineItem
 import com.threegap.bitnagil.presentation.recommendroutine.component.template.EmptyRecommendRoutineView
 import com.threegap.bitnagil.presentation.recommendroutine.component.template.RecommendLevelBottomSheet
-import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutineIntent
+import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutineSideEffect
 import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutineState
+import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun RecommendRoutineScreenContainer(
-    viewmodel: RecommendRoutineViewModel = hiltViewModel(),
+    viewModel: RecommendRoutineViewModel = hiltViewModel(),
     navigateToEmotion: () -> Unit,
     navigateToRegisterRoutine: (String?) -> Unit,
 ) {
-    val uiState by viewmodel.container.stateFlow.collectAsStateWithLifecycle()
+    val uiState by viewModel.collectAsState()
+
+    viewModel.collectSideEffect { sideEffect ->
+        when (sideEffect) {
+            is RecommendRoutineSideEffect.NavigateToEmotion -> navigateToEmotion()
+            is RecommendRoutineSideEffect.NavigateToRegisterRoutine -> navigateToRegisterRoutine(sideEffect.routineId)
+        }
+    }
 
     if (uiState.recommendLevelBottomSheetVisible) {
         RecommendLevelBottomSheet(
             selectedRecommendLevel = uiState.selectedRecommendLevel,
-            onRecommendLevelSelected = { selectedLevel ->
-                viewmodel.sendIntent(RecommendRoutineIntent.OnRecommendLevelSelected(selectedLevel))
-            },
-            onDismiss = {
-                viewmodel.sendIntent(RecommendRoutineIntent.HideRecommendLevelBottomSheet)
-            },
+            onRecommendLevelSelected = viewModel::updateRecommendLevel,
+            onDismiss = viewModel::hideRecommendLevelBottomSheet,
         )
     }
 
     RecommendRoutineScreen(
         uiState = uiState,
-        onCategorySelected = { category ->
-            viewmodel.sendIntent(RecommendRoutineIntent.OnCategorySelected(category))
-        },
-        onShowDifficultyBottomSheet = {
-            viewmodel.sendIntent(RecommendRoutineIntent.ShowRecommendLevelBottomSheet)
-        },
-        onRecommendRoutineByEmotionClick = navigateToEmotion,
-        onRegisterRoutineClick = navigateToRegisterRoutine,
+        onCategorySelected = viewModel::updateRoutineCategory,
+        onShowDifficultyBottomSheet = viewModel::showRecommendLevelBottomSheet,
+        onRecommendRoutineByEmotionClick = viewModel::navigateToEmotion,
+        onRegisterRoutineClick = viewModel::navigateToRegisterRoutine,
     )
 }
 
@@ -204,7 +204,7 @@ private fun RecommendRoutineScreen(
 @Composable
 private fun RoutineRecommendScreenPreview() {
     RecommendRoutineScreen(
-        uiState = RecommendRoutineState(),
+        uiState = RecommendRoutineState.INIT,
         onCategorySelected = {},
         onShowDifficultyBottomSheet = {},
         onRecommendRoutineByEmotionClick = {},

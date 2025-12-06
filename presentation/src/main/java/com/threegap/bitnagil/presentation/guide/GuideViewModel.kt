@@ -1,46 +1,39 @@
 package com.threegap.bitnagil.presentation.guide
 
-import androidx.lifecycle.SavedStateHandle
-import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
-import com.threegap.bitnagil.presentation.guide.model.GuideIntent
+import androidx.lifecycle.ViewModel
 import com.threegap.bitnagil.presentation.guide.model.GuideSideEffect
 import com.threegap.bitnagil.presentation.guide.model.GuideState
+import com.threegap.bitnagil.presentation.guide.model.GuideType
 import dagger.hilt.android.lifecycle.HiltViewModel
-import org.orbitmvi.orbit.syntax.Syntax
+import org.orbitmvi.orbit.Container
+import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 @HiltViewModel
-class GuideViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
-) : MviViewModel<GuideState, GuideSideEffect, GuideIntent>(
-    initState = GuideState(),
-    savedStateHandle = savedStateHandle,
-) {
-    override suspend fun Syntax<GuideState, GuideSideEffect>.reduceState(
-        intent: GuideIntent,
-        state: GuideState,
-    ): GuideState? {
-        val newState = when (intent) {
-            is GuideIntent.OnClickGuideButton -> {
-                state.copy(
-                    guideType = intent.guideType,
-                    guideBottomSheetVisible = true,
-                )
-            }
+class GuideViewModel @Inject constructor() : ContainerHost<GuideState, GuideSideEffect>, ViewModel() {
 
-            is GuideIntent.OnHideGuideBottomSheet -> {
-                state.copy(
-                    guideType = null,
-                    guideBottomSheetVisible = false,
-                )
-            }
+    override val container: Container<GuideState, GuideSideEffect> = container(initialState = GuideState.INIT)
 
-            is GuideIntent.OnBackClick -> {
-                sendSideEffect(GuideSideEffect.NavigateToBack)
-                null
+    fun onShowGuideBottomSheet(guideType: GuideType) {
+        intent {
+            reduce {
+                state.copy(guideType = guideType, guideBottomSheetVisible = true)
             }
         }
+    }
 
-        return newState
+    fun onHideGuideBottomSheet() {
+        intent {
+            reduce {
+                state.copy(guideType = null, guideBottomSheetVisible = false)
+            }
+        }
+    }
+
+    fun navigateToBack() {
+        intent {
+            postSideEffect(GuideSideEffect.NavigateToBack)
+        }
     }
 }

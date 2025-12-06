@@ -3,7 +3,6 @@ package com.threegap.bitnagil.presentation.splash
 import androidx.activity.ComponentActivity
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,28 +20,27 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.presentation.common.playstore.openAppInPlayStore
 import com.threegap.bitnagil.presentation.splash.component.template.BitnagilLottieAnimation
 import com.threegap.bitnagil.presentation.splash.component.template.ForceUpdateDialog
 import com.threegap.bitnagil.presentation.splash.model.SplashSideEffect
+import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 import kotlin.system.exitProcess
 
 @Composable
 fun SplashScreenContainer(
+    viewModel: SplashViewModel = hiltViewModel(),
     navigateToLogin: () -> Unit,
     navigateToTermsAgreement: () -> Unit,
     navigateToOnboarding: () -> Unit,
     navigateToHome: () -> Unit,
-    viewModel: SplashViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     val activity = context as? ComponentActivity
-    val uiState by viewModel.stateFlow.collectAsStateWithLifecycle()
+    val uiState by viewModel.collectAsState()
 
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
@@ -71,14 +69,11 @@ fun SplashScreenContainer(
 @Composable
 private fun SplashScreen(
     onCompleted: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     var showIcon by remember { mutableStateOf(false) }
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(BitnagilTheme.colors.white),
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -88,9 +83,7 @@ private fun SplashScreen(
             BitnagilLottieAnimation(
                 lottieJson = R.raw.splash_lottie,
                 onComplete = onCompleted,
-                onStart = {
-                    showIcon = true
-                },
+                onStart = { showIcon = true },
                 maxFrame = 120,
                 modifier = Modifier
                     .padding(bottom = 36.dp)
