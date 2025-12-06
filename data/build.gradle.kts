@@ -18,4 +18,6 @@ dependencies {
     implementation(libs.bundles.okhttp)
     implementation(platform(libs.retrofit.bom))
     implementation(libs.bundles.retrofit)
+    implementation(libs.play.services.location)
+    implementation(libs.kotlinx.coroutines.play)
 }

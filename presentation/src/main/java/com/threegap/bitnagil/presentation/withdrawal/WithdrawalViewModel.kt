@@ -1,72 +1,66 @@
 package com.threegap.bitnagil.presentation.withdrawal
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.ViewModel
 import com.threegap.bitnagil.domain.auth.usecase.WithdrawalUseCase
-import com.threegap.bitnagil.presentation.common.mviviewmodel.MviViewModel
-import com.threegap.bitnagil.presentation.withdrawal.model.WithdrawalIntent
+import com.threegap.bitnagil.presentation.withdrawal.model.WithdrawalReason
 import com.threegap.bitnagil.presentation.withdrawal.model.WithdrawalSideEffect
 import com.threegap.bitnagil.presentation.withdrawal.model.WithdrawalState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
-import org.orbitmvi.orbit.syntax.Syntax
+import org.orbitmvi.orbit.Container
+import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 @HiltViewModel
 class WithdrawalViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
     private val withdrawalUseCase: WithdrawalUseCase,
-) : MviViewModel<WithdrawalState, WithdrawalSideEffect, WithdrawalIntent>(
-    savedStateHandle = savedStateHandle,
-    initState = WithdrawalState(),
-) {
-    override suspend fun Syntax<WithdrawalState, WithdrawalSideEffect>.reduceState(
-        intent: WithdrawalIntent,
-        state: WithdrawalState,
-    ): WithdrawalState? {
-        val newState = when (intent) {
-            is WithdrawalIntent.UpdateLoading -> state.copy(isLoading = intent.isLoading)
-            is WithdrawalIntent.OnTermsToggle -> state.copy(isTermsChecked = !state.isTermsChecked)
-            is WithdrawalIntent.ShowSuccessDialog -> state.copy(showSuccessDialog = true)
+) : ContainerHost<WithdrawalState, WithdrawalSideEffect>, ViewModel() {
 
-            is WithdrawalIntent.OnCustomReasonChanged -> {
-                state.copy(customReasonText = intent.text)
-            }
+    override val container: Container<WithdrawalState, WithdrawalSideEffect> = container(initialState = WithdrawalState.INIT)
 
-            is WithdrawalIntent.OnReasonSelected -> {
-                state.copy(
-                    selectedReason = intent.reason,
-                    customReasonText = "",
-                )
-            }
-
-            is WithdrawalIntent.OnBackClick -> {
-                sendSideEffect(WithdrawalSideEffect.NavigateToBack)
-                null
-            }
-
-            is WithdrawalIntent.OnSuccessDialogConfirm -> {
-                sendSideEffect(WithdrawalSideEffect.NavigateToLogin)
-                null
-            }
+    fun onTermsToggle() {
+        intent {
+            reduce { state.copy(isTermsChecked = !state.isTermsChecked) }
         }
+    }
 
-        return newState
+    fun updateCustomReason(text: String) {
+        intent {
+            reduce { state.copy(customReasonText = text) }
+        }
+    }
+
+    fun updateSelectedReason(reason: WithdrawalReason?) {
+        intent {
+            reduce { state.copy(selectedReason = reason, customReasonText = "") }
+        }
     }
 
     fun withdrawal() {
-        if (container.stateFlow.value.isLoading) return
-        sendIntent(WithdrawalIntent.UpdateLoading(true))
-        viewModelScope.launch {
-            withdrawalUseCase().fold(
+        intent {
+            if (state.isLoading) return@intent
+            reduce { state.copy(isLoading = true) }
+            val reason = state.finalWithdrawalReason
+            withdrawalUseCase(reason).fold(
                 onSuccess = {
-                    sendIntent(WithdrawalIntent.UpdateLoading(false))
-                    sendIntent(WithdrawalIntent.ShowSuccessDialog)
+                    reduce { state.copy(isLoading = false, showSuccessDialog = true) }
                 },
                 onFailure = {
-                    sendIntent(WithdrawalIntent.UpdateLoading(false))
+                    reduce { state.copy(isLoading = false) }
                 },
             )
+        }
+    }
+
+    fun navigateToBack() {
+        intent {
+            postSideEffect(WithdrawalSideEffect.NavigateToBack)
+        }
+    }
+
+    fun navigateToLogin() {
+        intent {
+            postSideEffect(WithdrawalSideEffect.NavigateToLogin)
         }
     }
 }

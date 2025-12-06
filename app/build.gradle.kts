@@ -33,8 +33,6 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.threegap.bitnagil"
-
         val kakaoNativeAppKey =
             (properties["kakao.native.app.key"] as? String)
                 ?: System.getenv("KAKAO_NATIVE_APP_KEY")
@@ -46,10 +44,25 @@ android {
             name = "KAKAO_NATIVE_APP_KEY",
             value = "\"$kakaoNativeAppKey\"",
         )
+
+        val kakaoRestApiKey =
+            (properties["kakao.rest.api.key"] as? String)
+                ?: System.getenv("KAKAO_REST_API_KEY")
+                ?: throw GradleException("KAKAO_REST_API_KEY 값이 없습니다.")
+
+        buildConfigField(
+            type = "String",
+            name = "KAKAO_REST_API_KEY",
+            value = "\"$kakaoRestApiKey\"",
+        )
     }
 
     buildTypes {
         debug {
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-DEBUG"
+            isDebuggable = true
+
             val devUrl = properties["bitnagil.dev.url"] as? String
                 ?: System.getenv("BITNAGIL_DEV_URL")
                 ?: throw GradleException("bitnagil.dev.url 값이 없습니다.")

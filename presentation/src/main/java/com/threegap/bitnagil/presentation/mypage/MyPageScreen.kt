@@ -38,6 +38,7 @@ fun MyPageScreenContainer(
     navigateToNotice: () -> Unit,
     navigateToQnA: () -> Unit,
     navigateToOnBoarding: () -> Unit,
+    navigateToReportHistory: () -> Unit,
 ) {
     val state by myPageViewModel.collectAsState()
 
@@ -47,6 +48,7 @@ fun MyPageScreenContainer(
         onClickNotice = navigateToNotice,
         onClickResetOnBoarding = navigateToOnBoarding,
         onClickQnA = navigateToQnA,
+        onClickReportHistory = navigateToReportHistory,
     )
 }
 
@@ -57,6 +59,7 @@ private fun MyPageScreen(
     onClickNotice: () -> Unit,
     onClickResetOnBoarding: () -> Unit,
     onClickQnA: () -> Unit,
+    onClickReportHistory: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -101,6 +104,11 @@ private fun MyPageScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         BitnagilOptionButton(
+            title = "내 제보 기록",
+            onClick = onClickReportHistory,
+        )
+
+        BitnagilOptionButton(
             title = "내 목표 재설정",
             onClick = onClickResetOnBoarding,
         )
@@ -127,6 +135,7 @@ fun MyPageScreenPreview() {
             onClickNotice = { },
             onClickResetOnBoarding = { },
             onClickQnA = { },
+            onClickReportHistory = { },
         )
     }
 }

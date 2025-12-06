@@ -1,15 +1,23 @@
 package com.threegap.bitnagil.di.data
 
+import com.threegap.bitnagil.data.address.datasource.AddressDataSource
+import com.threegap.bitnagil.data.address.datasource.LocationDataSource
+import com.threegap.bitnagil.data.address.datasourceImpl.AddressDataSourceImpl
+import com.threegap.bitnagil.data.address.datasourceImpl.LocationDataSourceImpl
 import com.threegap.bitnagil.data.auth.datasource.AuthLocalDataSource
 import com.threegap.bitnagil.data.auth.datasource.AuthRemoteDataSource
 import com.threegap.bitnagil.data.auth.datasourceimpl.AuthLocalDataSourceImpl
 import com.threegap.bitnagil.data.auth.datasourceimpl.AuthRemoteDataSourceImpl
 import com.threegap.bitnagil.data.emotion.datasource.EmotionDataSource
 import com.threegap.bitnagil.data.emotion.datasourceImpl.EmotionDataSourceImpl
+import com.threegap.bitnagil.data.file.datasource.FileDataSource
+import com.threegap.bitnagil.data.file.datasourceImpl.FileDataSourceImpl
 import com.threegap.bitnagil.data.onboarding.datasource.OnBoardingDataSource
 import com.threegap.bitnagil.data.onboarding.datasourceImpl.OnBoardingDataSourceImpl
 import com.threegap.bitnagil.data.recommendroutine.datasource.RecommendRoutineDataSource
 import com.threegap.bitnagil.data.recommendroutine.datasourceImpl.RecommendRoutineDataSourceImpl
+import com.threegap.bitnagil.data.report.datasource.ReportDataSource
+import com.threegap.bitnagil.data.report.datasourceImpl.ReportDataSourceImpl
 import com.threegap.bitnagil.data.routine.datasource.RoutineRemoteDataSource
 import com.threegap.bitnagil.data.routine.datasourceImpl.RoutineRemoteDataSourceImpl
 import com.threegap.bitnagil.data.user.datasource.UserDataSource
@@ -63,4 +71,20 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindVersionDataSource(versionDataSourceImpl: VersionDataSourceImpl): VersionDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindLocationDataSource(locationDataSourceImpl: LocationDataSourceImpl): LocationDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindAddressDataSource(addressDataSourceImpl: AddressDataSourceImpl): AddressDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindFileDataSource(impl: FileDataSourceImpl): FileDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindReportDataSource(impl: ReportDataSourceImpl): ReportDataSource
 }

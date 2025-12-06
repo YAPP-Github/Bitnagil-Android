@@ -1,5 +1,6 @@
 package com.threegap.bitnagil.presentation.setting
 
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,23 +17,26 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.component.block.BitnagilAlertDialog
 import com.threegap.bitnagil.designsystem.component.block.BitnagilOptionButton
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
-import com.threegap.bitnagil.presentation.common.flow.collectAsEffect
+import com.threegap.bitnagil.presentation.common.playstore.UpdateAvailableState
+import com.threegap.bitnagil.presentation.common.playstore.openAppInPlayStore
+import com.threegap.bitnagil.presentation.common.playstore.updateAvailable
 import com.threegap.bitnagil.presentation.setting.component.atom.settingtitle.SettingTitle
-import com.threegap.bitnagil.presentation.setting.component.block.LogoutConfirmDialog
-import com.threegap.bitnagil.presentation.setting.model.mvi.SettingIntent
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingSideEffect
 import com.threegap.bitnagil.presentation.setting.model.mvi.SettingState
+import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun SettingScreenContainer(
@@ -43,9 +47,12 @@ fun SettingScreenContainer(
     navigateToLogin: () -> Unit,
     navigateToWithdrawal: () -> Unit,
 ) {
-    val state by viewModel.stateFlow.collectAsState()
+    val context = LocalContext.current
+    val activity = context as? ComponentActivity
+    val state by viewModel.collectAsState()
+    val updateAvailableState = updateAvailable()
 
-    viewModel.sideEffectFlow.collectAsEffect { sideEffect ->
+    viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
             SettingSideEffect.NavigateToLogin -> navigateToLogin()
             SettingSideEffect.NavigateToWithdrawal -> navigateToWithdrawal()
@@ -53,7 +60,11 @@ fun SettingScreenContainer(
     }
 
     if (state.logoutConfirmDialogVisible) {
-        LogoutConfirmDialog(
+        BitnagilAlertDialog(
+            title = "로그아웃 할까요?",
+            description = "이 기기에서 계정이 로그아웃되고, 다시\n로그인해야 서비스를 계속 이용할 수 있어요.",
+            dismissButtonText = "취소",
+            confirmButtonText = "로그아웃",
             onDismiss = viewModel::hideConfirmDialog,
             onConfirm = viewModel::logout,
         )
@@ -61,20 +72,22 @@ fun SettingScreenContainer(
 
     SettingScreen(
         state = state,
+        updateAvailableState = updateAvailableState,
         toggleServiceAlarm = viewModel::toggleServiceAlarm,
         togglePushAlarm = viewModel::togglePushAlarm,
-        onClickUpdate = {},
+        onClickUpdate = { openAppInPlayStore(activity = activity, shouldFinishApp = false) },
         onClickBack = navigateToBack,
         onClickTermsOfService = navigateToTermsOfService,
         onClickPrivacyPolicy = navigateToPrivacyPolicy,
         onClickLogout = viewModel::showLogoutDialog,
-        onClickWithdrawal = { viewModel.sendIntent(SettingIntent.OnWithdrawalClick) },
+        onClickWithdrawal = viewModel::navigateToWithdrawal,
     )
 }
 
 @Composable
 private fun SettingScreen(
     state: SettingState,
+    updateAvailableState: UpdateAvailableState,
     toggleServiceAlarm: () -> Unit,
     togglePushAlarm: () -> Unit,
     onClickUpdate: () -> Unit,
@@ -127,19 +140,32 @@ private fun SettingScreen(
                     )
                 }
 
-                val isLatest = state.version == state.latestVersion
-                Text(
-                    text = if (isLatest) "최신" else "업데이트",
-                    color = if (isLatest) BitnagilTheme.colors.coolGray70 else BitnagilTheme.colors.orange500,
-                    style = BitnagilTheme.typography.button2,
-                    modifier = Modifier
-                        .background(
-                            color = if (isLatest) BitnagilTheme.colors.coolGray98 else BitnagilTheme.colors.orange50,
-                            shape = RoundedCornerShape(8.dp),
-                        )
-                        .let { if (!isLatest) it.clickableWithoutRipple(onClick = onClickUpdate) else it }
-                        .padding(horizontal = 10.dp, vertical = 5.dp),
-                )
+                when (updateAvailableState) {
+                    UpdateAvailableState.LATEST -> Text(
+                        text = "최신",
+                        color = BitnagilTheme.colors.coolGray70,
+                        style = BitnagilTheme.typography.button2,
+                        modifier = Modifier
+                            .background(
+                                color = BitnagilTheme.colors.coolGray98,
+                                shape = RoundedCornerShape(8.dp),
+                            )
+                            .padding(horizontal = 10.dp, vertical = 5.dp),
+                    )
+                    UpdateAvailableState.NEED_UPDATE -> Text(
+                        text = "업데이트",
+                        color = BitnagilTheme.colors.orange500,
+                        style = BitnagilTheme.typography.button2,
+                        modifier = Modifier
+                            .background(
+                                color = BitnagilTheme.colors.orange50,
+                                shape = RoundedCornerShape(8.dp),
+                            )
+                            .clickableWithoutRipple(onClick = onClickUpdate)
+                            .padding(horizontal = 10.dp, vertical = 5.dp),
+                    )
+                    UpdateAvailableState.NONE -> {}
+                }
             }
 
             BitnagilOptionButton(
@@ -181,10 +207,10 @@ fun SettingScreenPreview() {
             useServiceAlarm = true,
             usePushAlarm = false,
             version = "1.0.1",
-            latestVersion = "1.0.0",
             loading = false,
             logoutConfirmDialogVisible = false,
         ),
+        updateAvailableState = UpdateAvailableState.LATEST,
         toggleServiceAlarm = {},
         togglePushAlarm = {},
         onClickUpdate = {},

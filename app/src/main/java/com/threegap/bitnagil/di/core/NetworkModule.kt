@@ -5,6 +5,9 @@ import android.content.Intent
 import com.threegap.bitnagil.BuildConfig
 import com.threegap.bitnagil.MainActivity
 import com.threegap.bitnagil.datastore.auth.storage.AuthTokenDataStore
+import com.threegap.bitnagil.network.Auth
+import com.threegap.bitnagil.network.Kakao
+import com.threegap.bitnagil.network.NoneAuth
 import com.threegap.bitnagil.network.auth.AuthInterceptor
 import com.threegap.bitnagil.network.auth.TokenAuthenticator
 import com.threegap.bitnagil.network.token.ReissueService
@@ -30,6 +33,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
     private const val APPLICATION_JSON = "application/json"
+    private const val REST_API_KEY = BuildConfig.KAKAO_REST_API_KEY
+    private const val KAKAO_URL = "https://dapi.kakao.com"
 
     @Provides
     @Singleton
@@ -73,6 +78,43 @@ object NetworkModule {
 
             override suspend fun clearTokens() = dataStore.clearAuthToken()
         }
+
+    @Provides
+    @Singleton
+    @Kakao
+    fun provideKakaoAuthInterceptor(): Interceptor =
+        Interceptor { chain ->
+            val request = chain.request().newBuilder()
+                .addHeader("Authorization", "KakaoAK $REST_API_KEY")
+                .build()
+            chain.proceed(request)
+        }
+
+    @Provides
+    @Singleton
+    @Kakao
+    fun provideKakaoOkHttpClient(
+        httpLoggingInterceptor: HttpLoggingInterceptor,
+        @Kakao kakaoAuthInterceptor: Interceptor,
+    ): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(kakaoAuthInterceptor)
+        .addInterceptor(httpLoggingInterceptor)
+        .connectTimeout(10L, TimeUnit.SECONDS)
+        .writeTimeout(30L, TimeUnit.SECONDS)
+        .readTimeout(30L, TimeUnit.SECONDS)
+        .build()
+
+    @Provides
+    @Singleton
+    @Kakao
+    fun provideKakaoRetrofit(
+        converterFactory: Converter.Factory,
+        @Kakao okHttpClient: OkHttpClient,
+    ): Retrofit = Retrofit.Builder()
+        .baseUrl(KAKAO_URL)
+        .addConverterFactory(converterFactory)
+        .client(okHttpClient)
+        .build()
 
     @Provides
     @Singleton

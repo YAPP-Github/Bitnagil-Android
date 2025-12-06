@@ -22,10 +22,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
+import com.threegap.bitnagil.presentation.common.playstore.openAppInPlayStore
 import com.threegap.bitnagil.presentation.splash.component.template.BitnagilLottieAnimation
 import com.threegap.bitnagil.presentation.splash.component.template.ForceUpdateDialog
 import com.threegap.bitnagil.presentation.splash.model.SplashSideEffect
-import com.threegap.bitnagil.presentation.splash.util.openAppInPlayStore
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 import kotlin.system.exitProcess

@@ -24,6 +24,7 @@ jobs:
       - name: Generate local.properties
         env:
           KAKAO_NATIVE_APP_KEY: ${{ secrets.KAKAO_NATIVE_APP_KEY }}
+          KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
           BITNAGIL_DEV_URL: ${{ secrets.BITNAGIL_DEV_URL }}
           BITNAGIL_PROD_URL: ${{ secrets.BITNAGIL_PROD_URL }}
           RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
@@ -31,6 +32,7 @@ jobs:
           RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
         run: |
           echo "kakao.native.app.key=$KAKAO_NATIVE_APP_KEY" >> local.properties
+          echo "kakao.rest.api.key=$KAKAO_REST_API_KEY" >> local.properties
           echo "bitnagil.dev.url=$BITNAGIL_DEV_URL" >> local.properties
           echo "bitnagil.prod.url=$BITNAGIL_PROD_URL" >> local.properties
           echo "release.key.alias=$RELEASE_KEY_ALIAS" >> local.properties
