@@ -11,11 +11,11 @@ data class ReportItemDto(
     @SerialName("reportId")
     val reportId: Int,
     @SerialName("reportStatus")
-    val reportStatus: String,
+    val reportStatus: ReportStatus,
     @SerialName("reportTitle")
     val reportTitle: String,
     @SerialName("reportCategory")
-    val reportCategory: String,
+    val reportCategory: ReportCategory,
     @SerialName("reportLocation")
     val reportLocation: String,
     @SerialName("reportImageUrl")
@@ -25,9 +25,9 @@ data class ReportItemDto(
 fun ReportItemDto.toDomain(): ReportItem =
     ReportItem(
         id = this.reportId,
-        status = ReportStatus.fromString(this.reportStatus),
+        status = this.reportStatus,
         title = this.reportTitle,
-        category = ReportCategory.fromString(this.reportCategory),
+        category = this.reportCategory,
         address = this.reportLocation,
         imageUrl = this.reportImageUrl,
     )
