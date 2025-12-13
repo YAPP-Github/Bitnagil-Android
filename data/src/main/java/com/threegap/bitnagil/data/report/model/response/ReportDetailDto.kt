@@ -12,13 +12,13 @@ class ReportDetailDto(
     @SerialName("reportDate")
     val reportDate: String,
     @SerialName("reportStatus")
-    val reportStatus: String,
+    val reportStatus: ReportStatus,
     @SerialName("reportTitle")
     val reportTitle: String,
     @SerialName("reportContent")
     val reportContent: String,
     @SerialName("reportCategory")
-    val reportCategory: String,
+    val reportCategory: ReportCategory,
     @SerialName("reportLocation")
     val reportLocation: String,
     @SerialName("reportImageUrls")
@@ -29,10 +29,10 @@ fun ReportDetailDto.toDomain(id: String?): ReportDetail =
     ReportDetail(
         id = id ?: "",
         date = LocalDate.parse(this.reportDate),
-        status = ReportStatus.fromString(this.reportStatus),
+        status = this.reportStatus,
         title = this.reportTitle,
         content = this.reportContent,
-        category = ReportCategory.fromString(this.reportCategory),
+        category = this.reportCategory,
         address = this.reportLocation,
         imageUrls = this.reportImageUrls,
     )

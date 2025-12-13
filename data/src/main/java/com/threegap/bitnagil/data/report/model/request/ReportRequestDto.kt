@@ -12,7 +12,7 @@ data class ReportRequestDto(
     @SerialName("reportContent")
     val reportContent: String,
     @SerialName("reportCategory")
-    val reportCategory: String,
+    val reportCategory: ReportCategory,
     @SerialName("reportImageUrls")
     val reportImageUrls: List<String>,
     @SerialName("reportLocation")
@@ -27,7 +27,7 @@ fun Report.toDto(): ReportRequestDto {
     return ReportRequestDto(
         reportTitle = this.title,
         reportContent = this.content,
-        reportCategory = ReportCategory.toString(this.category),
+        reportCategory = this.category,
         reportImageUrls = this.imageUrls,
         reportLocation = this.address,
         latitude = this.latitude,

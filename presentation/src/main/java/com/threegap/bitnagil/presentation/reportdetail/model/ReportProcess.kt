@@ -13,9 +13,9 @@ enum class ReportProcess(
     companion object {
         fun fromDomain(status: ReportStatus): ReportProcess {
             return when (status) {
-                ReportStatus.Pending -> Reported
-                ReportStatus.InProgress -> Progress
-                ReportStatus.Completed -> Complete
+                ReportStatus.PENDING -> Reported
+                ReportStatus.IN_PROGRESS -> Progress
+                ReportStatus.COMPLETED -> Complete
             }
         }
     }
