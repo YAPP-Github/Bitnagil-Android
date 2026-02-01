@@ -2,8 +2,8 @@ package com.threegap.bitnagil.presentation.writeroutine.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import java.time.LocalTime
 import kotlin.text.format
-import com.threegap.bitnagil.domain.writeroutine.model.Time as DomainTime
 
 @Parcelize
 data class Time(
@@ -19,18 +19,18 @@ data class Time(
         val Init = Time(hour = 12, minute = 0)
         val AllDay = Time(hour = 0, minute = 0)
 
-        fun fromDomainTimeString(timeString: String): Time {
-            try {
+        fun fromString(timeString: String): Time {
+            return try {
                 val (hour, minute) = timeString.split(":").map { it.toInt() }
-                return Time(hour = hour, minute = minute)
+                Time(hour = hour, minute = minute)
             } catch (_: Exception) {
-                return Time(hour = 12, minute = 0)
+                Init
             }
         }
     }
 
-    fun toDomainTime(): DomainTime {
-        return DomainTime(hour = hour, minute = minute)
+    fun toLocalTime(): LocalTime {
+        return LocalTime.of(hour, minute)
     }
 
     fun toAmPmFormattedString(): String {

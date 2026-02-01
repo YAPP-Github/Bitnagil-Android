@@ -105,7 +105,7 @@ class WriteRoutineViewModel @AssistedInject constructor(
                         routineName = routine.name,
                         repeatDays = repeatDays,
                         repeatType = repeatType,
-                        startTime = Time.fromDomainTimeString(routine.executionTime),
+                        startTime = Time.fromString(routine.executionTime),
                         startDate = Date.fromString(routine.startDate),
                         endDate = Date.fromString(routine.endDate),
                         subRoutineNames = listOf(
@@ -137,7 +137,7 @@ class WriteRoutineViewModel @AssistedInject constructor(
                         routineName = routine.name,
                         repeatDays = SelectableDay.defaultList,
                         repeatType = null,
-                        startTime = Time.fromDomainTimeString(routine.executionTime),
+                        startTime = Time.fromString(routine.executionTime),
                         startDate = Date.now(),
                         endDate = Date.now(),
                         subRoutineNames = listOf(
@@ -372,9 +372,9 @@ class WriteRoutineViewModel @AssistedInject constructor(
                 val registerRoutineResult = registerRoutineUseCase(
                     name = currentState.routineName,
                     repeatDay = repeatDay,
-                    startTime = startTime.toDomainTime(),
-                    startDate = if (noRepeatRoutine) Date.now().toDomainDate() else currentState.startDate.toDomainDate(),
-                    endDate = if (noRepeatRoutine) Date.now().toDomainDate() else currentState.endDate.toDomainDate(),
+                    startTime = startTime.toLocalTime(),
+                    startDate = if (noRepeatRoutine) Date.now().toLocalDate() else currentState.startDate.toLocalDate(),
+                    endDate = if (noRepeatRoutine) Date.now().toLocalDate() else currentState.endDate.toLocalDate(),
                     subRoutines = subRoutines,
                     recommendedRoutineType = currentState.recommendedRoutineType,
                 )
@@ -409,9 +409,9 @@ class WriteRoutineViewModel @AssistedInject constructor(
                     routineUpdateType = routineUpdateType,
                     name = currentState.routineName,
                     repeatDay = repeatDay,
-                    startTime = startTime.toDomainTime(),
-                    startDate = currentState.startDate.toDomainDate(),
-                    endDate = currentState.endDate.toDomainDate(),
+                    startTime = startTime.toLocalTime(),
+                    startDate = currentState.startDate.toLocalDate(),
+                    endDate = currentState.endDate.toLocalDate(),
                     subRoutines = subRoutines,
                 )
 

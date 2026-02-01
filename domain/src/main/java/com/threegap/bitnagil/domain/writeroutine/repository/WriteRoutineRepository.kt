@@ -1,19 +1,19 @@
 package com.threegap.bitnagil.domain.writeroutine.repository
 
-import com.threegap.bitnagil.domain.writeroutine.model.Date
 import com.threegap.bitnagil.domain.writeroutine.model.RepeatDay
 import com.threegap.bitnagil.domain.writeroutine.model.RoutineUpdateType
-import com.threegap.bitnagil.domain.writeroutine.model.Time
 import com.threegap.bitnagil.domain.writeroutine.model.WriteRoutineEvent
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
+import java.time.LocalTime
 
 interface WriteRoutineRepository {
     suspend fun registerRoutine(
         name: String,
         repeatDay: List<RepeatDay>,
-        startTime: Time,
-        startDate: Date,
-        endDate: Date,
+        startTime: LocalTime,
+        startDate: LocalDate,
+        endDate: LocalDate,
         subRoutines: List<String>,
         recommendedRoutineType: String?,
     ): Result<Unit>
@@ -23,9 +23,9 @@ interface WriteRoutineRepository {
         routineUpdateType: RoutineUpdateType,
         name: String,
         repeatDay: List<RepeatDay>,
-        startTime: Time,
-        startDate: Date,
-        endDate: Date,
+        startTime: LocalTime,
+        startDate: LocalDate,
+        endDate: LocalDate,
         subRoutines: List<String>,
     ): Result<Unit>
 
