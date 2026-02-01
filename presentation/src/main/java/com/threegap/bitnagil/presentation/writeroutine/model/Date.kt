@@ -11,11 +11,14 @@ data class Date(
     val day: Int,
 ) : Parcelable {
     companion object {
-        fun now() = Date(
-            year = LocalDate.now().year,
-            month = LocalDate.now().monthValue,
-            day = LocalDate.now().dayOfMonth,
-        )
+        fun now(): Date {
+            val currentDate = LocalDate.now()
+            return Date(
+                year = currentDate.year,
+                month = currentDate.monthValue,
+                day = currentDate.dayOfMonth,
+            )
+        }
 
         fun min(d1: Date, d2: Date): Date {
             if (d1.year < d2.year) return d1
