@@ -59,6 +59,6 @@ data class Date(
     }
 
     fun toLocalDate(): LocalDate {
-        return LocalDate.of(year, month, day,)
+        return LocalDate.of(year, month, day)
     }
 }
