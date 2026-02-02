@@ -1,9 +1,9 @@
 package com.threegap.bitnagil.domain.writeroutine.usecase
 
-import com.threegap.bitnagil.domain.writeroutine.model.Date
 import com.threegap.bitnagil.domain.writeroutine.model.RepeatDay
-import com.threegap.bitnagil.domain.writeroutine.model.Time
 import com.threegap.bitnagil.domain.writeroutine.repository.WriteRoutineRepository
+import java.time.LocalDate
+import java.time.LocalTime
 import javax.inject.Inject
 
 class RegisterRoutineUseCase @Inject constructor(
@@ -12,9 +12,9 @@ class RegisterRoutineUseCase @Inject constructor(
     suspend operator fun invoke(
         name: String,
         repeatDay: List<RepeatDay>,
-        startTime: Time,
-        startDate: Date,
-        endDate: Date,
+        startTime: LocalTime,
+        startDate: LocalDate,
+        endDate: LocalDate,
         subRoutines: List<String>,
         recommendedRoutineType: String?,
     ): Result<Unit> {

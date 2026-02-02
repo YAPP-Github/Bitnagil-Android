@@ -1,6 +1,6 @@
 package com.threegap.bitnagil.data.common
 
-import com.threegap.bitnagil.domain.error.model.BitnagilError
+import com.threegap.bitnagil.domain.common.model.BitnagilError
 import com.threegap.bitnagil.network.model.BaseResponse
 import com.threegap.bitnagil.network.model.ErrorResponse
 import kotlinx.serialization.json.Json

@@ -3,15 +3,15 @@ package com.threegap.bitnagil.data.writeroutine.repositoryImpl
 import com.threegap.bitnagil.data.writeroutine.datasource.WriteRoutineDataSource
 import com.threegap.bitnagil.data.writeroutine.model.request.EditRoutineRequest
 import com.threegap.bitnagil.data.writeroutine.model.request.RegisterRoutineRequest
-import com.threegap.bitnagil.domain.writeroutine.model.Date
 import com.threegap.bitnagil.domain.writeroutine.model.RepeatDay
 import com.threegap.bitnagil.domain.writeroutine.model.RoutineUpdateType
-import com.threegap.bitnagil.domain.writeroutine.model.Time
 import com.threegap.bitnagil.domain.writeroutine.model.WriteRoutineEvent
 import com.threegap.bitnagil.domain.writeroutine.repository.WriteRoutineRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import java.time.LocalDate
+import java.time.LocalTime
 import javax.inject.Inject
 
 class WriteRoutineRepositoryImpl @Inject constructor(
@@ -20,18 +20,18 @@ class WriteRoutineRepositoryImpl @Inject constructor(
     override suspend fun registerRoutine(
         name: String,
         repeatDay: List<RepeatDay>,
-        startTime: Time,
-        startDate: Date,
-        endDate: Date,
+        startTime: LocalTime,
+        startDate: LocalDate,
+        endDate: LocalDate,
         subRoutines: List<String>,
         recommendedRoutineType: String?,
     ): Result<Unit> {
         val request = RegisterRoutineRequest(
             routineName = name,
             repeatDay = repeatDay.map { it.fullName },
-            executionTime = startTime.toFormattedString(),
-            routineStartDate = startDate.toFormattedString(),
-            routineEndDate = endDate.toFormattedString(),
+            executionTime = startTime.toString(),
+            routineStartDate = startDate.toString(),
+            routineEndDate = endDate.toString(),
             subRoutineName = subRoutines,
             recommendedRoutineType = recommendedRoutineType,
         )
@@ -47,9 +47,9 @@ class WriteRoutineRepositoryImpl @Inject constructor(
         routineUpdateType: RoutineUpdateType,
         name: String,
         repeatDay: List<RepeatDay>,
-        startTime: Time,
-        startDate: Date,
-        endDate: Date,
+        startTime: LocalTime,
+        startDate: LocalDate,
+        endDate: LocalDate,
         subRoutines: List<String>,
     ): Result<Unit> {
         val request = EditRoutineRequest(
@@ -57,9 +57,9 @@ class WriteRoutineRepositoryImpl @Inject constructor(
             updateApplyDate = routineUpdateType.value,
             routineName = name,
             repeatDay = repeatDay.map { it.fullName },
-            executionTime = startTime.toFormattedString(),
-            routineStartDate = startDate.toFormattedString(),
-            routineEndDate = endDate.toFormattedString(),
+            executionTime = startTime.toString(),
+            routineStartDate = startDate.toString(),
+            routineEndDate = endDate.toString(),
             subRoutineName = subRoutines,
         )
 

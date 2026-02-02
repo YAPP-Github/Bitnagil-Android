@@ -2,7 +2,7 @@ package com.threegap.bitnagil.presentation.writeroutine.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import com.threegap.bitnagil.domain.writeroutine.model.Date as DomainDate
+import java.time.LocalDate
 
 @Parcelize
 data class Date(
@@ -11,11 +11,14 @@ data class Date(
     val day: Int,
 ) : Parcelable {
     companion object {
-        fun now() = Date(
-            year = java.time.LocalDate.now().year,
-            month = java.time.LocalDate.now().monthValue,
-            day = java.time.LocalDate.now().dayOfMonth,
-        )
+        fun now(): Date {
+            val currentDate = LocalDate.now()
+            return Date(
+                year = currentDate.year,
+                month = currentDate.monthValue,
+                day = currentDate.dayOfMonth,
+            )
+        }
 
         fun min(d1: Date, d2: Date): Date {
             if (d1.year < d2.year) return d1
@@ -51,21 +54,14 @@ data class Date(
     fun toYearShrinkageFormattedString(): String = "%02d.%02d.%02d".format((year % 100), month, day)
 
     fun checkInRange(startDate: Date?, endDate: Date?): Boolean {
-        val appliedStartDate = startDate ?: Date(year = 2000, month = 1, day = 1)
-        val appliedEndDate = endDate ?: Date(year = 2999, month = 12, day = 31)
+        val current = toLocalDate()
+        val start = startDate?.toLocalDate() ?: LocalDate.of(2000, 1, 1)
+        val end = endDate?.toLocalDate() ?: LocalDate.of(2999, 12, 31)
 
-        val startValue = appliedStartDate.year * 10000 + appliedStartDate.month * 100 + appliedStartDate.day
-        val endValue = appliedEndDate.year * 10000 + appliedEndDate.month * 100 + appliedEndDate.day
-        val targetValue = year * 10000 + month * 100 + day
-
-        return targetValue in startValue..endValue
+        return !current.isBefore(start) && !current.isAfter(end)
     }
 
-    fun toDomainDate(): DomainDate {
-        return DomainDate(
-            year = year,
-            month = month,
-            day = day,
-        )
+    fun toLocalDate(): LocalDate {
+        return LocalDate.of(year, month, day)
     }
 }

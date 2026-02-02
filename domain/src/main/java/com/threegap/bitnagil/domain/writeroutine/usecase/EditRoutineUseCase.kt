@@ -1,10 +1,10 @@
 package com.threegap.bitnagil.domain.writeroutine.usecase
 
-import com.threegap.bitnagil.domain.writeroutine.model.Date
 import com.threegap.bitnagil.domain.writeroutine.model.RepeatDay
 import com.threegap.bitnagil.domain.writeroutine.model.RoutineUpdateType
-import com.threegap.bitnagil.domain.writeroutine.model.Time
 import com.threegap.bitnagil.domain.writeroutine.repository.WriteRoutineRepository
+import java.time.LocalDate
+import java.time.LocalTime
 import javax.inject.Inject
 
 class EditRoutineUseCase @Inject constructor(
@@ -15,9 +15,9 @@ class EditRoutineUseCase @Inject constructor(
         routineUpdateType: RoutineUpdateType,
         name: String,
         repeatDay: List<RepeatDay>,
-        startTime: Time,
-        startDate: Date,
-        endDate: Date,
+        startTime: LocalTime,
+        startDate: LocalDate,
+        endDate: LocalDate,
         subRoutines: List<String>,
     ): Result<Unit> {
         return writeRoutineRepository.editRoutine(
