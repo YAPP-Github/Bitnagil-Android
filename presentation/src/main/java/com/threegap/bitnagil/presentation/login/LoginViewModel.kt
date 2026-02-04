@@ -3,6 +3,7 @@ package com.threegap.bitnagil.presentation.login
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.kakao.sdk.auth.model.OAuthToken
+import com.threegap.bitnagil.domain.auth.model.UserRole
 import com.threegap.bitnagil.domain.auth.usecase.LoginUseCase
 import com.threegap.bitnagil.presentation.login.model.LoginSideEffect
 import com.threegap.bitnagil.presentation.login.model.LoginState
@@ -37,8 +38,7 @@ class LoginViewModel @Inject constructor(
         subIntent {
             loginUseCase(socialAccessToken = token.accessToken, socialType = KAKAO).fold(
                 onSuccess = {
-                    val isGuest = it.role.isGuest()
-                    if (isGuest) {
+                    if (it.role == UserRole.GUEST) {
                         postSideEffect(LoginSideEffect.NavigateToTermsAgreement)
                     } else {
                         postSideEffect(LoginSideEffect.NavigateToHome)
