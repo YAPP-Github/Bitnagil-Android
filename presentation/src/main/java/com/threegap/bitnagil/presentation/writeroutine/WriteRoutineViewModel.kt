@@ -393,9 +393,9 @@ class WriteRoutineViewModel @AssistedInject constructor(
                 val currentRoutineId = routineId ?: return@intent
                 val subRoutines = if (currentState.selectNotUseSubRoutines) emptyList() else currentState.subRoutineNames.filter { it.isNotEmpty() }
                 val routineUpdateType = if (writeRoutineType.updateRoutineFromNowDate) {
-                    RoutineUpdateType.Today
+                    RoutineUpdateType.TODAY
                 } else {
-                    RoutineUpdateType.Tomorrow
+                    RoutineUpdateType.TOMORROW
                 }
 
                 reduce {

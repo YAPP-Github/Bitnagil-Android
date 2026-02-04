@@ -54,7 +54,7 @@ class WriteRoutineRepositoryImpl @Inject constructor(
     ): Result<Unit> {
         val request = EditRoutineRequest(
             routineId = routineId,
-            updateApplyDate = routineUpdateType.value,
+            updateApplyDate = routineUpdateType,
             routineName = name,
             repeatDay = repeatDay.map { it.fullName },
             executionTime = startTime.toString(),
