@@ -15,13 +15,13 @@ enum class Day(val text: String) {
 
     fun toRepeatDay(): RepeatDay {
         return when (this) {
-            MON -> RepeatDay.MON
-            TUE -> RepeatDay.TUE
-            WED -> RepeatDay.WED
-            THU -> RepeatDay.THU
-            FRI -> RepeatDay.FRI
-            SAT -> RepeatDay.SAT
-            SUN -> RepeatDay.SUN
+            MON -> RepeatDay.MONDAY
+            TUE -> RepeatDay.TUESDAY
+            WED -> RepeatDay.WEDNESDAY
+            THU -> RepeatDay.THURSDAY
+            FRI -> RepeatDay.FRIDAY
+            SAT -> RepeatDay.SATURDAY
+            SUN -> RepeatDay.SUNDAY
         }
     }
 

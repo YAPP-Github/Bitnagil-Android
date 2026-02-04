@@ -341,13 +341,13 @@ class WriteRoutineViewModel @AssistedInject constructor(
 
         val repeatDay = when (currentState.repeatType) {
             RepeatType.DAILY -> listOf(
-                RepeatDay.MON,
-                RepeatDay.TUE,
-                RepeatDay.WED,
-                RepeatDay.THU,
-                RepeatDay.FRI,
-                RepeatDay.SAT,
-                RepeatDay.SUN,
+                RepeatDay.MONDAY,
+                RepeatDay.TUESDAY,
+                RepeatDay.WEDNESDAY,
+                RepeatDay.THURSDAY,
+                RepeatDay.FRIDAY,
+                RepeatDay.SATURDAY,
+                RepeatDay.SUNDAY,
             )
 
             RepeatType.DAY ->
