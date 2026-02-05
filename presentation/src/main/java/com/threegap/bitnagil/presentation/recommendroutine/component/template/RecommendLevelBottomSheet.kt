@@ -19,6 +19,8 @@ import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendLevel
+import com.threegap.bitnagil.presentation.common.extension.displayLevel
+import com.threegap.bitnagil.presentation.common.extension.displayTitle
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,8 +49,8 @@ fun RecommendLevelBottomSheet(
         ) {
             RecommendLevel.entries.forEachIndexed { index, recommendLevel ->
                 LevelOption(
-                    optionLevel = recommendLevel.koreanLevel,
-                    optionText = recommendLevel.displayName,
+                    optionLevel = recommendLevel.displayLevel(),
+                    optionText = recommendLevel.displayTitle(),
                     isSelected = selectedRecommendLevel == recommendLevel,
                     onClick = {
                         val newLevel = if (selectedRecommendLevel == recommendLevel) null else recommendLevel
