@@ -22,7 +22,7 @@ import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIconButton
 import com.threegap.bitnagil.domain.routine.model.DayOfWeek
-import com.threegap.bitnagil.domain.routine.model.DayOfWeek.Companion.formatRepeatDays
+import com.threegap.bitnagil.presentation.common.extension.displayTitle
 import com.threegap.bitnagil.presentation.routinelist.model.RoutineUiModel
 import com.threegap.bitnagil.presentation.routinelist.model.getColor
 import com.threegap.bitnagil.presentation.routinelist.model.getIcon
@@ -132,7 +132,7 @@ fun RoutineDetailsCard(
             verticalArrangement = Arrangement.spacedBy(2.dp),
         ) {
             Text(
-                text = "반복: ${routine.repeatDay.formatRepeatDays()}",
+                text = "반복: ${routine.repeatDay.displayTitle()}",
                 color = BitnagilTheme.colors.coolGray40,
                 style = infoTextStyle,
             )

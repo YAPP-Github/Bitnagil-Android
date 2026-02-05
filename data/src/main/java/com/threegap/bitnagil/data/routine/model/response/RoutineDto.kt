@@ -13,7 +13,7 @@ data class RoutineDto(
     @SerialName("routineName")
     val routineName: String,
     @SerialName("repeatDay")
-    val repeatDay: List<String>,
+    val repeatDay: List<DayOfWeek>,
     @SerialName("executionTime")
     val executionTime: String,
     @SerialName("routineDate")
@@ -25,7 +25,7 @@ data class RoutineDto(
     @SerialName("subRoutineCompleteYn")
     val subRoutineCompleteYn: List<Boolean>,
     @SerialName("recommendedRoutineType")
-    val recommendedRoutineType: String?,
+    val recommendedRoutineType: RecommendedRoutineType?,
     @SerialName("routineDeletedYn")
     val routineDeletedYn: Boolean,
     @SerialName("routineStartDate")
@@ -38,13 +38,13 @@ fun RoutineDto.toDomain(): Routine =
     Routine(
         id = this.routineId,
         name = this.routineName,
-        repeatDays = this.repeatDay.map { DayOfWeek.fromString(it) },
+        repeatDays = this.repeatDay.map { it },
         executionTime = this.executionTime,
         routineDate = this.routineDate,
         isCompleted = this.routineCompleteYn,
         subRoutineNames = this.subRoutineNames,
         subRoutineCompletionStates = this.subRoutineCompleteYn,
-        recommendedRoutineType = RecommendedRoutineType.fromString(this.recommendedRoutineType),
+        recommendedRoutineType = this.recommendedRoutineType,
         isDeleted = routineDeletedYn,
         startDate = this.routineStartDate,
         endDate = this.routineEndDate,

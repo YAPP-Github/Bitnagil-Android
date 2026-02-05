@@ -1,5 +1,8 @@
 package com.threegap.bitnagil.domain.routine.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 enum class RecommendedRoutineType {
     PERSONALIZED,
     OUTING,
@@ -9,9 +12,4 @@ enum class RecommendedRoutineType {
     GROW,
     OUTING_REPORT,
     ;
-
-    companion object {
-        fun fromString(categoryName: String?): RecommendedRoutineType? =
-            RecommendedRoutineType.entries.find { it.name == categoryName }
-    }
 }

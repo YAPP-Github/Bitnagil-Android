@@ -11,7 +11,7 @@ data class RecommendRoutinesDto(
     @SerialName("recommendedRoutines")
     val recommendedRoutinesByCategory: Map<String, List<RecommendedRoutineDto>>,
     @SerialName("emotionMarbleType")
-    val emotionMarbleType: String?,
+    val emotionMarbleType: EmotionMarbleType?,
 )
 
 fun RecommendRoutinesDto.toDomain(): RecommendRoutines =
@@ -19,5 +19,5 @@ fun RecommendRoutinesDto.toDomain(): RecommendRoutines =
         recommendRoutinesByCategory = this.recommendedRoutinesByCategory.map { (categoryString, routines) ->
             RecommendCategory.fromString(categoryString) to routines.map { it.toDomain() }
         }.toMap(),
-        emotionMarbleType = this.emotionMarbleType?.let { EmotionMarbleType.valueOf(it) },
+        emotionMarbleType = this.emotionMarbleType,
     )
