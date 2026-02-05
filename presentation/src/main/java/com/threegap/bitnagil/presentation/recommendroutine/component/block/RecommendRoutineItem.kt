@@ -22,6 +22,8 @@ import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendCategory
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendLevel
+import com.threegap.bitnagil.presentation.common.extension.displayColor
+import com.threegap.bitnagil.presentation.common.extension.displayIcon
 import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutineUiModel
 import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendSubRoutineUiModel
 
@@ -47,11 +49,11 @@ fun RecommendRoutineItem(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             BitnagilIcon(
-                id = routine.icon,
+                id = routine.recommendedRoutineType?.displayIcon ?: R.drawable.ic_shine,
                 tint = null,
                 modifier = Modifier
                     .background(
-                        color = routine.color,
+                        color = routine.recommendedRoutineType?.displayColor ?: BitnagilTheme.colors.yellow10,
                         shape = RoundedCornerShape(4.dp),
                     )
                     .padding(4.dp),

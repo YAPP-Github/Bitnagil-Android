@@ -8,6 +8,7 @@ import com.threegap.bitnagil.domain.writeroutine.model.RepeatDay
 import com.threegap.bitnagil.domain.writeroutine.model.RoutineUpdateType
 import com.threegap.bitnagil.domain.writeroutine.usecase.EditRoutineUseCase
 import com.threegap.bitnagil.domain.writeroutine.usecase.RegisterRoutineUseCase
+import com.threegap.bitnagil.presentation.common.extension.displayTitle
 import com.threegap.bitnagil.presentation.writeroutine.model.Date
 import com.threegap.bitnagil.presentation.writeroutine.model.Day
 import com.threegap.bitnagil.presentation.writeroutine.model.RepeatType
@@ -146,7 +147,7 @@ class WriteRoutineViewModel @AssistedInject constructor(
                             oldSubRoutines.getOrNull(2)?.name ?: "",
                         ),
                         loading = false,
-                        recommendedRoutineType = routine.recommendedRoutineType.categoryName,
+                        recommendedRoutineType = routine.recommendedRoutineType.displayTitle,
                     )
                 }
             },

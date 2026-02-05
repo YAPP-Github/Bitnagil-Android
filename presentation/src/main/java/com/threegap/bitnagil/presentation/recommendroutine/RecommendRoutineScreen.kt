@@ -33,6 +33,8 @@ import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendCategory
 import com.threegap.bitnagil.presentation.common.extension.displayLevel
+import com.threegap.bitnagil.presentation.common.extension.displayTitle
+import com.threegap.bitnagil.presentation.common.extension.isVisible
 import com.threegap.bitnagil.presentation.recommendroutine.component.atom.RecommendCategoryChip
 import com.threegap.bitnagil.presentation.recommendroutine.component.block.EmotionRecommendRoutineButton
 import com.threegap.bitnagil.presentation.recommendroutine.component.block.RecommendRoutineItem
@@ -110,7 +112,7 @@ private fun RecommendRoutineScreen(
                 key = { it.name },
             ) { category ->
                 RecommendCategoryChip(
-                    categoryName = category.displayName,
+                    categoryName = category.displayTitle,
                     isSelected = uiState.selectedCategory == category,
                     onCategorySelected = {
                         onCategorySelected(category)
