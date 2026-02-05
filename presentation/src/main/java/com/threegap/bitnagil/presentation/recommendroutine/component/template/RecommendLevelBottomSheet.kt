@@ -49,8 +49,8 @@ fun RecommendLevelBottomSheet(
         ) {
             RecommendLevel.entries.forEachIndexed { index, recommendLevel ->
                 LevelOption(
-                    optionLevel = recommendLevel.displayLevel(),
-                    optionText = recommendLevel.displayTitle(),
+                    optionLevel = recommendLevel.displayLevel,
+                    optionText = recommendLevel.displayTitle,
                     isSelected = selectedRecommendLevel == recommendLevel,
                     onClick = {
                         val newLevel = if (selectedRecommendLevel == recommendLevel) null else recommendLevel

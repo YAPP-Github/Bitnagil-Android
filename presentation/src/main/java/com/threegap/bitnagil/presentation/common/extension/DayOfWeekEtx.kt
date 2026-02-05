@@ -2,8 +2,8 @@ package com.threegap.bitnagil.presentation.common.extension
 
 import com.threegap.bitnagil.domain.routine.model.DayOfWeek
 
-fun DayOfWeek.displayTitle(): String =
-    when (this) {
+val DayOfWeek.displayTitle: String
+    get() = when (this) {
         DayOfWeek.MONDAY -> "월"
         DayOfWeek.TUESDAY -> "화"
         DayOfWeek.WEDNESDAY -> "수"
@@ -13,8 +13,9 @@ fun DayOfWeek.displayTitle(): String =
         DayOfWeek.SUNDAY -> "일"
     }
 
-fun List<DayOfWeek>.displayTitle(): String {
-    if (this.isEmpty()) return "x"
-    return this.sortedBy { it.ordinal }
-        .joinToString(", ") { it.displayTitle() }
-}
+val List<DayOfWeek>.displayTitle: String
+    get() {
+        if (this.isEmpty()) return "x"
+        return this.sortedBy { it.ordinal }
+            .joinToString(", ") { it.displayTitle }
+    }

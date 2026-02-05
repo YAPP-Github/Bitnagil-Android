@@ -132,7 +132,7 @@ fun RoutineDetailsCard(
             verticalArrangement = Arrangement.spacedBy(2.dp),
         ) {
             Text(
-                text = "반복: ${routine.repeatDay.displayTitle()}",
+                text = "반복: ${routine.repeatDay.displayTitle}",
                 color = BitnagilTheme.colors.coolGray40,
                 style = infoTextStyle,
             )

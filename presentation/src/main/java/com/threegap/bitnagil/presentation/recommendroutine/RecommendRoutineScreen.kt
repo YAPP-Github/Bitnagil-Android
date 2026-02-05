@@ -155,7 +155,7 @@ private fun RecommendRoutineScreen(
                     .clickableWithoutRipple { onShowDifficultyBottomSheet() },
             ) {
                 Text(
-                    text = "난이도 ${uiState.selectedRecommendLevel?.displayLevel() ?: "선택"}",
+                    text = "난이도 ${uiState.selectedRecommendLevel?.displayLevel ?: "선택"}",
                     color = BitnagilTheme.colors.coolGray40,
                     style = BitnagilTheme.typography.body2Medium,
                     modifier = Modifier.padding(start = 10.dp),
