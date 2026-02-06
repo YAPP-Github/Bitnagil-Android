@@ -38,7 +38,7 @@ fun RoutineDto.toDomain(): Routine =
     Routine(
         id = this.routineId,
         name = this.routineName,
-        repeatDays = this.repeatDay.map { it },
+        repeatDays = this.repeatDay,
         executionTime = this.executionTime,
         routineDate = this.routineDate,
         isCompleted = this.routineCompleteYn,
