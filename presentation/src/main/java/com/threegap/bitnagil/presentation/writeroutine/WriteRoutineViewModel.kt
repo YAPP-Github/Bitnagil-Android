@@ -8,6 +8,7 @@ import com.threegap.bitnagil.domain.writeroutine.model.RepeatDay
 import com.threegap.bitnagil.domain.writeroutine.model.RoutineUpdateType
 import com.threegap.bitnagil.domain.writeroutine.usecase.EditRoutineUseCase
 import com.threegap.bitnagil.domain.writeroutine.usecase.RegisterRoutineUseCase
+import com.threegap.bitnagil.presentation.common.extension.displayTitle
 import com.threegap.bitnagil.presentation.writeroutine.model.Date
 import com.threegap.bitnagil.presentation.writeroutine.model.Day
 import com.threegap.bitnagil.presentation.writeroutine.model.RepeatType
@@ -146,7 +147,7 @@ class WriteRoutineViewModel @AssistedInject constructor(
                             oldSubRoutines.getOrNull(2)?.name ?: "",
                         ),
                         loading = false,
-                        recommendedRoutineType = routine.recommendedRoutineType.categoryName,
+                        recommendedRoutineType = routine.recommendedRoutineType.displayTitle,
                     )
                 }
             },
@@ -341,13 +342,13 @@ class WriteRoutineViewModel @AssistedInject constructor(
 
         val repeatDay = when (currentState.repeatType) {
             RepeatType.DAILY -> listOf(
-                RepeatDay.MON,
-                RepeatDay.TUE,
-                RepeatDay.WED,
-                RepeatDay.THU,
-                RepeatDay.FRI,
-                RepeatDay.SAT,
-                RepeatDay.SUN,
+                RepeatDay.MONDAY,
+                RepeatDay.TUESDAY,
+                RepeatDay.WEDNESDAY,
+                RepeatDay.THURSDAY,
+                RepeatDay.FRIDAY,
+                RepeatDay.SATURDAY,
+                RepeatDay.SUNDAY,
             )
 
             RepeatType.DAY ->
@@ -393,9 +394,9 @@ class WriteRoutineViewModel @AssistedInject constructor(
                 val currentRoutineId = routineId ?: return@intent
                 val subRoutines = if (currentState.selectNotUseSubRoutines) emptyList() else currentState.subRoutineNames.filter { it.isNotEmpty() }
                 val routineUpdateType = if (writeRoutineType.updateRoutineFromNowDate) {
-                    RoutineUpdateType.Today
+                    RoutineUpdateType.TODAY
                 } else {
-                    RoutineUpdateType.Tomorrow
+                    RoutineUpdateType.TOMORROW
                 }
 
                 reduce {

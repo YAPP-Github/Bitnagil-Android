@@ -15,22 +15,22 @@ data class RecommendedRoutineDto(
     @SerialName("recommendedRoutineDescription")
     val recommendedRoutineDescription: String,
     @SerialName("recommendedRoutineLevel")
-    val recommendedRoutineLevel: String,
+    val recommendedRoutineLevel: RecommendLevel,
     @SerialName("executionTime")
     val executionTime: String,
     @SerialName("recommendedRoutineType")
-    val recommendedRoutineType: String,
+    val recommendedRoutineType: RecommendCategory,
     @SerialName("recommendedSubRoutineSearchResult")
     val recommendedSubRoutineSearchResult: List<RecommendedSubRoutineDto>,
 )
 
 fun RecommendedRoutineDto.toDomain(): RecommendRoutine =
     RecommendRoutine(
-        id = recommendedRoutineId,
-        name = recommendedRoutineName,
-        description = recommendedRoutineDescription,
-        level = RecommendLevel.fromString(recommendedRoutineLevel),
-        executionTime = executionTime,
-        recommendedRoutineType = RecommendCategory.fromString(recommendedRoutineType),
-        recommendSubRoutines = recommendedSubRoutineSearchResult.map { it.toDomain() },
+        id = this.recommendedRoutineId,
+        name = this.recommendedRoutineName,
+        description = this.recommendedRoutineDescription,
+        level = this.recommendedRoutineLevel,
+        executionTime = this.executionTime,
+        recommendedRoutineType = this.recommendedRoutineType,
+        recommendSubRoutines = this.recommendedSubRoutineSearchResult.map { it.toDomain() },
     )

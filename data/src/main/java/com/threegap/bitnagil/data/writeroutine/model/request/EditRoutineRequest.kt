@@ -1,5 +1,7 @@
 package com.threegap.bitnagil.data.writeroutine.model.request
 
+import com.threegap.bitnagil.domain.writeroutine.model.RepeatDay
+import com.threegap.bitnagil.domain.writeroutine.model.RoutineUpdateType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -8,11 +10,11 @@ data class EditRoutineRequest(
     @SerialName("routineId")
     val routineId: String,
     @SerialName("updateApplyDate")
-    val updateApplyDate: String,
+    val updateApplyDate: RoutineUpdateType,
     @SerialName("routineName")
     val routineName: String,
     @SerialName("repeatDay")
-    val repeatDay: List<String>,
+    val repeatDay: List<RepeatDay>,
     @SerialName("routineStartDate")
     val routineStartDate: String,
     @SerialName("routineEndDate")

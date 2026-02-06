@@ -9,15 +9,15 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class RecommendRoutinesDto(
     @SerialName("recommendedRoutines")
-    val recommendedRoutinesByCategory: Map<String, List<RecommendedRoutineDto>>,
+    val recommendedRoutinesByCategory: Map<RecommendCategory, List<RecommendedRoutineDto>>,
     @SerialName("emotionMarbleType")
-    val emotionMarbleType: String?,
+    val emotionMarbleType: EmotionMarbleType?,
 )
 
 fun RecommendRoutinesDto.toDomain(): RecommendRoutines =
     RecommendRoutines(
-        recommendRoutinesByCategory = this.recommendedRoutinesByCategory.map { (categoryString, routines) ->
-            RecommendCategory.fromString(categoryString) to routines.map { it.toDomain() }
+        recommendRoutinesByCategory = this.recommendedRoutinesByCategory.map { (category, routines) ->
+            category to routines.map { it.toDomain() }
         }.toMap(),
-        emotionMarbleType = this.emotionMarbleType?.let { EmotionMarbleType.valueOf(it) },
+        emotionMarbleType = this.emotionMarbleType,
     )

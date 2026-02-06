@@ -1,5 +1,6 @@
 package com.threegap.bitnagil.domain.writeroutine.model
 
-enum class RoutineUpdateType(val value: String) {
-    Today("TODAY"), Tomorrow("TOMORROW")
-}
+import kotlinx.serialization.Serializable
+
+@Serializable
+enum class RoutineUpdateType { TODAY, TOMORROW }

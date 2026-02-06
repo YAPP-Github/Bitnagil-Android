@@ -4,14 +4,13 @@ import com.threegap.bitnagil.data.auth.model.request.TermsAgreementRequestDto
 import com.threegap.bitnagil.data.auth.model.response.LoginResponseDto
 import com.threegap.bitnagil.domain.auth.model.AuthSession
 import com.threegap.bitnagil.domain.auth.model.TermsAgreement
-import com.threegap.bitnagil.domain.auth.model.UserRole
 
 // toDomain
 internal fun LoginResponseDto.toDomain() =
     AuthSession(
         accessToken = this.accessToken,
         refreshToken = this.refreshToken,
-        role = UserRole.fromString(this.role),
+        role = this.role,
     )
 
 // toDto
