@@ -36,7 +36,7 @@ fun ToggleSwitch(
     )
 
     val trackColor by animateColorAsState(
-        targetValue = if (checked) BitnagilTheme.colors.navy500 else BitnagilTheme.colors.coolGray95,
+        targetValue = if (checked) BitnagilTheme.colors.coolGray10 else BitnagilTheme.colors.coolGray95,
         animationSpec = tween(durationMillis = 200),
     )
 

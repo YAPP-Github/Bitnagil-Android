@@ -61,7 +61,7 @@ fun OnBoardingAbstractTemplate(
     ) {
         Text(
             text = title,
-            color = BitnagilTheme.colors.navy500,
+            color = BitnagilTheme.colors.coolGray10,
             style = BitnagilTheme.typography.title2Bold,
         )
 
