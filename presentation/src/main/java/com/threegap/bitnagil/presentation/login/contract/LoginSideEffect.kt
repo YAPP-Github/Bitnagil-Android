@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.login.model
+package com.threegap.bitnagil.presentation.login.contract
 
 sealed interface LoginSideEffect {
     data object NavigateToHome : LoginSideEffect

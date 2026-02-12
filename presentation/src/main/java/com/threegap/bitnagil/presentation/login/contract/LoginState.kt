@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.login.model
+package com.threegap.bitnagil.presentation.login.contract
 
 data class LoginState(
     val isLoading: Boolean,

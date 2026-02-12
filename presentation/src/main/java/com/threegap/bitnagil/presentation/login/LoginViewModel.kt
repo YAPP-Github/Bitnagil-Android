@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import com.kakao.sdk.auth.model.OAuthToken
 import com.threegap.bitnagil.domain.auth.model.UserRole
 import com.threegap.bitnagil.domain.auth.usecase.LoginUseCase
-import com.threegap.bitnagil.presentation.login.model.LoginSideEffect
-import com.threegap.bitnagil.presentation.login.model.LoginState
+import com.threegap.bitnagil.presentation.login.contract.LoginSideEffect
+import com.threegap.bitnagil.presentation.login.contract.LoginState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
