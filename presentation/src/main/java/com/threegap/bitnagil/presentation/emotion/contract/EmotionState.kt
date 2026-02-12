@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.emotion.model.mvi
+package com.threegap.bitnagil.presentation.emotion.contract
 
 import android.os.Parcelable
 import androidx.compose.runtime.Immutable

@@ -9,8 +9,8 @@ import com.threegap.bitnagil.domain.onboarding.usecase.RegisterRecommendOnBoardi
 import com.threegap.bitnagil.presentation.emotion.model.EmotionRecommendRoutineUiModel
 import com.threegap.bitnagil.presentation.emotion.model.EmotionScreenStep
 import com.threegap.bitnagil.presentation.emotion.model.EmotionUiModel
-import com.threegap.bitnagil.presentation.emotion.model.mvi.EmotionSideEffect
-import com.threegap.bitnagil.presentation.emotion.model.mvi.EmotionState
+import com.threegap.bitnagil.presentation.emotion.contract.EmotionSideEffect
+import com.threegap.bitnagil.presentation.emotion.contract.EmotionState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

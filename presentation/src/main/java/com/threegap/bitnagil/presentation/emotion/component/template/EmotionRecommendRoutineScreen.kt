@@ -25,7 +25,7 @@ import com.threegap.bitnagil.presentation.emotion.model.EmotionImageUiModel
 import com.threegap.bitnagil.presentation.emotion.model.EmotionRecommendRoutineUiModel
 import com.threegap.bitnagil.presentation.emotion.model.EmotionScreenStep
 import com.threegap.bitnagil.presentation.emotion.model.EmotionUiModel
-import com.threegap.bitnagil.presentation.emotion.model.mvi.EmotionState
+import com.threegap.bitnagil.presentation.emotion.contract.EmotionState
 
 @Composable
 fun EmotionRecommendRoutineScreen(

@@ -65,7 +65,7 @@ import com.threegap.bitnagil.presentation.emotion.component.atom.EmotionMarbleIm
 import com.threegap.bitnagil.presentation.emotion.model.EmotionImageUiModel
 import com.threegap.bitnagil.presentation.emotion.model.EmotionScreenStep
 import com.threegap.bitnagil.presentation.emotion.model.EmotionUiModel
-import com.threegap.bitnagil.presentation.emotion.model.mvi.EmotionState
+import com.threegap.bitnagil.presentation.emotion.contract.EmotionState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
