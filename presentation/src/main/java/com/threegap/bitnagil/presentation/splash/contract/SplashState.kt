@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.splash.model
+package com.threegap.bitnagil.presentation.splash.contract
 
 import com.threegap.bitnagil.domain.auth.model.UserRole
 

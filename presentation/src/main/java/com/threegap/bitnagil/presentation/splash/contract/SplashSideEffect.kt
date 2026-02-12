@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.splash.model
+package com.threegap.bitnagil.presentation.splash.contract
 
 sealed interface SplashSideEffect {
     data object NavigateToLogin : SplashSideEffect
