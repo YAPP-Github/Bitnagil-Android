@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.routinelist.model
+package com.threegap.bitnagil.presentation.routinelist.contract
 
 sealed interface RoutineListSideEffect {
     data object NavigateToBack : RoutineListSideEffect

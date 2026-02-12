@@ -26,8 +26,8 @@ import com.threegap.bitnagil.presentation.routinelist.component.template.EditCon
 import com.threegap.bitnagil.presentation.routinelist.component.template.EmptyRoutineListView
 import com.threegap.bitnagil.presentation.routinelist.component.template.RoutineDetailsCard
 import com.threegap.bitnagil.presentation.routinelist.component.template.WeeklyDatePicker
-import com.threegap.bitnagil.presentation.routinelist.model.RoutineListSideEffect
-import com.threegap.bitnagil.presentation.routinelist.model.RoutineListState
+import com.threegap.bitnagil.presentation.routinelist.contract.RoutineListSideEffect
+import com.threegap.bitnagil.presentation.routinelist.contract.RoutineListState
 import com.threegap.bitnagil.presentation.routinelist.model.RoutineUiModel
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect

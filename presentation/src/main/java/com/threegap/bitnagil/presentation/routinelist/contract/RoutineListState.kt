@@ -1,6 +1,8 @@
-package com.threegap.bitnagil.presentation.routinelist.model
+package com.threegap.bitnagil.presentation.routinelist.contract
 
 import com.threegap.bitnagil.presentation.home.util.getCurrentWeekDays
+import com.threegap.bitnagil.presentation.routinelist.model.RoutineUiModel
+import com.threegap.bitnagil.presentation.routinelist.model.RoutinesUiModel
 import java.time.LocalDate
 
 data class RoutineListState(
