@@ -28,7 +28,7 @@ import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIconButton
 import com.threegap.bitnagil.designsystem.component.block.BitnagilOptionButton
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
-import com.threegap.bitnagil.presentation.mypage.model.MyPageState
+import com.threegap.bitnagil.presentation.mypage.contract.MyPageState
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
