@@ -7,7 +7,7 @@ data class MyPageState(
     companion object {
         val INIT = MyPageState(
             name = "",
-            profileUrl = ""
+            profileUrl = "",
         )
     }
 }

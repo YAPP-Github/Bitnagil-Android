@@ -2,9 +2,9 @@ package com.threegap.bitnagil.presentation.withdrawal
 
 import androidx.lifecycle.ViewModel
 import com.threegap.bitnagil.domain.auth.usecase.WithdrawalUseCase
-import com.threegap.bitnagil.presentation.withdrawal.model.WithdrawalReason
 import com.threegap.bitnagil.presentation.withdrawal.contract.WithdrawalSideEffect
 import com.threegap.bitnagil.presentation.withdrawal.contract.WithdrawalState
+import com.threegap.bitnagil.presentation.withdrawal.model.WithdrawalReason
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost

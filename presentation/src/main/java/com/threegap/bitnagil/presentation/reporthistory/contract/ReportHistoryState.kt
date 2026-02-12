@@ -41,7 +41,8 @@ data class ReportHistoryState(
     val reportProcessWithCounts: List<ReportProcessWithCount> = listOf(
         ReportProcessWithCount(
             ReportProcess.Total,
-            reportHistoriesPerDays.sumOf { it.reports.size }),
+            reportHistoriesPerDays.sumOf { it.reports.size },
+        ),
         ReportProcessWithCount(
             ReportProcess.Reported,
             reportHistoriesPerDays.sumOf { it.reports.filter { report -> report.process == ReportProcess.Reported }.size },

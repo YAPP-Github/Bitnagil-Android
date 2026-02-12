@@ -15,11 +15,11 @@ import com.threegap.bitnagil.presentation.common.toast.GlobalBitnagilToast
 import com.threegap.bitnagil.presentation.onboarding.component.template.OnBoardingAbstractTemplate
 import com.threegap.bitnagil.presentation.onboarding.component.template.OnBoardingIntroTemplate
 import com.threegap.bitnagil.presentation.onboarding.component.template.OnBoardingSelectTemplate
+import com.threegap.bitnagil.presentation.onboarding.contract.OnBoardingSideEffect
+import com.threegap.bitnagil.presentation.onboarding.contract.OnBoardingState
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingItem
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingPageInfo
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingSetType
-import com.threegap.bitnagil.presentation.onboarding.contract.OnBoardingSideEffect
-import com.threegap.bitnagil.presentation.onboarding.contract.OnBoardingState
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 

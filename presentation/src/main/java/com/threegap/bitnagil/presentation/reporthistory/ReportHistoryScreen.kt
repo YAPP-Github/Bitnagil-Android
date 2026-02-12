@@ -34,9 +34,9 @@ import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.reporthistory.component.block.ReportHistoryItem
 import com.threegap.bitnagil.presentation.reporthistory.component.template.ReportCategoryBottomSheet
+import com.threegap.bitnagil.presentation.reporthistory.contract.ReportHistoryState
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportCategory
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportHistoriesPerDayUiModel
-import com.threegap.bitnagil.presentation.reporthistory.contract.ReportHistoryState
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportHistoryUiModel
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportProcess
 import com.threegap.bitnagil.presentation.reporthistory.util.toPresentationFormat

@@ -9,12 +9,12 @@ import com.threegap.bitnagil.domain.onboarding.usecase.GetRecommendOnBoardingRou
 import com.threegap.bitnagil.domain.onboarding.usecase.GetUserOnBoardingUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.RegisterRecommendOnBoardingRoutinesUseCase
 import com.threegap.bitnagil.domain.user.usecase.FetchUserProfileUseCase
+import com.threegap.bitnagil.presentation.onboarding.contract.OnBoardingSideEffect
+import com.threegap.bitnagil.presentation.onboarding.contract.OnBoardingState
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingAbstractTextItem
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingItem
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingPageInfo
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingSetType
-import com.threegap.bitnagil.presentation.onboarding.contract.OnBoardingSideEffect
-import com.threegap.bitnagil.presentation.onboarding.contract.OnBoardingState
 import com.threegap.bitnagil.presentation.onboarding.model.navarg.OnBoardingScreenArg
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory

@@ -9,6 +9,8 @@ import com.threegap.bitnagil.domain.writeroutine.model.RoutineUpdateType
 import com.threegap.bitnagil.domain.writeroutine.usecase.EditRoutineUseCase
 import com.threegap.bitnagil.domain.writeroutine.usecase.RegisterRoutineUseCase
 import com.threegap.bitnagil.presentation.common.extension.displayTitle
+import com.threegap.bitnagil.presentation.writeroutine.contract.WriteRoutineSideEffect
+import com.threegap.bitnagil.presentation.writeroutine.contract.WriteRoutineState
 import com.threegap.bitnagil.presentation.writeroutine.model.Date
 import com.threegap.bitnagil.presentation.writeroutine.model.Day
 import com.threegap.bitnagil.presentation.writeroutine.model.RepeatType
@@ -16,8 +18,6 @@ import com.threegap.bitnagil.presentation.writeroutine.model.SelectableDay
 import com.threegap.bitnagil.presentation.writeroutine.model.SubRoutine
 import com.threegap.bitnagil.presentation.writeroutine.model.Time
 import com.threegap.bitnagil.presentation.writeroutine.model.WriteRoutineType
-import com.threegap.bitnagil.presentation.writeroutine.contract.WriteRoutineSideEffect
-import com.threegap.bitnagil.presentation.writeroutine.contract.WriteRoutineState
 import com.threegap.bitnagil.presentation.writeroutine.model.navarg.WriteRoutineScreenArg
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory

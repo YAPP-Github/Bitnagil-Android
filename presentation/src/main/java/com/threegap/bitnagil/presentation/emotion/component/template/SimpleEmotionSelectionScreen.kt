@@ -22,10 +22,10 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.emotion.component.atom.EmotionMarbleImage
+import com.threegap.bitnagil.presentation.emotion.contract.EmotionState
 import com.threegap.bitnagil.presentation.emotion.model.EmotionImageUiModel
 import com.threegap.bitnagil.presentation.emotion.model.EmotionScreenStep
 import com.threegap.bitnagil.presentation.emotion.model.EmotionUiModel
-import com.threegap.bitnagil.presentation.emotion.contract.EmotionState
 
 @Composable
 fun SimpleEmotionSelectionScreen(

@@ -21,11 +21,11 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilSelectButton
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButtonColor
+import com.threegap.bitnagil.presentation.emotion.contract.EmotionState
 import com.threegap.bitnagil.presentation.emotion.model.EmotionImageUiModel
 import com.threegap.bitnagil.presentation.emotion.model.EmotionRecommendRoutineUiModel
 import com.threegap.bitnagil.presentation.emotion.model.EmotionScreenStep
 import com.threegap.bitnagil.presentation.emotion.model.EmotionUiModel
-import com.threegap.bitnagil.presentation.emotion.contract.EmotionState
 
 @Composable
 fun EmotionRecommendRoutineScreen(
