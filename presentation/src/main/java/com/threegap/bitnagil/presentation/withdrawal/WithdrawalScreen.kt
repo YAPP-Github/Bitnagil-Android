@@ -41,8 +41,8 @@ import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.withdrawal.component.WithdrawalConfirmDialog
 import com.threegap.bitnagil.presentation.withdrawal.model.WithdrawalReason
-import com.threegap.bitnagil.presentation.withdrawal.model.WithdrawalSideEffect
-import com.threegap.bitnagil.presentation.withdrawal.model.WithdrawalState
+import com.threegap.bitnagil.presentation.withdrawal.contract.WithdrawalSideEffect
+import com.threegap.bitnagil.presentation.withdrawal.contract.WithdrawalState
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 

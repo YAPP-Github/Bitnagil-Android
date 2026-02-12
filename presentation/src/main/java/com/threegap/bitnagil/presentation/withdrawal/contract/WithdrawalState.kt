@@ -1,4 +1,6 @@
-package com.threegap.bitnagil.presentation.withdrawal.model
+package com.threegap.bitnagil.presentation.withdrawal.contract
+
+import com.threegap.bitnagil.presentation.withdrawal.model.WithdrawalReason
 
 data class WithdrawalState(
     val isLoading: Boolean,

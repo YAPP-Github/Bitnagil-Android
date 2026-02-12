@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.withdrawal.model
+package com.threegap.bitnagil.presentation.withdrawal.contract
 
 sealed interface WithdrawalSideEffect {
     data object NavigateToBack : WithdrawalSideEffect
