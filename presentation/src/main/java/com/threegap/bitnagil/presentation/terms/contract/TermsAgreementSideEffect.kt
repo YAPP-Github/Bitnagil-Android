@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.terms.model
+package com.threegap.bitnagil.presentation.terms.contract
 
 sealed interface TermsAgreementSideEffect {
     data object NavigateToTermsOfService : TermsAgreementSideEffect

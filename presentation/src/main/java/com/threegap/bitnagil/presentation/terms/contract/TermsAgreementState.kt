@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.terms.model
+package com.threegap.bitnagil.presentation.terms.contract
 
 data class TermsAgreementState(
     val isLoading: Boolean,
