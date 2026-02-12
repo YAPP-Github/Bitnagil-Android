@@ -1,7 +1,8 @@
-package com.threegap.bitnagil.presentation.report.model
+package com.threegap.bitnagil.presentation.report.contract
 
 import android.net.Uri
 import com.threegap.bitnagil.domain.report.model.ReportCategory
+import com.threegap.bitnagil.presentation.report.model.SubmitState
 
 data class ReportState(
     val reportImages: List<Uri>,

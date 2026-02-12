@@ -64,9 +64,9 @@ import com.threegap.bitnagil.presentation.report.component.ReportCategorySelecto
 import com.threegap.bitnagil.presentation.report.component.ReportField
 import com.threegap.bitnagil.presentation.report.component.template.CompleteReportContent
 import com.threegap.bitnagil.presentation.report.component.template.SubmittingReportContent
-import com.threegap.bitnagil.presentation.report.model.ReportSideEffect
-import com.threegap.bitnagil.presentation.report.model.ReportState
-import com.threegap.bitnagil.presentation.report.model.ReportState.Companion.MAX_IMAGE_COUNT
+import com.threegap.bitnagil.presentation.report.contract.ReportSideEffect
+import com.threegap.bitnagil.presentation.report.contract.ReportState
+import com.threegap.bitnagil.presentation.report.contract.ReportState.Companion.MAX_IMAGE_COUNT
 import com.threegap.bitnagil.presentation.report.model.SubmitState
 import com.threegap.bitnagil.presentation.report.model.uiTitle
 import kotlinx.coroutines.delay

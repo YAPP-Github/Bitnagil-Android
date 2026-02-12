@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.report.model
+package com.threegap.bitnagil.presentation.report.contract
 
 sealed interface ReportSideEffect {
     data object NavigateToBack : ReportSideEffect

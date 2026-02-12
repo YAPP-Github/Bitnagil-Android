@@ -25,7 +25,7 @@ import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButtonColor
 import com.threegap.bitnagil.presentation.report.component.CompleteReportCard
-import com.threegap.bitnagil.presentation.report.model.ReportState
+import com.threegap.bitnagil.presentation.report.contract.ReportState
 
 @Composable
 fun CompleteReportContent(
