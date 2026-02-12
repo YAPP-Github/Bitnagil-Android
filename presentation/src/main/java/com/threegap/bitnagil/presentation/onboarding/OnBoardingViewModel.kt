@@ -13,8 +13,8 @@ import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingAbstractTex
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingItem
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingPageInfo
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingSetType
-import com.threegap.bitnagil.presentation.onboarding.model.mvi.OnBoardingSideEffect
-import com.threegap.bitnagil.presentation.onboarding.model.mvi.OnBoardingState
+import com.threegap.bitnagil.presentation.onboarding.contract.OnBoardingSideEffect
+import com.threegap.bitnagil.presentation.onboarding.contract.OnBoardingState
 import com.threegap.bitnagil.presentation.onboarding.model.navarg.OnBoardingScreenArg
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory

@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.onboarding.model.mvi
+package com.threegap.bitnagil.presentation.onboarding.contract
 
 import android.os.Parcelable
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingPageInfo
