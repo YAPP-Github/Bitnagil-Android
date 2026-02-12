@@ -12,8 +12,8 @@ import com.threegap.bitnagil.domain.routine.usecase.RoutineCompletionUseCase
 import com.threegap.bitnagil.domain.routine.usecase.ToggleRoutineUseCase
 import com.threegap.bitnagil.domain.user.usecase.FetchUserProfileUseCase
 import com.threegap.bitnagil.domain.writeroutine.usecase.GetWriteRoutineEventFlowUseCase
-import com.threegap.bitnagil.presentation.home.model.HomeSideEffect
-import com.threegap.bitnagil.presentation.home.model.HomeState
+import com.threegap.bitnagil.presentation.home.contract.HomeSideEffect
+import com.threegap.bitnagil.presentation.home.contract.HomeState
 import com.threegap.bitnagil.presentation.home.model.ToggleStrategy
 import com.threegap.bitnagil.presentation.home.model.toUiModel
 import com.threegap.bitnagil.presentation.home.util.getCurrentWeekDays

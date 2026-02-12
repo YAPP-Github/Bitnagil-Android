@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.home.model
+package com.threegap.bitnagil.presentation.home.contract
 
 sealed interface HomeSideEffect {
     data object NavigateToGuide : HomeSideEffect

@@ -1,5 +1,8 @@
-package com.threegap.bitnagil.presentation.home.model
+package com.threegap.bitnagil.presentation.home.contract
 
+import com.threegap.bitnagil.presentation.home.model.RoutineScheduleUiModel
+import com.threegap.bitnagil.presentation.home.model.RoutineUiModel
+import com.threegap.bitnagil.presentation.home.model.TodayEmotionUiModel
 import com.threegap.bitnagil.presentation.home.util.getCurrentWeekDays
 import java.time.LocalDate
 
