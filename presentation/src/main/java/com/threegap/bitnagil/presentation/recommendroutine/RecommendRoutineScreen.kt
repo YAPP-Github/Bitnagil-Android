@@ -40,8 +40,8 @@ import com.threegap.bitnagil.presentation.recommendroutine.component.block.Emoti
 import com.threegap.bitnagil.presentation.recommendroutine.component.block.RecommendRoutineItem
 import com.threegap.bitnagil.presentation.recommendroutine.component.template.EmptyRecommendRoutineView
 import com.threegap.bitnagil.presentation.recommendroutine.component.template.RecommendLevelBottomSheet
-import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutineSideEffect
-import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutineState
+import com.threegap.bitnagil.presentation.recommendroutine.contract.RecommendRoutineSideEffect
+import com.threegap.bitnagil.presentation.recommendroutine.contract.RecommendRoutineState
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 

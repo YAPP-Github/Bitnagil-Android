@@ -6,8 +6,8 @@ import com.threegap.bitnagil.domain.emotion.usecase.GetEmotionChangeEventFlowUse
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendCategory
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendLevel
 import com.threegap.bitnagil.domain.recommendroutine.usecase.FetchRecommendRoutinesUseCase
-import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutineSideEffect
-import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutineState
+import com.threegap.bitnagil.presentation.recommendroutine.contract.RecommendRoutineSideEffect
+import com.threegap.bitnagil.presentation.recommendroutine.contract.RecommendRoutineState
 import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutineUiModel
 import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutinesUiModel
 import com.threegap.bitnagil.presentation.recommendroutine.model.toUiModel

@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.recommendroutine.model
+package com.threegap.bitnagil.presentation.recommendroutine.contract
 
 sealed interface RecommendRoutineSideEffect {
     data object NavigateToEmotion : RecommendRoutineSideEffect
