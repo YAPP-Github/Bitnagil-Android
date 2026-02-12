@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.guide.model
+package com.threegap.bitnagil.presentation.guide.contract
 
 sealed interface GuideSideEffect {
     data object NavigateToBack : GuideSideEffect
