@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.setting.model.mvi
+package com.threegap.bitnagil.presentation.setting.contract
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
