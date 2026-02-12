@@ -16,8 +16,8 @@ import com.threegap.bitnagil.presentation.writeroutine.model.SelectableDay
 import com.threegap.bitnagil.presentation.writeroutine.model.SubRoutine
 import com.threegap.bitnagil.presentation.writeroutine.model.Time
 import com.threegap.bitnagil.presentation.writeroutine.model.WriteRoutineType
-import com.threegap.bitnagil.presentation.writeroutine.model.mvi.WriteRoutineSideEffect
-import com.threegap.bitnagil.presentation.writeroutine.model.mvi.WriteRoutineState
+import com.threegap.bitnagil.presentation.writeroutine.contract.WriteRoutineSideEffect
+import com.threegap.bitnagil.presentation.writeroutine.contract.WriteRoutineState
 import com.threegap.bitnagil.presentation.writeroutine.model.navarg.WriteRoutineScreenArg
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -42,7 +42,7 @@ class WriteRoutineViewModel @AssistedInject constructor(
 
     override val container: Container<WriteRoutineState, WriteRoutineSideEffect> = container(
         savedStateHandle = savedStateHandle,
-        initialState = WriteRoutineState.Init,
+        initialState = WriteRoutineState.INIT,
     )
 
     private var routineId: String? = null

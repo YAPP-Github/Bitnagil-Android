@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.writeroutine.model.mvi
+package com.threegap.bitnagil.presentation.writeroutine.contract
 
 import android.os.Parcelable
 import com.threegap.bitnagil.presentation.writeroutine.model.Date
@@ -32,7 +32,7 @@ data class WriteRoutineState(
     val recommendedRoutineType: String?,
 ) : Parcelable {
     companion object {
-        val Init = WriteRoutineState(
+        val INIT = WriteRoutineState(
             routineName = "",
             subRoutineNames = listOf("", "", ""),
             selectNotUseSubRoutines = false,
