@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import com.threegap.bitnagil.domain.report.usecase.GetReportUseCase
 import com.threegap.bitnagil.presentation.reportdetail.model.ReportCategory
 import com.threegap.bitnagil.presentation.reportdetail.model.ReportProcess
-import com.threegap.bitnagil.presentation.reportdetail.model.mvi.ReportDetailSideEffect
-import com.threegap.bitnagil.presentation.reportdetail.model.mvi.ReportDetailState
+import com.threegap.bitnagil.presentation.reportdetail.contract.ReportDetailSideEffect
+import com.threegap.bitnagil.presentation.reportdetail.contract.ReportDetailState
 import com.threegap.bitnagil.presentation.reportdetail.model.navarg.ReportDetailScreenArg
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory

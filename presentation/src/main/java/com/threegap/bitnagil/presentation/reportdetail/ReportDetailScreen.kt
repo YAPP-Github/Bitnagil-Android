@@ -29,7 +29,7 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.presentation.reportdetail.component.atom.ReportProcessBadge
 import com.threegap.bitnagil.presentation.reportdetail.component.block.ReportDetailLabeledContent
-import com.threegap.bitnagil.presentation.reportdetail.model.mvi.ReportDetailState
+import com.threegap.bitnagil.presentation.reportdetail.contract.ReportDetailState
 import com.threegap.bitnagil.presentation.reportdetail.util.toPresentationFormatInReportDetail
 import org.orbitmvi.orbit.compose.collectAsState
 

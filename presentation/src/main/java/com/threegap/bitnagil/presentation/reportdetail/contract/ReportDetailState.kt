@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.reportdetail.model.mvi
+package com.threegap.bitnagil.presentation.reportdetail.contract
 
 import com.threegap.bitnagil.presentation.reportdetail.model.ReportCategory
 import com.threegap.bitnagil.presentation.reportdetail.model.ReportProcess
