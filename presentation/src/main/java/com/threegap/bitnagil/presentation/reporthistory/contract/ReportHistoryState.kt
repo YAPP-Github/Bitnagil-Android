@@ -1,4 +1,9 @@
-package com.threegap.bitnagil.presentation.reporthistory.model
+package com.threegap.bitnagil.presentation.reporthistory.contract
+
+import com.threegap.bitnagil.presentation.reporthistory.model.ReportCategory
+import com.threegap.bitnagil.presentation.reporthistory.model.ReportHistoriesPerDayUiModel
+import com.threegap.bitnagil.presentation.reporthistory.model.ReportProcess
+import com.threegap.bitnagil.presentation.reporthistory.model.ReportProcessWithCount
 
 data class ReportHistoryState(
     val selectedReportCategory: ReportCategory?,
@@ -34,7 +39,9 @@ data class ReportHistoryState(
         }
 
     val reportProcessWithCounts: List<ReportProcessWithCount> = listOf(
-        ReportProcessWithCount(ReportProcess.Total, reportHistoriesPerDays.sumOf { it.reports.size }),
+        ReportProcessWithCount(
+            ReportProcess.Total,
+            reportHistoriesPerDays.sumOf { it.reports.size }),
         ReportProcessWithCount(
             ReportProcess.Reported,
             reportHistoriesPerDays.sumOf { it.reports.filter { report -> report.process == ReportProcess.Reported }.size },

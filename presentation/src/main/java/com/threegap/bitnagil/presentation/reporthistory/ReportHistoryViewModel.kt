@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import com.threegap.bitnagil.domain.report.usecase.GetReportHistoriesUseCase
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportCategory
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportHistoriesPerDayUiModel
-import com.threegap.bitnagil.presentation.reporthistory.model.ReportHistorySideEffect
-import com.threegap.bitnagil.presentation.reporthistory.model.ReportHistoryState
+import com.threegap.bitnagil.presentation.reporthistory.contract.ReportHistorySideEffect
+import com.threegap.bitnagil.presentation.reporthistory.contract.ReportHistoryState
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportHistoryUiModel
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportProcess
 import dagger.hilt.android.lifecycle.HiltViewModel

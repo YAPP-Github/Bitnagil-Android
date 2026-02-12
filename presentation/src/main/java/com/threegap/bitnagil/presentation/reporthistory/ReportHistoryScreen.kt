@@ -36,11 +36,12 @@ import com.threegap.bitnagil.presentation.reporthistory.component.block.ReportHi
 import com.threegap.bitnagil.presentation.reporthistory.component.template.ReportCategoryBottomSheet
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportCategory
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportHistoriesPerDayUiModel
-import com.threegap.bitnagil.presentation.reporthistory.model.ReportHistoryState
+import com.threegap.bitnagil.presentation.reporthistory.contract.ReportHistoryState
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportHistoryUiModel
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportProcess
 import com.threegap.bitnagil.presentation.reporthistory.util.toPresentationFormat
 import org.orbitmvi.orbit.compose.collectAsState
+import java.time.LocalDate
 
 @Composable
 fun ReportHistoryScreenContainer(
@@ -198,7 +199,7 @@ private fun ReportHistoryScreenPreview() {
             state = ReportHistoryState.Init.copy(
                 reportHistoriesPerDays = List(10) {
                     ReportHistoriesPerDayUiModel(
-                        date = java.time.LocalDate.now(),
+                        date = LocalDate.now(),
                         reports = listOf(
                             ReportHistoryUiModel(
                                 id = "1",
