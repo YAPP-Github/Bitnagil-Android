@@ -1,5 +1,7 @@
 package com.threegap.bitnagil.domain.routine.model
 
+import com.threegap.bitnagil.domain.recommendroutine.model.RecommendCategory
+
 data class Routine(
     val id: String,
     val name: String,
@@ -12,5 +14,5 @@ data class Routine(
     val isDeleted: Boolean,
     val subRoutineNames: List<String>,
     val subRoutineCompletionStates: List<Boolean>,
-    val recommendedRoutineType: RecommendedRoutineType?,
+    val recommendedRoutineType: RecommendCategory?,
 )

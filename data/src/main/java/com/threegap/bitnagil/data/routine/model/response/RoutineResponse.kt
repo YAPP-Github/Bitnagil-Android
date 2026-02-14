@@ -1,7 +1,7 @@
 package com.threegap.bitnagil.data.routine.model.response
 
+import com.threegap.bitnagil.domain.recommendroutine.model.RecommendCategory
 import com.threegap.bitnagil.domain.routine.model.DayOfWeek
-import com.threegap.bitnagil.domain.routine.model.RecommendedRoutineType
 import com.threegap.bitnagil.domain.routine.model.Routine
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -25,7 +25,7 @@ data class RoutineResponse(
     @SerialName("subRoutineCompleteYn")
     val subRoutineCompleteYn: List<Boolean>,
     @SerialName("recommendedRoutineType")
-    val recommendedRoutineType: RecommendedRoutineType?,
+    val recommendedRoutineType: RecommendCategory?,
     @SerialName("routineDeletedYn")
     val routineDeletedYn: Boolean,
     @SerialName("routineStartDate")

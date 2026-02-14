@@ -1,7 +1,7 @@
 package com.threegap.bitnagil.presentation.home.model
 
+import com.threegap.bitnagil.domain.recommendroutine.model.RecommendCategory
 import com.threegap.bitnagil.domain.routine.model.DayOfWeek
-import com.threegap.bitnagil.domain.routine.model.RecommendedRoutineType
 import com.threegap.bitnagil.domain.routine.model.Routine
 
 data class RoutineUiModel(
@@ -13,7 +13,7 @@ data class RoutineUiModel(
     val isCompleted: Boolean,
     val subRoutineNames: List<String>,
     val subRoutineCompletionStates: List<Boolean>,
-    val recommendedRoutineType: RecommendedRoutineType?,
+    val recommendedRoutineType: RecommendCategory?,
 )
 
 internal fun Routine.toUiModel(): RoutineUiModel =
