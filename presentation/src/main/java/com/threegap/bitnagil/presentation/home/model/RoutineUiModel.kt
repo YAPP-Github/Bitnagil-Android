@@ -1,12 +1,9 @@
 package com.threegap.bitnagil.presentation.home.model
 
-import android.os.Parcelable
 import com.threegap.bitnagil.domain.routine.model.DayOfWeek
 import com.threegap.bitnagil.domain.routine.model.RecommendedRoutineType
 import com.threegap.bitnagil.domain.routine.model.Routine
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
 data class RoutineUiModel(
     val id: String,
     val name: String,
@@ -17,9 +14,9 @@ data class RoutineUiModel(
     val subRoutineNames: List<String>,
     val subRoutineCompletionStates: List<Boolean>,
     val recommendedRoutineType: RecommendedRoutineType?,
-) : Parcelable
+)
 
-fun Routine.toUiModel(): RoutineUiModel =
+internal fun Routine.toUiModel(): RoutineUiModel =
     RoutineUiModel(
         id = this.id,
         name = this.name,

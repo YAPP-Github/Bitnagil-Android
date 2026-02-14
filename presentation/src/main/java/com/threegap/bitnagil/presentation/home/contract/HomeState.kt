@@ -27,7 +27,7 @@ data class HomeState(
             todayEmotion = null,
             selectedDate = LocalDate.now(),
             currentWeeks = LocalDate.now().getCurrentWeekDays(),
-            routineSchedule = RoutineScheduleUiModel(),
+            routineSchedule = RoutineScheduleUiModel.INIT,
         )
     }
 }
