@@ -4,17 +4,17 @@ import com.threegap.bitnagil.data.common.safeApiCall
 import com.threegap.bitnagil.data.common.safeUnitApiCall
 import com.threegap.bitnagil.data.routine.datasource.RoutineRemoteDataSource
 import com.threegap.bitnagil.data.routine.model.request.RoutineCompletionRequestDto
-import com.threegap.bitnagil.data.routine.model.response.RoutineDto
-import com.threegap.bitnagil.data.routine.model.response.RoutinesResponseDto
+import com.threegap.bitnagil.data.routine.model.response.RoutineResponse
+import com.threegap.bitnagil.data.routine.model.response.RoutineScheduleResponse
 import com.threegap.bitnagil.data.routine.service.RoutineService
 import javax.inject.Inject
 
 class RoutineRemoteDataSourceImpl @Inject constructor(
     private val routineService: RoutineService,
 ) : RoutineRemoteDataSource {
-    override suspend fun fetchWeeklyRoutines(startDate: String, endDate: String): Result<RoutinesResponseDto> =
+    override suspend fun fetchWeeklyRoutines(startDate: String, endDate: String): Result<RoutineScheduleResponse> =
         safeApiCall {
-            routineService.fetchRoutines(startDate, endDate)
+            routineService.fetchRoutineSchedule(startDate, endDate)
         }
 
     override suspend fun syncRoutineCompletion(routineCompletionRequestDto: RoutineCompletionRequestDto): Result<Unit> =
@@ -22,7 +22,7 @@ class RoutineRemoteDataSourceImpl @Inject constructor(
             routineService.routineCompletion(routineCompletionRequestDto)
         }
 
-    override suspend fun getRoutine(routineId: String): Result<RoutineDto> =
+    override suspend fun getRoutine(routineId: String): Result<RoutineResponse> =
         safeApiCall {
             routineService.getRoutine(routineId)
         }

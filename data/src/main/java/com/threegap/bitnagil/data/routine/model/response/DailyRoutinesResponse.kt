@@ -5,15 +5,15 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class DayRoutinesDto(
+data class DailyRoutinesResponse(
     @SerialName("routineList")
-    val routineList: List<RoutineDto>,
+    val routines: List<RoutineResponse>,
     @SerialName("allCompleted")
     val allCompleted: Boolean,
 )
 
-fun DayRoutinesDto.toDomain(): DailyRoutines =
+fun DailyRoutinesResponse.toDomain(): DailyRoutines =
     DailyRoutines(
-        routines = routineList.map { it.toDomain() },
+        routines = routines.map { it.toDomain() },
         isAllCompleted = allCompleted,
     )

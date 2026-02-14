@@ -7,7 +7,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RoutineDto(
+data class RoutineResponse(
     @SerialName("routineId")
     val routineId: String,
     @SerialName("routineName")
@@ -34,7 +34,7 @@ data class RoutineDto(
     val routineEndDate: String,
 )
 
-fun RoutineDto.toDomain(): Routine =
+fun RoutineResponse.toDomain(): Routine =
     Routine(
         id = this.routineId,
         name = this.routineName,

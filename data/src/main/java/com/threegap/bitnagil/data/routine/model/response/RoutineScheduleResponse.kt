@@ -5,14 +5,12 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RoutinesResponseDto(
+data class RoutineScheduleResponse(
     @SerialName("routines")
-    val routines: Map<String, DayRoutinesDto>,
+    val dailyRoutines: Map<String, DailyRoutinesResponse>,
 )
 
-fun RoutinesResponseDto.toDomain() =
+fun RoutineScheduleResponse.toDomain(): RoutineSchedule =
     RoutineSchedule(
-        dailyRoutines = this.routines.mapValues { (_, dayRoutinesDto) ->
-            dayRoutinesDto.toDomain()
-        },
+        dailyRoutines = this.dailyRoutines.mapValues { (_, dailyRoutinesResponse) -> dailyRoutinesResponse.toDomain() }
     )
