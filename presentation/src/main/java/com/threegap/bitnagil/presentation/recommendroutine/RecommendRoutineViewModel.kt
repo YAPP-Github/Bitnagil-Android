@@ -32,7 +32,7 @@ class RecommendRoutineViewModel @Inject constructor(
         observeEmotionChangeEvent()
     }
 
-    private var recommendRoutines: RecommendRoutinesUiModel = RecommendRoutinesUiModel()
+    private var recommendRoutines: RecommendRoutinesUiModel = RecommendRoutinesUiModel.INIT
 
     fun updateRoutineCategory(category: RecommendCategory) {
         intent {

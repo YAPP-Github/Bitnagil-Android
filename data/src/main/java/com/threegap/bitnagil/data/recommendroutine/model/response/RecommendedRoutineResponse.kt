@@ -7,7 +7,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RecommendedRoutineDto(
+data class RecommendedRoutineResponse(
     @SerialName("recommendedRoutineId")
     val recommendedRoutineId: Long,
     @SerialName("recommendedRoutineName")
@@ -21,16 +21,16 @@ data class RecommendedRoutineDto(
     @SerialName("recommendedRoutineType")
     val recommendedRoutineType: RecommendCategory,
     @SerialName("recommendedSubRoutineSearchResult")
-    val recommendedSubRoutineSearchResult: List<RecommendedSubRoutineDto>,
+    val recommendedSubRoutineSearchResult: List<RecommendedSubRoutineResponse>,
 )
 
-fun RecommendedRoutineDto.toDomain(): RecommendRoutine =
+fun RecommendedRoutineResponse.toDomain(): RecommendRoutine =
     RecommendRoutine(
         id = this.recommendedRoutineId,
         name = this.recommendedRoutineName,
         description = this.recommendedRoutineDescription,
         level = this.recommendedRoutineLevel,
         executionTime = this.executionTime,
-        recommendedRoutineType = this.recommendedRoutineType,
-        recommendSubRoutines = this.recommendedSubRoutineSearchResult.map { it.toDomain() },
+        category = this.recommendedRoutineType,
+        subRoutines = this.recommendedSubRoutineSearchResult.map { it.toDomain() },
     )

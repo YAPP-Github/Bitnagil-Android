@@ -131,7 +131,7 @@ class WriteRoutineViewModel @AssistedInject constructor(
         }
         getRecommendRoutineUseCase(recommendRoutineId).fold(
             onSuccess = { routine ->
-                oldSubRoutines = routine.recommendSubRoutines.map { SubRoutine.fromDomainRecommendSubRoutine(it) }
+                oldSubRoutines = routine.subRoutines.map { SubRoutine.fromDomainRecommendSubRoutine(it) }
 
                 reduce {
                     state.copy(
@@ -147,7 +147,7 @@ class WriteRoutineViewModel @AssistedInject constructor(
                             oldSubRoutines.getOrNull(2)?.name ?: "",
                         ),
                         loading = false,
-                        recommendedRoutineType = routine.recommendedRoutineType.displayTitle,
+                        recommendedRoutineType = routine.category.displayTitle,
                     )
                 }
             },

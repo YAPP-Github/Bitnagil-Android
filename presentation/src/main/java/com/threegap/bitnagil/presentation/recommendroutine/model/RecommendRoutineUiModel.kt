@@ -1,25 +1,22 @@
 package com.threegap.bitnagil.presentation.recommendroutine.model
 
-import android.os.Parcelable
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendCategory
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendLevel
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendRoutine
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
 data class RecommendRoutineUiModel(
-    val id: Long = 0,
-    val name: String = "",
-    val level: RecommendLevel? = null,
-    val recommendedRoutineType: RecommendCategory? = null,
-    val recommendSubRoutines: List<RecommendSubRoutineUiModel> = emptyList(),
-) : Parcelable
+    val id: Long,
+    val name: String,
+    val level: RecommendLevel?,
+    val category: RecommendCategory?,
+    val subRoutines: List<RecommendSubRoutineUiModel>,
+)
 
-fun RecommendRoutine.toUiModel() =
+internal fun RecommendRoutine.toUiModel(): RecommendRoutineUiModel =
     RecommendRoutineUiModel(
         id = this.id,
         name = this.name,
         level = this.level,
-        recommendedRoutineType = this.recommendedRoutineType,
-        recommendSubRoutines = this.recommendSubRoutines.map { it.toUiModel() },
+        category = this.category,
+        subRoutines = this.subRoutines.map { it.toUiModel() },
     )

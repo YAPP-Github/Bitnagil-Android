@@ -1,6 +1,6 @@
 package com.threegap.bitnagil.presentation.recommendroutine.contract
 
-import com.threegap.bitnagil.domain.recommendroutine.model.EmotionMarbleType
+import com.threegap.bitnagil.domain.emotion.model.EmotionMarbleType
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendCategory
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendLevel
 import com.threegap.bitnagil.presentation.recommendroutine.model.RecommendRoutineUiModel

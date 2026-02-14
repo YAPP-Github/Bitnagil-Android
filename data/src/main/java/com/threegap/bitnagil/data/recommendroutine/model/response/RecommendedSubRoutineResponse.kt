@@ -5,14 +5,14 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RecommendedSubRoutineDto(
+data class RecommendedSubRoutineResponse(
     @SerialName("recommendedSubRoutineId")
     val recommendedSubRoutineId: Long,
     @SerialName("recommendedSubRoutineName")
     val recommendedSubRoutineName: String,
 )
 
-fun RecommendedSubRoutineDto.toDomain(): RecommendSubRoutine =
+fun RecommendedSubRoutineResponse.toDomain(): RecommendSubRoutine =
     RecommendSubRoutine(
         id = recommendedSubRoutineId,
         name = recommendedSubRoutineName,

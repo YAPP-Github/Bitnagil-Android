@@ -12,5 +12,5 @@ data class RoutineScheduleResponse(
 
 fun RoutineScheduleResponse.toDomain(): RoutineSchedule =
     RoutineSchedule(
-        dailyRoutines = this.dailyRoutines.mapValues { (_, dailyRoutinesResponse) -> dailyRoutinesResponse.toDomain() }
+        dailyRoutines = this.dailyRoutines.mapValues { (_, dailyRoutinesResponse) -> dailyRoutinesResponse.toDomain() },
     )
