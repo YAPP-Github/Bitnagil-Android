@@ -2,7 +2,7 @@ package com.threegap.bitnagil.presentation.home
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.threegap.bitnagil.domain.emotion.usecase.FetchTodayEmotionUseCase
+import com.threegap.bitnagil.domain.emotion.usecase.FetchDailyEmotionUseCase
 import com.threegap.bitnagil.domain.emotion.usecase.GetEmotionChangeEventFlowUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingRecommendRoutineEventFlowUseCase
 import com.threegap.bitnagil.domain.routine.model.RoutineCompletionInfo
@@ -36,7 +36,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val fetchWeeklyRoutinesUseCase: FetchWeeklyRoutinesUseCase,
     private val fetchUserProfileUseCase: FetchUserProfileUseCase,
-    private val fetchTodayEmotionUseCase: FetchTodayEmotionUseCase,
+    private val fetchDailyEmotionUseCase: FetchDailyEmotionUseCase,
     private val routineCompletionUseCase: RoutineCompletionUseCase,
     private val getWriteRoutineEventFlowUseCase: GetWriteRoutineEventFlowUseCase,
     private val getEmotionChangeEventFlowUseCase: GetEmotionChangeEventFlowUseCase,
@@ -186,7 +186,7 @@ class HomeViewModel @Inject constructor(
         intent {
             coroutineScope {
                 launch { fetchUserProfile() }
-                launch { fetchTodayEmotion() }
+                launch { fetchDailyEmotion() }
                 launch { fetchWeeklyRoutines(state.currentWeeks) }
                 launch { observeWriteRoutineEvent() }
                 launch { observeEmotionChangeEvent() }
@@ -208,7 +208,7 @@ class HomeViewModel @Inject constructor(
     private suspend fun observeEmotionChangeEvent() {
         subIntent {
             getEmotionChangeEventFlowUseCase().collect {
-                fetchTodayEmotion()
+                fetchDailyEmotion()
             }
         }
     }
@@ -278,12 +278,12 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private suspend fun fetchTodayEmotion() {
+    private suspend fun fetchDailyEmotion() {
         subIntent {
             reduce { state.copy(loadingCount = state.loadingCount + 1) }
-            fetchTodayEmotionUseCase().fold(
+            fetchDailyEmotionUseCase().fold(
                 onSuccess = {
-                    reduce { state.copy(todayEmotion = it?.toUiModel(), loadingCount = state.loadingCount - 1) }
+                    reduce { state.copy(dailyEmotion = it.toUiModel(), loadingCount = state.loadingCount - 1) }
                 },
                 onFailure = {
                     Log.e("HomeViewModel", "나의 감정 실패: ${it.message}")

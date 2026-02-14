@@ -1,15 +1,15 @@
 package com.threegap.bitnagil.presentation.home.contract
 
+import com.threegap.bitnagil.presentation.home.model.DailyEmotionUiModel
 import com.threegap.bitnagil.presentation.home.model.RoutineScheduleUiModel
 import com.threegap.bitnagil.presentation.home.model.RoutineUiModel
-import com.threegap.bitnagil.presentation.home.model.TodayEmotionUiModel
 import com.threegap.bitnagil.presentation.home.util.getCurrentWeekDays
 import java.time.LocalDate
 
 data class HomeState(
     val loadingCount: Int,
     val userNickname: String,
-    val todayEmotion: TodayEmotionUiModel?,
+    val dailyEmotion: DailyEmotionUiModel,
     val selectedDate: LocalDate,
     val currentWeeks: List<LocalDate>,
     val routineSchedule: RoutineScheduleUiModel,
@@ -24,7 +24,7 @@ data class HomeState(
         val INIT = HomeState(
             loadingCount = 0,
             userNickname = "",
-            todayEmotion = null,
+            dailyEmotion = DailyEmotionUiModel.INIT,
             selectedDate = LocalDate.now(),
             currentWeeks = LocalDate.now().getCurrentWeekDays(),
             routineSchedule = RoutineScheduleUiModel.INIT,

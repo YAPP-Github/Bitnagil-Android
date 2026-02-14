@@ -37,11 +37,11 @@ import java.time.LocalDate
 
 @Composable
 fun HomeScreenContainer(
+    viewModel: HomeViewModel = hiltViewModel(),
     navigateToGuide: () -> Unit,
     navigateToRegisterRoutine: () -> Unit,
     navigateToEmotion: () -> Unit,
     navigateToRoutineList: (String) -> Unit,
-    viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.collectAsState()
 
@@ -169,7 +169,7 @@ private fun HomeScreen(
 
         CollapsibleHomeHeader(
             userName = uiState.userNickname,
-            todayEmotion = uiState.todayEmotion,
+            dailyEmotion = uiState.dailyEmotion,
             collapsibleHeaderState = collapsibleHeaderState,
             onHelpClick = onHelpClick,
             onRegisterEmotion = onRegisterEmotionClick,

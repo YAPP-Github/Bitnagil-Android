@@ -2,10 +2,10 @@ package com.threegap.bitnagil.data.emotion.repositoryImpl
 
 import com.threegap.bitnagil.data.emotion.datasource.EmotionDataSource
 import com.threegap.bitnagil.data.emotion.model.response.toDomain
+import com.threegap.bitnagil.domain.emotion.model.DailyEmotion
 import com.threegap.bitnagil.domain.emotion.model.Emotion
 import com.threegap.bitnagil.domain.emotion.model.EmotionChangeEvent
 import com.threegap.bitnagil.domain.emotion.model.EmotionRecommendRoutine
-import com.threegap.bitnagil.domain.emotion.model.TodayEmotion
 import com.threegap.bitnagil.domain.emotion.repository.EmotionRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -34,8 +34,8 @@ class EmotionRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun fetchTodayEmotion(currentDate: String): Result<TodayEmotion?> =
-        emotionDataSource.fetchTodayEmotion(currentDate).map { it.toDomain() }
+    override suspend fun fetchDailyEmotion(currentDate: String): Result<DailyEmotion> =
+        emotionDataSource.fetchDailyEmotion(currentDate).map { it.toDomain() }
 
     private val _emotionChangeEventFlow = MutableSharedFlow<EmotionChangeEvent>()
     override suspend fun getEmotionChangeEventFlow(): Flow<EmotionChangeEvent> = _emotionChangeEventFlow.asSharedFlow()
