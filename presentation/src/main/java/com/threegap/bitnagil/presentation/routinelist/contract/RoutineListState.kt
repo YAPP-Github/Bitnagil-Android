@@ -1,13 +1,13 @@
 package com.threegap.bitnagil.presentation.routinelist.contract
 
 import com.threegap.bitnagil.presentation.home.util.getCurrentWeekDays
+import com.threegap.bitnagil.presentation.routinelist.model.RoutineScheduleUiModel
 import com.threegap.bitnagil.presentation.routinelist.model.RoutineUiModel
-import com.threegap.bitnagil.presentation.routinelist.model.RoutinesUiModel
 import java.time.LocalDate
 
 data class RoutineListState(
     val isLoading: Boolean,
-    val routines: RoutinesUiModel,
+    val routines: RoutineScheduleUiModel,
     val selectedRoutine: RoutineUiModel?,
     val selectedDate: LocalDate,
     val deleteConfirmBottomSheetVisible: Boolean,
@@ -17,12 +17,12 @@ data class RoutineListState(
         get() = selectedDate.getCurrentWeekDays()
 
     val selectedDateRoutines: List<RoutineUiModel>
-        get() = routines.routines[selectedDate.toString()]?.routineList ?: emptyList()
+        get() = routines.routines[selectedDate.toString()]?.routines ?: emptyList()
 
     companion object {
         val INIT = RoutineListState(
             isLoading = false,
-            routines = RoutinesUiModel(),
+            routines = RoutineScheduleUiModel.INIT,
             selectedRoutine = null,
             selectedDate = LocalDate.now(),
             deleteConfirmBottomSheetVisible = false,

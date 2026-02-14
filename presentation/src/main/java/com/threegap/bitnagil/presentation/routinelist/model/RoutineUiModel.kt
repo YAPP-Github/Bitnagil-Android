@@ -1,14 +1,11 @@
 package com.threegap.bitnagil.presentation.routinelist.model
 
-import android.os.Parcelable
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendCategory
 import com.threegap.bitnagil.domain.routine.model.DayOfWeek
 import com.threegap.bitnagil.domain.routine.model.Routine
 import com.threegap.bitnagil.presentation.home.util.formatExecutionTime12Hour
 import com.threegap.bitnagil.presentation.home.util.toShortDateFormat
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
 data class RoutineUiModel(
     val routineId: String,
     val routineName: String,
@@ -19,13 +16,13 @@ data class RoutineUiModel(
     val endDate: String,
     val routineDeletedYn: Boolean,
     val subRoutineNames: List<String>,
-) : Parcelable {
     val recommendedRoutineType: RecommendCategory?,
+) {
     val formattedDateRange: String
         get() = "${startDate.toShortDateFormat()} - ${endDate.toShortDateFormat()}"
 }
 
-fun Routine.toUiModel(): RoutineUiModel =
+internal fun Routine.toUiModel(): RoutineUiModel =
     RoutineUiModel(
         routineId = this.id,
         routineName = this.name,
@@ -38,4 +35,3 @@ fun Routine.toUiModel(): RoutineUiModel =
         subRoutineNames = this.subRoutineNames,
         recommendedRoutineType = this.recommendedRoutineType,
     )
-
