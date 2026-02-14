@@ -5,5 +5,5 @@ import com.threegap.bitnagil.data.recommendroutine.model.response.RecommendedRou
 
 interface RecommendRoutineDataSource {
     suspend fun fetchRecommendRoutines(): Result<RecommendRoutinesDto>
-    suspend fun getRecommendRoutine(recommendRoutineId: Int): Result<RecommendedRoutineDto>
+    suspend fun getRecommendRoutine(recommendRoutineId: Long): Result<RecommendedRoutineDto>
 }

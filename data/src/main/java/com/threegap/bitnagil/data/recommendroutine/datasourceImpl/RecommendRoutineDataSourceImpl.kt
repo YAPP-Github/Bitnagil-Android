@@ -16,7 +16,7 @@ class RecommendRoutineDataSourceImpl @Inject constructor(
             recommendRoutineService.fetchRecommendRoutines()
         }
 
-    override suspend fun getRecommendRoutine(recommendRoutineId: Int): Result<RecommendedRoutineDto> =
+    override suspend fun getRecommendRoutine(recommendRoutineId: Long): Result<RecommendedRoutineDto> =
         safeApiCall {
             recommendRoutineService.getRecommendRoutine(recommendRoutineId)
         }

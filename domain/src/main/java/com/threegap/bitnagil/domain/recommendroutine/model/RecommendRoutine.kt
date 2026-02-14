@@ -1,7 +1,7 @@
 package com.threegap.bitnagil.domain.recommendroutine.model
 
 data class RecommendRoutine(
-    val id: Int,
+    val id: Long,
     val name: String,
     val description: String,
     val level: RecommendLevel,

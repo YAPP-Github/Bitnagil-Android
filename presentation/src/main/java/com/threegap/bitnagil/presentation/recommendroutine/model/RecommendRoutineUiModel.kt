@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class RecommendRoutineUiModel(
-    val id: Int = 0,
+    val id: Long = 0,
     val name: String = "",
     val level: RecommendLevel? = null,
     val recommendedRoutineType: RecommendCategory? = null,

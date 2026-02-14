@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class RecommendedSubRoutineDto(
     @SerialName("recommendedSubRoutineId")
-    val recommendedSubRoutineId: Int,
+    val recommendedSubRoutineId: Long,
     @SerialName("recommendedSubRoutineName")
     val recommendedSubRoutineName: String,
 )

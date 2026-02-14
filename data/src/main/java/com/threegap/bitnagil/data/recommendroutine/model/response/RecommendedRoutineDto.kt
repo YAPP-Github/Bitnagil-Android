@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class RecommendedRoutineDto(
     @SerialName("recommendedRoutineId")
-    val recommendedRoutineId: Int,
+    val recommendedRoutineId: Long,
     @SerialName("recommendedRoutineName")
     val recommendedRoutineName: String,
     @SerialName("recommendedRoutineDescription")

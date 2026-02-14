@@ -12,6 +12,6 @@ interface RecommendRoutineService {
 
     @GET("/api/v1/recommend-routines/{recommendedRoutineId}")
     suspend fun getRecommendRoutine(
-        @Path("recommendedRoutineId") recommendedRoutineId: Int,
+        @Path("recommendedRoutineId") recommendedRoutineId: Long,
     ): BaseResponse<RecommendedRoutineDto>
 }
