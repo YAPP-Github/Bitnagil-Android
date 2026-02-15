@@ -3,6 +3,10 @@ package com.threegap.bitnagil.presentation.emotion.model
 import android.os.Parcelable
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.domain.emotion.model.Emotion
+import com.threegap.bitnagil.presentation.emotion.model.EmotionUiModel.Companion.getMessage
+import com.threegap.bitnagil.presentation.emotion.model.EmotionUiModel.Companion.getOfflineBackupImageResourceId
+import com.threegap.bitnagil.presentation.emotion.model.EmotionUiModel.Companion.getSymbolBackgroundColor
+import com.threegap.bitnagil.presentation.emotion.model.EmotionUiModel.Companion.getSymbolColor
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -16,19 +20,7 @@ data class EmotionUiModel(
     val symbolColor: Long = 0xFF878A93,
 ) : Parcelable {
     companion object {
-        fun fromDomain(emotion: Emotion) = EmotionUiModel(
-            emotionType = emotion.emotionType,
-            emotionMarbleName = emotion.emotionMarbleName,
-            image = EmotionImageUiModel.Url(
-                url = emotion.imageUrl,
-                offlineBackupImageResourceId = getOfflineBackupImageResourceId(emotion.emotionType),
-            ),
-            message = getMessage(emotion.emotionType),
-            symbolBackgroundColor = getSymbolBackgroundColor(emotion.emotionType),
-            symbolColor = getSymbolColor(emotion.emotionType),
-        )
-
-        private fun getOfflineBackupImageResourceId(emotionType: String): Int? {
+        fun getOfflineBackupImageResourceId(emotionType: String): Int? {
             return when (emotionType) {
                 "CALM" -> R.drawable.calm
                 "VITALITY" -> R.drawable.vitality
@@ -40,7 +32,7 @@ data class EmotionUiModel(
             }
         }
 
-        private fun getMessage(emotionType: String): String? {
+        fun getMessage(emotionType: String): String? {
             return when (emotionType) {
                 "CALM" -> "평온함은 마음이 고요하고 편안해\n균형을 이루는 상태에요."
                 "VITALITY" -> "활기참은 생기가 가득 차\n활발하고 적극적인 상태예요."
@@ -52,7 +44,7 @@ data class EmotionUiModel(
             }
         }
 
-        private fun getSymbolBackgroundColor(emotionType: String): Long {
+        fun getSymbolBackgroundColor(emotionType: String): Long {
             return when (emotionType) {
                 "CALM" -> 0xFFEFECFF
                 "VITALITY" -> 0xFFE9FAD0
@@ -64,7 +56,7 @@ data class EmotionUiModel(
             }
         }
 
-        private fun getSymbolColor(emotionType: String): Long {
+        fun getSymbolColor(emotionType: String): Long {
             return when (emotionType) {
                 "CALM" -> 0xFF692BD0
                 "VITALITY" -> 0xFF609F00
@@ -87,3 +79,16 @@ data class EmotionUiModel(
         )
     }
 }
+
+internal fun Emotion.toUiModel(): EmotionUiModel =
+    EmotionUiModel(
+        emotionType = this.emotionType,
+        emotionMarbleName = this.emotionMarbleName,
+        image = EmotionImageUiModel.Url(
+            url = this.imageUrl,
+            offlineBackupImageResourceId = getOfflineBackupImageResourceId(this.emotionType),
+        ),
+        message = getMessage(this.emotionType),
+        symbolBackgroundColor = getSymbolBackgroundColor(this.emotionType),
+        symbolColor = getSymbolColor(this.emotionType),
+    )
