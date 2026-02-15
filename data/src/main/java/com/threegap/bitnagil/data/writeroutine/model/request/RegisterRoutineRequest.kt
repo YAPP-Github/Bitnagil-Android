@@ -1,5 +1,6 @@
 package com.threegap.bitnagil.data.writeroutine.model.request
 
+import com.threegap.bitnagil.domain.recommendroutine.model.RecommendCategory
 import com.threegap.bitnagil.domain.writeroutine.model.RepeatDay
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -19,5 +20,5 @@ data class RegisterRoutineRequest(
     @SerialName("subRoutineName")
     val subRoutineName: List<String>,
     @SerialName("recommendedRoutineType")
-    val recommendedRoutineType: String?,
+    val recommendedRoutineType: RecommendCategory?,
 )

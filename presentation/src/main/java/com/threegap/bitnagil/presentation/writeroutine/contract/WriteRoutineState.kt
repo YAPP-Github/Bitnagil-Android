@@ -1,6 +1,7 @@
 package com.threegap.bitnagil.presentation.writeroutine.contract
 
 import android.os.Parcelable
+import com.threegap.bitnagil.domain.recommendroutine.model.RecommendCategory
 import com.threegap.bitnagil.presentation.writeroutine.model.Date
 import com.threegap.bitnagil.presentation.writeroutine.model.Day
 import com.threegap.bitnagil.presentation.writeroutine.model.RepeatType
@@ -29,7 +30,7 @@ data class WriteRoutineState(
     val repeatDaysUiExpanded: Boolean,
     val periodUiExpanded: Boolean,
     val startTimeUiExpanded: Boolean,
-    val recommendedRoutineType: String?,
+    val recommendedRoutineType: RecommendCategory?,
 ) : Parcelable {
     companion object {
         val INIT = WriteRoutineState(

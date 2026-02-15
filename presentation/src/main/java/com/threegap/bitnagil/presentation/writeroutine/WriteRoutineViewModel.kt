@@ -147,7 +147,7 @@ class WriteRoutineViewModel @AssistedInject constructor(
                             oldSubRoutines.getOrNull(2)?.name ?: "",
                         ),
                         loading = false,
-                        recommendedRoutineType = routine.category.displayTitle,
+                        recommendedRoutineType = routine.category,
                     )
                 }
             },
