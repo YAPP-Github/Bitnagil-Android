@@ -97,9 +97,8 @@ data class WriteRoutineState(
             null -> ""
         }
 
-    val periodText: String get() {
-        return "${startDate.toYearShrinkageFormattedString()} ~ ${endDate.toYearShrinkageFormattedString()}"
-    }
+    val periodText: String
+        get() = "${startDate.toYearShrinkageFormattedString()} ~ ${endDate.toYearShrinkageFormattedString()}"
 
     val startTimeText: String
         get() = if (selectAllTime) "하루종일" else startTime?.let { "${it.toAmPmFormattedString()}부터 시작" } ?: ""
