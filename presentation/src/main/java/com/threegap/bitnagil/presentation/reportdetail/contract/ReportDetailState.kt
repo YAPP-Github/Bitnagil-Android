@@ -1,11 +1,11 @@
 package com.threegap.bitnagil.presentation.reportdetail.contract
 
-import com.threegap.bitnagil.presentation.reportdetail.model.ReportCategory
-import com.threegap.bitnagil.presentation.reportdetail.model.ReportProcess
+import com.threegap.bitnagil.domain.report.model.ReportCategory
+import com.threegap.bitnagil.domain.report.model.ReportStatus
 import java.time.LocalDate
 
 data class ReportDetailState(
-    val reportProcess: ReportProcess,
+    val reportProcess: ReportStatus,
     val reportTitle: String,
     val reportContent: String,
     val reportCategory: ReportCategory,
@@ -15,10 +15,10 @@ data class ReportDetailState(
 ) {
     companion object {
         val Init = ReportDetailState(
-            reportProcess = ReportProcess.Reported,
+            reportProcess = ReportStatus.PENDING,
             reportTitle = "",
             reportContent = "",
-            reportCategory = ReportCategory.TrafficFacilities,
+            reportCategory = ReportCategory.TRANSPORTATION,
             imageUrls = emptyList(),
             location = "",
             date = LocalDate.now(),

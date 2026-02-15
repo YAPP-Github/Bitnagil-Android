@@ -27,6 +27,7 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
+import com.threegap.bitnagil.presentation.common.extension.displayTitle
 import com.threegap.bitnagil.presentation.reportdetail.component.atom.ReportProcessBadge
 import com.threegap.bitnagil.presentation.reportdetail.component.block.ReportDetailLabeledContent
 import com.threegap.bitnagil.presentation.reportdetail.contract.ReportDetailState
@@ -74,7 +75,7 @@ private fun ReportDetailScreen(
         ) {
             Spacer(modifier = Modifier.height(20.dp))
 
-            ReportProcessBadge(reportProcess = state.reportProcess)
+            ReportProcessBadge(reportStatus = state.reportProcess)
 
             Spacer(modifier = Modifier.height(6.dp))
 
@@ -116,7 +117,7 @@ private fun ReportDetailScreen(
 
                 ReportDetailLabeledContent(
                     label = "카테고리",
-                    content = state.reportCategory.title,
+                    content = state.reportCategory.displayTitle,
                 )
 
                 ReportDetailLabeledContent(

@@ -1,8 +1,8 @@
 package com.threegap.bitnagil.presentation.onboarding.model
 
 import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
 import com.threegap.bitnagil.domain.onboarding.model.OnBoardingAbstractTextItem
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class OnBoardingAbstractTextItemUiModel(

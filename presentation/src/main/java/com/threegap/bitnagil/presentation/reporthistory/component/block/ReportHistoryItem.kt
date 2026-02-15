@@ -25,10 +25,11 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
-import com.threegap.bitnagil.presentation.reporthistory.component.atom.ReportProcessBadge
-import com.threegap.bitnagil.presentation.reporthistory.model.ReportCategory
+import com.threegap.bitnagil.domain.report.model.ReportCategory
+import com.threegap.bitnagil.domain.report.model.ReportStatus
+import com.threegap.bitnagil.presentation.common.extension.displayTitle
+import com.threegap.bitnagil.presentation.reportdetail.component.atom.ReportProcessBadge
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportHistoryUiModel
-import com.threegap.bitnagil.presentation.reporthistory.model.ReportProcess
 
 @Composable
 fun ReportHistoryItem(
@@ -46,7 +47,7 @@ fun ReportHistoryItem(
         Column(
             modifier = Modifier.weight(1f),
         ) {
-            ReportProcessBadge(reportProcess = report.process)
+            ReportProcessBadge(reportStatus = report.status)
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -59,7 +60,7 @@ fun ReportHistoryItem(
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(text = report.category.title, style = BitnagilTheme.typography.caption1Medium.copy(color = BitnagilTheme.colors.coolGray50))
+                Text(text = report.category.displayTitle, style = BitnagilTheme.typography.caption1Medium.copy(color = BitnagilTheme.colors.coolGray50))
 
                 Box(
                     modifier = Modifier
@@ -103,8 +104,8 @@ private fun ReportHistoryItemPreview() {
                     title = "다이소 덕소점 앞 가로등 심해요",
                     imageUrl = "-",
                     location = "서울특별시 성북구 안암로 106",
-                    process = ReportProcess.Reported,
-                    category = ReportCategory.TrafficFacilities,
+                    status = ReportStatus.PENDING,
+                    category = ReportCategory.TRANSPORTATION,
                 ),
                 onClick = {},
             )
@@ -115,8 +116,8 @@ private fun ReportHistoryItemPreview() {
                     title = "다이소 덕소점 앞 가로등 깜빡이는데 어쩌죠 이거 진짜로 심각한 문제인데 이 뒷부분은 figma에서 짤려 보여서 임의로 채웁니다",
                     imageUrl = "-",
                     location = "서울특별시 성북구 안암로 106",
-                    process = ReportProcess.Progress,
-                    category = ReportCategory.TrafficFacilities,
+                    status = ReportStatus.IN_PROGRESS,
+                    category = ReportCategory.TRANSPORTATION,
                 ),
                 onClick = {},
             )
@@ -127,8 +128,8 @@ private fun ReportHistoryItemPreview() {
                     title = "퇴근하고 싶어요",
                     imageUrl = "-",
                     location = "서울특별시 성북구 안암로 106 서울특별시 성북구 안암로 106 서울특별시 성북구 안암로 106",
-                    process = ReportProcess.Complete,
-                    category = ReportCategory.Amenities,
+                    status = ReportStatus.COMPLETED,
+                    category = ReportCategory.AMENITY,
                 ),
                 onClick = {},
             )

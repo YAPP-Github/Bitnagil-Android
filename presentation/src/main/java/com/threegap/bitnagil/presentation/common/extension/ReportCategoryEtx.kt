@@ -1,9 +1,10 @@
-package com.threegap.bitnagil.presentation.report.model
+package com.threegap.bitnagil.presentation.common.extension
 
+import androidx.annotation.DrawableRes
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.domain.report.model.ReportCategory
 
-val ReportCategory.uiTitle: String
+val ReportCategory.displayTitle: String
     get() = when (this) {
         ReportCategory.TRANSPORTATION -> "교통 시설"
         ReportCategory.LIGHTING -> "조명 시설"
@@ -11,7 +12,7 @@ val ReportCategory.uiTitle: String
         ReportCategory.AMENITY -> "편의 시설"
     }
 
-val ReportCategory.uiDescription: String
+val ReportCategory.displayExamples: String
     get() = when (this) {
         ReportCategory.TRANSPORTATION -> "신호등 고장, 표지판 파손, 횡단보도 등"
         ReportCategory.LIGHTING -> "가로등, 보안등 파손 등"
@@ -20,7 +21,7 @@ val ReportCategory.uiDescription: String
     }
 
 val ReportCategory.iconRes: Int
-    get() = when (this) {
+    @DrawableRes get() = when (this) {
         ReportCategory.TRANSPORTATION -> R.drawable.ic_car
         ReportCategory.LIGHTING -> R.drawable.ic_light
         ReportCategory.WATERFACILITY -> R.drawable.ic_water

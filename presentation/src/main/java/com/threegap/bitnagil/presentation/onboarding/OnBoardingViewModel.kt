@@ -11,7 +11,6 @@ import com.threegap.bitnagil.domain.onboarding.usecase.RegisterRecommendOnBoardi
 import com.threegap.bitnagil.domain.user.usecase.FetchUserProfileUseCase
 import com.threegap.bitnagil.presentation.onboarding.contract.OnBoardingSideEffect
 import com.threegap.bitnagil.presentation.onboarding.contract.OnBoardingState
-import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingAbstractTextItemUiModel
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingItemUiModel
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingPageInfo
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingSetType

@@ -1,13 +1,13 @@
 package com.threegap.bitnagil.presentation.reporthistory
 
 import androidx.lifecycle.ViewModel
+import com.threegap.bitnagil.domain.report.model.ReportCategory
 import com.threegap.bitnagil.domain.report.usecase.GetReportHistoriesUseCase
 import com.threegap.bitnagil.presentation.reporthistory.contract.ReportHistorySideEffect
 import com.threegap.bitnagil.presentation.reporthistory.contract.ReportHistoryState
-import com.threegap.bitnagil.presentation.reporthistory.model.ReportCategory
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportHistoriesPerDayUiModel
-import com.threegap.bitnagil.presentation.reporthistory.model.ReportHistoryUiModel
-import com.threegap.bitnagil.presentation.reporthistory.model.ReportProcess
+import com.threegap.bitnagil.presentation.reporthistory.model.ReportStatusFilter
+import com.threegap.bitnagil.presentation.reporthistory.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
@@ -31,9 +31,7 @@ class ReportHistoryViewModel @Inject constructor(
                     .map { reportHistoryPerDateMap ->
                         ReportHistoriesPerDayUiModel(
                             date = reportHistoryPerDateMap.key,
-                            reports = reportHistoryPerDateMap.value.map {
-                                ReportHistoryUiModel.fromDomain(it)
-                            },
+                            reports = reportHistoryPerDateMap.value.map { it.toUiModel() },
                         )
                     }
                     .sortedByDescending { reportHistoryPerDate ->
@@ -61,10 +59,10 @@ class ReportHistoryViewModel @Inject constructor(
         }
     }
 
-    fun selectReportProcess(reportProcess: ReportProcess) = intent {
+    fun selectReportStatusFilter(reportStatusFilter: ReportStatusFilter) = intent {
         reduce {
             state.copy(
-                selectedReportProcess = reportProcess,
+                selectedReportStatusFilter = reportStatusFilter,
             )
         }
     }

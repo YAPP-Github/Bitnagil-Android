@@ -1,68 +1,52 @@
 package com.threegap.bitnagil.presentation.reporthistory.contract
 
-import com.threegap.bitnagil.presentation.reporthistory.model.ReportCategory
+import com.threegap.bitnagil.domain.report.model.ReportCategory
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportHistoriesPerDayUiModel
-import com.threegap.bitnagil.presentation.reporthistory.model.ReportProcess
-import com.threegap.bitnagil.presentation.reporthistory.model.ReportProcessWithCount
+import com.threegap.bitnagil.presentation.reporthistory.model.ReportStatusFilter
+import com.threegap.bitnagil.presentation.reporthistory.model.ReportStatusFilterWithCount
 
 data class ReportHistoryState(
     val selectedReportCategory: ReportCategory?,
-    val selectedReportProcess: ReportProcess,
+    val selectedReportStatusFilter: ReportStatusFilter,
     val reportHistoriesPerDays: List<ReportHistoriesPerDayUiModel>,
     val showSelectReportCategoryBottomSheet: Boolean,
 ) {
-    val filteredReportHistoriesPerDays: List<ReportHistoriesPerDayUiModel> = reportHistoriesPerDays
-        .map { reportHistoriesPerDay ->
-            reportHistoriesPerDay.copy(
-                reports = reportHistoriesPerDay.reports.filter {
-                    val processMatched = when (selectedReportProcess) {
-                        ReportProcess.Total -> true
-                        ReportProcess.Reported -> it.process == ReportProcess.Reported
-                        ReportProcess.Progress -> it.process == ReportProcess.Progress
-                        ReportProcess.Complete -> it.process == ReportProcess.Complete
-                    }
+    val filteredReportHistoriesPerDays: List<ReportHistoriesPerDayUiModel> =
+        reportHistoriesPerDays
+            .map { reportHistoriesPerDay ->
+                reportHistoriesPerDay.copy(
+                    reports = reportHistoriesPerDay.reports.filter { report ->
+                        val statusMatched = selectedReportStatusFilter.matches(report.status)
 
-                    val categoryMatched = when (selectedReportCategory) {
-                        ReportCategory.TrafficFacilities -> it.category == ReportCategory.TrafficFacilities
-                        ReportCategory.LightingFacilities -> it.category == ReportCategory.LightingFacilities
-                        ReportCategory.WaterFacilities -> it.category == ReportCategory.WaterFacilities
-                        ReportCategory.Amenities -> it.category == ReportCategory.Amenities
-                        null -> true
-                    }
+                        val categoryMatched = when (selectedReportCategory) {
+                            null -> true
+                            else -> report.category == selectedReportCategory
+                        }
 
-                    processMatched && categoryMatched
-                },
-            )
+                        statusMatched && categoryMatched
+                    },
+                )
+            }
+            .filter { reportHistoriesPerDay ->
+                reportHistoriesPerDay.reports.isNotEmpty()
+            }
+
+    val reportStatusFilterWithCounts: List<ReportStatusFilterWithCount> =
+        ReportStatusFilter.values().map { filter ->
+            val count = reportHistoriesPerDays.sumOf { day ->
+                day.reports.count { report ->
+                    filter.matches(report.status)
+                }
+            }
+            ReportStatusFilterWithCount(filter, count)
         }
-        .filter { reportHistoriesPerDay ->
-            reportHistoriesPerDay.reports.isNotEmpty()
-        }
-
-    val reportProcessWithCounts: List<ReportProcessWithCount> = listOf(
-        ReportProcessWithCount(
-            ReportProcess.Total,
-            reportHistoriesPerDays.sumOf { it.reports.size },
-        ),
-        ReportProcessWithCount(
-            ReportProcess.Reported,
-            reportHistoriesPerDays.sumOf { it.reports.filter { report -> report.process == ReportProcess.Reported }.size },
-        ),
-        ReportProcessWithCount(
-            ReportProcess.Progress,
-            reportHistoriesPerDays.sumOf { it.reports.filter { report -> report.process == ReportProcess.Progress }.size },
-        ),
-        ReportProcessWithCount(
-            ReportProcess.Complete,
-            reportHistoriesPerDays.sumOf { it.reports.filter { report -> report.process == ReportProcess.Complete }.size },
-        ),
-    )
 
     val showCategorySelectButton: Boolean = reportHistoriesPerDays.isNotEmpty()
 
     companion object {
         val Init = ReportHistoryState(
             selectedReportCategory = null,
-            selectedReportProcess = ReportProcess.Total,
+            selectedReportStatusFilter = ReportStatusFilter.All,
             reportHistoriesPerDays = listOf(),
             showSelectReportCategoryBottomSheet = false,
         )
