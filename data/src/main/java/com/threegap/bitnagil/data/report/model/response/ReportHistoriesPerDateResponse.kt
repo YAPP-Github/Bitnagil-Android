@@ -6,12 +6,12 @@ import kotlinx.serialization.Serializable
 import java.time.LocalDate
 
 @Serializable
-data class ReportHistoriesPerDateDto(
+data class ReportHistoriesPerDateResponse(
     @SerialName("reportInfos")
-    val reportInfos: Map<String, List<ReportItemDto>>,
+    val reportInfos: Map<String, List<ReportItemResponse>>,
 )
 
-fun ReportHistoriesPerDateDto.toDomainMap(): Map<LocalDate, List<ReportItem>> =
+fun ReportHistoriesPerDateResponse.toDomainMap(): Map<LocalDate, List<ReportItem>> =
     this.reportInfos
         .mapKeys { LocalDate.parse(it.key) }
         .mapValues { entry ->

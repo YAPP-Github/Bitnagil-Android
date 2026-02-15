@@ -5,12 +5,12 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RoutineCompletionRequestDto(
+data class RoutineCompletionRequest(
     @SerialName("routineCompletionInfos")
-    val routineCompletionInfos: List<RoutineCompletionInfoDto>,
+    val routineCompletionInfos: List<RoutineCompletionInfoRequest>,
 )
 
 internal fun RoutineCompletionInfos.toDto() =
-    RoutineCompletionRequestDto(
+    RoutineCompletionRequest(
         routineCompletionInfos = this.routineCompletionInfos.map { it.toDto() },
     )

@@ -5,12 +5,12 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UserProfileResponseDto(
+data class UserProfileResponse(
     @SerialName("nickname")
     val nickname: String,
 )
 
-fun UserProfileResponseDto.toDomain() =
+fun UserProfileResponse.toDomain() =
     UserProfile(
         nickname = this.nickname,
     )

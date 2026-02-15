@@ -6,7 +6,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ReportRequestDto(
+data class ReportRequest(
     @SerialName("reportTitle")
     val reportTitle: String,
     @SerialName("reportContent")
@@ -23,8 +23,8 @@ data class ReportRequestDto(
     val longitude: Double,
 )
 
-fun Report.toDto(): ReportRequestDto {
-    return ReportRequestDto(
+fun Report.toDto(): ReportRequest {
+    return ReportRequest(
         reportTitle = this.title,
         reportContent = this.content,
         reportCategory = this.category,

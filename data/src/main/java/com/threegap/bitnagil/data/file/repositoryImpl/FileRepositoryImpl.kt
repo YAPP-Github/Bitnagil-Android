@@ -1,7 +1,7 @@
 package com.threegap.bitnagil.data.file.repositoryImpl
 
 import com.threegap.bitnagil.data.file.datasource.FileDataSource
-import com.threegap.bitnagil.data.file.model.request.FileInfoRequestDto
+import com.threegap.bitnagil.data.file.model.request.FileInfoRequest
 import com.threegap.bitnagil.data.file.uploader.ImageUploader
 import com.threegap.bitnagil.domain.file.model.ImageFile
 import com.threegap.bitnagil.domain.file.repository.FileRepository
@@ -17,7 +17,7 @@ class FileRepositoryImpl @Inject constructor(
     override suspend fun uploadImages(imageFiles: List<ImageFile>): Result<List<String>> {
         return runCatching {
             val fileInfos = imageFiles.map { imageFile ->
-                FileInfoRequestDto(prefix = imageFile.prefix, fileName = imageFile.name)
+                FileInfoRequest(prefix = imageFile.prefix, fileName = imageFile.name)
             }
 
             val presignedUrlMap: Map<String, String> = fileDataSource

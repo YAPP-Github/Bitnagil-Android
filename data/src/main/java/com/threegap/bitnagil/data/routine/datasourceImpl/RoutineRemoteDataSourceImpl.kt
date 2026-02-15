@@ -3,7 +3,7 @@ package com.threegap.bitnagil.data.routine.datasourceImpl
 import com.threegap.bitnagil.data.common.safeApiCall
 import com.threegap.bitnagil.data.common.safeUnitApiCall
 import com.threegap.bitnagil.data.routine.datasource.RoutineRemoteDataSource
-import com.threegap.bitnagil.data.routine.model.request.RoutineCompletionRequestDto
+import com.threegap.bitnagil.data.routine.model.request.RoutineCompletionRequest
 import com.threegap.bitnagil.data.routine.model.response.RoutineResponse
 import com.threegap.bitnagil.data.routine.model.response.RoutineScheduleResponse
 import com.threegap.bitnagil.data.routine.service.RoutineService
@@ -17,9 +17,9 @@ class RoutineRemoteDataSourceImpl @Inject constructor(
             routineService.fetchRoutineSchedule(startDate, endDate)
         }
 
-    override suspend fun syncRoutineCompletion(routineCompletionRequestDto: RoutineCompletionRequestDto): Result<Unit> =
+    override suspend fun syncRoutineCompletion(routineCompletionRequest: RoutineCompletionRequest): Result<Unit> =
         safeUnitApiCall {
-            routineService.routineCompletion(routineCompletionRequestDto)
+            routineService.routineCompletion(routineCompletionRequest)
         }
 
     override suspend fun getRoutine(routineId: String): Result<RoutineResponse> =
