@@ -11,11 +11,12 @@ import com.threegap.bitnagil.domain.onboarding.usecase.RegisterRecommendOnBoardi
 import com.threegap.bitnagil.domain.user.usecase.FetchUserProfileUseCase
 import com.threegap.bitnagil.presentation.onboarding.contract.OnBoardingSideEffect
 import com.threegap.bitnagil.presentation.onboarding.contract.OnBoardingState
-import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingAbstractTextItem
-import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingItem
+import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingAbstractTextItemUiModel
+import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingItemUiModel
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingPageInfo
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingSetType
 import com.threegap.bitnagil.presentation.onboarding.model.navarg.OnBoardingScreenArg
+import com.threegap.bitnagil.presentation.onboarding.model.toUiModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -100,9 +101,7 @@ class OnBoardingViewModel @AssistedInject constructor(
 
         val abstractPagePrefixText = onBoardingAbstract.prefix
         val abstractTexts = onBoardingAbstract.abstractTexts.map { onBoardingAbstractText ->
-            onBoardingAbstractText.textItems.map { onBoardingAbstractTextItem ->
-                OnBoardingAbstractTextItem.fromOnBoardingAbstractTextItem(onBoardingAbstractTextItem)
-            }
+            onBoardingAbstractText.textItems.map { it.toUiModel() }
         }
 
         val existedOnBoardingAbstract = OnBoardingPageInfo.ExistedOnBoardingAbstract(
@@ -125,9 +124,7 @@ class OnBoardingViewModel @AssistedInject constructor(
 
     fun loadOnBoardingItems() = intent {
         val onBoardings = getOnBoardingsUseCase()
-        val onBoardingPages = onBoardings.map { onBoarding ->
-            OnBoardingPageInfo.SelectOnBoarding.fromOnBoarding(onBoarding = onBoarding)
-        }
+        val onBoardingPages = onBoardings.map { it.toUiModel() }
 
         val currentState = state
         if (currentState !is OnBoardingState.Idle) return@intent
@@ -175,9 +172,7 @@ class OnBoardingViewModel @AssistedInject constructor(
 
             val abstractPagePrefixText = onBoardingAbstract.prefix
             val abstractTexts = onBoardingAbstract.abstractTexts.map { onBoardingAbstractText ->
-                onBoardingAbstractText.textItems.map { onBoardingAbstractTextItem ->
-                    OnBoardingAbstractTextItem.fromOnBoardingAbstractTextItem(onBoardingAbstractTextItem)
-                }
+                onBoardingAbstractText.textItems.map { it.toUiModel() }
             }
 
             reduce {
@@ -291,9 +286,7 @@ class OnBoardingViewModel @AssistedInject constructor(
                 onSuccess = { recommendRoutines ->
                     if (isActive) {
                         applyRecommendRoutines(
-                            routines = recommendRoutines.map {
-                                OnBoardingItem.fromOnBoardingRecommendRoutine(it)
-                            },
+                            routines = recommendRoutines.map { it.toUiModel() },
                         )
                     }
                 },
@@ -303,7 +296,7 @@ class OnBoardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun applyRecommendRoutines(routines: List<OnBoardingItem>) = intent {
+    private fun applyRecommendRoutines(routines: List<OnBoardingItemUiModel>) = intent {
         val currentState = state
         if (currentState !is OnBoardingState.Idle) return@intent
 
