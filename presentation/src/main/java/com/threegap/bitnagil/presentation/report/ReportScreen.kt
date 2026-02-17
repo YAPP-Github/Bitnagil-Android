@@ -278,7 +278,6 @@ private fun ReportScreen(
                             color = BitnagilTheme.colors.coolGray80,
                         )
                     },
-                    maxLines = 2,
                     minLines = 2,
                 )
 
