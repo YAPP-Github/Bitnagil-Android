@@ -16,7 +16,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.presentation.guide.component.atom.GuideButton
 import com.threegap.bitnagil.presentation.guide.component.template.GuideBottomSheet
-import com.threegap.bitnagil.presentation.guide.model.GuideSideEffect
+import com.threegap.bitnagil.presentation.guide.contract.GuideSideEffect
 import com.threegap.bitnagil.presentation.guide.model.GuideType
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect

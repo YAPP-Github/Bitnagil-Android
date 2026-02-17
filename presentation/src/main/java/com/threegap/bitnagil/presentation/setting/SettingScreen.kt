@@ -33,8 +33,8 @@ import com.threegap.bitnagil.presentation.common.playstore.UpdateAvailableState
 import com.threegap.bitnagil.presentation.common.playstore.openAppInPlayStore
 import com.threegap.bitnagil.presentation.common.playstore.updateAvailable
 import com.threegap.bitnagil.presentation.setting.component.atom.settingtitle.SettingTitle
-import com.threegap.bitnagil.presentation.setting.model.mvi.SettingSideEffect
-import com.threegap.bitnagil.presentation.setting.model.mvi.SettingState
+import com.threegap.bitnagil.presentation.setting.contract.SettingSideEffect
+import com.threegap.bitnagil.presentation.setting.contract.SettingState
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 

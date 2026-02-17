@@ -38,14 +38,14 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
 import com.threegap.bitnagil.presentation.common.ninepatch.ninePatchBackgroundNode
-import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingAbstractTextItem
+import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingAbstractTextItemUiModel
 
 @Composable
 fun OnBoardingAbstractTemplate(
     modifier: Modifier = Modifier,
     title: String,
     userName: String,
-    onBoardingAbstractTexts: List<List<OnBoardingAbstractTextItem>>,
+    onBoardingAbstractTexts: List<List<OnBoardingAbstractTextItemUiModel>>,
     onDispose: () -> Unit,
     onClickNextButton: () -> Unit,
     nextButtonEnable: Boolean,
@@ -120,7 +120,7 @@ private fun getIndexIconResourceId(index: Int): Int {
 
 @Composable
 private fun OnBoardingAbstractText(
-    onBoardingAbstractTextList: List<OnBoardingAbstractTextItem>,
+    onBoardingAbstractTextList: List<OnBoardingAbstractTextItemUiModel>,
     iconResourceId: Int,
 ) {
     val annotatedString = buildAnnotatedString {
@@ -214,31 +214,31 @@ private fun OnBoardingAbstractTemplatePreview() {
             userName = "안드로이드",
             onBoardingAbstractTexts = listOf(
                 listOf(
-                    OnBoardingAbstractTextItem(
+                    OnBoardingAbstractTextItemUiModel(
                         text = "텍스트1",
                         isBold = true,
                     ),
-                    OnBoardingAbstractTextItem(
+                    OnBoardingAbstractTextItemUiModel(
                         text = "텍스트2 아아아아아아아아아ㅏ아앙아아ㅏ아아아아아",
                         isBold = false,
                     ),
                 ),
                 listOf(
-                    OnBoardingAbstractTextItem(
+                    OnBoardingAbstractTextItemUiModel(
                         text = "텍스트1",
                         isBold = true,
                     ),
-                    OnBoardingAbstractTextItem(
+                    OnBoardingAbstractTextItemUiModel(
                         text = "텍스트2",
                         isBold = false,
                     ),
                 ),
                 listOf(
-                    OnBoardingAbstractTextItem(
+                    OnBoardingAbstractTextItemUiModel(
                         text = "텍스트1",
                         isBold = true,
                     ),
-                    OnBoardingAbstractTextItem(
+                    OnBoardingAbstractTextItemUiModel(
                         text = "텍스트2",
                         isBold = false,
                     ),

@@ -8,17 +8,17 @@ import com.threegap.bitnagil.domain.writeroutine.model.RepeatDay
 import com.threegap.bitnagil.domain.writeroutine.model.RoutineUpdateType
 import com.threegap.bitnagil.domain.writeroutine.usecase.EditRoutineUseCase
 import com.threegap.bitnagil.domain.writeroutine.usecase.RegisterRoutineUseCase
-import com.threegap.bitnagil.presentation.common.extension.displayTitle
+import com.threegap.bitnagil.presentation.writeroutine.contract.WriteRoutineSideEffect
+import com.threegap.bitnagil.presentation.writeroutine.contract.WriteRoutineState
 import com.threegap.bitnagil.presentation.writeroutine.model.Date
 import com.threegap.bitnagil.presentation.writeroutine.model.Day
 import com.threegap.bitnagil.presentation.writeroutine.model.RepeatType
 import com.threegap.bitnagil.presentation.writeroutine.model.SelectableDay
-import com.threegap.bitnagil.presentation.writeroutine.model.SubRoutine
+import com.threegap.bitnagil.presentation.writeroutine.model.SubRoutineUiModel
 import com.threegap.bitnagil.presentation.writeroutine.model.Time
 import com.threegap.bitnagil.presentation.writeroutine.model.WriteRoutineType
-import com.threegap.bitnagil.presentation.writeroutine.model.mvi.WriteRoutineSideEffect
-import com.threegap.bitnagil.presentation.writeroutine.model.mvi.WriteRoutineState
 import com.threegap.bitnagil.presentation.writeroutine.model.navarg.WriteRoutineScreenArg
+import com.threegap.bitnagil.presentation.writeroutine.model.toUiModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -42,11 +42,11 @@ class WriteRoutineViewModel @AssistedInject constructor(
 
     override val container: Container<WriteRoutineState, WriteRoutineSideEffect> = container(
         savedStateHandle = savedStateHandle,
-        initialState = WriteRoutineState.Init,
+        initialState = WriteRoutineState.INIT,
     )
 
     private var routineId: String? = null
-    private var oldSubRoutines: List<SubRoutine> = listOf()
+    private var oldSubRoutineUiModels: List<SubRoutineUiModel> = listOf()
 
     init {
         val navigationArg = writeRoutineArg
@@ -131,7 +131,7 @@ class WriteRoutineViewModel @AssistedInject constructor(
         }
         getRecommendRoutineUseCase(recommendRoutineId).fold(
             onSuccess = { routine ->
-                oldSubRoutines = routine.recommendSubRoutines.map { SubRoutine.fromDomainRecommendSubRoutine(it) }
+                oldSubRoutineUiModels = routine.subRoutines.map { it.toUiModel() }
 
                 reduce {
                     state.copy(
@@ -142,12 +142,12 @@ class WriteRoutineViewModel @AssistedInject constructor(
                         startDate = Date.now(),
                         endDate = Date.now(),
                         subRoutineNames = listOf(
-                            oldSubRoutines.getOrNull(0)?.name ?: "",
-                            oldSubRoutines.getOrNull(1)?.name ?: "",
-                            oldSubRoutines.getOrNull(2)?.name ?: "",
+                            oldSubRoutineUiModels.getOrNull(0)?.name ?: "",
+                            oldSubRoutineUiModels.getOrNull(1)?.name ?: "",
+                            oldSubRoutineUiModels.getOrNull(2)?.name ?: "",
                         ),
                         loading = false,
-                        recommendedRoutineType = routine.recommendedRoutineType.displayTitle,
+                        recommendedRoutineType = routine.category,
                     )
                 }
             },

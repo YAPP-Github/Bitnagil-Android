@@ -32,15 +32,18 @@ import com.threegap.bitnagil.designsystem.component.atom.BitnagilChip
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
+import com.threegap.bitnagil.domain.report.model.ReportCategory
+import com.threegap.bitnagil.domain.report.model.ReportStatus
+import com.threegap.bitnagil.presentation.common.extension.displayTitle
 import com.threegap.bitnagil.presentation.reporthistory.component.block.ReportHistoryItem
 import com.threegap.bitnagil.presentation.reporthistory.component.template.ReportCategoryBottomSheet
-import com.threegap.bitnagil.presentation.reporthistory.model.ReportCategory
+import com.threegap.bitnagil.presentation.reporthistory.contract.ReportHistoryState
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportHistoriesPerDayUiModel
-import com.threegap.bitnagil.presentation.reporthistory.model.ReportHistoryState
 import com.threegap.bitnagil.presentation.reporthistory.model.ReportHistoryUiModel
-import com.threegap.bitnagil.presentation.reporthistory.model.ReportProcess
+import com.threegap.bitnagil.presentation.reporthistory.model.ReportStatusFilter
 import com.threegap.bitnagil.presentation.reporthistory.util.toPresentationFormat
 import org.orbitmvi.orbit.compose.collectAsState
+import java.time.LocalDate
 
 @Composable
 fun ReportHistoryScreenContainer(
@@ -61,7 +64,7 @@ fun ReportHistoryScreenContainer(
     ReportHistoryScreen(
         state = state,
         onClickPreviousButton = navigateToBack,
-        onClickReportProcessChip = viewModel::selectReportProcess,
+        onClickReportStatusFilterChip = viewModel::selectReportStatusFilter,
         onClickReportCategoryButton = viewModel::showReportCategoryBottomSheet,
         onClickReportItem = navigateToReportDetail,
     )
@@ -72,7 +75,7 @@ private fun ReportHistoryScreen(
     modifier: Modifier = Modifier,
     state: ReportHistoryState,
     onClickPreviousButton: () -> Unit,
-    onClickReportProcessChip: (ReportProcess) -> Unit,
+    onClickReportStatusFilterChip: (ReportStatusFilter) -> Unit,
     onClickReportCategoryButton: () -> Unit,
     onClickReportItem: (String) -> Unit,
 ) {
@@ -98,12 +101,12 @@ private fun ReportHistoryScreen(
         ) {
             Spacer(modifier = Modifier.width(8.dp))
 
-            state.reportProcessWithCounts.forEach { reportProcessWithCount ->
+            state.reportStatusFilterWithCounts.forEach { filterWithCount ->
                 BitnagilChip(
-                    title = reportProcessWithCount.titleWithCount,
-                    isSelected = state.selectedReportProcess == reportProcessWithCount.process,
+                    title = filterWithCount.titleWithCount,
+                    isSelected = state.selectedReportStatusFilter == filterWithCount.filter,
                     onCategorySelected = {
-                        onClickReportProcessChip(reportProcessWithCount.process)
+                        onClickReportStatusFilterChip(filterWithCount.filter)
                     },
                 )
             }
@@ -171,7 +174,7 @@ private fun ReportHistoryScreen(
                         .clickableWithoutRipple(onClick = onClickReportCategoryButton),
                 ) {
                     Text(
-                        text = state.selectedReportCategory?.title ?: "카테고리",
+                        text = state.selectedReportCategory?.displayTitle ?: "카테고리",
                         color = BitnagilTheme.colors.coolGray40,
                         style = BitnagilTheme.typography.body2Medium,
                         modifier = Modifier.padding(start = 10.dp),
@@ -198,30 +201,30 @@ private fun ReportHistoryScreenPreview() {
             state = ReportHistoryState.Init.copy(
                 reportHistoriesPerDays = List(10) {
                     ReportHistoriesPerDayUiModel(
-                        date = java.time.LocalDate.now(),
+                        date = LocalDate.now(),
                         reports = listOf(
                             ReportHistoryUiModel(
                                 id = "1",
                                 title = "제보 1",
                                 imageUrl = "-",
                                 location = "서울특별시 성북구 안암로 106",
-                                process = ReportProcess.Reported,
-                                category = ReportCategory.Amenities,
+                                status = ReportStatus.PENDING,
+                                category = ReportCategory.AMENITY,
                             ),
                             ReportHistoryUiModel(
                                 id = "1",
                                 title = "제보 1",
                                 imageUrl = "-",
                                 location = "서울특별시 성북구 안암로 106",
-                                process = ReportProcess.Progress,
-                                category = ReportCategory.Amenities,
+                                status = ReportStatus.IN_PROGRESS,
+                                category = ReportCategory.AMENITY,
                             ),
                         ),
                     )
                 },
             ),
             onClickPreviousButton = {},
-            onClickReportProcessChip = {},
+            onClickReportStatusFilterChip = {},
             onClickReportCategoryButton = {},
             onClickReportItem = {},
         )

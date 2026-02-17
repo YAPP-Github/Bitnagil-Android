@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.threegap.bitnagil.domain.auth.model.TermsAgreement
 import com.threegap.bitnagil.domain.auth.usecase.SubmitTermsAgreementUseCase
-import com.threegap.bitnagil.presentation.terms.model.TermsAgreementSideEffect
-import com.threegap.bitnagil.presentation.terms.model.TermsAgreementState
+import com.threegap.bitnagil.presentation.terms.contract.TermsAgreementSideEffect
+import com.threegap.bitnagil.presentation.terms.contract.TermsAgreementState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost

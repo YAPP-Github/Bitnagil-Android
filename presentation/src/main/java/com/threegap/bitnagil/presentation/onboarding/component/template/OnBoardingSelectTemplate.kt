@@ -16,14 +16,14 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilSelectButton
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButtonColor
-import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingItem
+import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingItemUiModel
 
 @Composable
 fun OnBoardingSelectTemplate(
     modifier: Modifier = Modifier,
     title: String,
     subText: String? = null,
-    items: List<OnBoardingItem>,
+    items: List<OnBoardingItemUiModel>,
     nextButtonEnable: Boolean = false,
     onClickNextButton: () -> Unit,
     onClickItem: ((String) -> Unit)?,

@@ -19,8 +19,8 @@ import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.presentation.terms.component.TermsAgreementItem
 import com.threegap.bitnagil.presentation.terms.component.ToggleAllAgreementsItem
-import com.threegap.bitnagil.presentation.terms.model.TermsAgreementSideEffect
-import com.threegap.bitnagil.presentation.terms.model.TermsAgreementState
+import com.threegap.bitnagil.presentation.terms.contract.TermsAgreementSideEffect
+import com.threegap.bitnagil.presentation.terms.contract.TermsAgreementState
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 

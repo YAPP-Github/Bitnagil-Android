@@ -10,17 +10,12 @@ data class EmotionRecommendRoutineUiModel(
     val name: String,
     val description: String,
     val selected: Boolean,
-) : Parcelable {
-    companion object {
-        fun fromEmotionRecommendRoutine(
-            emotionRecommendRoutine: EmotionRecommendRoutine,
-        ): EmotionRecommendRoutineUiModel {
-            return EmotionRecommendRoutineUiModel(
-                id = emotionRecommendRoutine.routineId,
-                name = emotionRecommendRoutine.routineName,
-                description = emotionRecommendRoutine.routineDescription,
-                selected = false,
-            )
-        }
-    }
-}
+) : Parcelable
+
+internal fun EmotionRecommendRoutine.toUiModel(): EmotionRecommendRoutineUiModel =
+    EmotionRecommendRoutineUiModel(
+        id = this.routineId,
+        name = this.routineName,
+        description = this.routineDescription,
+        selected = false,
+    )

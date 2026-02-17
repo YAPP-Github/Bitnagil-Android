@@ -23,7 +23,10 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
-import com.threegap.bitnagil.presentation.reporthistory.model.ReportCategory
+import com.threegap.bitnagil.domain.report.model.ReportCategory
+import com.threegap.bitnagil.presentation.common.extension.displayExamples
+import com.threegap.bitnagil.presentation.common.extension.displayTitle
+import com.threegap.bitnagil.presentation.common.extension.iconRes
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,9 +52,9 @@ fun ReportCategoryBottomSheet(
         ) {
             ReportCategory.entries.forEachIndexed { index, category ->
                 ReportCategoryItem(
-                    icon = category.iconResourceId,
-                    title = category.title,
-                    description = category.description,
+                    icon = category.iconRes,
+                    title = category.displayTitle,
+                    description = category.displayExamples,
                     isSelected = selectedCategory == category,
                     onClick = {
                         onSelected(category)
@@ -123,7 +126,7 @@ private fun ReportCategoryItem(
 @Composable
 private fun ReportCategoryBottomSheetPreview() {
     ReportCategoryBottomSheet(
-        selectedCategory = ReportCategory.WaterFacilities,
+        selectedCategory = ReportCategory.WATERFACILITY,
         onDismiss = {},
         onSelected = {},
     )

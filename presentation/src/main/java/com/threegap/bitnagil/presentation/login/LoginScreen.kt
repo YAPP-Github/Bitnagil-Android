@@ -31,8 +31,8 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
+import com.threegap.bitnagil.presentation.login.contract.LoginSideEffect
 import com.threegap.bitnagil.presentation.login.kakao.KakaoLoginHandlerImpl
-import com.threegap.bitnagil.presentation.login.model.LoginSideEffect
 import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable

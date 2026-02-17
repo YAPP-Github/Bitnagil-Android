@@ -34,14 +34,14 @@ import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIconButton
 import com.threegap.bitnagil.presentation.home.component.atom.EmotionRegisterButton
-import com.threegap.bitnagil.presentation.home.model.TodayEmotionUiModel
+import com.threegap.bitnagil.presentation.home.model.DailyEmotionUiModel
 import com.threegap.bitnagil.presentation.home.util.CollapsibleHeaderState
 import com.threegap.bitnagil.presentation.home.util.rememberCollapsibleHeaderState
 
 @Composable
 fun CollapsibleHomeHeader(
     userName: String,
-    todayEmotion: TodayEmotionUiModel?,
+    dailyEmotion: DailyEmotionUiModel,
     collapsibleHeaderState: CollapsibleHeaderState,
     onHelpClick: () -> Unit,
     onRegisterEmotion: () -> Unit,
@@ -53,12 +53,6 @@ fun CollapsibleHomeHeader(
         animationSpec = tween(durationMillis = 300),
         label = "header_alpha",
     )
-    val hasEmotion = todayEmotion != null
-    val welcomeMessage = if (hasEmotion) {
-        "${userName}님,\n${todayEmotion?.homeMessage}"
-    } else {
-        "${userName}님, 오셨군요!\n오늘 기분은 어떤가요?"
-    }
 
     Column(
         modifier = modifier
@@ -102,7 +96,7 @@ fun CollapsibleHomeHeader(
                     verticalArrangement = Arrangement.spacedBy(20.dp),
                 ) {
                     Text(
-                        text = welcomeMessage,
+                        text = "$userName${dailyEmotion.homeMessage}",
                         style = BitnagilTheme.typography.cafe24SsurroundAir,
                         color = BitnagilTheme.colors.white,
                         fontWeight = FontWeight.SemiBold,
@@ -110,14 +104,14 @@ fun CollapsibleHomeHeader(
 
                     EmotionRegisterButton(
                         onClick = onRegisterEmotion,
-                        enabled = !hasEmotion,
+                        enabled = !dailyEmotion.hasEmotion,
                     )
                 }
 
                 AsyncImage(
-                    model = remember(todayEmotion?.imageUrl) {
+                    model = remember(dailyEmotion.imageUrl) {
                         ImageRequest.Builder(context)
-                            .data(todayEmotion?.imageUrl)
+                            .data(dailyEmotion.imageUrl)
                             .crossfade(true)
                             .build()
                     },
@@ -140,7 +134,7 @@ fun CollapsibleHomeHeader(
 private fun CollapsibleHomeHeaderPreview() {
     CollapsibleHomeHeader(
         userName = "대현",
-        todayEmotion = null,
+        dailyEmotion = DailyEmotionUiModel.INIT,
         collapsibleHeaderState = rememberCollapsibleHeaderState(),
         onHelpClick = {},
         onRegisterEmotion = {},

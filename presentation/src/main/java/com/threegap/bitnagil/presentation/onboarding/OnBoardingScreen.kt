@@ -15,11 +15,11 @@ import com.threegap.bitnagil.presentation.common.toast.GlobalBitnagilToast
 import com.threegap.bitnagil.presentation.onboarding.component.template.OnBoardingAbstractTemplate
 import com.threegap.bitnagil.presentation.onboarding.component.template.OnBoardingIntroTemplate
 import com.threegap.bitnagil.presentation.onboarding.component.template.OnBoardingSelectTemplate
-import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingItem
+import com.threegap.bitnagil.presentation.onboarding.contract.OnBoardingSideEffect
+import com.threegap.bitnagil.presentation.onboarding.contract.OnBoardingState
+import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingItemUiModel
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingPageInfo
 import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingSetType
-import com.threegap.bitnagil.presentation.onboarding.model.mvi.OnBoardingSideEffect
-import com.threegap.bitnagil.presentation.onboarding.model.mvi.OnBoardingState
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
@@ -163,7 +163,7 @@ fun OnBoardingScreenPreview() {
             nextButtonEnable = false,
             currentOnBoardingPageInfo = OnBoardingPageInfo.RecommendRoutines(
                 listOf(
-                    OnBoardingItem("1", "루틴명", "세부 루틴 한 줄 설명", null),
+                    OnBoardingItemUiModel("1", "루틴명", "세부 루틴 한 줄 설명", null),
                 ),
             ),
             totalStep = 5,

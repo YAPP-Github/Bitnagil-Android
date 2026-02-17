@@ -14,8 +14,8 @@ import com.threegap.bitnagil.presentation.common.toast.GlobalBitnagilToast
 import com.threegap.bitnagil.presentation.emotion.component.template.EmotionRecommendRoutineScreen
 import com.threegap.bitnagil.presentation.emotion.component.template.SimpleEmotionSelectionScreen
 import com.threegap.bitnagil.presentation.emotion.component.template.SwipeEmotionSelectionScreen
+import com.threegap.bitnagil.presentation.emotion.contract.EmotionSideEffect
 import com.threegap.bitnagil.presentation.emotion.model.EmotionScreenStep
-import com.threegap.bitnagil.presentation.emotion.model.mvi.EmotionSideEffect
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 

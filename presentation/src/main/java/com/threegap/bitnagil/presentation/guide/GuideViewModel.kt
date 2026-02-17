@@ -1,8 +1,8 @@
 package com.threegap.bitnagil.presentation.guide
 
 import androidx.lifecycle.ViewModel
-import com.threegap.bitnagil.presentation.guide.model.GuideSideEffect
-import com.threegap.bitnagil.presentation.guide.model.GuideState
+import com.threegap.bitnagil.presentation.guide.contract.GuideSideEffect
+import com.threegap.bitnagil.presentation.guide.contract.GuideState
 import com.threegap.bitnagil.presentation.guide.model.GuideType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.Container

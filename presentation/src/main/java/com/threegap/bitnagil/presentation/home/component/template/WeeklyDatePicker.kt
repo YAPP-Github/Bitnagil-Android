@@ -197,7 +197,7 @@ private fun WeeklyDatePickerPreview() {
     WeeklyDatePicker(
         selectedDate = selectedDate,
         weeklyDates = selectedDate.getCurrentWeekDays(),
-        routines = RoutineScheduleUiModel(),
+        routines = RoutineScheduleUiModel.INIT,
         onDateSelect = { selectedDate = it },
         onPreviousWeekClick = { selectedDate = selectedDate.minusWeeks(1) },
         onNextWeekClick = { selectedDate = selectedDate.plusWeeks(1) },

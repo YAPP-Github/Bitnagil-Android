@@ -22,10 +22,10 @@ import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIconButton
 import com.threegap.bitnagil.domain.routine.model.DayOfWeek
+import com.threegap.bitnagil.presentation.common.extension.displayColor
+import com.threegap.bitnagil.presentation.common.extension.displayIcon
 import com.threegap.bitnagil.presentation.common.extension.displayTitle
 import com.threegap.bitnagil.presentation.routinelist.model.RoutineUiModel
-import com.threegap.bitnagil.presentation.routinelist.model.getColor
-import com.threegap.bitnagil.presentation.routinelist.model.getIcon
 
 @Composable
 fun RoutineDetailsCard(
@@ -56,11 +56,11 @@ fun RoutineDetailsCard(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             BitnagilIcon(
-                id = if (routine.recommendedRoutineType != null) routine.recommendedRoutineType.getIcon() else R.drawable.ic_shine,
+                id = if (routine.recommendedRoutineType != null) routine.recommendedRoutineType.displayIcon else R.drawable.ic_shine,
                 tint = null,
                 modifier = Modifier
                     .background(
-                        color = if (routine.recommendedRoutineType != null) routine.recommendedRoutineType.getColor() else BitnagilTheme.colors.yellow10,
+                        color = if (routine.recommendedRoutineType != null) routine.recommendedRoutineType.displayColor else BitnagilTheme.colors.yellow10,
                         shape = RoundedCornerShape(4.dp),
                     )
                     .padding(4.dp),

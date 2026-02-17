@@ -6,11 +6,10 @@ import androidx.lifecycle.viewModelScope
 import com.threegap.bitnagil.domain.emotion.usecase.GetEmotionsUseCase
 import com.threegap.bitnagil.domain.emotion.usecase.RegisterEmotionUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.RegisterRecommendOnBoardingRoutinesUseCase
-import com.threegap.bitnagil.presentation.emotion.model.EmotionRecommendRoutineUiModel
+import com.threegap.bitnagil.presentation.emotion.contract.EmotionSideEffect
+import com.threegap.bitnagil.presentation.emotion.contract.EmotionState
 import com.threegap.bitnagil.presentation.emotion.model.EmotionScreenStep
-import com.threegap.bitnagil.presentation.emotion.model.EmotionUiModel
-import com.threegap.bitnagil.presentation.emotion.model.mvi.EmotionSideEffect
-import com.threegap.bitnagil.presentation.emotion.model.mvi.EmotionState
+import com.threegap.bitnagil.presentation.emotion.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -39,7 +38,7 @@ class EmotionViewModel @Inject constructor(
                 onSuccess = { emotions ->
                     reduce {
                         state.copy(
-                            emotionTypeUiModels = emotions.map { EmotionUiModel.fromDomain(it) },
+                            emotionTypeUiModels = emotions.map { it.toUiModel() },
                             isLoading = false,
                         )
                     }
@@ -69,7 +68,7 @@ class EmotionViewModel @Inject constructor(
 
                 registerEmotionUseCase(emotionType = emotionType).fold(
                     onSuccess = { emotionRecommendRoutines ->
-                        val recommendRoutines = emotionRecommendRoutines.map { EmotionRecommendRoutineUiModel.fromEmotionRecommendRoutine(it) }
+                        val recommendRoutines = emotionRecommendRoutines.map { it.toUiModel() }
                         reduce {
                             state.copy(
                                 recommendRoutines = recommendRoutines,

@@ -1,5 +1,6 @@
 package com.threegap.bitnagil.domain.writeroutine.repository
 
+import com.threegap.bitnagil.domain.recommendroutine.model.RecommendCategory
 import com.threegap.bitnagil.domain.writeroutine.model.RepeatDay
 import com.threegap.bitnagil.domain.writeroutine.model.RoutineUpdateType
 import com.threegap.bitnagil.domain.writeroutine.model.WriteRoutineEvent
@@ -15,7 +16,7 @@ interface WriteRoutineRepository {
         startDate: LocalDate,
         endDate: LocalDate,
         subRoutines: List<String>,
-        recommendedRoutineType: String?,
+        recommendedRoutineType: RecommendCategory?,
     ): Result<Unit>
 
     suspend fun editRoutine(

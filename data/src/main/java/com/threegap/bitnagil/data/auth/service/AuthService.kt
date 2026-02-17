@@ -1,9 +1,9 @@
 package com.threegap.bitnagil.data.auth.service
 
-import com.threegap.bitnagil.data.auth.model.request.LoginRequestDto
-import com.threegap.bitnagil.data.auth.model.request.TermsAgreementRequestDto
+import com.threegap.bitnagil.data.auth.model.request.LoginRequest
+import com.threegap.bitnagil.data.auth.model.request.TermsAgreementRequest
 import com.threegap.bitnagil.data.auth.model.request.WithdrawalReasonRequest
-import com.threegap.bitnagil.data.auth.model.response.LoginResponseDto
+import com.threegap.bitnagil.data.auth.model.response.LoginResponse
 import com.threegap.bitnagil.network.model.BaseResponse
 import retrofit2.http.Body
 import retrofit2.http.Header
@@ -15,12 +15,12 @@ interface AuthService {
     @Headers("No-Service-Token: true")
     suspend fun postLogin(
         @Header("SocialAccessToken") socialAccessToken: String,
-        @Body loginRequestDto: LoginRequestDto,
-    ): BaseResponse<LoginResponseDto>
+        @Body loginRequest: LoginRequest,
+    ): BaseResponse<LoginResponse>
 
     @POST("/api/v1/auth/agreements")
     suspend fun submitAgreement(
-        @Body termsAgreementRequestDto: TermsAgreementRequestDto,
+        @Body termsAgreementRequest: TermsAgreementRequest,
     ): BaseResponse<Unit>
 
     @POST("/api/v1/auth/withdrawal")
@@ -33,5 +33,5 @@ interface AuthService {
     @Headers("No-Service-Token: true", "Auto-Login: true")
     suspend fun postReissueToken(
         @Header("Refresh-Token") refreshToken: String,
-    ): BaseResponse<LoginResponseDto>
+    ): BaseResponse<LoginResponse>
 }

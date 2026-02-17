@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.threegap.bitnagil.domain.auth.model.UserRole
 import com.threegap.bitnagil.domain.auth.usecase.AutoLoginUseCase
 import com.threegap.bitnagil.domain.version.usecase.CheckUpdateRequirementUseCase
-import com.threegap.bitnagil.presentation.splash.model.SplashSideEffect
-import com.threegap.bitnagil.presentation.splash.model.SplashState
+import com.threegap.bitnagil.presentation.splash.contract.SplashSideEffect
+import com.threegap.bitnagil.presentation.splash.contract.SplashState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

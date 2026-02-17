@@ -2,8 +2,8 @@ package com.threegap.bitnagil.data.emotion.service
 
 import com.threegap.bitnagil.data.emotion.model.dto.EmotionDto
 import com.threegap.bitnagil.data.emotion.model.request.RegisterEmotionRequest
+import com.threegap.bitnagil.data.emotion.model.response.DailyEmotionResponse
 import com.threegap.bitnagil.data.emotion.model.response.RegisterEmotionResponse
-import com.threegap.bitnagil.data.emotion.model.response.TodayEmotionResponseDto
 import com.threegap.bitnagil.network.model.BaseResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -20,7 +20,7 @@ interface EmotionService {
     ): BaseResponse<RegisterEmotionResponse>
 
     @GET("/api/v2/emotion-marbles/{searchDate}")
-    suspend fun fetchTodayEmotion(
+    suspend fun fetchDailyEmotion(
         @Path("searchDate") date: String,
-    ): BaseResponse<TodayEmotionResponseDto>
+    ): BaseResponse<DailyEmotionResponse>
 }

@@ -24,9 +24,9 @@ import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.domain.report.model.ReportCategory
-import com.threegap.bitnagil.presentation.report.model.iconRes
-import com.threegap.bitnagil.presentation.report.model.uiDescription
-import com.threegap.bitnagil.presentation.report.model.uiTitle
+import com.threegap.bitnagil.presentation.common.extension.displayExamples
+import com.threegap.bitnagil.presentation.common.extension.displayTitle
+import com.threegap.bitnagil.presentation.common.extension.iconRes
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,8 +54,8 @@ fun ReportCategoryBottomSheet(
             categories.forEachIndexed { index, category ->
                 ReportCategoryItem(
                     icon = category.iconRes,
-                    title = category.uiTitle,
-                    description = category.uiDescription,
+                    title = category.displayTitle,
+                    description = category.displayExamples,
                     isSelected = selectedCategory == category,
                     onClick = {
                         onSelected(category)

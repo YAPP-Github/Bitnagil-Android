@@ -53,6 +53,7 @@ import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButtonColor
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextField
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
+import com.threegap.bitnagil.presentation.common.extension.displayTitle
 import com.threegap.bitnagil.presentation.common.file.createCameraImageUri
 import com.threegap.bitnagil.presentation.common.premission.rememberPermissionHandler
 import com.threegap.bitnagil.presentation.report.component.AddPhotoButton
@@ -64,11 +65,10 @@ import com.threegap.bitnagil.presentation.report.component.ReportCategorySelecto
 import com.threegap.bitnagil.presentation.report.component.ReportField
 import com.threegap.bitnagil.presentation.report.component.template.CompleteReportContent
 import com.threegap.bitnagil.presentation.report.component.template.SubmittingReportContent
-import com.threegap.bitnagil.presentation.report.model.ReportSideEffect
-import com.threegap.bitnagil.presentation.report.model.ReportState
-import com.threegap.bitnagil.presentation.report.model.ReportState.Companion.MAX_IMAGE_COUNT
+import com.threegap.bitnagil.presentation.report.contract.ReportSideEffect
+import com.threegap.bitnagil.presentation.report.contract.ReportState
+import com.threegap.bitnagil.presentation.report.contract.ReportState.Companion.MAX_IMAGE_COUNT
 import com.threegap.bitnagil.presentation.report.model.SubmitState
-import com.threegap.bitnagil.presentation.report.model.uiTitle
 import kotlinx.coroutines.delay
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
@@ -284,7 +284,7 @@ private fun ReportScreen(
 
             ReportField(title = "카테고리") {
                 ReportCategorySelector(
-                    title = uiState.selectedCategory?.uiTitle,
+                    title = uiState.selectedCategory?.displayTitle,
                     onClick = {
                         focusManager.clearFocus()
                         onShowReportCategoryBottomSheet()

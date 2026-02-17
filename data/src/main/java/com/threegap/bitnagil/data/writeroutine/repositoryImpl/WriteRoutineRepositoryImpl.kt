@@ -3,6 +3,7 @@ package com.threegap.bitnagil.data.writeroutine.repositoryImpl
 import com.threegap.bitnagil.data.writeroutine.datasource.WriteRoutineDataSource
 import com.threegap.bitnagil.data.writeroutine.model.request.EditRoutineRequest
 import com.threegap.bitnagil.data.writeroutine.model.request.RegisterRoutineRequest
+import com.threegap.bitnagil.domain.recommendroutine.model.RecommendCategory
 import com.threegap.bitnagil.domain.writeroutine.model.RepeatDay
 import com.threegap.bitnagil.domain.writeroutine.model.RoutineUpdateType
 import com.threegap.bitnagil.domain.writeroutine.model.WriteRoutineEvent
@@ -24,7 +25,7 @@ class WriteRoutineRepositoryImpl @Inject constructor(
         startDate: LocalDate,
         endDate: LocalDate,
         subRoutines: List<String>,
-        recommendedRoutineType: String?,
+        recommendedRoutineType: RecommendCategory?,
     ): Result<Unit> {
         val request = RegisterRoutineRequest(
             routineName = name,

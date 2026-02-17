@@ -9,9 +9,9 @@ import com.threegap.bitnagil.domain.report.model.Report
 import com.threegap.bitnagil.domain.report.model.ReportCategory
 import com.threegap.bitnagil.domain.report.usecase.SubmitReportUseCase
 import com.threegap.bitnagil.presentation.common.file.convertUriToImageFile
-import com.threegap.bitnagil.presentation.report.model.ReportSideEffect
-import com.threegap.bitnagil.presentation.report.model.ReportState
-import com.threegap.bitnagil.presentation.report.model.ReportState.Companion.MAX_IMAGE_COUNT
+import com.threegap.bitnagil.presentation.report.contract.ReportSideEffect
+import com.threegap.bitnagil.presentation.report.contract.ReportState
+import com.threegap.bitnagil.presentation.report.contract.ReportState.Companion.MAX_IMAGE_COUNT
 import com.threegap.bitnagil.presentation.report.model.SubmitState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext

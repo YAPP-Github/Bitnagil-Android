@@ -1,6 +1,6 @@
 package com.threegap.bitnagil.data.file.datasource
 
-import com.threegap.bitnagil.data.file.model.request.FileInfoRequestDto
+import com.threegap.bitnagil.data.file.model.request.FileInfoRequest
 
 interface FileDataSource {
     /**
@@ -8,5 +8,5 @@ interface FileDataSource {
      * @param fileInfos 파일 정보 리스트 (prefix + fileName)
      * @return key: S3 경로, value: presigned URL
      */
-    suspend fun fetchPresignedUrls(fileInfos: List<FileInfoRequestDto>): Result<Map<String, String>>
+    suspend fun fetchPresignedUrls(fileInfos: List<FileInfoRequest>): Result<Map<String, String>>
 }

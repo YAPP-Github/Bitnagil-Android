@@ -28,8 +28,8 @@ import com.threegap.bitnagil.presentation.home.component.template.CollapsibleHom
 import com.threegap.bitnagil.presentation.home.component.template.EmptyRoutineView
 import com.threegap.bitnagil.presentation.home.component.template.RoutineSection
 import com.threegap.bitnagil.presentation.home.component.template.WeeklyDatePicker
-import com.threegap.bitnagil.presentation.home.model.HomeSideEffect
-import com.threegap.bitnagil.presentation.home.model.HomeState
+import com.threegap.bitnagil.presentation.home.contract.HomeSideEffect
+import com.threegap.bitnagil.presentation.home.contract.HomeState
 import com.threegap.bitnagil.presentation.home.util.rememberCollapsibleHeaderState
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
@@ -37,11 +37,11 @@ import java.time.LocalDate
 
 @Composable
 fun HomeScreenContainer(
+    viewModel: HomeViewModel = hiltViewModel(),
     navigateToGuide: () -> Unit,
     navigateToRegisterRoutine: () -> Unit,
     navigateToEmotion: () -> Unit,
     navigateToRoutineList: (String) -> Unit,
-    viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.collectAsState()
 
@@ -169,7 +169,7 @@ private fun HomeScreen(
 
         CollapsibleHomeHeader(
             userName = uiState.userNickname,
-            todayEmotion = uiState.todayEmotion,
+            dailyEmotion = uiState.dailyEmotion,
             collapsibleHeaderState = collapsibleHeaderState,
             onHelpClick = onHelpClick,
             onRegisterEmotion = onRegisterEmotionClick,

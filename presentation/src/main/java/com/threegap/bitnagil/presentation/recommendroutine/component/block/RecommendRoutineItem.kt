@@ -49,11 +49,11 @@ fun RecommendRoutineItem(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             BitnagilIcon(
-                id = routine.recommendedRoutineType?.displayIcon ?: R.drawable.ic_shine,
+                id = routine.category?.displayIcon ?: R.drawable.ic_shine,
                 tint = null,
                 modifier = Modifier
                     .background(
-                        color = routine.recommendedRoutineType?.displayColor ?: BitnagilTheme.colors.yellow10,
+                        color = routine.category?.displayColor ?: BitnagilTheme.colors.yellow10,
                         shape = RoundedCornerShape(4.dp),
                     )
                     .padding(4.dp),
@@ -75,7 +75,7 @@ fun RecommendRoutineItem(
             )
         }
 
-        if (routine.recommendSubRoutines.isNotEmpty()) {
+        if (routine.subRoutines.isNotEmpty()) {
             HorizontalDivider(
                 thickness = 1.dp,
                 color = BitnagilTheme.colors.coolGray97,
@@ -93,7 +93,7 @@ fun RecommendRoutineItem(
                     style = BitnagilTheme.typography.body2Medium,
                 )
 
-                routine.recommendSubRoutines.forEach { subRoutine ->
+                routine.subRoutines.forEach { subRoutine ->
                     Text(
                         text = "•  ${subRoutine.name}",
                         color = BitnagilTheme.colors.coolGray40,
@@ -113,8 +113,8 @@ private fun RecommendRoutineItemPreview() {
             id = 1,
             name = "개운하게 일어나기",
             level = RecommendLevel.LEVEL1,
-            recommendedRoutineType = RecommendCategory.WAKE_UP,
-            recommendSubRoutines = listOf(
+            category = RecommendCategory.WAKE_UP,
+            subRoutines = listOf(
                 RecommendSubRoutineUiModel(
                     id = 1,
                     name = "일어나기",
@@ -133,8 +133,8 @@ private fun EmptySubRoutineRecommendRoutineItemPreview() {
             id = 1,
             name = "개운하게 일어나기",
             level = RecommendLevel.LEVEL1,
-            recommendedRoutineType = RecommendCategory.WAKE_UP,
-            recommendSubRoutines = emptyList(),
+            category = RecommendCategory.WAKE_UP,
+            subRoutines = emptyList(),
         ),
         onAddRoutineClick = {},
     )

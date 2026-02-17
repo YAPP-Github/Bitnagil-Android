@@ -3,6 +3,7 @@ package com.threegap.bitnagil.presentation.onboarding.model
 import android.os.Parcelable
 import androidx.compose.runtime.Stable
 import com.threegap.bitnagil.domain.onboarding.model.OnBoarding
+import com.threegap.bitnagil.presentation.onboarding.model.OnBoardingPageInfo.SelectOnBoarding
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -13,7 +14,7 @@ sealed class OnBoardingPageInfo : Parcelable {
     @Parcelize
     data class ExistedOnBoardingAbstract(
         val prefix: String,
-        @Stable val abstractTexts: List<List<OnBoardingAbstractTextItem>>,
+        @Stable val abstractTexts: List<List<OnBoardingAbstractTextItemUiModel>>,
     ) : OnBoardingPageInfo()
 
     @Parcelize
@@ -21,22 +22,10 @@ sealed class OnBoardingPageInfo : Parcelable {
         val id: String,
         val title: String,
         val description: String?,
-        @Stable val items: List<OnBoardingItem> = emptyList(),
+        @Stable val items: List<OnBoardingItemUiModel> = emptyList(),
         val multipleSelectable: Boolean = false,
     ) : OnBoardingPageInfo() {
         companion object {
-            fun fromOnBoarding(onBoarding: OnBoarding): SelectOnBoarding {
-                return SelectOnBoarding(
-                    id = onBoarding.id,
-                    title = onBoarding.title,
-                    description = onBoarding.description,
-                    items = onBoarding.onboardingItemList.map {
-                        OnBoardingItem.fromOnBoardingItem(it)
-                    },
-                    multipleSelectable = onBoarding.multipleSelectable,
-                )
-            }
-
             private var lastSelectedIndex = 0
         }
 
@@ -68,11 +57,11 @@ sealed class OnBoardingPageInfo : Parcelable {
     @Parcelize
     data class Abstract(
         val prefix: String,
-        @Stable val abstractTexts: List<List<OnBoardingAbstractTextItem>>,
+        @Stable val abstractTexts: List<List<OnBoardingAbstractTextItemUiModel>>,
     ) : OnBoardingPageInfo()
 
     @Parcelize
-    data class RecommendRoutines(@Stable val routines: List<OnBoardingItem>) : OnBoardingPageInfo() {
+    data class RecommendRoutines(@Stable val routines: List<OnBoardingItemUiModel>) : OnBoardingPageInfo() {
         companion object {
             private var lastSelectedIndex = 0
         }
@@ -98,3 +87,12 @@ sealed class OnBoardingPageInfo : Parcelable {
         }
     }
 }
+
+internal fun OnBoarding.toUiModel(): SelectOnBoarding =
+    SelectOnBoarding(
+        id = this.id,
+        title = this.title,
+        description = this.description,
+        items = this.onboardingItemList.map { it.toUiModel() },
+        multipleSelectable = this.multipleSelectable,
+    )

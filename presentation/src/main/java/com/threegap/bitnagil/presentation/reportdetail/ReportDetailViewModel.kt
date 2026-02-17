@@ -2,10 +2,8 @@ package com.threegap.bitnagil.presentation.reportdetail
 
 import androidx.lifecycle.ViewModel
 import com.threegap.bitnagil.domain.report.usecase.GetReportUseCase
-import com.threegap.bitnagil.presentation.reportdetail.model.ReportCategory
-import com.threegap.bitnagil.presentation.reportdetail.model.ReportProcess
-import com.threegap.bitnagil.presentation.reportdetail.model.mvi.ReportDetailSideEffect
-import com.threegap.bitnagil.presentation.reportdetail.model.mvi.ReportDetailState
+import com.threegap.bitnagil.presentation.reportdetail.contract.ReportDetailSideEffect
+import com.threegap.bitnagil.presentation.reportdetail.contract.ReportDetailState
 import com.threegap.bitnagil.presentation.reportdetail.model.navarg.ReportDetailScreenArg
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -36,10 +34,10 @@ class ReportDetailViewModel @AssistedInject constructor(
             onSuccess = { reportDetail ->
                 reduce {
                     state.copy(
-                        reportProcess = ReportProcess.fromDomain(reportDetail.status),
+                        reportProcess = reportDetail.status,
                         reportTitle = reportDetail.title,
                         reportContent = reportDetail.content,
-                        reportCategory = ReportCategory.fromDomain(reportDetail.category),
+                        reportCategory = reportDetail.category,
                         imageUrls = reportDetail.imageUrls,
                         location = reportDetail.address,
                         date = reportDetail.date,
