@@ -14,15 +14,9 @@ jobs:
       - name: check out repository
         uses: actions/checkout@v4
 
-      - name: Decode Keystore
+      - name: Decode Keystore & Generate local.properties
         env:
           RELEASE_STORE_BASE_64: ${{ secrets.RELEASE_STORE_BASE_64 }}
-        run: |
-          echo $RELEASE_STORE_BASE_64 > encoded_keystore.txt
-          base64 --decode encoded_keystore.txt > release.jks
-
-      - name: Generate local.properties
-        env:
           KAKAO_NATIVE_APP_KEY: ${{ secrets.KAKAO_NATIVE_APP_KEY }}
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
           BITNAGIL_DEV_URL: ${{ secrets.BITNAGIL_DEV_URL }}
@@ -31,6 +25,11 @@ jobs:
           RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
           RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
         run: |
+          # Keystore Decoding
+          echo $RELEASE_STORE_BASE_64 > encoded_keystore.txt
+          base64 --decode encoded_keystore.txt > release.jks
+          
+          # Generate local.properties
           echo "kakao.native.app.key=$KAKAO_NATIVE_APP_KEY" >> local.properties
           echo "kakao.rest.api.key=$KAKAO_REST_API_KEY" >> local.properties
           echo "bitnagil.dev.url=$BITNAGIL_DEV_URL" >> local.properties
@@ -45,13 +44,11 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: gradle
 
-      - name: Run ktlint
-        run: ./gradlew ktlintCheck
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
 
-      - name: Run unit tests
-        run: ./gradlew testDebugUnitTest
-
-      - name: Build with Gradle
-        run: ./gradlew assembleDebug
+      - name: Build and Verify
+        run: ./gradlew ktlintCheck testDebugUnitTest assembleDebug
