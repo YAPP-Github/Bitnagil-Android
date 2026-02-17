@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -305,7 +304,6 @@ private fun ReportScreen(
                     value = uiState.reportContent,
                     onValueChange = onReportContentChange,
                     modifier = Modifier
-                        .height(88.dp)
                         .focusRequester(contentFocusRequester),
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Done,
@@ -322,6 +320,7 @@ private fun ReportScreen(
                             color = BitnagilTheme.colors.coolGray80,
                         )
                     },
+                    minLines = 3,
                 )
 
                 Text(
