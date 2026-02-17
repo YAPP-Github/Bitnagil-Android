@@ -33,6 +33,8 @@ data class WriteRoutineState(
     val recommendedRoutineType: RecommendCategory?,
 ) : Parcelable {
     companion object {
+        const val MAX_ROUTINE_NAME_LENGTH = 20
+
         val INIT = WriteRoutineState(
             routineName = "",
             subRoutineNames = listOf("", "", ""),

@@ -158,6 +158,7 @@ class WriteRoutineViewModel @AssistedInject constructor(
     }
 
     fun setRoutineName(name: String) = intent {
+        if (name.length > WriteRoutineState.MAX_ROUTINE_NAME_LENGTH) return@intent
         reduce {
             state.copy(
                 routineName = name,

@@ -30,6 +30,10 @@ data class ReportState(
             currentLongitude != null
 
     companion object {
+        const val MAX_TITLE_LENGTH = 50
+        const val MAX_CONTENT_LENGTH = 150
+        const val MIN_LOADING_TIME = 1500L
+
         const val MAX_IMAGE_COUNT = 3
 
         val Init = ReportState(
