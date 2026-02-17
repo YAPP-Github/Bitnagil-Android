@@ -16,10 +16,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -166,7 +168,17 @@ private fun WriteRoutineScreen(
                 onClickRemove = null,
             )
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(6.dp))
+
+            Text(
+                text = "${state.routineName.length} / ${WriteRoutineState.MAX_ROUTINE_NAME_LENGTH}",
+                style = BitnagilTheme.typography.caption1Medium,
+                color = BitnagilTheme.colors.coolGray80,
+                textAlign = TextAlign.End,
+                modifier = Modifier.fillMaxWidth(),
+            )
+
+            Spacer(modifier = Modifier.height(28.dp))
 
             Column(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
