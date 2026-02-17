@@ -265,7 +265,6 @@ private fun ReportScreen(
                 BitnagilTextField(
                     value = uiState.reportTitle,
                     onValueChange = onReportTitleChange,
-                    singleLine = true,
                     keyboardActions = KeyboardActions(
                         onDone = {
                             focusManager.clearFocus()
@@ -279,6 +278,16 @@ private fun ReportScreen(
                             color = BitnagilTheme.colors.coolGray80,
                         )
                     },
+                    maxLines = 2,
+                    minLines = 2,
+                )
+
+                Text(
+                    text = "${uiState.reportTitle.length} / ${ReportState.MAX_TITLE_LENGTH}",
+                    style = BitnagilTheme.typography.caption1Medium,
+                    color = BitnagilTheme.colors.coolGray80,
+                    textAlign = TextAlign.End,
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
 
@@ -309,7 +318,7 @@ private fun ReportScreen(
                     ),
                     placeholder = {
                         Text(
-                            text = "어떤 위험인지 간단히 설명해주세요.(100자 내외)",
+                            text = "어떤 위험인지 간단히 설명해주세요.(${ReportState.MAX_CONTENT_LENGTH}자 내외)",
                             style = BitnagilTheme.typography.body2Medium,
                             color = BitnagilTheme.colors.coolGray80,
                         )
@@ -317,7 +326,7 @@ private fun ReportScreen(
                 )
 
                 Text(
-                    text = "${uiState.reportContent.length} / 150",
+                    text = "${uiState.reportContent.length} / ${ReportState.MAX_CONTENT_LENGTH}",
                     style = BitnagilTheme.typography.caption1Medium,
                     color = BitnagilTheme.colors.coolGray80,
                     textAlign = TextAlign.End,

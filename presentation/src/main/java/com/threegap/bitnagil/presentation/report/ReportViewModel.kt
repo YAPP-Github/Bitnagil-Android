@@ -36,12 +36,14 @@ class ReportViewModel @Inject constructor(
 
     fun updateReportTitle(title: String) {
         intent {
+            if (title.length > ReportState.MAX_TITLE_LENGTH) return@intent;
             reduce { state.copy(reportTitle = title) }
         }
     }
 
     fun updateReportContent(content: String) {
         intent {
+            if (content.length > ReportState.MAX_CONTENT_LENGTH) return@intent;
             reduce { state.copy(reportContent = content) }
         }
     }
@@ -129,7 +131,7 @@ class ReportViewModel @Inject constructor(
 
             coroutineScope {
                 val minDelayJob = async {
-                    delay(1000L)
+                    delay(timeMillis = ReportState.MIN_LOADING_TIME)
                 }
 
                 val processingJob = async {
@@ -174,7 +176,7 @@ class ReportViewModel @Inject constructor(
                             )
                         }
                     },
-                    onFailure = { error ->
+                    onFailure = { _ ->
                         reduce { state.copy(submitState = SubmitState.IDLE) }
                     },
                 )
