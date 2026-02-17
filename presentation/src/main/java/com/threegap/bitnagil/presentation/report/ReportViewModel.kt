@@ -36,14 +36,14 @@ class ReportViewModel @Inject constructor(
 
     fun updateReportTitle(title: String) {
         intent {
-            if (title.length > ReportState.MAX_TITLE_LENGTH) return@intent;
+            if (title.length > ReportState.MAX_TITLE_LENGTH) return@intent
             reduce { state.copy(reportTitle = title) }
         }
     }
 
     fun updateReportContent(content: String) {
         intent {
-            if (content.length > ReportState.MAX_CONTENT_LENGTH) return@intent;
+            if (content.length > ReportState.MAX_CONTENT_LENGTH) return@intent
             reduce { state.copy(reportContent = content) }
         }
     }
