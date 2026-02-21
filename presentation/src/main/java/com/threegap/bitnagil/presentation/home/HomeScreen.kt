@@ -4,36 +4,44 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
-import com.threegap.bitnagil.presentation.home.component.template.CollapsibleHomeHeader
+import com.threegap.bitnagil.presentation.home.component.template.CollapsibleHeader
 import com.threegap.bitnagil.presentation.home.component.template.EmptyRoutineView
 import com.threegap.bitnagil.presentation.home.component.template.RoutineSection
+import com.threegap.bitnagil.presentation.home.component.template.StickyHeader
 import com.threegap.bitnagil.presentation.home.component.template.WeeklyDatePicker
 import com.threegap.bitnagil.presentation.home.contract.HomeSideEffect
 import com.threegap.bitnagil.presentation.home.contract.HomeState
-import com.threegap.bitnagil.presentation.home.util.rememberCollapsibleHeaderState
+import com.threegap.bitnagil.presentation.home.model.DailyEmotionUiModel
+import com.threegap.bitnagil.presentation.home.model.rememberCollapsibleHeaderState
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 import java.time.LocalDate
+import kotlin.math.pow
 
 @Composable
 fun HomeScreenContainer(
@@ -71,6 +79,7 @@ fun HomeScreenContainer(
 @Composable
 private fun HomeScreen(
     uiState: HomeState,
+    modifier: Modifier = Modifier,
     onDateSelect: (LocalDate) -> Unit,
     onPreviousWeekClick: () -> Unit,
     onNextWeekClick: () -> Unit,
@@ -80,18 +89,42 @@ private fun HomeScreen(
     onRegisterRoutineClick: () -> Unit,
     onRegisterEmotionClick: () -> Unit,
     onShowMoreRoutinesClick: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     val collapsibleHeaderState = rememberCollapsibleHeaderState()
 
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(BitnagilTheme.colors.coolGray10),
+            .background(BitnagilTheme.colors.coolGray10)
+            .statusBarsPadding()
+            .nestedScroll(collapsibleHeaderState.nestedScrollConnection),
     ) {
-        Column {
-            Spacer(modifier = Modifier.height(collapsibleHeaderState.currentHeaderHeight))
+        StickyHeader(
+            modifier = Modifier
+                .padding(top = 14.dp)
+                .height(collapsibleHeaderState.stickyHeaderHeightDp),
+            onHelpClick = onHelpClick,
+        )
 
+        CollapsibleHeader(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 80.dp, start = 18.dp, end = 18.dp)
+                .height(collapsibleHeaderState.expandedHeaderHeightDp)
+                .graphicsLayer { alpha = collapsibleHeaderState.expansionProgress.pow(3) },
+            welcomeMessage = "${uiState.userNickname}${uiState.dailyEmotion.homeMessage}",
+            dailyEmotion = uiState.dailyEmotion,
+            onRegisterEmotionClick = onRegisterEmotionClick,
+        )
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = collapsibleHeaderState.collapsedContentOffsetDp)
+                .graphicsLayer { translationY = collapsibleHeaderState.currentHeightPx }
+                .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+                .background(color = BitnagilTheme.colors.coolGray99),
+        ) {
             WeeklyDatePicker(
                 selectedDate = uiState.selectedDate,
                 weeklyDates = uiState.currentWeeks,
@@ -99,29 +132,20 @@ private fun HomeScreen(
                 onDateSelect = onDateSelect,
                 onPreviousWeekClick = onPreviousWeekClick,
                 onNextWeekClick = onNextWeekClick,
-                modifier = Modifier
-                    .background(
-                        color = BitnagilTheme.colors.coolGray99,
-                        shape = RoundedCornerShape(
-                            topStart = 20.dp,
-                            topEnd = 20.dp,
-                        ),
-                    ),
             )
 
             if (uiState.selectedDateRoutines.isEmpty()) {
                 EmptyRoutineView(
-                    onRegisterRoutineClick = onRegisterRoutineClick,
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(BitnagilTheme.colors.coolGray99)
-                        .padding(top = 62.dp),
+                        .padding(top = 62.dp)
+                        .verticalScroll(rememberScrollState()),
+                    onRegisterRoutineClick = onRegisterRoutineClick,
                 )
             } else {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(BitnagilTheme.colors.coolGray99)
                         .padding(start = 16.dp, end = 4.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.Top,
@@ -145,15 +169,13 @@ private fun HomeScreen(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(BitnagilTheme.colors.coolGray99)
-                        .nestedScroll(collapsibleHeaderState.nestedScrollConnection)
                         .padding(horizontal = 16.dp),
-                    state = collapsibleHeaderState.lazyListState,
                     verticalArrangement = Arrangement.spacedBy(12.dp),
+                    contentPadding = PaddingValues(bottom = 48.dp),
                 ) {
                     items(
                         items = uiState.selectedDateRoutines,
-                        key = { routine -> "${routine.id}_${uiState.selectedDate}" },
+                        key = { routine -> routine.id },
                     ) { routine ->
                         RoutineSection(
                             routine = routine,
@@ -166,14 +188,6 @@ private fun HomeScreen(
                 }
             }
         }
-
-        CollapsibleHomeHeader(
-            userName = uiState.userNickname,
-            dailyEmotion = uiState.dailyEmotion,
-            collapsibleHeaderState = collapsibleHeaderState,
-            onHelpClick = onHelpClick,
-            onRegisterEmotion = onRegisterEmotionClick,
-        )
     }
 }
 
@@ -181,7 +195,12 @@ private fun HomeScreen(
 @Composable
 private fun HomeScreenPreview() {
     HomeScreen(
-        uiState = HomeState.INIT,
+        uiState = HomeState.INIT.copy(
+            userNickname = "홍길동",
+            dailyEmotion = DailyEmotionUiModel.INIT.copy(
+                homeMessage = "님, 오셨군요!\n오늘 기분은 어떤가요?",
+            ),
+        ),
         onDateSelect = {},
         onPreviousWeekClick = {},
         onNextWeekClick = {},
