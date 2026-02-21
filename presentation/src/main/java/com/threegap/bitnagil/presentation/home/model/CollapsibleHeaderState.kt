@@ -107,8 +107,9 @@ internal fun rememberCollapsibleHeaderState(
     stickyHeaderHeight: Dp = 48.dp,
     minExpandedHeaderHeight: Dp = 146.dp,
 ): CollapsibleHeaderState {
-    return remember(density, windowInfo, minExpandedHeaderHeight, stickyHeaderHeight) {
-        val screenHeightDp = with(density) { windowInfo.containerSize.height.toDp() }
+    val containerSize = windowInfo.containerSize
+    return remember(density, containerSize, minExpandedHeaderHeight, stickyHeaderHeight) {
+        val screenHeightDp = with(density) { containerSize.height.toDp() }
         val expandedHeaderHeightDp = (screenHeightDp * 0.18f).coerceAtLeast(minExpandedHeaderHeight)
 
         CollapsibleHeaderState(
