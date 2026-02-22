@@ -3,6 +3,7 @@ package com.threegap.bitnagil.navigation.home
 import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -30,6 +32,7 @@ import com.threegap.bitnagil.presentation.common.toast.GlobalBitnagilToast
 import com.threegap.bitnagil.presentation.home.HomeScreenContainer
 import com.threegap.bitnagil.presentation.mypage.MyPageScreenContainer
 import com.threegap.bitnagil.presentation.recommendroutine.RecommendRoutineScreenContainer
+import com.threegap.bitnagil.util.setStatusBarContentColor
 
 @Composable
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -50,6 +53,12 @@ fun HomeNavHost(
     var showFloatingOverlay by remember { mutableStateOf(false) }
 
     DoubleBackButtonPressedHandler()
+
+    val activity = LocalActivity.current
+    val isHomeTab = navigator.isHomeRoute
+    SideEffect {
+        activity?.setStatusBarContentColor(isLightContent = isHomeTab)
+    }
 
     Box(modifier = modifier.fillMaxSize()) {
         Scaffold(
