@@ -19,7 +19,7 @@ class ClickThrottler(private val throttleTimeMs: Long = 500L) {
 @Composable
 fun throttled(
     throttleTimeMs: Long = 500L,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ): () -> Unit {
     val throttler = remember { ClickThrottler(throttleTimeMs) }
 

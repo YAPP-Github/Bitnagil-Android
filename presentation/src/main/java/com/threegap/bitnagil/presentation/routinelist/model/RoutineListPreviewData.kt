@@ -48,8 +48,8 @@ private val withRoutinesState = RoutineListState(
     selectedDate = today,
     routines = RoutineScheduleUiModel(
         routines = mapOf(
-            today.toString() to DailyRoutinesUiModel(routines = sampleRoutines)
-        )
+            today.toString() to DailyRoutinesUiModel(routines = sampleRoutines),
+        ),
     ),
     selectedRoutine = null,
     deleteConfirmBottomSheetVisible = false,
