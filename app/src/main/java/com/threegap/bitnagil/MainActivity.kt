@@ -46,9 +46,7 @@ class MainActivity : ComponentActivity() {
             }
 
             Box(modifier = Modifier.fillMaxSize()) {
-                MainScreen(
-                    navigator = mainNavigator,
-                )
+                MainScreen(navigator = mainNavigator)
 
                 BitnagilToastContainer(
                     state = globalToast,

@@ -11,16 +11,15 @@ class HomeNavigator(
 ) {
     val startDestination = HomeRoute.Home.route
 
-    @Composable
-    fun getCurrentRoute(): String? {
-        return navController.currentBackStackEntryAsState().value?.destination?.route
-    }
+    val currentRoute: String?
+        @Composable get() = navController.currentBackStackEntryAsState().value?.destination?.route
+
+    val isHomeRoute: Boolean
+        @Composable get() = currentRoute == HomeRoute.Home.route
 
     @Composable
-    fun shouldShowFloatingAction(): Boolean {
-        val currentRoute = getCurrentRoute()
-        return currentRoute == HomeRoute.Home.route || currentRoute == HomeRoute.RecommendRoutine.route
-    }
+    fun shouldShowFloatingAction(): Boolean =
+        currentRoute in setOf(HomeRoute.Home.route, HomeRoute.RecommendRoutine.route)
 }
 
 @Composable
