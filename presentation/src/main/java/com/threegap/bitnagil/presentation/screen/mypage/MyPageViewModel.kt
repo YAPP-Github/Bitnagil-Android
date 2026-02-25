@@ -14,7 +14,7 @@ import javax.inject.Inject
 class MyPageViewModel @Inject constructor(
     private val fetchUserProfileUseCase: FetchUserProfileUseCase,
 ) : ContainerHost<MyPageState, MyPageSideEffect>, ViewModel() {
-    override val container: Container<MyPageState, MyPageSideEffect> = container(initialState = MyPageState.Companion.INIT)
+    override val container: Container<MyPageState, MyPageSideEffect> = container(initialState = MyPageState.INIT)
 
     init {
         loadMyPageInfo()

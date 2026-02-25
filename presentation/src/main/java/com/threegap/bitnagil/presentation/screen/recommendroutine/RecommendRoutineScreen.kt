@@ -207,7 +207,7 @@ private fun RecommendRoutineScreen(
 @Composable
 private fun RoutineRecommendScreenPreview() {
     RecommendRoutineScreen(
-        uiState = RecommendRoutineState.Companion.INIT,
+        uiState = RecommendRoutineState.INIT,
         onCategorySelected = {},
         onShowDifficultyBottomSheet = {},
         onRecommendRoutineByEmotionClick = {},

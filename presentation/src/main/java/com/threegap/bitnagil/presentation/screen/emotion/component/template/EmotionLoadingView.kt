@@ -184,7 +184,7 @@ private fun getRecommendRoutineText(emotion: EmotionUiModel): String {
 private fun EmotionLoadingViewPreview() {
     BitnagilTheme {
         EmotionLoadingView(
-            emotion = EmotionUiModel.Companion.Default,
+            emotion = EmotionUiModel.Default,
         )
     }
 }

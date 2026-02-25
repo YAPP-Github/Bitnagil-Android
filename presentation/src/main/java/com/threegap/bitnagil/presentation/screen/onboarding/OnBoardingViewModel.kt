@@ -58,7 +58,7 @@ class OnBoardingViewModel @AssistedInject constructor(
     }
 
     private fun loadInitData() {
-        val onBoardingSetType = OnBoardingSetType.Companion.fromOnBoardingScreenArg(onBoardingArg)
+        val onBoardingSetType = OnBoardingSetType.fromOnBoardingScreenArg(onBoardingArg)
 
         when (onBoardingSetType) {
             OnBoardingSetType.NEW -> {

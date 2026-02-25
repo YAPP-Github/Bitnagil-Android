@@ -24,10 +24,10 @@ data class HomeState(
         val INIT = HomeState(
             loadingCount = 0,
             userNickname = "",
-            dailyEmotion = DailyEmotionUiModel.Companion.INIT,
+            dailyEmotion = DailyEmotionUiModel.INIT,
             selectedDate = LocalDate.now(),
             currentWeeks = LocalDate.now().getCurrentWeekDays(),
-            routineSchedule = RoutineScheduleUiModel.Companion.INIT,
+            routineSchedule = RoutineScheduleUiModel.INIT,
         )
     }
 }

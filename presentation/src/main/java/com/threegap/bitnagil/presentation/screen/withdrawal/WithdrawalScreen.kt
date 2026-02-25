@@ -223,7 +223,7 @@ private fun WithdrawalScreen(
 @Composable
 private fun WithdrawalScreenPreview() {
     WithdrawalScreen(
-        uiState = WithdrawalState.Companion.INIT,
+        uiState = WithdrawalState.INIT,
         onTermsToggle = {},
         onReasonSelect = {},
         onCustomReasonChanged = {},

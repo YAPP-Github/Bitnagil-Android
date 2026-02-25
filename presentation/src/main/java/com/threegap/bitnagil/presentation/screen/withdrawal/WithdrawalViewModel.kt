@@ -16,7 +16,7 @@ class WithdrawalViewModel @Inject constructor(
     private val withdrawalUseCase: WithdrawalUseCase,
 ) : ContainerHost<WithdrawalState, WithdrawalSideEffect>, ViewModel() {
 
-    override val container: Container<WithdrawalState, WithdrawalSideEffect> = container(initialState = WithdrawalState.Companion.INIT)
+    override val container: Container<WithdrawalState, WithdrawalSideEffect> = container(initialState = WithdrawalState.INIT)
 
     fun onTermsToggle() {
         intent {

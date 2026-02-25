@@ -26,7 +26,7 @@ class EmotionViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : ContainerHost<EmotionState, EmotionSideEffect>, ViewModel() {
 
-    override val container: Container<EmotionState, EmotionSideEffect> = container(initialState = EmotionState.Companion.Init, savedStateHandle = savedStateHandle)
+    override val container: Container<EmotionState, EmotionSideEffect> = container(initialState = EmotionState.Init, savedStateHandle = savedStateHandle)
 
     init {
         loadEmotions()

@@ -18,7 +18,7 @@ class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
 ) : ContainerHost<LoginState, LoginSideEffect>, ViewModel() {
 
-    override val container: Container<LoginState, LoginSideEffect> = container(initialState = LoginState.Companion.INIT)
+    override val container: Container<LoginState, LoginSideEffect> = container(initialState = LoginState.INIT)
 
     fun kakaoLogin(token: OAuthToken?, error: Throwable?) {
         intent {

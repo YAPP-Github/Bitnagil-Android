@@ -195,9 +195,9 @@ private fun HomeScreen(
 @Composable
 private fun HomeScreenPreview() {
     HomeScreen(
-        uiState = HomeState.Companion.INIT.copy(
+        uiState = HomeState.INIT.copy(
             userNickname = "홍길동",
-            dailyEmotion = DailyEmotionUiModel.Companion.INIT.copy(
+            dailyEmotion = DailyEmotionUiModel.INIT.copy(
                 homeMessage = "님, 오셨군요!\n오늘 기분은 어떤가요?",
             ),
         ),

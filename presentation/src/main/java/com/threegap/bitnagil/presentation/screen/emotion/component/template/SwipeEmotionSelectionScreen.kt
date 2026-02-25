@@ -80,7 +80,7 @@ fun SwipeEmotionSelectionScreen(
     val fadeInTransition = remember { fadeIn(animationSpec = tween(150)) }
     val fadeOutTransition = remember { fadeOut(animationSpec = tween(50)) }
 
-    val emotions = remember(state.emotionTypeUiModels) { state.emotionTypeUiModels + EmotionUiModel.Companion.Default }
+    val emotions = remember(state.emotionTypeUiModels) { state.emotionTypeUiModels + EmotionUiModel.Default }
     val actualItemCount = emotions.size
 
     val pagerState = rememberPagerState(

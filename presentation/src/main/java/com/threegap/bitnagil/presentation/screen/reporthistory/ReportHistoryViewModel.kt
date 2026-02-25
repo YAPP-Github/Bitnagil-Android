@@ -18,7 +18,7 @@ import javax.inject.Inject
 class ReportHistoryViewModel @Inject constructor(
     private val getReportHistoriesUseCase: GetReportHistoriesUseCase,
 ) : ContainerHost<ReportHistoryState, ReportHistorySideEffect>, ViewModel() {
-    override val container: Container<ReportHistoryState, ReportHistorySideEffect> = container(initialState = ReportHistoryState.Companion.Init)
+    override val container: Container<ReportHistoryState, ReportHistorySideEffect> = container(initialState = ReportHistoryState.Init)
 
     init {
         loadReportHistories()

@@ -32,7 +32,7 @@ data class ReportHistoryState(
             }
 
     val reportStatusFilterWithCounts: List<ReportStatusFilterWithCount> =
-        ReportStatusFilter.Companion.values().map { filter ->
+        ReportStatusFilter.values().map { filter ->
             val count = reportHistoriesPerDays.sumOf { day ->
                 day.reports.count { report ->
                     filter.matches(report.status)

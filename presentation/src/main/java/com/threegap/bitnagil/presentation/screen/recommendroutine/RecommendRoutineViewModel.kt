@@ -25,14 +25,14 @@ class RecommendRoutineViewModel @Inject constructor(
 ) : ContainerHost<RecommendRoutineState, RecommendRoutineSideEffect>, ViewModel() {
 
     override val container: Container<RecommendRoutineState, RecommendRoutineSideEffect> =
-        container(initialState = RecommendRoutineState.Companion.INIT)
+        container(initialState = RecommendRoutineState.INIT)
 
     init {
         loadRecommendRoutines()
         observeEmotionChangeEvent()
     }
 
-    private var recommendRoutines: RecommendRoutinesUiModel = RecommendRoutinesUiModel.Companion.INIT
+    private var recommendRoutines: RecommendRoutinesUiModel = RecommendRoutinesUiModel.INIT
 
     fun updateRoutineCategory(category: RecommendCategory) {
         intent {

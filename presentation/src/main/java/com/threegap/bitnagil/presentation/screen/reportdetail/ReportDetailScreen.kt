@@ -141,7 +141,7 @@ private fun ReportDetailScreen(
 private fun ReportDetailScreenPreview() {
     BitnagilTheme {
         ReportDetailScreen(
-            state = ReportDetailState.Companion.Init.copy(
+            state = ReportDetailState.Init.copy(
                 reportContent = "Lorem ipsum dolor sit amet, " +
                     "consectetur adipiscing elit," +
                     " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +

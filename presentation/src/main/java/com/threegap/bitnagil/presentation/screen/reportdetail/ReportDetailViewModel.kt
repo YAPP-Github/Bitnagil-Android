@@ -18,7 +18,7 @@ class ReportDetailViewModel @AssistedInject constructor(
     private val getReportDetailUseCase: GetReportUseCase,
     @Assisted private val reportDetailArg: ReportDetailScreenArg,
 ) : ContainerHost<ReportDetailState, ReportDetailSideEffect>, ViewModel() {
-    override val container: Container<ReportDetailState, ReportDetailSideEffect> = container(initialState = ReportDetailState.Companion.Init)
+    override val container: Container<ReportDetailState, ReportDetailSideEffect> = container(initialState = ReportDetailState.Init)
 
     @AssistedFactory
     interface Factory {

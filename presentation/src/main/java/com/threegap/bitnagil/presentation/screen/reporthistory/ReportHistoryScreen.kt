@@ -199,7 +199,7 @@ private fun ReportHistoryScreen(
 private fun ReportHistoryScreenPreview() {
     BitnagilTheme {
         ReportHistoryScreen(
-            state = ReportHistoryState.Companion.Init.copy(
+            state = ReportHistoryState.Init.copy(
                 reportHistoriesPerDays = List(10) {
                     ReportHistoriesPerDayUiModel(
                         date = LocalDate.now(),

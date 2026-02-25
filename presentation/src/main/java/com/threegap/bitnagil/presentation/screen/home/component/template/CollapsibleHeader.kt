@@ -71,7 +71,7 @@ private fun CollapsibleHeaderPreview() {
     CollapsibleHeader(
         modifier = Modifier.fillMaxWidth(),
         welcomeMessage = "대현님 오셨군요!\n오늘 기분은 어떤가요?!",
-        dailyEmotion = DailyEmotionUiModel.Companion.INIT,
+        dailyEmotion = DailyEmotionUiModel.INIT,
         onRegisterEmotionClick = {},
     )
 }
