@@ -13,20 +13,20 @@ import com.threegap.bitnagil.presentation.screen.login.LoginScreenContainer
 import com.threegap.bitnagil.presentation.screen.onboarding.OnBoardingScreenContainer
 import com.threegap.bitnagil.presentation.screen.onboarding.OnBoardingViewModel
 import com.threegap.bitnagil.presentation.screen.onboarding.model.navarg.OnBoardingScreenArg
-import com.threegap.bitnagil.presentation.screen.reportwrite.ReportScreenContainer
 import com.threegap.bitnagil.presentation.screen.reportdetail.ReportDetailScreenContainer
 import com.threegap.bitnagil.presentation.screen.reportdetail.ReportDetailViewModel
 import com.threegap.bitnagil.presentation.screen.reportdetail.model.navarg.ReportDetailScreenArg
 import com.threegap.bitnagil.presentation.screen.reporthistory.ReportHistoryScreenContainer
+import com.threegap.bitnagil.presentation.screen.reportwrite.ReportScreenContainer
 import com.threegap.bitnagil.presentation.screen.routinelist.RoutineListScreenContainer
+import com.threegap.bitnagil.presentation.screen.routinewrite.WriteRoutineScreenContainer
+import com.threegap.bitnagil.presentation.screen.routinewrite.WriteRoutineViewModel
+import com.threegap.bitnagil.presentation.screen.routinewrite.model.navarg.WriteRoutineScreenArg
 import com.threegap.bitnagil.presentation.screen.setting.SettingScreenContainer
 import com.threegap.bitnagil.presentation.screen.splash.SplashScreenContainer
 import com.threegap.bitnagil.presentation.screen.terms.TermsAgreementScreenContainer
 import com.threegap.bitnagil.presentation.screen.webview.BitnagilWebViewScreen
 import com.threegap.bitnagil.presentation.screen.withdrawal.WithdrawalScreenContainer
-import com.threegap.bitnagil.presentation.screen.routinewrite.WriteRoutineScreenContainer
-import com.threegap.bitnagil.presentation.screen.routinewrite.WriteRoutineViewModel
-import com.threegap.bitnagil.presentation.screen.routinewrite.model.navarg.WriteRoutineScreenArg
 
 @Composable
 fun MainNavHost(
