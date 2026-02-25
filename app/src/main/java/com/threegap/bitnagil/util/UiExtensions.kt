@@ -5,8 +5,11 @@ import androidx.core.view.WindowCompat
 
 fun Activity.setStatusBarContentColor(isLightContent: Boolean) {
     val window = this.window
-    val view = window.decorView
-    val wic = WindowCompat.getInsetsController(window, view)
+    val wic = WindowCompat.getInsetsController(window, window.decorView)
 
-    wic.isAppearanceLightStatusBars = !isLightContent
+    val targetAppearance = !isLightContent
+
+    if (wic.isAppearanceLightStatusBars != targetAppearance) {
+        wic.isAppearanceLightStatusBars = targetAppearance
+    }
 }
