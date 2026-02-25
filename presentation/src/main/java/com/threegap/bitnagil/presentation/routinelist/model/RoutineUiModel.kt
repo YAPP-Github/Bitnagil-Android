@@ -3,8 +3,8 @@ package com.threegap.bitnagil.presentation.routinelist.model
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendCategory
 import com.threegap.bitnagil.domain.routine.model.DayOfWeek
 import com.threegap.bitnagil.domain.routine.model.Routine
-import com.threegap.bitnagil.presentation.home.util.formatExecutionTime12Hour
-import com.threegap.bitnagil.presentation.home.util.toShortDateFormat
+import com.threegap.bitnagil.presentation.screen.home.util.formatExecutionTime12Hour
+import com.threegap.bitnagil.presentation.screen.home.util.toShortDateFormat
 
 data class RoutineUiModel(
     val routineId: String,

@@ -1,6 +1,6 @@
 package com.threegap.bitnagil.presentation.routinelist.contract
 
-import com.threegap.bitnagil.presentation.home.util.getCurrentWeekDays
+import com.threegap.bitnagil.presentation.screen.home.util.getCurrentWeekDays
 import com.threegap.bitnagil.presentation.routinelist.model.RoutineScheduleUiModel
 import com.threegap.bitnagil.presentation.routinelist.model.RoutineUiModel
 import java.time.LocalDate

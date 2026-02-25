@@ -29,7 +29,7 @@ import com.threegap.bitnagil.designsystem.component.atom.BitnagilFloatingActionM
 import com.threegap.bitnagil.designsystem.component.atom.FloatingActionItem
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.common.toast.GlobalBitnagilToast
-import com.threegap.bitnagil.presentation.home.HomeScreenContainer
+import com.threegap.bitnagil.presentation.screen.home.HomeScreenContainer
 import com.threegap.bitnagil.presentation.mypage.MyPageScreenContainer
 import com.threegap.bitnagil.presentation.recommendroutine.RecommendRoutineScreenContainer
 import com.threegap.bitnagil.util.setStatusBarContentColor

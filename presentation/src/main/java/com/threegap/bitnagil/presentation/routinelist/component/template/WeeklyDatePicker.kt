@@ -22,9 +22,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
-import com.threegap.bitnagil.presentation.home.util.formatDayOfMonth
-import com.threegap.bitnagil.presentation.home.util.formatDayOfWeekShort
-import com.threegap.bitnagil.presentation.home.util.getCurrentWeekDays
+import com.threegap.bitnagil.presentation.screen.home.util.formatDayOfMonth
+import com.threegap.bitnagil.presentation.screen.home.util.formatDayOfWeekShort
+import com.threegap.bitnagil.presentation.screen.home.util.getCurrentWeekDays
 import java.time.LocalDate
 
 @Composable

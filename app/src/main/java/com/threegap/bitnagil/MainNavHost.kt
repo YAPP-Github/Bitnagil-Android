@@ -7,8 +7,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.threegap.bitnagil.navigation.home.HomeNavHost
-import com.threegap.bitnagil.presentation.emotion.EmotionScreenContainer
-import com.threegap.bitnagil.presentation.guide.GuideScreenContainer
+import com.threegap.bitnagil.presentation.screen.emotion.EmotionScreenContainer
+import com.threegap.bitnagil.presentation.screen.guide.GuideScreenContainer
 import com.threegap.bitnagil.presentation.login.LoginScreenContainer
 import com.threegap.bitnagil.presentation.onboarding.OnBoardingScreenContainer
 import com.threegap.bitnagil.presentation.onboarding.OnBoardingViewModel
