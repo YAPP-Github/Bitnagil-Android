@@ -19,11 +19,11 @@ import com.threegap.bitnagil.presentation.screen.reportdetail.ReportDetailViewMo
 import com.threegap.bitnagil.presentation.screen.reportdetail.model.navarg.ReportDetailScreenArg
 import com.threegap.bitnagil.presentation.screen.reporthistory.ReportHistoryScreenContainer
 import com.threegap.bitnagil.presentation.screen.routinelist.RoutineListScreenContainer
-import com.threegap.bitnagil.presentation.setting.SettingScreenContainer
-import com.threegap.bitnagil.presentation.splash.SplashScreenContainer
-import com.threegap.bitnagil.presentation.terms.TermsAgreementScreenContainer
-import com.threegap.bitnagil.presentation.webview.BitnagilWebViewScreen
-import com.threegap.bitnagil.presentation.withdrawal.WithdrawalScreenContainer
+import com.threegap.bitnagil.presentation.screen.setting.SettingScreenContainer
+import com.threegap.bitnagil.presentation.screen.splash.SplashScreenContainer
+import com.threegap.bitnagil.presentation.screen.terms.TermsAgreementScreenContainer
+import com.threegap.bitnagil.presentation.screen.webview.BitnagilWebViewScreen
+import com.threegap.bitnagil.presentation.screen.withdrawal.WithdrawalScreenContainer
 import com.threegap.bitnagil.presentation.screen.routinewrite.WriteRoutineScreenContainer
 import com.threegap.bitnagil.presentation.screen.routinewrite.WriteRoutineViewModel
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.navarg.WriteRoutineScreenArg
