@@ -18,15 +18,15 @@ import com.threegap.bitnagil.presentation.screen.reportdetail.ReportDetailScreen
 import com.threegap.bitnagil.presentation.screen.reportdetail.ReportDetailViewModel
 import com.threegap.bitnagil.presentation.screen.reportdetail.model.navarg.ReportDetailScreenArg
 import com.threegap.bitnagil.presentation.screen.reporthistory.ReportHistoryScreenContainer
-import com.threegap.bitnagil.presentation.routinelist.RoutineListScreenContainer
+import com.threegap.bitnagil.presentation.screen.routinelist.RoutineListScreenContainer
 import com.threegap.bitnagil.presentation.setting.SettingScreenContainer
 import com.threegap.bitnagil.presentation.splash.SplashScreenContainer
 import com.threegap.bitnagil.presentation.terms.TermsAgreementScreenContainer
 import com.threegap.bitnagil.presentation.webview.BitnagilWebViewScreen
 import com.threegap.bitnagil.presentation.withdrawal.WithdrawalScreenContainer
-import com.threegap.bitnagil.presentation.writeroutine.WriteRoutineScreenContainer
-import com.threegap.bitnagil.presentation.writeroutine.WriteRoutineViewModel
-import com.threegap.bitnagil.presentation.writeroutine.model.navarg.WriteRoutineScreenArg
+import com.threegap.bitnagil.presentation.screen.routinewrite.WriteRoutineScreenContainer
+import com.threegap.bitnagil.presentation.screen.routinewrite.WriteRoutineViewModel
+import com.threegap.bitnagil.presentation.screen.routinewrite.model.navarg.WriteRoutineScreenArg
 
 @Composable
 fun MainNavHost(
