@@ -13,11 +13,11 @@ import com.threegap.bitnagil.presentation.screen.login.LoginScreenContainer
 import com.threegap.bitnagil.presentation.screen.onboarding.OnBoardingScreenContainer
 import com.threegap.bitnagil.presentation.screen.onboarding.OnBoardingViewModel
 import com.threegap.bitnagil.presentation.screen.onboarding.model.navarg.OnBoardingScreenArg
-import com.threegap.bitnagil.presentation.report.ReportScreenContainer
-import com.threegap.bitnagil.presentation.reportdetail.ReportDetailScreenContainer
-import com.threegap.bitnagil.presentation.reportdetail.ReportDetailViewModel
-import com.threegap.bitnagil.presentation.reportdetail.model.navarg.ReportDetailScreenArg
-import com.threegap.bitnagil.presentation.reporthistory.ReportHistoryScreenContainer
+import com.threegap.bitnagil.presentation.screen.reportwrite.ReportScreenContainer
+import com.threegap.bitnagil.presentation.screen.reportdetail.ReportDetailScreenContainer
+import com.threegap.bitnagil.presentation.screen.reportdetail.ReportDetailViewModel
+import com.threegap.bitnagil.presentation.screen.reportdetail.model.navarg.ReportDetailScreenArg
+import com.threegap.bitnagil.presentation.screen.reporthistory.ReportHistoryScreenContainer
 import com.threegap.bitnagil.presentation.routinelist.RoutineListScreenContainer
 import com.threegap.bitnagil.presentation.setting.SettingScreenContainer
 import com.threegap.bitnagil.presentation.splash.SplashScreenContainer
