@@ -9,10 +9,10 @@ import androidx.navigation.toRoute
 import com.threegap.bitnagil.navigation.home.HomeNavHost
 import com.threegap.bitnagil.presentation.screen.emotion.EmotionScreenContainer
 import com.threegap.bitnagil.presentation.screen.guide.GuideScreenContainer
-import com.threegap.bitnagil.presentation.login.LoginScreenContainer
-import com.threegap.bitnagil.presentation.onboarding.OnBoardingScreenContainer
-import com.threegap.bitnagil.presentation.onboarding.OnBoardingViewModel
-import com.threegap.bitnagil.presentation.onboarding.model.navarg.OnBoardingScreenArg
+import com.threegap.bitnagil.presentation.screen.login.LoginScreenContainer
+import com.threegap.bitnagil.presentation.screen.onboarding.OnBoardingScreenContainer
+import com.threegap.bitnagil.presentation.screen.onboarding.OnBoardingViewModel
+import com.threegap.bitnagil.presentation.screen.onboarding.model.navarg.OnBoardingScreenArg
 import com.threegap.bitnagil.presentation.report.ReportScreenContainer
 import com.threegap.bitnagil.presentation.reportdetail.ReportDetailScreenContainer
 import com.threegap.bitnagil.presentation.reportdetail.ReportDetailViewModel

@@ -1,0 +1,141 @@
+package com.threegap.bitnagil.presentation.screen.login
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.R
+import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
+import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
+import com.threegap.bitnagil.presentation.screen.login.contract.LoginSideEffect
+import com.threegap.bitnagil.presentation.screen.login.kakao.KakaoLoginHandlerImpl
+import org.orbitmvi.orbit.compose.collectSideEffect
+
+@Composable
+fun LoginScreenContainer(
+    viewModel: LoginViewModel = hiltViewModel(),
+    navigateToHome: () -> Unit,
+    navigateToTermsAgreement: () -> Unit,
+) {
+    val context = LocalContext.current
+
+    viewModel.collectSideEffect { sideEffect ->
+        when (sideEffect) {
+            is LoginSideEffect.NavigateToHome -> navigateToHome()
+            is LoginSideEffect.NavigateToTermsAgreement -> navigateToTermsAgreement()
+        }
+    }
+
+    LoginScreen(
+        onKakaoLoginClick = {
+            KakaoLoginHandlerImpl.login(context) { token, error ->
+                viewModel.kakaoLogin(token, error)
+            }
+        },
+    )
+}
+
+@Composable
+private fun LoginScreen(
+    onKakaoLoginClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val windowInfo = LocalWindowInfo.current
+    val screenHeight = with(LocalDensity.current) {
+        windowInfo.containerSize.height.toDp()
+    }
+    val screenWidth = with(LocalDensity.current) {
+        windowInfo.containerSize.width.toDp()
+    }
+    val widthRatio = 290f / 360f
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .fillMaxSize()
+            .statusBarsPadding(),
+    ) {
+        Spacer(modifier = Modifier.height(screenHeight * 0.114f))
+
+        Text(
+            text = "안녕! 저는 포모예요\n함께 빛나길을 시작해볼까요?",
+            color = BitnagilTheme.colors.coolGray10,
+            style = BitnagilTheme.typography.title1Bold,
+            textAlign = TextAlign.Start,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 20.dp),
+        )
+
+        Spacer(modifier = Modifier.height(screenHeight * 0.112f))
+
+        Image(
+            painter = painterResource(R.drawable.login_fomo),
+            contentDescription = null,
+            contentScale = ContentScale.Fit,
+            modifier = Modifier
+                .width(screenWidth * widthRatio)
+                .aspectRatio(290f / 305f),
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Row(
+            modifier = Modifier
+                .padding(start = 16.dp, end = 16.dp, bottom = 20.dp)
+                .height(54.dp)
+                .clickableWithoutRipple { onKakaoLoginClick() }
+                .background(
+                    color = BitnagilTheme.colors.kakao,
+                    shape = RoundedCornerShape(12.dp),
+                )
+                .fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+        ) {
+            BitnagilIcon(
+                id = R.drawable.ic_kakao_login,
+                modifier = Modifier.padding(end = 8.dp),
+            )
+            Text(
+                text = "카카오로 시작하기",
+                color = BitnagilTheme.colors.black,
+                style = BitnagilTheme.typography.button2,
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun LoginScreenPreview() {
+    BitnagilTheme {
+        LoginScreen(
+            onKakaoLoginClick = {},
+        )
+    }
+}
