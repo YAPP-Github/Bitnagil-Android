@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
@@ -28,6 +29,7 @@ import com.threegap.bitnagil.presentation.routinelist.component.template.Routine
 import com.threegap.bitnagil.presentation.routinelist.component.template.WeeklyDatePicker
 import com.threegap.bitnagil.presentation.routinelist.contract.RoutineListSideEffect
 import com.threegap.bitnagil.presentation.routinelist.contract.RoutineListState
+import com.threegap.bitnagil.presentation.routinelist.model.RoutineListStatePreviewProvider
 import com.threegap.bitnagil.presentation.routinelist.model.RoutineUiModel
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
@@ -133,7 +135,6 @@ private fun RoutineListScreen(
                 items(
                     items = uiState.selectedDateRoutines,
                     key = { routine -> routine.routineId },
-                    contentType = { "routine_item" },
                 ) { routine ->
                     RoutineDetailsCard(
                         routine = routine,
@@ -148,13 +149,17 @@ private fun RoutineListScreen(
 
 @Preview
 @Composable
-private fun RoutineListScreenPreview() {
-    RoutineListScreen(
-        uiState = RoutineListState.INIT,
-        onDateSelect = {},
-        onShowDeleteConfirmBottomSheet = {},
-        onShowEditConfirmBottomSheet = {},
-        onRegisterRoutineClick = {},
-        onBackClick = {},
-    )
+private fun RoutineListScreenPreview(
+    @PreviewParameter(RoutineListStatePreviewProvider::class) uiState: RoutineListState,
+) {
+    BitnagilTheme {
+        RoutineListScreen(
+            uiState = uiState,
+            onDateSelect = {},
+            onShowDeleteConfirmBottomSheet = {},
+            onShowEditConfirmBottomSheet = {},
+            onRegisterRoutineClick = {},
+            onBackClick = {},
+        )
+    }
 }
