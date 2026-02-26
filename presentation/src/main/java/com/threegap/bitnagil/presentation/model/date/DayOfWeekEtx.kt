@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.common.extension
+package com.threegap.bitnagil.presentation.model.date
 
 import com.threegap.bitnagil.domain.routine.model.DayOfWeek
 

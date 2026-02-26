@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.common.file
+package com.threegap.bitnagil.presentation.util.file
 
 import android.content.ContentResolver
 import android.content.Context

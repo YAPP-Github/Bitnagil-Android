@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.domain.report.model.ReportCategory
-import com.threegap.bitnagil.presentation.common.extension.displayTitle
+import com.threegap.bitnagil.presentation.model.report.displayTitle
 
 @Composable
 fun CompleteReportCard(

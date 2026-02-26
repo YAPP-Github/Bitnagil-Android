@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.common.premission
+package com.threegap.bitnagil.presentation.util.permission
 
 import android.content.Intent
 import android.net.Uri

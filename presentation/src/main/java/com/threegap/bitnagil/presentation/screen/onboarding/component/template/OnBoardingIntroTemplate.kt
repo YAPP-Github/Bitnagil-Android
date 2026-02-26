@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
-import com.threegap.bitnagil.presentation.common.ninepatch.ninePatchBackgroundNode
+import com.threegap.bitnagil.presentation.util.ninepatch.ninePatchBackgroundNode
 
 @Composable
 fun OnBoardingIntroTemplate(

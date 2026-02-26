@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.common.extension
+package com.threegap.bitnagil.presentation.model.report
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color

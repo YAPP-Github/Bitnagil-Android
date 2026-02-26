@@ -4,9 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.threegap.bitnagil.domain.auth.usecase.LogoutUseCase
-import com.threegap.bitnagil.presentation.common.version.VersionNameProvider
 import com.threegap.bitnagil.presentation.screen.setting.contract.SettingSideEffect
 import com.threegap.bitnagil.presentation.screen.setting.contract.SettingState
+import com.threegap.bitnagil.presentation.util.version.VersionNameProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay

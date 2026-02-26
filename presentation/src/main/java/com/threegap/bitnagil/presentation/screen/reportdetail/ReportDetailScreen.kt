@@ -27,7 +27,7 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
-import com.threegap.bitnagil.presentation.common.extension.displayTitle
+import com.threegap.bitnagil.presentation.model.report.displayTitle
 import com.threegap.bitnagil.presentation.screen.reportdetail.component.atom.ReportProcessBadge
 import com.threegap.bitnagil.presentation.screen.reportdetail.component.block.ReportDetailLabeledContent
 import com.threegap.bitnagil.presentation.screen.reportdetail.contract.ReportDetailState

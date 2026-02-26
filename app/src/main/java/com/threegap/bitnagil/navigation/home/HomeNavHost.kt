@@ -28,10 +28,10 @@ import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilFloatingActionMenu
 import com.threegap.bitnagil.designsystem.component.atom.FloatingActionItem
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
-import com.threegap.bitnagil.presentation.common.toast.GlobalBitnagilToast
 import com.threegap.bitnagil.presentation.screen.home.HomeScreenContainer
 import com.threegap.bitnagil.presentation.screen.mypage.MyPageScreenContainer
 import com.threegap.bitnagil.presentation.screen.recommendroutine.RecommendRoutineScreenContainer
+import com.threegap.bitnagil.presentation.util.toast.GlobalBitnagilToast
 import com.threegap.bitnagil.util.setStatusBarContentColor
 
 @Composable

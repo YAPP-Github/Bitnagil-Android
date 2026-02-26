@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.common.extension
+package com.threegap.bitnagil.presentation.model.report
 
 import androidx.annotation.DrawableRes
 import com.threegap.bitnagil.designsystem.R

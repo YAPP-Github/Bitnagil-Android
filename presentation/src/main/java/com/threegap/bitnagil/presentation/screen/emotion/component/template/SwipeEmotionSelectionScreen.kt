@@ -60,12 +60,12 @@ import androidx.compose.ui.zIndex
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
-import com.threegap.bitnagil.presentation.common.dimension.dpToPx
 import com.threegap.bitnagil.presentation.screen.emotion.component.atom.EmotionMarbleImage
 import com.threegap.bitnagil.presentation.screen.emotion.contract.EmotionState
 import com.threegap.bitnagil.presentation.screen.emotion.model.EmotionImageUiModel
 import com.threegap.bitnagil.presentation.screen.emotion.model.EmotionScreenStep
 import com.threegap.bitnagil.presentation.screen.emotion.model.EmotionUiModel
+import com.threegap.bitnagil.presentation.util.dimension.dpToPx
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.collections.forEach

@@ -12,9 +12,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.domain.report.model.ReportStatus
-import com.threegap.bitnagil.presentation.common.extension.badgeBackgroundColor
-import com.threegap.bitnagil.presentation.common.extension.displayTitle
-import com.threegap.bitnagil.presentation.common.extension.textColor
+import com.threegap.bitnagil.presentation.model.report.badgeBackgroundColor
+import com.threegap.bitnagil.presentation.model.report.displayTitle
+import com.threegap.bitnagil.presentation.model.report.textColor
 
 @Composable
 fun ReportProcessBadge(

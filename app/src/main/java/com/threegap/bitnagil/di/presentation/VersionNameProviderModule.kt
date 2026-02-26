@@ -1,7 +1,7 @@
 package com.threegap.bitnagil.di.presentation
 
-import com.threegap.bitnagil.presentation.common.version.AndroidApplicationVersionNameProvider
-import com.threegap.bitnagil.presentation.common.version.VersionNameProvider
+import com.threegap.bitnagil.presentation.util.version.AndroidApplicationVersionNameProvider
+import com.threegap.bitnagil.presentation.util.version.VersionNameProvider
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

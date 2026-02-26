@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.common.version
+package com.threegap.bitnagil.presentation.util.version
 
 import com.threegap.bitnagil.presentation.BuildConfig
 import javax.inject.Inject

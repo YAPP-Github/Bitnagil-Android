@@ -8,11 +8,11 @@ import com.threegap.bitnagil.domain.file.usecase.UploadReportImagesUseCase
 import com.threegap.bitnagil.domain.report.model.Report
 import com.threegap.bitnagil.domain.report.model.ReportCategory
 import com.threegap.bitnagil.domain.report.usecase.SubmitReportUseCase
-import com.threegap.bitnagil.presentation.common.file.convertUriToImageFile
 import com.threegap.bitnagil.presentation.screen.reportwrite.contract.ReportSideEffect
 import com.threegap.bitnagil.presentation.screen.reportwrite.contract.ReportState
 import com.threegap.bitnagil.presentation.screen.reportwrite.contract.ReportState.Companion.MAX_IMAGE_COUNT
 import com.threegap.bitnagil.presentation.screen.reportwrite.model.SubmitState
+import com.threegap.bitnagil.presentation.util.file.convertUriToImageFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.async

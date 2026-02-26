@@ -52,9 +52,7 @@ import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButtonColor
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextField
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
-import com.threegap.bitnagil.presentation.common.extension.displayTitle
-import com.threegap.bitnagil.presentation.common.file.createCameraImageUri
-import com.threegap.bitnagil.presentation.common.premission.rememberPermissionHandler
+import com.threegap.bitnagil.presentation.model.report.displayTitle
 import com.threegap.bitnagil.presentation.screen.reportwrite.component.AddPhotoButton
 import com.threegap.bitnagil.presentation.screen.reportwrite.component.CurrentLocationInput
 import com.threegap.bitnagil.presentation.screen.reportwrite.component.ImageSourceBottomSheet
@@ -68,6 +66,8 @@ import com.threegap.bitnagil.presentation.screen.reportwrite.contract.ReportSide
 import com.threegap.bitnagil.presentation.screen.reportwrite.contract.ReportState
 import com.threegap.bitnagil.presentation.screen.reportwrite.contract.ReportState.Companion.MAX_IMAGE_COUNT
 import com.threegap.bitnagil.presentation.screen.reportwrite.model.SubmitState
+import com.threegap.bitnagil.presentation.util.file.createCameraImageUri
+import com.threegap.bitnagil.presentation.util.permission.rememberPermissionHandler
 import kotlinx.coroutines.delay
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect

@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.common.ninepatch
+package com.threegap.bitnagil.presentation.util.ninepatch
 
 import android.graphics.drawable.NinePatchDrawable
 import androidx.compose.runtime.Composable

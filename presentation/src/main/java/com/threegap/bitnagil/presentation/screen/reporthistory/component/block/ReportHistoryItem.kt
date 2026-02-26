@@ -27,7 +27,7 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.domain.report.model.ReportCategory
 import com.threegap.bitnagil.domain.report.model.ReportStatus
-import com.threegap.bitnagil.presentation.common.extension.displayTitle
+import com.threegap.bitnagil.presentation.model.report.displayTitle
 import com.threegap.bitnagil.presentation.screen.reportdetail.component.atom.ReportProcessBadge
 import com.threegap.bitnagil.presentation.screen.reporthistory.model.ReportHistoryUiModel
 

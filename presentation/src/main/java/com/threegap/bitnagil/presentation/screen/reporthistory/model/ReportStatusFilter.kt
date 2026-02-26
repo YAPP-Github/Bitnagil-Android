@@ -1,7 +1,7 @@
 package com.threegap.bitnagil.presentation.screen.reporthistory.model
 
 import com.threegap.bitnagil.domain.report.model.ReportStatus
-import com.threegap.bitnagil.presentation.common.extension.displayTitle
+import com.threegap.bitnagil.presentation.model.report.displayTitle
 
 sealed class ReportStatusFilter {
     data object All : ReportStatusFilter()

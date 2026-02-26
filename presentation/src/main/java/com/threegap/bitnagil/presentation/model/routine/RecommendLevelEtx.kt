@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.common.extension
+package com.threegap.bitnagil.presentation.model.routine
 
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendLevel
 

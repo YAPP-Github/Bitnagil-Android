@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
-import com.threegap.bitnagil.presentation.common.toast.GlobalBitnagilToast
 import com.threegap.bitnagil.presentation.screen.routinelist.component.template.DeleteConfirmBottomSheet
 import com.threegap.bitnagil.presentation.screen.routinelist.component.template.EditConfirmBottomSheet
 import com.threegap.bitnagil.presentation.screen.routinelist.component.template.EmptyRoutineListView
@@ -31,6 +30,7 @@ import com.threegap.bitnagil.presentation.screen.routinelist.contract.RoutineLis
 import com.threegap.bitnagil.presentation.screen.routinelist.contract.RoutineListState
 import com.threegap.bitnagil.presentation.screen.routinelist.model.RoutineListStatePreviewProvider
 import com.threegap.bitnagil.presentation.screen.routinelist.model.RoutineUiModel
+import com.threegap.bitnagil.presentation.util.toast.GlobalBitnagilToast
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 import java.time.LocalDate

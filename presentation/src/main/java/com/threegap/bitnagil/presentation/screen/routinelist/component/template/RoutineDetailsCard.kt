@@ -21,9 +21,9 @@ import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIconButton
 import com.threegap.bitnagil.domain.routine.model.DayOfWeek
-import com.threegap.bitnagil.presentation.common.extension.displayColor
-import com.threegap.bitnagil.presentation.common.extension.displayIcon
-import com.threegap.bitnagil.presentation.common.extension.displayTitle
+import com.threegap.bitnagil.presentation.model.date.displayTitle
+import com.threegap.bitnagil.presentation.model.routine.displayColor
+import com.threegap.bitnagil.presentation.model.routine.displayIcon
 import com.threegap.bitnagil.presentation.screen.routinelist.model.RoutineUiModel
 
 @Composable

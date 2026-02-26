@@ -29,12 +29,12 @@ import com.threegap.bitnagil.designsystem.component.block.BitnagilAlertDialog
 import com.threegap.bitnagil.designsystem.component.block.BitnagilOptionButton
 import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
-import com.threegap.bitnagil.presentation.common.playstore.UpdateAvailableState
-import com.threegap.bitnagil.presentation.common.playstore.openAppInPlayStore
-import com.threegap.bitnagil.presentation.common.playstore.updateAvailable
 import com.threegap.bitnagil.presentation.screen.setting.component.atom.settingtitle.SettingTitle
 import com.threegap.bitnagil.presentation.screen.setting.contract.SettingSideEffect
 import com.threegap.bitnagil.presentation.screen.setting.contract.SettingState
+import com.threegap.bitnagil.presentation.util.playstore.UpdateAvailableState
+import com.threegap.bitnagil.presentation.util.playstore.openAppInPlayStore
+import com.threegap.bitnagil.presentation.util.playstore.updateAvailable
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 

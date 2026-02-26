@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.common.playstore
+package com.threegap.bitnagil.presentation.util.playstore
 
 import android.content.ActivityNotFoundException
 import android.content.Context

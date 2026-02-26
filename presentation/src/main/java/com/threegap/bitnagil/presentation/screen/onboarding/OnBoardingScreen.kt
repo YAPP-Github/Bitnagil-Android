@@ -11,7 +11,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.component.block.BitnagilProgressTopBar
-import com.threegap.bitnagil.presentation.common.toast.GlobalBitnagilToast
 import com.threegap.bitnagil.presentation.screen.onboarding.component.template.OnBoardingAbstractTemplate
 import com.threegap.bitnagil.presentation.screen.onboarding.component.template.OnBoardingIntroTemplate
 import com.threegap.bitnagil.presentation.screen.onboarding.component.template.OnBoardingSelectTemplate
@@ -20,6 +19,7 @@ import com.threegap.bitnagil.presentation.screen.onboarding.contract.OnBoardingS
 import com.threegap.bitnagil.presentation.screen.onboarding.model.OnBoardingItemUiModel
 import com.threegap.bitnagil.presentation.screen.onboarding.model.OnBoardingPageInfo
 import com.threegap.bitnagil.presentation.screen.onboarding.model.OnBoardingSetType
+import com.threegap.bitnagil.presentation.util.toast.GlobalBitnagilToast
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 

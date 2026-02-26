@@ -24,10 +24,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
-import com.threegap.bitnagil.presentation.common.dimension.pxToDp
 import com.threegap.bitnagil.presentation.screen.emotion.component.atom.EmotionMarbleImage
 import com.threegap.bitnagil.presentation.screen.emotion.component.atom.SpeechBubbleText
 import com.threegap.bitnagil.presentation.screen.emotion.model.EmotionUiModel
+import com.threegap.bitnagil.presentation.util.dimension.pxToDp
 
 @Composable
 fun EmotionLoadingView(

@@ -24,9 +24,9 @@ import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.domain.report.model.ReportCategory
-import com.threegap.bitnagil.presentation.common.extension.displayExamples
-import com.threegap.bitnagil.presentation.common.extension.displayTitle
-import com.threegap.bitnagil.presentation.common.extension.iconRes
+import com.threegap.bitnagil.presentation.model.report.displayExamples
+import com.threegap.bitnagil.presentation.model.report.displayTitle
+import com.threegap.bitnagil.presentation.model.report.iconRes
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -37,8 +37,8 @@ import androidx.compose.ui.zIndex
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
-import com.threegap.bitnagil.presentation.common.ninepatch.ninePatchBackgroundNode
 import com.threegap.bitnagil.presentation.screen.onboarding.model.OnBoardingAbstractTextItemUiModel
+import com.threegap.bitnagil.presentation.util.ninepatch.ninePatchBackgroundNode
 
 @Composable
 fun OnBoardingAbstractTemplate(

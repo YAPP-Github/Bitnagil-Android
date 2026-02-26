@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.common.playstore
+package com.threegap.bitnagil.presentation.util.playstore
 
 enum class UpdateAvailableState {
     LATEST, NEED_UPDATE, NONE

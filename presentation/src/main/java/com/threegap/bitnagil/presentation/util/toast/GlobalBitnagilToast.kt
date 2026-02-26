@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.common.toast
+package com.threegap.bitnagil.presentation.util.toast
 
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilToastState

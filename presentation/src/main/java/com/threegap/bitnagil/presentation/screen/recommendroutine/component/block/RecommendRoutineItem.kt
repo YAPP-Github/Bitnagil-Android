@@ -22,8 +22,8 @@ import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendCategory
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendLevel
-import com.threegap.bitnagil.presentation.common.extension.displayColor
-import com.threegap.bitnagil.presentation.common.extension.displayIcon
+import com.threegap.bitnagil.presentation.model.routine.displayColor
+import com.threegap.bitnagil.presentation.model.routine.displayIcon
 import com.threegap.bitnagil.presentation.screen.recommendroutine.model.RecommendRoutineUiModel
 import com.threegap.bitnagil.presentation.screen.recommendroutine.model.RecommendSubRoutineUiModel
 
