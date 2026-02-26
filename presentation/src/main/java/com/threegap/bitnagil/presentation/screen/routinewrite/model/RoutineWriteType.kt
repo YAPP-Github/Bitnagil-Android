@@ -4,10 +4,10 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-sealed class WriteRoutineType : Parcelable {
+sealed class RoutineWriteType : Parcelable {
     @Parcelize
-    data object Add : WriteRoutineType()
+    data object Add : RoutineWriteType()
 
     @Parcelize
-    data class Edit(val updateRoutineFromNowDate: Boolean) : WriteRoutineType()
+    data class Edit(val updateRoutineFromNowDate: Boolean) : RoutineWriteType()
 }

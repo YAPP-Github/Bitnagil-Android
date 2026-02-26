@@ -19,9 +19,9 @@ import com.threegap.bitnagil.presentation.screen.reportdetail.model.navarg.Repor
 import com.threegap.bitnagil.presentation.screen.reporthistory.ReportHistoryScreenContainer
 import com.threegap.bitnagil.presentation.screen.reportwrite.ReportWriteScreenContainer
 import com.threegap.bitnagil.presentation.screen.routinelist.RoutineListScreenContainer
-import com.threegap.bitnagil.presentation.screen.routinewrite.WriteRoutineScreenContainer
-import com.threegap.bitnagil.presentation.screen.routinewrite.WriteRoutineViewModel
-import com.threegap.bitnagil.presentation.screen.routinewrite.model.navarg.WriteRoutineScreenArg
+import com.threegap.bitnagil.presentation.screen.routinewrite.RoutineWriteScreenContainer
+import com.threegap.bitnagil.presentation.screen.routinewrite.RoutineWriteViewModel
+import com.threegap.bitnagil.presentation.screen.routinewrite.model.navarg.RoutineWriteScreenArg
 import com.threegap.bitnagil.presentation.screen.setting.SettingScreenContainer
 import com.threegap.bitnagil.presentation.screen.splash.SplashScreenContainer
 import com.threegap.bitnagil.presentation.screen.terms.TermsAgreementScreenContainer
@@ -127,7 +127,7 @@ fun MainNavHost(
                     }
                 },
                 navigateToRegisterRoutine = { routineId ->
-                    navigator.navController.navigate(Route.WriteRoutine(routineId = routineId))
+                    navigator.navController.navigate(Route.RoutineWrite(routineId = routineId))
                 },
                 navigateToEmotion = {
                     navigator.navController.navigate(Route.Emotion)
@@ -224,19 +224,19 @@ fun MainNavHost(
             )
         }
 
-        composable<Route.WriteRoutine> { navBackStackEntry ->
-            val arg = navBackStackEntry.toRoute<Route.WriteRoutine>()
+        composable<Route.RoutineWrite> { navBackStackEntry ->
+            val arg = navBackStackEntry.toRoute<Route.RoutineWrite>()
             val writeScreenNavArg = if (arg.isRegister) {
-                WriteRoutineScreenArg.Add(baseRoutineId = arg.routineId)
+                RoutineWriteScreenArg.Add(baseRoutineId = arg.routineId)
             } else {
-                WriteRoutineScreenArg.Edit(routineId = arg.routineId!!, updateRoutineFromNowDate = arg.isUpdateRoutineFromNowDate)
+                RoutineWriteScreenArg.Edit(routineId = arg.routineId!!, updateRoutineFromNowDate = arg.isUpdateRoutineFromNowDate)
             }
 
-            val viewModel = hiltViewModel<WriteRoutineViewModel, WriteRoutineViewModel.Factory> { factory ->
+            val viewModel = hiltViewModel<RoutineWriteViewModel, RoutineWriteViewModel.Factory> { factory ->
                 factory.create(writeScreenNavArg)
             }
 
-            WriteRoutineScreenContainer(
+            RoutineWriteScreenContainer(
                 viewModel = viewModel,
                 navigateToBack = {
                     if (navigator.navController.previousBackStackEntry != null) {
@@ -281,11 +281,11 @@ fun MainNavHost(
                     }
                 },
                 navigateToAddRoutine = {
-                    navigator.navController.navigate(Route.WriteRoutine())
+                    navigator.navController.navigate(Route.RoutineWrite())
                 },
                 navigateToEditRoutine = { routineId, updateRoutineFromNowDate ->
                     navigator.navController.navigate(
-                        Route.WriteRoutine(
+                        Route.RoutineWrite(
                             routineId = routineId,
                             isRegister = false,
                             isUpdateRoutineFromNowDate = updateRoutineFromNowDate,

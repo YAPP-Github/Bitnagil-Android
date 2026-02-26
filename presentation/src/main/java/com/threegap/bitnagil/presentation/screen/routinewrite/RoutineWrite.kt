@@ -38,30 +38,30 @@ import com.threegap.bitnagil.presentation.screen.routinewrite.component.block.ro
 import com.threegap.bitnagil.presentation.screen.routinewrite.component.block.subroutinefield.SubRoutineField
 import com.threegap.bitnagil.presentation.screen.routinewrite.component.template.datepickerbottomsheet.DatePickerBottomSheet
 import com.threegap.bitnagil.presentation.screen.routinewrite.component.template.timepickerbottomsheet.TimePickerBottomSheet
-import com.threegap.bitnagil.presentation.screen.routinewrite.contract.WriteRoutineSideEffect
-import com.threegap.bitnagil.presentation.screen.routinewrite.contract.WriteRoutineState
+import com.threegap.bitnagil.presentation.screen.routinewrite.contract.RoutineWriteSideEffect
+import com.threegap.bitnagil.presentation.screen.routinewrite.contract.RoutineWriteState
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.Day
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.RepeatType
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.Time
-import com.threegap.bitnagil.presentation.screen.routinewrite.model.WriteRoutineType
+import com.threegap.bitnagil.presentation.screen.routinewrite.model.RoutineWriteType
 import com.threegap.bitnagil.presentation.util.toast.GlobalBitnagilToast
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
-fun WriteRoutineScreenContainer(
-    viewModel: WriteRoutineViewModel = hiltViewModel(),
+fun RoutineWriteScreenContainer(
+    viewModel: RoutineWriteViewModel = hiltViewModel(),
     navigateToBack: () -> Unit,
 ) {
     val state by viewModel.collectAsState()
 
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
-            WriteRoutineSideEffect.MoveToPreviousScreen -> {
+            RoutineWriteSideEffect.MoveToPreviousScreen -> {
                 navigateToBack()
             }
 
-            is WriteRoutineSideEffect.ShowToast -> {
+            is RoutineWriteSideEffect.ShowToast -> {
                 GlobalBitnagilToast.showCheck(sideEffect.message)
             }
         }
@@ -99,7 +99,7 @@ fun WriteRoutineScreenContainer(
         )
     }
 
-    WriteRoutineScreen(
+    RoutineWriteScreen(
         state = state,
         setRoutineName = viewModel::setRoutineName,
         setSubRoutineName = viewModel::setSubRoutineName,
@@ -120,8 +120,8 @@ fun WriteRoutineScreenContainer(
 }
 
 @Composable
-private fun WriteRoutineScreen(
-    state: WriteRoutineState,
+private fun RoutineWriteScreen(
+    state: RoutineWriteState,
     setRoutineName: (String) -> Unit,
     setSubRoutineName: (Int, String) -> Unit,
     selectNotUseSubRoutines: () -> Unit,
@@ -148,7 +148,7 @@ private fun WriteRoutineScreen(
             .windowInsetsPadding(WindowInsets.ime),
     ) {
         BitnagilTopBar(
-            title = if (state.writeRoutineType == WriteRoutineType.Add) "루틴 등록" else "루틴 수정",
+            title = if (state.routineWriteType == RoutineWriteType.Add) "루틴 등록" else "루틴 수정",
             showBackButton = true,
             onBackClick = onClickBack,
         )
@@ -171,7 +171,7 @@ private fun WriteRoutineScreen(
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "${state.routineName.length} / ${WriteRoutineState.MAX_ROUTINE_NAME_LENGTH}",
+                text = "${state.routineName.length} / ${RoutineWriteState.MAX_ROUTINE_NAME_LENGTH}",
                 style = BitnagilTheme.typography.caption1Medium,
                 color = BitnagilTheme.colors.coolGray80,
                 textAlign = TextAlign.End,
@@ -368,10 +368,10 @@ private fun getSubRoutinePlaceHolder(index: Int): String {
 
 @Preview
 @Composable
-fun WriteRoutineScreenPreview() {
+fun RoutineWriteScreenPreview() {
     BitnagilTheme {
-        WriteRoutineScreen(
-            state = WriteRoutineState.INIT.copy(periodUiExpanded = true, startTimeUiExpanded = true),
+        RoutineWriteScreen(
+            state = RoutineWriteState.INIT.copy(periodUiExpanded = true, startTimeUiExpanded = true),
             setRoutineName = {},
             setSubRoutineName = { _, _ -> },
             selectRepeatTime = {},

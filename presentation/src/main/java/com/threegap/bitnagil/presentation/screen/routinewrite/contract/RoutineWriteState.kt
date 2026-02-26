@@ -7,11 +7,11 @@ import com.threegap.bitnagil.presentation.screen.routinewrite.model.Day
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.RepeatType
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.SelectableDay
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.Time
-import com.threegap.bitnagil.presentation.screen.routinewrite.model.WriteRoutineType
+import com.threegap.bitnagil.presentation.screen.routinewrite.model.RoutineWriteType
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class WriteRoutineState(
+data class RoutineWriteState(
     val routineName: String,
     val subRoutineNames: List<String>,
     val selectNotUseSubRoutines: Boolean,
@@ -25,7 +25,7 @@ data class WriteRoutineState(
     val showTimePickerBottomSheet: Boolean,
     val showStartDatePickerBottomSheet: Boolean,
     val showEndDatePickerBottomSheet: Boolean,
-    val writeRoutineType: WriteRoutineType,
+    val routineWriteType: RoutineWriteType,
     val subRoutineUiExpanded: Boolean,
     val repeatDaysUiExpanded: Boolean,
     val periodUiExpanded: Boolean,
@@ -35,7 +35,7 @@ data class WriteRoutineState(
     companion object {
         const val MAX_ROUTINE_NAME_LENGTH = 20
 
-        val INIT = WriteRoutineState(
+        val INIT = RoutineWriteState(
             routineName = "",
             subRoutineNames = listOf("", "", ""),
             selectNotUseSubRoutines = false,
@@ -76,7 +76,7 @@ data class WriteRoutineState(
             showStartDatePickerBottomSheet = false,
             showEndDatePickerBottomSheet = false,
             showTimePickerBottomSheet = false,
-            writeRoutineType = WriteRoutineType.Add,
+            routineWriteType = RoutineWriteType.Add,
             subRoutineUiExpanded = false,
             repeatDaysUiExpanded = false,
             periodUiExpanded = false,

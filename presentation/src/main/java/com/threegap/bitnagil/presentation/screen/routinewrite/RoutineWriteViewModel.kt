@@ -8,16 +8,16 @@ import com.threegap.bitnagil.domain.writeroutine.model.RepeatDay
 import com.threegap.bitnagil.domain.writeroutine.model.RoutineUpdateType
 import com.threegap.bitnagil.domain.writeroutine.usecase.EditRoutineUseCase
 import com.threegap.bitnagil.domain.writeroutine.usecase.RegisterRoutineUseCase
-import com.threegap.bitnagil.presentation.screen.routinewrite.contract.WriteRoutineSideEffect
-import com.threegap.bitnagil.presentation.screen.routinewrite.contract.WriteRoutineState
+import com.threegap.bitnagil.presentation.screen.routinewrite.contract.RoutineWriteSideEffect
+import com.threegap.bitnagil.presentation.screen.routinewrite.contract.RoutineWriteState
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.Date
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.Day
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.RepeatType
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.SelectableDay
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.SubRoutineUiModel
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.Time
-import com.threegap.bitnagil.presentation.screen.routinewrite.model.WriteRoutineType
-import com.threegap.bitnagil.presentation.screen.routinewrite.model.navarg.WriteRoutineScreenArg
+import com.threegap.bitnagil.presentation.screen.routinewrite.model.RoutineWriteType
+import com.threegap.bitnagil.presentation.screen.routinewrite.model.navarg.RoutineWriteScreenArg
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.toUiModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -27,22 +27,22 @@ import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.viewmodel.container
 
-@HiltViewModel(assistedFactory = WriteRoutineViewModel.Factory::class)
-class WriteRoutineViewModel @AssistedInject constructor(
+@HiltViewModel(assistedFactory = RoutineWriteViewModel.Factory::class)
+class RoutineWriteViewModel @AssistedInject constructor(
     savedStateHandle: SavedStateHandle,
     private val registerRoutineUseCase: RegisterRoutineUseCase,
     private val editRoutineUseCase: EditRoutineUseCase,
     private val getRoutineUseCase: GetRoutineUseCase,
     private val getRecommendRoutineUseCase: GetRecommendRoutineUseCase,
-    @Assisted private val writeRoutineArg: WriteRoutineScreenArg,
-) : ContainerHost<WriteRoutineState, WriteRoutineSideEffect>, ViewModel() {
+    @Assisted private val writeRoutineArg: RoutineWriteScreenArg,
+) : ContainerHost<RoutineWriteState, RoutineWriteSideEffect>, ViewModel() {
     @AssistedFactory interface Factory {
-        fun create(writeRoutineArg: WriteRoutineScreenArg): WriteRoutineViewModel
+        fun create(writeRoutineArg: RoutineWriteScreenArg): RoutineWriteViewModel
     }
 
-    override val container: Container<WriteRoutineState, WriteRoutineSideEffect> = container(
+    override val container: Container<RoutineWriteState, RoutineWriteSideEffect> = container(
         savedStateHandle = savedStateHandle,
-        initialState = WriteRoutineState.INIT,
+        initialState = RoutineWriteState.INIT,
     )
 
     private var routineId: String? = null
@@ -53,12 +53,12 @@ class WriteRoutineViewModel @AssistedInject constructor(
         initResource(navigationArg)
     }
 
-    private fun initResource(navigationArg: WriteRoutineScreenArg) = intent {
+    private fun initResource(navigationArg: RoutineWriteScreenArg) = intent {
         when (navigationArg) {
-            is WriteRoutineScreenArg.Add -> {
+            is RoutineWriteScreenArg.Add -> {
                 reduce {
                     state.copy(
-                        writeRoutineType = WriteRoutineType.Add,
+                        routineWriteType = RoutineWriteType.Add,
                     )
                 }
 
@@ -67,10 +67,10 @@ class WriteRoutineViewModel @AssistedInject constructor(
                     loadRecommendRoutine(it)
                 }
             }
-            is WriteRoutineScreenArg.Edit -> {
+            is RoutineWriteScreenArg.Edit -> {
                 reduce {
                     state.copy(
-                        writeRoutineType = WriteRoutineType.Edit(updateRoutineFromNowDate = navigationArg.updateRoutineFromNowDate),
+                        routineWriteType = RoutineWriteType.Edit(updateRoutineFromNowDate = navigationArg.updateRoutineFromNowDate),
                     )
                 }
 
@@ -158,7 +158,7 @@ class WriteRoutineViewModel @AssistedInject constructor(
     }
 
     fun setRoutineName(name: String) = intent {
-        if (name.length > WriteRoutineState.MAX_ROUTINE_NAME_LENGTH) return@intent
+        if (name.length > RoutineWriteState.MAX_ROUTINE_NAME_LENGTH) return@intent
         reduce {
             state.copy(
                 routineName = name,
@@ -360,8 +360,8 @@ class WriteRoutineViewModel @AssistedInject constructor(
             null -> listOf()
         }
 
-        when (val writeRoutineType = currentState.writeRoutineType) {
-            WriteRoutineType.Add -> {
+        when (val writeRoutineType = currentState.routineWriteType) {
+            RoutineWriteType.Add -> {
                 reduce {
                     state.copy(
                         loading = true,
@@ -382,7 +382,7 @@ class WriteRoutineViewModel @AssistedInject constructor(
                 )
 
                 if (registerRoutineResult.isSuccess) {
-                    postSideEffect(WriteRoutineSideEffect.MoveToPreviousScreen)
+                    postSideEffect(RoutineWriteSideEffect.MoveToPreviousScreen)
                 } else {
                     reduce {
                         state.copy(
@@ -391,7 +391,7 @@ class WriteRoutineViewModel @AssistedInject constructor(
                     }
                 }
             }
-            is WriteRoutineType.Edit -> {
+            is RoutineWriteType.Edit -> {
                 val currentRoutineId = routineId ?: return@intent
                 val subRoutines = if (currentState.selectNotUseSubRoutines) emptyList() else currentState.subRoutineNames.filter { it.isNotEmpty() }
                 val routineUpdateType = if (writeRoutineType.updateRoutineFromNowDate) {
@@ -418,8 +418,8 @@ class WriteRoutineViewModel @AssistedInject constructor(
                 )
 
                 if (editRoutineResult.isSuccess) {
-                    postSideEffect(WriteRoutineSideEffect.MoveToPreviousScreen)
-                    postSideEffect(WriteRoutineSideEffect.ShowToast("루틴 수정이 완료되었습니다."))
+                    postSideEffect(RoutineWriteSideEffect.MoveToPreviousScreen)
+                    postSideEffect(RoutineWriteSideEffect.ShowToast("루틴 수정이 완료되었습니다."))
                 } else {
                     reduce {
                         state.copy(
