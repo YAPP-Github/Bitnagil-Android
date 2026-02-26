@@ -44,7 +44,6 @@ import com.threegap.bitnagil.presentation.screen.reporthistory.model.ReportStatu
 import com.threegap.bitnagil.presentation.screen.reporthistory.util.toPresentationFormat
 import org.orbitmvi.orbit.compose.collectAsState
 import java.time.LocalDate
-import kotlin.collections.forEach
 
 @Composable
 fun ReportHistoryScreenContainer(

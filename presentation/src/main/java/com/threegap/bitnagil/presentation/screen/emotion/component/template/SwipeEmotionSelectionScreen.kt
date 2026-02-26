@@ -68,7 +68,6 @@ import com.threegap.bitnagil.presentation.screen.emotion.model.EmotionUiModel
 import com.threegap.bitnagil.presentation.util.dimension.dpToPx
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.collections.forEach
 import kotlin.math.absoluteValue
 
 @Composable

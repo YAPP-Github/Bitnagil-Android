@@ -31,8 +31,6 @@ import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.viewmodel.container
 import java.time.LocalDate
 import javax.inject.Inject
-import kotlin.collections.map
-import kotlin.collections.plus
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(

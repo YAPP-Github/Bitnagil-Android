@@ -19,7 +19,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
-import com.threegap.bitnagil.designsystem.R
 
 @Composable
 fun SubRoutineField(
@@ -78,7 +77,7 @@ fun SubRoutineField(
 fun NameFieldPreview() {
     BitnagilTheme {
         SubRoutineField(
-            resourceId = R.drawable.img_circle_1,
+            resourceId = com.threegap.bitnagil.designsystem.R.drawable.img_circle_1,
             placeHolder = "세부루틴을 설정해주세요.",
             value = "TEXT",
             onValueChange = {},
