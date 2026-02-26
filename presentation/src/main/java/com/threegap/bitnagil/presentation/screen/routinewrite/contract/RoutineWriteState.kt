@@ -5,9 +5,9 @@ import com.threegap.bitnagil.domain.recommendroutine.model.RecommendCategory
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.Date
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.Day
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.RepeatType
+import com.threegap.bitnagil.presentation.screen.routinewrite.model.RoutineWriteType
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.SelectableDay
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.Time
-import com.threegap.bitnagil.presentation.screen.routinewrite.model.RoutineWriteType
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

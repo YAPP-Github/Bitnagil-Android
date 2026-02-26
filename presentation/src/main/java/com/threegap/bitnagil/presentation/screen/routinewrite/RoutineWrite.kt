@@ -42,8 +42,8 @@ import com.threegap.bitnagil.presentation.screen.routinewrite.contract.RoutineWr
 import com.threegap.bitnagil.presentation.screen.routinewrite.contract.RoutineWriteState
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.Day
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.RepeatType
-import com.threegap.bitnagil.presentation.screen.routinewrite.model.Time
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.RoutineWriteType
+import com.threegap.bitnagil.presentation.screen.routinewrite.model.Time
 import com.threegap.bitnagil.presentation.util.toast.GlobalBitnagilToast
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
