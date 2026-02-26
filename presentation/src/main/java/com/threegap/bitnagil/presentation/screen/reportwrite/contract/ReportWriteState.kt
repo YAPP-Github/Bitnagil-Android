@@ -4,7 +4,7 @@ import android.net.Uri
 import com.threegap.bitnagil.domain.report.model.ReportCategory
 import com.threegap.bitnagil.presentation.screen.reportwrite.model.SubmitState
 
-data class ReportState(
+data class ReportWriteState(
     val reportImages: List<Uri>,
     val reportTitle: String,
     val reportContent: String,
@@ -36,7 +36,7 @@ data class ReportState(
 
         const val MAX_IMAGE_COUNT = 3
 
-        val Init = ReportState(
+        val Init = ReportWriteState(
             reportImages = emptyList(),
             reportTitle = "",
             reportContent = "",

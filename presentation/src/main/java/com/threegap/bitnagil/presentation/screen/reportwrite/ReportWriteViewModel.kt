@@ -8,9 +8,9 @@ import com.threegap.bitnagil.domain.file.usecase.UploadReportImagesUseCase
 import com.threegap.bitnagil.domain.report.model.Report
 import com.threegap.bitnagil.domain.report.model.ReportCategory
 import com.threegap.bitnagil.domain.report.usecase.SubmitReportUseCase
-import com.threegap.bitnagil.presentation.screen.reportwrite.contract.ReportSideEffect
-import com.threegap.bitnagil.presentation.screen.reportwrite.contract.ReportState
-import com.threegap.bitnagil.presentation.screen.reportwrite.contract.ReportState.Companion.MAX_IMAGE_COUNT
+import com.threegap.bitnagil.presentation.screen.reportwrite.contract.ReportWriteSideEffect
+import com.threegap.bitnagil.presentation.screen.reportwrite.contract.ReportWriteState
+import com.threegap.bitnagil.presentation.screen.reportwrite.contract.ReportWriteState.Companion.MAX_IMAGE_COUNT
 import com.threegap.bitnagil.presentation.screen.reportwrite.model.SubmitState
 import com.threegap.bitnagil.presentation.util.file.convertUriToImageFile
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,25 +25,25 @@ import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 @HiltViewModel
-class ReportViewModel @Inject constructor(
+class ReportWriteViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val fetchCurrentAddressUseCase: FetchCurrentAddressUseCase,
     private val uploadReportImagesUseCase: UploadReportImagesUseCase,
     private val submitReportUseCase: SubmitReportUseCase,
-) : ViewModel(), ContainerHost<ReportState, ReportSideEffect> {
+) : ViewModel(), ContainerHost<ReportWriteState, ReportWriteSideEffect> {
 
-    override val container: Container<ReportState, ReportSideEffect> = container(initialState = ReportState.Init)
+    override val container: Container<ReportWriteState, ReportWriteSideEffect> = container(initialState = ReportWriteState.Init)
 
     fun updateReportTitle(title: String) {
         intent {
-            if (title.length > ReportState.MAX_TITLE_LENGTH) return@intent
+            if (title.length > ReportWriteState.MAX_TITLE_LENGTH) return@intent
             reduce { state.copy(reportTitle = title) }
         }
     }
 
     fun updateReportContent(content: String) {
         intent {
-            if (content.length > ReportState.MAX_CONTENT_LENGTH) return@intent
+            if (content.length > ReportWriteState.MAX_CONTENT_LENGTH) return@intent
             reduce { state.copy(reportContent = content) }
         }
     }
@@ -69,7 +69,7 @@ class ReportViewModel @Inject constructor(
     fun hideReportCategoryBottomSheet() {
         intent {
             reduce { state.copy(reportCategoryBottomSheetVisible = false) }
-            postSideEffect(ReportSideEffect.FocusOnContent)
+            postSideEffect(ReportWriteSideEffect.FocusOnContent)
         }
     }
 
@@ -116,7 +116,7 @@ class ReportViewModel @Inject constructor(
 
     fun navigateToBack() {
         intent {
-            postSideEffect(ReportSideEffect.NavigateToBack)
+            postSideEffect(ReportWriteSideEffect.NavigateToBack)
         }
     }
 
@@ -131,7 +131,7 @@ class ReportViewModel @Inject constructor(
 
             coroutineScope {
                 val minDelayJob = async {
-                    delay(timeMillis = ReportState.MIN_LOADING_TIME)
+                    delay(timeMillis = ReportWriteState.MIN_LOADING_TIME)
                 }
 
                 val processingJob = async {

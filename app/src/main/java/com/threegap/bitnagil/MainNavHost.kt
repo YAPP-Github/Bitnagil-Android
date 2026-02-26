@@ -17,7 +17,7 @@ import com.threegap.bitnagil.presentation.screen.reportdetail.ReportDetailScreen
 import com.threegap.bitnagil.presentation.screen.reportdetail.ReportDetailViewModel
 import com.threegap.bitnagil.presentation.screen.reportdetail.model.navarg.ReportDetailScreenArg
 import com.threegap.bitnagil.presentation.screen.reporthistory.ReportHistoryScreenContainer
-import com.threegap.bitnagil.presentation.screen.reportwrite.ReportScreenContainer
+import com.threegap.bitnagil.presentation.screen.reportwrite.ReportWriteScreenContainer
 import com.threegap.bitnagil.presentation.screen.routinelist.RoutineListScreenContainer
 import com.threegap.bitnagil.presentation.screen.routinewrite.WriteRoutineScreenContainer
 import com.threegap.bitnagil.presentation.screen.routinewrite.WriteRoutineViewModel
@@ -306,7 +306,7 @@ fun MainNavHost(
         }
 
         composable<Route.Report> {
-            ReportScreenContainer(
+            ReportWriteScreenContainer(
                 navigateToBack = {
                     if (navigator.navController.previousBackStackEntry != null) {
                         navigator.navController.popBackStack()

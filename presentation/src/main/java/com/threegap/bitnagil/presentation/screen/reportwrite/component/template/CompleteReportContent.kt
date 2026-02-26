@@ -25,11 +25,11 @@ import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButton
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilTextButtonColor
 import com.threegap.bitnagil.presentation.screen.reportwrite.component.CompleteReportCard
-import com.threegap.bitnagil.presentation.screen.reportwrite.contract.ReportState
+import com.threegap.bitnagil.presentation.screen.reportwrite.contract.ReportWriteState
 
 @Composable
 fun CompleteReportContent(
-    uiState: ReportState,
+    uiState: ReportWriteState,
     onConfirmClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -108,7 +108,7 @@ fun CompleteReportContent(
 @Composable
 private fun Preview() {
     CompleteReportContent(
-        uiState = ReportState.Init,
+        uiState = ReportWriteState.Init,
         onConfirmClick = {},
     )
 }

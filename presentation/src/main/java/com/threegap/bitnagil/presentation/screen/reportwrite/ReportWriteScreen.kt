@@ -62,9 +62,9 @@ import com.threegap.bitnagil.presentation.screen.reportwrite.component.ReportCat
 import com.threegap.bitnagil.presentation.screen.reportwrite.component.ReportField
 import com.threegap.bitnagil.presentation.screen.reportwrite.component.template.CompleteReportContent
 import com.threegap.bitnagil.presentation.screen.reportwrite.component.template.SubmittingReportContent
-import com.threegap.bitnagil.presentation.screen.reportwrite.contract.ReportSideEffect
-import com.threegap.bitnagil.presentation.screen.reportwrite.contract.ReportState
-import com.threegap.bitnagil.presentation.screen.reportwrite.contract.ReportState.Companion.MAX_IMAGE_COUNT
+import com.threegap.bitnagil.presentation.screen.reportwrite.contract.ReportWriteSideEffect
+import com.threegap.bitnagil.presentation.screen.reportwrite.contract.ReportWriteState
+import com.threegap.bitnagil.presentation.screen.reportwrite.contract.ReportWriteState.Companion.MAX_IMAGE_COUNT
 import com.threegap.bitnagil.presentation.screen.reportwrite.model.SubmitState
 import com.threegap.bitnagil.presentation.util.file.createCameraImageUri
 import com.threegap.bitnagil.presentation.util.permission.rememberPermissionHandler
@@ -74,9 +74,9 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
-fun ReportScreenContainer(
+fun ReportWriteScreenContainer(
     navigateToBack: () -> Unit,
-    viewModel: ReportViewModel = hiltViewModel(),
+    viewModel: ReportWriteViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     val uiState by viewModel.collectAsState()
@@ -84,8 +84,8 @@ fun ReportScreenContainer(
 
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
-            is ReportSideEffect.NavigateToBack -> navigateToBack()
-            is ReportSideEffect.FocusOnContent -> {
+            is ReportWriteSideEffect.NavigateToBack -> navigateToBack()
+            is ReportWriteSideEffect.FocusOnContent -> {
                 delay(100)
                 contentFocusRequester.requestFocus()
             }
@@ -175,7 +175,7 @@ fun ReportScreenContainer(
     ) { submitState ->
         when (submitState) {
             SubmitState.IDLE -> {
-                ReportScreen(
+                ReportWriteScreen(
                     uiState = uiState,
                     contentFocusRequester = contentFocusRequester,
                     onReportTitleChange = viewModel::updateReportTitle,
@@ -201,8 +201,8 @@ fun ReportScreenContainer(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ReportScreen(
-    uiState: ReportState,
+private fun ReportWriteScreen(
+    uiState: ReportWriteState,
     contentFocusRequester: FocusRequester,
     onReportTitleChange: (String) -> Unit,
     onReportContentChange: (String) -> Unit,
@@ -281,7 +281,7 @@ private fun ReportScreen(
                 )
 
                 Text(
-                    text = "${uiState.reportTitle.length} / ${ReportState.MAX_TITLE_LENGTH}",
+                    text = "${uiState.reportTitle.length} / ${ReportWriteState.MAX_TITLE_LENGTH}",
                     style = BitnagilTheme.typography.caption1Medium,
                     color = BitnagilTheme.colors.coolGray80,
                     textAlign = TextAlign.End,
@@ -315,7 +315,7 @@ private fun ReportScreen(
                     ),
                     placeholder = {
                         Text(
-                            text = "어떤 위험인지 간단히 설명해주세요.(${ReportState.MAX_CONTENT_LENGTH}자 내외)",
+                            text = "어떤 위험인지 간단히 설명해주세요.(${ReportWriteState.MAX_CONTENT_LENGTH}자 내외)",
                             style = BitnagilTheme.typography.body2Medium,
                             color = BitnagilTheme.colors.coolGray80,
                         )
@@ -324,7 +324,7 @@ private fun ReportScreen(
                 )
 
                 Text(
-                    text = "${uiState.reportContent.length} / ${ReportState.MAX_CONTENT_LENGTH}",
+                    text = "${uiState.reportContent.length} / ${ReportWriteState.MAX_CONTENT_LENGTH}",
                     style = BitnagilTheme.typography.caption1Medium,
                     color = BitnagilTheme.colors.coolGray80,
                     textAlign = TextAlign.End,
@@ -358,8 +358,8 @@ private fun ReportScreen(
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-    ReportScreen(
-        uiState = ReportState.Init,
+    ReportWriteScreen(
+        uiState = ReportWriteState.Init,
         contentFocusRequester = remember { FocusRequester() },
         onReportTitleChange = {},
         onReportContentChange = {},
