@@ -140,7 +140,7 @@ fun MainNavHost(
                     }
                 },
                 navigateToReport = {
-                    navigator.navController.navigate(Route.Report) {
+                    navigator.navController.navigate(Route.ReportWrite) {
                         launchSingleTop = true
                     }
                 },
@@ -305,7 +305,7 @@ fun MainNavHost(
             )
         }
 
-        composable<Route.Report> {
+        composable<Route.ReportWrite> {
             ReportWriteScreenContainer(
                 navigateToBack = {
                     if (navigator.navController.previousBackStackEntry != null) {

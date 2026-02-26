@@ -50,7 +50,7 @@ sealed interface Route {
     data object Guide : Route
 
     @Serializable
-    data object Report : Route
+    data object ReportWrite : Route
 
     @Serializable
     data object ReportHistory : Route
