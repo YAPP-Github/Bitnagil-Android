@@ -7,26 +7,26 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.threegap.bitnagil.navigation.home.HomeNavHost
-import com.threegap.bitnagil.presentation.emotion.EmotionScreenContainer
-import com.threegap.bitnagil.presentation.guide.GuideScreenContainer
-import com.threegap.bitnagil.presentation.login.LoginScreenContainer
-import com.threegap.bitnagil.presentation.onboarding.OnBoardingScreenContainer
-import com.threegap.bitnagil.presentation.onboarding.OnBoardingViewModel
-import com.threegap.bitnagil.presentation.onboarding.model.navarg.OnBoardingScreenArg
-import com.threegap.bitnagil.presentation.report.ReportScreenContainer
-import com.threegap.bitnagil.presentation.reportdetail.ReportDetailScreenContainer
-import com.threegap.bitnagil.presentation.reportdetail.ReportDetailViewModel
-import com.threegap.bitnagil.presentation.reportdetail.model.navarg.ReportDetailScreenArg
-import com.threegap.bitnagil.presentation.reporthistory.ReportHistoryScreenContainer
-import com.threegap.bitnagil.presentation.routinelist.RoutineListScreenContainer
-import com.threegap.bitnagil.presentation.setting.SettingScreenContainer
-import com.threegap.bitnagil.presentation.splash.SplashScreenContainer
-import com.threegap.bitnagil.presentation.terms.TermsAgreementScreenContainer
-import com.threegap.bitnagil.presentation.webview.BitnagilWebViewScreen
-import com.threegap.bitnagil.presentation.withdrawal.WithdrawalScreenContainer
-import com.threegap.bitnagil.presentation.writeroutine.WriteRoutineScreenContainer
-import com.threegap.bitnagil.presentation.writeroutine.WriteRoutineViewModel
-import com.threegap.bitnagil.presentation.writeroutine.model.navarg.WriteRoutineScreenArg
+import com.threegap.bitnagil.presentation.screen.emotion.EmotionScreenContainer
+import com.threegap.bitnagil.presentation.screen.guide.GuideScreenContainer
+import com.threegap.bitnagil.presentation.screen.login.LoginScreenContainer
+import com.threegap.bitnagil.presentation.screen.onboarding.OnBoardingScreenContainer
+import com.threegap.bitnagil.presentation.screen.onboarding.OnBoardingViewModel
+import com.threegap.bitnagil.presentation.screen.onboarding.model.navarg.OnBoardingScreenArg
+import com.threegap.bitnagil.presentation.screen.reportdetail.ReportDetailScreenContainer
+import com.threegap.bitnagil.presentation.screen.reportdetail.ReportDetailViewModel
+import com.threegap.bitnagil.presentation.screen.reportdetail.model.navarg.ReportDetailScreenArg
+import com.threegap.bitnagil.presentation.screen.reporthistory.ReportHistoryScreenContainer
+import com.threegap.bitnagil.presentation.screen.reportwrite.ReportWriteScreenContainer
+import com.threegap.bitnagil.presentation.screen.routinelist.RoutineListScreenContainer
+import com.threegap.bitnagil.presentation.screen.routinewrite.RoutineWriteScreenContainer
+import com.threegap.bitnagil.presentation.screen.routinewrite.RoutineWriteViewModel
+import com.threegap.bitnagil.presentation.screen.routinewrite.model.navarg.RoutineWriteScreenArg
+import com.threegap.bitnagil.presentation.screen.setting.SettingScreenContainer
+import com.threegap.bitnagil.presentation.screen.splash.SplashScreenContainer
+import com.threegap.bitnagil.presentation.screen.terms.TermsAgreementScreenContainer
+import com.threegap.bitnagil.presentation.screen.webview.BitnagilWebViewScreen
+import com.threegap.bitnagil.presentation.screen.withdrawal.WithdrawalScreenContainer
 
 @Composable
 fun MainNavHost(
@@ -127,7 +127,7 @@ fun MainNavHost(
                     }
                 },
                 navigateToRegisterRoutine = { routineId ->
-                    navigator.navController.navigate(Route.WriteRoutine(routineId = routineId))
+                    navigator.navController.navigate(Route.RoutineWrite(routineId = routineId))
                 },
                 navigateToEmotion = {
                     navigator.navController.navigate(Route.Emotion)
@@ -140,7 +140,7 @@ fun MainNavHost(
                     }
                 },
                 navigateToReport = {
-                    navigator.navController.navigate(Route.Report) {
+                    navigator.navController.navigate(Route.ReportWrite) {
                         launchSingleTop = true
                     }
                 },
@@ -224,19 +224,19 @@ fun MainNavHost(
             )
         }
 
-        composable<Route.WriteRoutine> { navBackStackEntry ->
-            val arg = navBackStackEntry.toRoute<Route.WriteRoutine>()
+        composable<Route.RoutineWrite> { navBackStackEntry ->
+            val arg = navBackStackEntry.toRoute<Route.RoutineWrite>()
             val writeScreenNavArg = if (arg.isRegister) {
-                WriteRoutineScreenArg.Add(baseRoutineId = arg.routineId)
+                RoutineWriteScreenArg.Add(baseRoutineId = arg.routineId)
             } else {
-                WriteRoutineScreenArg.Edit(routineId = arg.routineId!!, updateRoutineFromNowDate = arg.isUpdateRoutineFromNowDate)
+                RoutineWriteScreenArg.Edit(routineId = arg.routineId!!, updateRoutineFromNowDate = arg.isUpdateRoutineFromNowDate)
             }
 
-            val viewModel = hiltViewModel<WriteRoutineViewModel, WriteRoutineViewModel.Factory> { factory ->
+            val viewModel = hiltViewModel<RoutineWriteViewModel, RoutineWriteViewModel.Factory> { factory ->
                 factory.create(writeScreenNavArg)
             }
 
-            WriteRoutineScreenContainer(
+            RoutineWriteScreenContainer(
                 viewModel = viewModel,
                 navigateToBack = {
                     if (navigator.navController.previousBackStackEntry != null) {
@@ -281,11 +281,11 @@ fun MainNavHost(
                     }
                 },
                 navigateToAddRoutine = {
-                    navigator.navController.navigate(Route.WriteRoutine())
+                    navigator.navController.navigate(Route.RoutineWrite())
                 },
                 navigateToEditRoutine = { routineId, updateRoutineFromNowDate ->
                     navigator.navController.navigate(
-                        Route.WriteRoutine(
+                        Route.RoutineWrite(
                             routineId = routineId,
                             isRegister = false,
                             isUpdateRoutineFromNowDate = updateRoutineFromNowDate,
@@ -305,8 +305,8 @@ fun MainNavHost(
             )
         }
 
-        composable<Route.Report> {
-            ReportScreenContainer(
+        composable<Route.ReportWrite> {
+            ReportWriteScreenContainer(
                 navigateToBack = {
                     if (navigator.navController.previousBackStackEntry != null) {
                         navigator.navController.popBackStack()

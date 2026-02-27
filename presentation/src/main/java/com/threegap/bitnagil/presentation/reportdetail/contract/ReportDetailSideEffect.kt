@@ -1,3 +1,0 @@
-package com.threegap.bitnagil.presentation.reportdetail.contract
-
-interface ReportDetailSideEffect

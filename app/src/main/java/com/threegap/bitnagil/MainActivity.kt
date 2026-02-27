@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilToastContainer
 import com.threegap.bitnagil.designsystem.component.atom.rememberBitnagilToast
-import com.threegap.bitnagil.presentation.common.toast.GlobalBitnagilToast
+import com.threegap.bitnagil.presentation.util.toast.GlobalBitnagilToast
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
