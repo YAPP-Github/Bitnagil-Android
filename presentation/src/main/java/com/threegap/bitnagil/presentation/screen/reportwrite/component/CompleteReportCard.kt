@@ -16,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,8 +33,6 @@ fun CompleteReportCard(
     images: List<String>,
     modifier: Modifier = Modifier,
 ) {
-    val context = LocalContext.current
-
     Column(
         modifier = modifier
             .background(
@@ -59,6 +56,7 @@ fun CompleteReportCard(
                 text = title,
                 color = BitnagilTheme.colors.coolGray10,
                 style = BitnagilTheme.typography.body1Medium,
+                textAlign = TextAlign.End,
             )
         }
 
@@ -69,6 +67,7 @@ fun CompleteReportCard(
                 text = category?.displayTitle ?: "카테고리 없음",
                 color = BitnagilTheme.colors.coolGray10,
                 style = BitnagilTheme.typography.body1Medium,
+                textAlign = TextAlign.End,
             )
         }
 
@@ -79,6 +78,7 @@ fun CompleteReportCard(
                 text = address ?: "주소 없음",
                 color = BitnagilTheme.colors.coolGray10,
                 style = BitnagilTheme.typography.body1Medium,
+                textAlign = TextAlign.End,
             )
         }
 
@@ -124,7 +124,7 @@ private fun CompleteReportCardItem(
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Top,
     ) {
         Text(
             text = title,

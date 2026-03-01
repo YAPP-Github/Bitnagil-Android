@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -76,9 +75,7 @@ fun CompleteReportContent(
             )
 
             CompleteReportCard(
-                modifier = Modifier
-                    .offset(y = 115.dp)
-                    .padding(horizontal = 18.dp),
+                modifier = Modifier.padding(top = 115.dp, start = 18.dp, end = 18.dp),
                 title = uiState.reportTitle,
                 category = uiState.selectedCategory,
                 address = uiState.currentAddress,
