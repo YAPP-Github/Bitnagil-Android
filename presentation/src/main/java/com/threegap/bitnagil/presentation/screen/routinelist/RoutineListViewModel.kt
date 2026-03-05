@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.threegap.bitnagil.domain.routine.usecase.DeleteRoutineForDayUseCase
 import com.threegap.bitnagil.domain.routine.usecase.DeleteRoutineUseCase
 import com.threegap.bitnagil.domain.routine.usecase.FetchWeeklyRoutinesUseCase
-import com.threegap.bitnagil.domain.writeroutine.usecase.GetWriteRoutineEventFlowUseCase
+import com.threegap.bitnagil.domain.routine.usecase.GetWriteRoutineEventFlowUseCase
 import com.threegap.bitnagil.presentation.screen.home.util.getCurrentWeekDays
 import com.threegap.bitnagil.presentation.screen.routinelist.contract.RoutineListSideEffect
 import com.threegap.bitnagil.presentation.screen.routinelist.contract.RoutineListState

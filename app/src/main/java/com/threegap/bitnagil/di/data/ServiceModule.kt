@@ -10,7 +10,6 @@ import com.threegap.bitnagil.data.report.service.ReportService
 import com.threegap.bitnagil.data.routine.service.RoutineService
 import com.threegap.bitnagil.data.user.service.UserService
 import com.threegap.bitnagil.data.version.service.VersionService
-import com.threegap.bitnagil.data.writeroutine.service.WriteRoutineService
 import com.threegap.bitnagil.network.Auth
 import com.threegap.bitnagil.network.Kakao
 import com.threegap.bitnagil.network.NoneAuth
@@ -45,11 +44,6 @@ object ServiceModule {
     @Singleton
     fun providerEmotionService(@Auth retrofit: Retrofit): EmotionService =
         retrofit.create(EmotionService::class.java)
-
-    @Provides
-    @Singleton
-    fun providerWriteRoutineService(@Auth retrofit: Retrofit): WriteRoutineService =
-        retrofit.create(WriteRoutineService::class.java)
 
     @Provides
     @Singleton

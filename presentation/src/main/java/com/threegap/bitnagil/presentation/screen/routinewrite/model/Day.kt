@@ -1,7 +1,6 @@
 package com.threegap.bitnagil.presentation.screen.routinewrite.model
 
 import com.threegap.bitnagil.domain.routine.model.DayOfWeek
-import com.threegap.bitnagil.domain.writeroutine.model.RepeatDay
 
 enum class Day(val text: String) {
     MON(text = "월"),
@@ -13,15 +12,15 @@ enum class Day(val text: String) {
     SUN(text = "일"),
     ;
 
-    fun toRepeatDay(): RepeatDay {
+    fun toRepeatDay(): DayOfWeek {
         return when (this) {
-            MON -> RepeatDay.MONDAY
-            TUE -> RepeatDay.TUESDAY
-            WED -> RepeatDay.WEDNESDAY
-            THU -> RepeatDay.THURSDAY
-            FRI -> RepeatDay.FRIDAY
-            SAT -> RepeatDay.SATURDAY
-            SUN -> RepeatDay.SUNDAY
+            MON -> DayOfWeek.MONDAY
+            TUE -> DayOfWeek.TUESDAY
+            WED -> DayOfWeek.WEDNESDAY
+            THU -> DayOfWeek.THURSDAY
+            FRI -> DayOfWeek.FRIDAY
+            SAT -> DayOfWeek.SATURDAY
+            SUN -> DayOfWeek.SUNDAY
         }
     }
 

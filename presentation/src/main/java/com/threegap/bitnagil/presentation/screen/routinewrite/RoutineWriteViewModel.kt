@@ -3,11 +3,11 @@ package com.threegap.bitnagil.presentation.screen.routinewrite
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.threegap.bitnagil.domain.recommendroutine.usecase.GetRecommendRoutineUseCase
+import com.threegap.bitnagil.domain.routine.model.DayOfWeek
+import com.threegap.bitnagil.domain.routine.model.RoutineUpdateType
+import com.threegap.bitnagil.domain.routine.usecase.EditRoutineUseCase
 import com.threegap.bitnagil.domain.routine.usecase.GetRoutineUseCase
-import com.threegap.bitnagil.domain.writeroutine.model.RepeatDay
-import com.threegap.bitnagil.domain.writeroutine.model.RoutineUpdateType
-import com.threegap.bitnagil.domain.writeroutine.usecase.EditRoutineUseCase
-import com.threegap.bitnagil.domain.writeroutine.usecase.RegisterRoutineUseCase
+import com.threegap.bitnagil.domain.routine.usecase.RegisterRoutineUseCase
 import com.threegap.bitnagil.presentation.screen.routinewrite.contract.RoutineWriteSideEffect
 import com.threegap.bitnagil.presentation.screen.routinewrite.contract.RoutineWriteState
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.Date
@@ -343,13 +343,13 @@ class RoutineWriteViewModel @AssistedInject constructor(
 
         val repeatDay = when (currentState.repeatType) {
             RepeatType.DAILY -> listOf(
-                RepeatDay.MONDAY,
-                RepeatDay.TUESDAY,
-                RepeatDay.WEDNESDAY,
-                RepeatDay.THURSDAY,
-                RepeatDay.FRIDAY,
-                RepeatDay.SATURDAY,
-                RepeatDay.SUNDAY,
+                DayOfWeek.MONDAY,
+                DayOfWeek.TUESDAY,
+                DayOfWeek.WEDNESDAY,
+                DayOfWeek.THURSDAY,
+                DayOfWeek.FRIDAY,
+                DayOfWeek.SATURDAY,
+                DayOfWeek.SUNDAY,
             )
 
             RepeatType.DAY ->
