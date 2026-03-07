@@ -8,10 +8,10 @@ import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingRecommendRou
 import com.threegap.bitnagil.domain.routine.model.RoutineCompletionInfo
 import com.threegap.bitnagil.domain.routine.model.RoutineCompletionInfos
 import com.threegap.bitnagil.domain.routine.usecase.FetchWeeklyRoutinesUseCase
+import com.threegap.bitnagil.domain.routine.usecase.GetWriteRoutineEventFlowUseCase
 import com.threegap.bitnagil.domain.routine.usecase.RoutineCompletionUseCase
 import com.threegap.bitnagil.domain.routine.usecase.ToggleRoutineUseCase
 import com.threegap.bitnagil.domain.user.usecase.FetchUserProfileUseCase
-import com.threegap.bitnagil.domain.writeroutine.usecase.GetWriteRoutineEventFlowUseCase
 import com.threegap.bitnagil.presentation.screen.home.contract.HomeSideEffect
 import com.threegap.bitnagil.presentation.screen.home.contract.HomeState
 import com.threegap.bitnagil.presentation.screen.home.model.ToggleStrategy

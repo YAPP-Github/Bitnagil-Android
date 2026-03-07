@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.domain.writeroutine.model
+package com.threegap.bitnagil.domain.routine.model
 
 import kotlinx.serialization.Serializable
 

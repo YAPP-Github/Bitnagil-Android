@@ -1,12 +1,16 @@
 package com.threegap.bitnagil.data.routine.service
 
 import com.threegap.bitnagil.data.routine.model.request.RoutineCompletionRequest
+import com.threegap.bitnagil.data.routine.model.request.RoutineEditRequest
+import com.threegap.bitnagil.data.routine.model.request.RoutineRegisterRequest
 import com.threegap.bitnagil.data.routine.model.response.RoutineResponse
 import com.threegap.bitnagil.data.routine.model.response.RoutineScheduleResponse
 import com.threegap.bitnagil.network.model.BaseResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.PATCH
+import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -36,5 +40,15 @@ interface RoutineService {
     @DELETE("/api/v2/routines/day/{routineId}")
     suspend fun deleteRoutineForDay(
         @Path("routineId") routineId: String,
+    ): BaseResponse<Unit>
+
+    @POST("/api/v2/routines")
+    suspend fun postRoutine(
+        @Body routineRegisterRequest: RoutineRegisterRequest,
+    ): BaseResponse<Unit>
+
+    @PATCH("/api/v2/routines")
+    suspend fun patchRoutine(
+        @Body routineEditRequest: RoutineEditRequest,
     ): BaseResponse<Unit>
 }
