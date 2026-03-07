@@ -4,17 +4,24 @@ import com.threegap.bitnagil.data.emotion.datasource.EmotionDataSource
 import com.threegap.bitnagil.data.emotion.model.response.toDomain
 import com.threegap.bitnagil.domain.emotion.model.DailyEmotion
 import com.threegap.bitnagil.domain.emotion.model.Emotion
-import com.threegap.bitnagil.domain.emotion.model.EmotionChangeEvent
 import com.threegap.bitnagil.domain.emotion.model.EmotionRecommendRoutine
 import com.threegap.bitnagil.domain.emotion.repository.EmotionRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.onSubscription
+import java.time.LocalDate
 import javax.inject.Inject
 
 class EmotionRepositoryImpl @Inject constructor(
     private val emotionDataSource: EmotionDataSource,
 ) : EmotionRepository {
+
+    private val _dailyEmotionFlow = MutableStateFlow(DailyEmotion.INIT)
+    override val dailyEmotionFlow: Flow<DailyEmotion> = _dailyEmotionFlow
+        .onSubscription {
+            if (_dailyEmotionFlow.value.isStale) fetchDailyEmotion()
+        }
+
     override suspend fun getEmotions(): Result<List<Emotion>> {
         return emotionDataSource.getEmotions().map { response ->
             response.map { it.toDomain() }
@@ -23,20 +30,18 @@ class EmotionRepositoryImpl @Inject constructor(
 
     override suspend fun registerEmotion(emotionMarbleType: String): Result<List<EmotionRecommendRoutine>> {
         return emotionDataSource.registerEmotion(emotionMarbleType).map {
-            it.recommendedRoutines.map {
-                    emotionRecommendedRoutineDto ->
+            it.recommendedRoutines.map { emotionRecommendedRoutineDto ->
                 emotionRecommendedRoutineDto.toEmotionRecommendRoutine()
             }
         }.also {
-            if (it.isSuccess) {
-                _emotionChangeEventFlow.emit(EmotionChangeEvent.ChangeEmotion(emotionMarbleType))
-            }
+            if (it.isSuccess) fetchDailyEmotion()
         }
     }
 
-    override suspend fun fetchDailyEmotion(currentDate: String): Result<DailyEmotion> =
-        emotionDataSource.fetchDailyEmotion(currentDate).map { it.toDomain() }
-
-    private val _emotionChangeEventFlow = MutableSharedFlow<EmotionChangeEvent>()
-    override suspend fun getEmotionChangeEventFlow(): Flow<EmotionChangeEvent> = _emotionChangeEventFlow.asSharedFlow()
+    override suspend fun fetchDailyEmotion(): Result<Unit> {
+        val currentDate = LocalDate.now().toString()
+        return emotionDataSource.fetchDailyEmotion(currentDate).map {
+            _dailyEmotionFlow.value = it.toDomain()
+        }
+    }
 }

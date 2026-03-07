@@ -4,6 +4,7 @@ import com.threegap.bitnagil.domain.emotion.model.DailyEmotion
 import com.threegap.bitnagil.domain.emotion.model.EmotionMarbleType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.time.LocalDate
 
 @Serializable
 data class DailyEmotionResponse(
@@ -23,4 +24,5 @@ fun DailyEmotionResponse.toDomain(): DailyEmotion =
         name = emotionMarbleName,
         imageUrl = imageUrl,
         homeMessage = emotionMarbleHomeMessage,
+        fetchedDate = LocalDate.now(),
     )

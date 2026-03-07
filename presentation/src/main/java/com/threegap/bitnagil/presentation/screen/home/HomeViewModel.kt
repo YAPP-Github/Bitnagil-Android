@@ -2,8 +2,6 @@ package com.threegap.bitnagil.presentation.screen.home
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.threegap.bitnagil.domain.emotion.usecase.FetchDailyEmotionUseCase
-import com.threegap.bitnagil.domain.emotion.usecase.GetEmotionChangeEventFlowUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingRecommendRoutineEventFlowUseCase
 import com.threegap.bitnagil.domain.routine.model.RoutineCompletionInfo
 import com.threegap.bitnagil.domain.routine.model.RoutineCompletionInfos
@@ -35,11 +33,11 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val fetchWeeklyRoutinesUseCase: FetchWeeklyRoutinesUseCase,
+    private val fetchUserProfileUseCase: FetchUserProfileUseCase,
     private val observeUserProfileUseCase: ObserveUserProfileUseCase,
     private val fetchDailyEmotionUseCase: FetchDailyEmotionUseCase,
     private val routineCompletionUseCase: RoutineCompletionUseCase,
     private val getWriteRoutineEventFlowUseCase: GetWriteRoutineEventFlowUseCase,
-    private val getEmotionChangeEventFlowUseCase: GetEmotionChangeEventFlowUseCase,
     private val getOnBoardingRecommendRoutineEventFlowUseCase: GetOnBoardingRecommendRoutineEventFlowUseCase,
     private val toggleRoutineUseCase: ToggleRoutineUseCase,
 ) : ContainerHost<HomeState, HomeSideEffect>, ViewModel() {
@@ -51,6 +49,17 @@ class HomeViewModel @Inject constructor(
 
     init {
         initialize()
+        observeDailyEmotion()
+    }
+
+    private fun observeDailyEmotion() {
+        intent {
+            repeatOnSubscription {
+                observeDailyEmotionUseCase()
+                    .map { it.toUiModel() }
+                    .collect { reduce { state.copy(dailyEmotion = it) } }
+            }
+        }
     }
 
     fun selectDate(data: LocalDate) {
@@ -185,11 +194,11 @@ class HomeViewModel @Inject constructor(
     private fun initialize() {
         intent {
             coroutineScope {
+                launch { fetchUserProfile() }
                 launch { observeUserProfile() }
                 launch { fetchDailyEmotion() }
                 launch { fetchWeeklyRoutines(state.currentWeeks) }
                 launch { observeWriteRoutineEvent() }
-                launch { observeEmotionChangeEvent() }
                 launch { observeRecommendRoutineEvent() }
                 launch { observeWeekChanges() }
                 launch { observeRoutineUpdates() }
@@ -201,14 +210,6 @@ class HomeViewModel @Inject constructor(
         subIntent {
             getWriteRoutineEventFlowUseCase().collect {
                 fetchWeeklyRoutines(state.currentWeeks)
-            }
-        }
-    }
-
-    private suspend fun observeEmotionChangeEvent() {
-        subIntent {
-            getEmotionChangeEventFlowUseCase().collect {
-                fetchDailyEmotion()
             }
         }
     }
@@ -276,21 +277,6 @@ class HomeViewModel @Inject constructor(
                 },
                 onFailure = {
                     Log.e("HomeViewModel", "루틴 가져오기 실패: ${it.message}")
-                    reduce { state.copy(loadingCount = state.loadingCount - 1) }
-                },
-            )
-        }
-    }
-
-    private suspend fun fetchDailyEmotion() {
-        subIntent {
-            reduce { state.copy(loadingCount = state.loadingCount + 1) }
-            fetchDailyEmotionUseCase().fold(
-                onSuccess = {
-                    reduce { state.copy(dailyEmotion = it.toUiModel(), loadingCount = state.loadingCount - 1) }
-                },
-                onFailure = {
-                    Log.e("HomeViewModel", "나의 감정 실패: ${it.message}")
                     reduce { state.copy(loadingCount = state.loadingCount - 1) }
                 },
             )

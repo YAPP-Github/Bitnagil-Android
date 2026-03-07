@@ -1,8 +1,7 @@
 package com.threegap.bitnagil.presentation.screen.recommendroutine
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.threegap.bitnagil.domain.emotion.usecase.GetEmotionChangeEventFlowUseCase
+import com.threegap.bitnagil.domain.emotion.usecase.ObserveDailyEmotionUseCase
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendCategory
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendLevel
 import com.threegap.bitnagil.domain.recommendroutine.usecase.FetchRecommendRoutinesUseCase
@@ -12,7 +11,8 @@ import com.threegap.bitnagil.presentation.screen.recommendroutine.model.Recommen
 import com.threegap.bitnagil.presentation.screen.recommendroutine.model.RecommendRoutinesUiModel
 import com.threegap.bitnagil.presentation.screen.recommendroutine.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.viewmodel.container
@@ -20,17 +20,23 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RecommendRoutineViewModel @Inject constructor(
+    private val observeDailyEmotionUseCase: ObserveDailyEmotionUseCase,
     private val fetchRecommendRoutinesUseCase: FetchRecommendRoutinesUseCase,
-    private val getEmotionChangeEventFlowUseCase: GetEmotionChangeEventFlowUseCase,
 ) : ContainerHost<RecommendRoutineState, RecommendRoutineSideEffect>, ViewModel() {
 
     override val container: Container<RecommendRoutineState, RecommendRoutineSideEffect> =
-        container(initialState = RecommendRoutineState.INIT)
-
-    init {
-        loadRecommendRoutines()
-        observeEmotionChangeEvent()
-    }
+        container(
+            initialState = RecommendRoutineState.INIT,
+            buildSettings = { repeatOnSubscribedStopTimeout = 5_000L },
+            onCreate = {
+                repeatOnSubscription {
+                    observeDailyEmotionUseCase()
+                        .map { it.type }
+                        .distinctUntilChanged()
+                        .collect { loadRecommendRoutines() }
+                }
+            },
+        )
 
     private var recommendRoutines: RecommendRoutinesUiModel = RecommendRoutinesUiModel.INIT
 
@@ -77,14 +83,6 @@ class RecommendRoutineViewModel @Inject constructor(
             routines.filter { it.level == level }
         } else {
             routines
-        }
-    }
-
-    private fun observeEmotionChangeEvent() {
-        viewModelScope.launch {
-            getEmotionChangeEventFlowUseCase().collect {
-                loadRecommendRoutines()
-            }
         }
     }
 
