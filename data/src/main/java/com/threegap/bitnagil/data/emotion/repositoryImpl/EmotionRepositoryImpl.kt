@@ -10,12 +10,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onSubscription
 import java.time.LocalDate
+import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
 class EmotionRepositoryImpl @Inject constructor(
     private val emotionDataSource: EmotionDataSource,
 ) : EmotionRepository {
 
+    private val isFetching = AtomicBoolean(false)
     private val _dailyEmotionFlow = MutableStateFlow(DailyEmotion.INIT)
     override val dailyEmotionFlow: Flow<DailyEmotion> = _dailyEmotionFlow
         .onSubscription {
@@ -39,9 +41,14 @@ class EmotionRepositoryImpl @Inject constructor(
     }
 
     override suspend fun fetchDailyEmotion(): Result<Unit> {
-        val currentDate = LocalDate.now().toString()
-        return emotionDataSource.fetchDailyEmotion(currentDate).map {
-            _dailyEmotionFlow.value = it.toDomain()
+        if (!isFetching.compareAndSet(false, true)) return Result.success(Unit)
+        return try {
+            val currentDate = LocalDate.now().toString()
+            emotionDataSource.fetchDailyEmotion(currentDate).map {
+                _dailyEmotionFlow.value = it.toDomain()
+            }
+        } finally {
+            isFetching.set(false)
         }
     }
 }

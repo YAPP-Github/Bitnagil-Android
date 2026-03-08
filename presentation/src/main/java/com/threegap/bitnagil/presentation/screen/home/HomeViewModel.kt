@@ -42,7 +42,11 @@ class HomeViewModel @Inject constructor(
     private val toggleRoutineUseCase: ToggleRoutineUseCase,
 ) : ContainerHost<HomeState, HomeSideEffect>, ViewModel() {
 
-    override val container: Container<HomeState, HomeSideEffect> = container(initialState = HomeState.INIT)
+    override val container: Container<HomeState, HomeSideEffect> =
+        container(
+            initialState = HomeState.INIT,
+            buildSettings = { repeatOnSubscribedStopTimeout = 5_000L },
+        )
 
     private val pendingChangesByDate = mutableMapOf<String, MutableMap<String, RoutineCompletionInfo>>()
     private val routineSyncTrigger = MutableSharedFlow<String>(extraBufferCapacity = 64)
