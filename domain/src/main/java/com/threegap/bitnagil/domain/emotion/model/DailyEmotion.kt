@@ -9,8 +9,7 @@ data class DailyEmotion(
     val homeMessage: String?,
     val fetchedDate: LocalDate = LocalDate.MIN,
 ) {
-    val isStale: Boolean
-        get() = fetchedDate != LocalDate.now()
+    fun isStale(today: LocalDate): Boolean = fetchedDate != today
 
     companion object {
         val INIT = DailyEmotion(
