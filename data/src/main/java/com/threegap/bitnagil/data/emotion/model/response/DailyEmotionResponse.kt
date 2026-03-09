@@ -18,11 +18,11 @@ data class DailyEmotionResponse(
     val emotionMarbleHomeMessage: String?,
 )
 
-fun DailyEmotionResponse.toDomain(): DailyEmotion =
+fun DailyEmotionResponse.toDomain(fetchedDate: LocalDate): DailyEmotion =
     DailyEmotion(
         type = emotionMarbleType,
         name = emotionMarbleName,
         imageUrl = imageUrl,
         homeMessage = emotionMarbleHomeMessage,
-        fetchedDate = LocalDate.now(),
+        fetchedDate = fetchedDate,
     )

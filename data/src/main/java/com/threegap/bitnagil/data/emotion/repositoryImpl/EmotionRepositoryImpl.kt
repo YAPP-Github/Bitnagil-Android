@@ -21,7 +21,7 @@ class EmotionRepositoryImpl @Inject constructor(
     private val _dailyEmotionFlow = MutableStateFlow(DailyEmotion.INIT)
     override val dailyEmotionFlow: Flow<DailyEmotion> = _dailyEmotionFlow
         .onSubscription {
-            if (_dailyEmotionFlow.value.isStale) fetchDailyEmotion()
+            if (_dailyEmotionFlow.value.isStale(LocalDate.now())) fetchDailyEmotion()
         }
 
     override suspend fun getEmotions(): Result<List<Emotion>> {
@@ -43,9 +43,9 @@ class EmotionRepositoryImpl @Inject constructor(
     override suspend fun fetchDailyEmotion(): Result<Unit> {
         if (!isFetching.compareAndSet(false, true)) return Result.success(Unit)
         return try {
-            val currentDate = LocalDate.now().toString()
-            emotionDataSource.fetchDailyEmotion(currentDate).map {
-                _dailyEmotionFlow.value = it.toDomain()
+            val today = LocalDate.now()
+            emotionDataSource.fetchDailyEmotion(today.toString()).map {
+                _dailyEmotionFlow.value = it.toDomain(today)
             }
         } finally {
             isFetching.set(false)
