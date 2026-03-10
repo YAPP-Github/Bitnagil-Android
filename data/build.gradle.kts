@@ -20,4 +20,7 @@ dependencies {
     implementation(libs.bundles.retrofit)
     implementation(libs.play.services.location)
     implementation(libs.kotlinx.coroutines.play)
+
+    testImplementation(libs.androidx.junit)
+    testImplementation(libs.kotlin.coroutines.test)
 }
