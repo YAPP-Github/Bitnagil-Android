@@ -20,8 +20,10 @@ import com.threegap.bitnagil.data.report.datasource.ReportDataSource
 import com.threegap.bitnagil.data.report.datasourceImpl.ReportDataSourceImpl
 import com.threegap.bitnagil.data.routine.datasource.RoutineRemoteDataSource
 import com.threegap.bitnagil.data.routine.datasourceImpl.RoutineRemoteDataSourceImpl
-import com.threegap.bitnagil.data.user.datasource.UserDataSource
-import com.threegap.bitnagil.data.user.datasourceImpl.UserDataSourceImpl
+import com.threegap.bitnagil.data.user.datasource.UserLocalDataSource
+import com.threegap.bitnagil.data.user.datasource.UserRemoteDataSource
+import com.threegap.bitnagil.data.user.datasourceImpl.UserLocalDataSourceImpl
+import com.threegap.bitnagil.data.user.datasourceImpl.UserRemoteDataSourceImpl
 import com.threegap.bitnagil.data.version.datasource.VersionDataSource
 import com.threegap.bitnagil.data.version.datasourceImpl.VersionDataSourceImpl
 import dagger.Binds
@@ -56,7 +58,11 @@ abstract class DataSourceModule {
 
     @Binds
     @Singleton
-    abstract fun bindUserDataSource(userDataSourceImpl: UserDataSourceImpl): UserDataSource
+    abstract fun bindUserLocalDataSource(userLocalDataSourceImpl: UserLocalDataSourceImpl): UserLocalDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindUserRemoteDataSource(userRemoteDataSourceImpl: UserRemoteDataSourceImpl): UserRemoteDataSource
 
     @Binds
     @Singleton
