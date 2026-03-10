@@ -8,7 +8,7 @@ import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingsUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.GetRecommendOnBoardingRoutinesUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.GetUserOnBoardingUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.RegisterRecommendOnBoardingRoutinesUseCase
-import com.threegap.bitnagil.domain.user.usecase.FetchUserProfileUseCase
+import com.threegap.bitnagil.domain.user.usecase.ObserveUserProfileUseCase
 import com.threegap.bitnagil.presentation.screen.onboarding.contract.OnBoardingSideEffect
 import com.threegap.bitnagil.presentation.screen.onboarding.contract.OnBoardingState
 import com.threegap.bitnagil.presentation.screen.onboarding.model.OnBoardingItemUiModel
@@ -22,6 +22,7 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.isActive
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
@@ -34,7 +35,7 @@ class OnBoardingViewModel @AssistedInject constructor(
     private val getRecommendOnBoardingRoutinesUseCase: GetRecommendOnBoardingRoutinesUseCase,
     private val getOnBoardingAbstractUseCase: GetOnBoardingAbstractUseCase,
     private val registerRecommendOnBoardingRoutinesUseCase: RegisterRecommendOnBoardingRoutinesUseCase,
-    private val fetchUserProfileUseCase: FetchUserProfileUseCase,
+    private val observeUserProfileUseCase: ObserveUserProfileUseCase,
     private val getUserOnBoardingUseCase: GetUserOnBoardingUseCase,
     @Assisted private val onBoardingArg: OnBoardingScreenArg,
 ) : ContainerHost<OnBoardingState, OnBoardingSideEffect>, ViewModel() {
@@ -71,7 +72,7 @@ class OnBoardingViewModel @AssistedInject constructor(
     }
 
     private fun loadIntro() = intent {
-        val userName = fetchUserProfileUseCase().getOrNull()?.nickname ?: "-"
+        val userName = observeUserProfileUseCase().first().getOrNull()?.nickname ?: "-"
 
         reduce {
             OnBoardingState.Idle(
@@ -86,7 +87,7 @@ class OnBoardingViewModel @AssistedInject constructor(
     }
 
     private fun loadUserOnBoarding() = intent {
-        val userName = fetchUserProfileUseCase().getOrNull()?.nickname ?: "-"
+        val userName = observeUserProfileUseCase().first().getOrNull()?.nickname ?: "-"
         val userOnBoarding = getUserOnBoardingUseCase().fold(
             onSuccess = { it },
             onFailure = {
