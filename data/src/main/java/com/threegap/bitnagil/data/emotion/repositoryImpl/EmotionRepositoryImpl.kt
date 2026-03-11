@@ -1,54 +1,84 @@
 package com.threegap.bitnagil.data.emotion.repositoryImpl
 
-import com.threegap.bitnagil.data.emotion.datasource.EmotionDataSource
+import com.threegap.bitnagil.data.emotion.datasource.EmotionLocalDataSource
+import com.threegap.bitnagil.data.emotion.datasource.EmotionRemoteDataSource
 import com.threegap.bitnagil.data.emotion.model.response.toDomain
 import com.threegap.bitnagil.domain.emotion.model.DailyEmotion
 import com.threegap.bitnagil.domain.emotion.model.Emotion
 import com.threegap.bitnagil.domain.emotion.model.EmotionRecommendRoutine
 import com.threegap.bitnagil.domain.emotion.repository.EmotionRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.onSubscription
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.time.LocalDate
-import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
 class EmotionRepositoryImpl @Inject constructor(
-    private val emotionDataSource: EmotionDataSource,
+    private val emotionRemoteDataSource: EmotionRemoteDataSource,
+    private val emotionLocalDateSource: EmotionLocalDataSource,
 ) : EmotionRepository {
 
-    private val isFetching = AtomicBoolean(false)
-    private val _dailyEmotionFlow = MutableStateFlow(DailyEmotion.INIT)
-    override val dailyEmotionFlow: Flow<DailyEmotion> = _dailyEmotionFlow
-        .onSubscription {
-            if (_dailyEmotionFlow.value.isStale(LocalDate.now())) fetchDailyEmotion()
-        }
+    private val fetchMutex = Mutex()
 
     override suspend fun getEmotions(): Result<List<Emotion>> {
-        return emotionDataSource.getEmotions().map { response ->
+        return emotionRemoteDataSource.getEmotions().map { response ->
             response.map { it.toDomain() }
         }
     }
 
     override suspend fun registerEmotion(emotionMarbleType: String): Result<List<EmotionRecommendRoutine>> {
-        return emotionDataSource.registerEmotion(emotionMarbleType).map {
+        return emotionRemoteDataSource.registerEmotion(emotionMarbleType).map {
             it.recommendedRoutines.map { emotionRecommendedRoutineDto ->
                 emotionRecommendedRoutineDto.toEmotionRecommendRoutine()
             }
         }.also {
-            if (it.isSuccess) fetchDailyEmotion()
+            if (it.isSuccess) fetchAndSaveDailyEmotion(today = LocalDate.now(), forceRefresh = true)
         }
     }
 
-    override suspend fun fetchDailyEmotion(): Result<Unit> {
-        if (!isFetching.compareAndSet(false, true)) return Result.success(Unit)
-        return try {
-            val today = LocalDate.now()
-            emotionDataSource.fetchDailyEmotion(today.toString()).map {
-                _dailyEmotionFlow.value = it.toDomain(today)
+    override fun observeDailyEmotion(): Flow<Result<DailyEmotion>> = flow {
+        fetchAndSaveDailyEmotion(LocalDate.now())
+            .onFailure {
+                emit(Result.failure(it))
+                return@flow
             }
-        } finally {
-            isFetching.set(false)
+
+        emitAll(
+            emotionLocalDateSource.dailyEmotion
+                .filterNotNull()
+                .map { Result.success(it) },
+        )
+    }
+
+    override fun clearCache() {
+        emotionLocalDateSource.clearCache()
+    }
+
+    private suspend fun fetchAndSaveDailyEmotion(
+        today: LocalDate,
+        forceRefresh: Boolean = false,
+    ): Result<DailyEmotion> {
+        if (!forceRefresh) {
+            val currentLocalData = emotionLocalDateSource.dailyEmotion.value
+            if (currentLocalData != null && !currentLocalData.isStale(today)) {
+                return Result.success(currentLocalData)
+            }
+        }
+
+        return fetchMutex.withLock {
+            if (!forceRefresh) {
+                val doubleCheckData = emotionLocalDateSource.dailyEmotion.value
+                if (doubleCheckData != null && !doubleCheckData.isStale(today)) {
+                    return@withLock Result.success(doubleCheckData)
+                }
+            }
+            emotionRemoteDataSource.fetchDailyEmotion(today.toString())
+                .onSuccess { emotionLocalDateSource.saveDailyEmotion(it.toDomain(today)) }
+                .map { it.toDomain(today) }
         }
     }
 }
