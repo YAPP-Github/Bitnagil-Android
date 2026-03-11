@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 class EmotionRepositoryImpl @Inject constructor(
     private val emotionRemoteDataSource: EmotionRemoteDataSource,
-    private val emotionLocalDateSource: EmotionLocalDataSource,
+    private val emotionLocalDataSource: EmotionLocalDataSource,
 ) : EmotionRepository {
 
     private val fetchMutex = Mutex()
@@ -48,14 +48,14 @@ class EmotionRepositoryImpl @Inject constructor(
             }
 
         emitAll(
-            emotionLocalDateSource.dailyEmotion
+            emotionLocalDataSource.dailyEmotion
                 .filterNotNull()
                 .map { Result.success(it) },
         )
     }
 
     override fun clearCache() {
-        emotionLocalDateSource.clearCache()
+        emotionLocalDataSource.clearCache()
     }
 
     private suspend fun fetchAndSaveDailyEmotion(
@@ -63,7 +63,7 @@ class EmotionRepositoryImpl @Inject constructor(
         forceRefresh: Boolean = false,
     ): Result<DailyEmotion> {
         if (!forceRefresh) {
-            val currentLocalData = emotionLocalDateSource.dailyEmotion.value
+            val currentLocalData = emotionLocalDataSource.dailyEmotion.value
             if (currentLocalData != null && !currentLocalData.isStale(today)) {
                 return Result.success(currentLocalData)
             }
@@ -71,13 +71,13 @@ class EmotionRepositoryImpl @Inject constructor(
 
         return fetchMutex.withLock {
             if (!forceRefresh) {
-                val doubleCheckData = emotionLocalDateSource.dailyEmotion.value
+                val doubleCheckData = emotionLocalDataSource.dailyEmotion.value
                 if (doubleCheckData != null && !doubleCheckData.isStale(today)) {
                     return@withLock Result.success(doubleCheckData)
                 }
             }
             emotionRemoteDataSource.fetchDailyEmotion(today.toString())
-                .onSuccess { emotionLocalDateSource.saveDailyEmotion(it.toDomain(today)) }
+                .onSuccess { emotionLocalDataSource.saveDailyEmotion(it.toDomain(today)) }
                 .map { it.toDomain(today) }
         }
     }
