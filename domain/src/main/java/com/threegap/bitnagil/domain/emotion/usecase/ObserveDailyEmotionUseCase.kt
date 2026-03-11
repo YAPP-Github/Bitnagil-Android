@@ -8,5 +8,5 @@ import javax.inject.Inject
 class ObserveDailyEmotionUseCase @Inject constructor(
     private val emotionRepository: EmotionRepository,
 ) {
-    operator fun invoke(): Flow<DailyEmotion> = emotionRepository.dailyEmotionFlow
+    operator fun invoke(): Flow<Result<DailyEmotion>> = emotionRepository.observeDailyEmotion()
 }

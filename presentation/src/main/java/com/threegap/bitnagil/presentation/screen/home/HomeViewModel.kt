@@ -59,9 +59,14 @@ class HomeViewModel @Inject constructor(
     private fun observeDailyEmotion() {
         intent {
             repeatOnSubscription {
-                observeDailyEmotionUseCase()
-                    .map { it.toUiModel() }
-                    .collect { reduce { state.copy(dailyEmotion = it) } }
+                observeDailyEmotionUseCase().collect { result ->
+                    result.fold(
+                        onSuccess = { dailyEmotion ->
+                            reduce { state.copy(dailyEmotion = dailyEmotion.toUiModel()) }
+                        },
+                        onFailure = {},
+                    )
+                }
             }
         }
     }

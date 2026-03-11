@@ -31,7 +31,7 @@ class RecommendRoutineViewModel @Inject constructor(
             onCreate = {
                 repeatOnSubscription {
                     observeDailyEmotionUseCase()
-                        .map { it.type }
+                        .map { result -> result.getOrNull()?.type }
                         .distinctUntilChanged()
                         .collect { loadRecommendRoutines() }
                 }
