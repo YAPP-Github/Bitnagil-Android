@@ -5,5 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
     fun observeUserProfile(): Flow<Result<UserProfile>>
+    suspend fun getUserProfile(): Result<UserProfile>
     fun clearCache()
 }

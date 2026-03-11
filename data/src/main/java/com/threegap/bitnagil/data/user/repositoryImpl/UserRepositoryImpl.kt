@@ -23,18 +23,9 @@ class UserRepositoryImpl @Inject constructor(
     private val fetchMutex = Mutex()
 
     override fun observeUserProfile(): Flow<Result<UserProfile>> = flow {
-        if (userLocalDataSource.userProfile.value == null) {
-            fetchMutex.withLock {
-                if (userLocalDataSource.userProfile.value == null) {
-                    userRemoteDataSource.fetchUserProfile()
-                        .onSuccess { response ->
-                            userLocalDataSource.saveUserProfile(response.toDomain())
-                        }
-                        .onFailure {
-                            emit(Result.failure(it))
-                        }
-                }
-            }
+        fetchAndCacheIfNeeded().onFailure {
+            emit(Result.failure(it))
+            return@flow
         }
 
         emitAll(
@@ -44,7 +35,25 @@ class UserRepositoryImpl @Inject constructor(
         )
     }
 
+    override suspend fun getUserProfile(): Result<UserProfile> {
+        return fetchAndCacheIfNeeded()
+    }
+
     override fun clearCache() {
         userLocalDataSource.clearCache()
+    }
+
+    private suspend fun fetchAndCacheIfNeeded(): Result<UserProfile> {
+        userLocalDataSource.userProfile.value?.let { return Result.success(it) }
+
+        return fetchMutex.withLock {
+            userLocalDataSource.userProfile.value?.let { return@withLock Result.success(it) }
+
+            userRemoteDataSource.fetchUserProfile()
+                .onSuccess { response ->
+                    userLocalDataSource.saveUserProfile(response.toDomain())
+                }
+                .map { it.toDomain() }
+        }
     }
 }
