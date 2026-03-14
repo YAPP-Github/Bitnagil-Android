@@ -8,7 +8,7 @@ import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingsUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.GetRecommendOnBoardingRoutinesUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.GetUserOnBoardingUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.RegisterRecommendOnBoardingRoutinesUseCase
-import com.threegap.bitnagil.domain.user.usecase.FetchUserProfileUseCase
+import com.threegap.bitnagil.domain.user.usecase.GetUserProfileUseCase
 import com.threegap.bitnagil.presentation.screen.onboarding.contract.OnBoardingSideEffect
 import com.threegap.bitnagil.presentation.screen.onboarding.contract.OnBoardingState
 import com.threegap.bitnagil.presentation.screen.onboarding.model.OnBoardingItemUiModel
@@ -34,7 +34,7 @@ class OnBoardingViewModel @AssistedInject constructor(
     private val getRecommendOnBoardingRoutinesUseCase: GetRecommendOnBoardingRoutinesUseCase,
     private val getOnBoardingAbstractUseCase: GetOnBoardingAbstractUseCase,
     private val registerRecommendOnBoardingRoutinesUseCase: RegisterRecommendOnBoardingRoutinesUseCase,
-    private val fetchUserProfileUseCase: FetchUserProfileUseCase,
+    private val getUserProfileUseCase: GetUserProfileUseCase,
     private val getUserOnBoardingUseCase: GetUserOnBoardingUseCase,
     @Assisted private val onBoardingArg: OnBoardingScreenArg,
 ) : ContainerHost<OnBoardingState, OnBoardingSideEffect>, ViewModel() {
@@ -71,7 +71,7 @@ class OnBoardingViewModel @AssistedInject constructor(
     }
 
     private fun loadIntro() = intent {
-        val userName = fetchUserProfileUseCase().getOrNull()?.nickname ?: "-"
+        val userName = getUserProfileUseCase().getOrNull()?.nickname ?: "-"
 
         reduce {
             OnBoardingState.Idle(
@@ -86,7 +86,7 @@ class OnBoardingViewModel @AssistedInject constructor(
     }
 
     private fun loadUserOnBoarding() = intent {
-        val userName = fetchUserProfileUseCase().getOrNull()?.nickname ?: "-"
+        val userName = getUserProfileUseCase().getOrNull()?.nickname ?: "-"
         val userOnBoarding = getUserOnBoardingUseCase().fold(
             onSuccess = { it },
             onFailure = {

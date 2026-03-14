@@ -11,7 +11,7 @@ import com.threegap.bitnagil.domain.routine.usecase.FetchWeeklyRoutinesUseCase
 import com.threegap.bitnagil.domain.routine.usecase.GetWriteRoutineEventFlowUseCase
 import com.threegap.bitnagil.domain.routine.usecase.RoutineCompletionUseCase
 import com.threegap.bitnagil.domain.routine.usecase.ToggleRoutineUseCase
-import com.threegap.bitnagil.domain.user.usecase.FetchUserProfileUseCase
+import com.threegap.bitnagil.domain.user.usecase.ObserveUserProfileUseCase
 import com.threegap.bitnagil.presentation.screen.home.contract.HomeSideEffect
 import com.threegap.bitnagil.presentation.screen.home.contract.HomeState
 import com.threegap.bitnagil.presentation.screen.home.model.ToggleStrategy
@@ -35,7 +35,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val fetchWeeklyRoutinesUseCase: FetchWeeklyRoutinesUseCase,
-    private val fetchUserProfileUseCase: FetchUserProfileUseCase,
+    private val observeUserProfileUseCase: ObserveUserProfileUseCase,
     private val fetchDailyEmotionUseCase: FetchDailyEmotionUseCase,
     private val routineCompletionUseCase: RoutineCompletionUseCase,
     private val getWriteRoutineEventFlowUseCase: GetWriteRoutineEventFlowUseCase,
@@ -185,7 +185,7 @@ class HomeViewModel @Inject constructor(
     private fun initialize() {
         intent {
             coroutineScope {
-                launch { fetchUserProfile() }
+                launch { observeUserProfile() }
                 launch { fetchDailyEmotion() }
                 launch { fetchWeeklyRoutines(state.currentWeeks) }
                 launch { observeWriteRoutineEvent() }
@@ -246,18 +246,22 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private suspend fun fetchUserProfile() {
-        subIntent {
-            reduce { state.copy(loadingCount = state.loadingCount + 1) }
-            fetchUserProfileUseCase().fold(
-                onSuccess = {
-                    reduce { state.copy(userNickname = it.nickname, loadingCount = state.loadingCount - 1) }
-                },
-                onFailure = {
-                    Log.e("HomeViewModel", "유저 정보 가져오기 실패: ${it.message}")
-                    reduce { state.copy(loadingCount = state.loadingCount - 1) }
-                },
-            )
+    private fun observeUserProfile() {
+        intent {
+            repeatOnSubscription {
+                reduce { state.copy(loadingCount = state.loadingCount + 1) }
+                observeUserProfileUseCase().collect { result ->
+                    result.fold(
+                        onSuccess = {
+                            reduce { state.copy(userNickname = it.nickname, loadingCount = state.loadingCount - 1) }
+                        },
+                        onFailure = {
+                            Log.e("HomeViewModel", "유저 정보 가져오기 실패: ${it.message}")
+                            reduce { state.copy(loadingCount = state.loadingCount - 1) }
+                        },
+                    )
+                }
+            }
         }
     }
 
