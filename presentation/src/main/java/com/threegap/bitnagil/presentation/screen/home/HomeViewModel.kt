@@ -2,6 +2,7 @@ package com.threegap.bitnagil.presentation.screen.home
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.threegap.bitnagil.domain.emotion.usecase.ObserveDailyEmotionUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingRecommendRoutineEventFlowUseCase
 import com.threegap.bitnagil.domain.routine.model.RoutineCompletionInfo
 import com.threegap.bitnagil.domain.routine.model.RoutineCompletionInfos
@@ -33,9 +34,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val fetchWeeklyRoutinesUseCase: FetchWeeklyRoutinesUseCase,
-    private val fetchUserProfileUseCase: FetchUserProfileUseCase,
     private val observeUserProfileUseCase: ObserveUserProfileUseCase,
-    private val fetchDailyEmotionUseCase: FetchDailyEmotionUseCase,
+    private val observeDailyEmotionUseCase: ObserveDailyEmotionUseCase,
     private val routineCompletionUseCase: RoutineCompletionUseCase,
     private val getWriteRoutineEventFlowUseCase: GetWriteRoutineEventFlowUseCase,
     private val getOnBoardingRecommendRoutineEventFlowUseCase: GetOnBoardingRecommendRoutineEventFlowUseCase,
@@ -203,9 +203,7 @@ class HomeViewModel @Inject constructor(
     private fun initialize() {
         intent {
             coroutineScope {
-                launch { fetchUserProfile() }
                 launch { observeUserProfile() }
-                launch { fetchDailyEmotion() }
                 launch { fetchWeeklyRoutines(state.currentWeeks) }
                 launch { observeWriteRoutineEvent() }
                 launch { observeRecommendRoutineEvent() }
