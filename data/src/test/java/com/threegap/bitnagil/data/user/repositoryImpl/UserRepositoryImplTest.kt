@@ -102,7 +102,7 @@ class UserRepositoryImplTest {
         private val _userProfile = MutableStateFlow<UserProfile?>(null)
         override val userProfile: StateFlow<UserProfile?> = _userProfile.asStateFlow()
 
-        override suspend fun saveUserProfile(userProfile: UserProfile) {
+        override fun saveUserProfile(userProfile: UserProfile) {
             _userProfile.update { userProfile }
         }
 
