@@ -5,6 +5,6 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface UserLocalDataSource {
     val userProfile: StateFlow<UserProfile?>
-    suspend fun saveUserProfile(userProfile: UserProfile)
+    fun saveUserProfile(userProfile: UserProfile)
     fun clearCache()
 }
