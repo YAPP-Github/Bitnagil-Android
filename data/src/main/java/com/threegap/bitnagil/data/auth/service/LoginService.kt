@@ -5,7 +5,6 @@ import com.threegap.bitnagil.data.auth.model.response.LoginResponse
 import com.threegap.bitnagil.network.model.BaseResponse
 import retrofit2.http.Body
 import retrofit2.http.Header
-import retrofit2.http.Headers
 import retrofit2.http.POST
 
 interface LoginService {
@@ -16,7 +15,6 @@ interface LoginService {
     ): BaseResponse<LoginResponse>
 
     @POST("/api/v1/auth/token/reissue")
-    @Headers("Auto-Login: true")
     suspend fun postReissueToken(
         @Header("Refresh-Token") refreshToken: String,
     ): BaseResponse<LoginResponse>
