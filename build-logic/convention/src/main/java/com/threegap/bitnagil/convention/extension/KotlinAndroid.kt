@@ -44,6 +44,7 @@ internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension<*, 
             resources {
                 excludes.add("META-INF/AL2.0")
                 excludes.add("META-INF/LGPL2.1")
+                excludes.add("META-INF/versions/9/OSGI-INF/MANIFEST.MF")
             }
         }
 
