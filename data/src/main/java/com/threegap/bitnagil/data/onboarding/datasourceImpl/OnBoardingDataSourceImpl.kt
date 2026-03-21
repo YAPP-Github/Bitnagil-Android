@@ -1,7 +1,5 @@
 package com.threegap.bitnagil.data.onboarding.datasourceImpl
 
-import com.threegap.bitnagil.data.common.safeApiCall
-import com.threegap.bitnagil.data.common.safeUnitApiCall
 import com.threegap.bitnagil.data.onboarding.datasource.OnBoardingDataSource
 import com.threegap.bitnagil.data.onboarding.model.dto.OnBoardingAbstractDto
 import com.threegap.bitnagil.data.onboarding.model.dto.OnBoardingAbstractTextDto
@@ -29,11 +27,8 @@ class OnBoardingDataSourceImpl @Inject constructor(
         return onBoardingDtoList
     }
 
-    override suspend fun getOnBoardingRecommendRoutines(request: GetOnBoardingRecommendRoutinesRequest): Result<GetOnBoardingRecommendRoutinesResponse> {
-        return safeApiCall {
-            onBoardingService.postOnBoarding(request)
-        }
-    }
+    override suspend fun getOnBoardingRecommendRoutines(request: GetOnBoardingRecommendRoutinesRequest): Result<GetOnBoardingRecommendRoutinesResponse> =
+        onBoardingService.postOnBoarding(request)
 
     override suspend fun getOnBoardingAbstract(selectedOnBoardingItemIdList: List<Pair<String, List<String>>>): OnBoardingAbstractDto {
         val onBoardingAbstractTextList = mutableListOf<OnBoardingAbstractTextDto>()
@@ -53,16 +48,10 @@ class OnBoardingDataSourceImpl @Inject constructor(
 
     override suspend fun registerRecommendRoutineList(selectedRecommendRoutineIds: List<Int>): Result<Unit> {
         val registerRecommendRoutineListRequest = RegisterOnBoardingRecommendRoutinesRequest(recommendedRoutineIds = selectedRecommendRoutineIds)
-        return safeUnitApiCall {
-            onBoardingService.postOnBoardingRoutines(registerRecommendRoutineListRequest)
-        }
+        return onBoardingService.postOnBoardingRoutines(registerRecommendRoutineListRequest)
     }
 
-    override suspend fun getUserOnBoarding(): Result<GetUserOnBoardingResponse> {
-        return safeApiCall {
-            onBoardingService.getOnBoarding()
-        }
-    }
+    override suspend fun getUserOnBoarding(): Result<GetUserOnBoardingResponse> = onBoardingService.getOnBoarding()
 
     private fun getOnBoardingAbstractText(onBoardingId: String, selectedOnBoardingDetailIdList: List<String>): OnBoardingAbstractTextDto? {
         if (selectedOnBoardingDetailIdList.isEmpty()) return null
@@ -95,6 +84,7 @@ class OnBoardingDataSourceImpl @Inject constructor(
                             ),
                         )
                     }
+
                     OnBoardingItemDto.Evening.id -> {
                         OnBoardingAbstractTextDto(
                             textItemList = listOf(
@@ -109,6 +99,7 @@ class OnBoardingDataSourceImpl @Inject constructor(
                             ),
                         )
                     }
+
                     OnBoardingItemDto.Nothing.id -> {
                         OnBoardingAbstractTextDto(
                             textItemList = listOf(
@@ -123,11 +114,13 @@ class OnBoardingDataSourceImpl @Inject constructor(
                             ),
                         )
                     }
+
                     else -> {
                         null
                     }
                 }
             }
+
             OnBoardingDto.TargetOutingFrequency.id -> {
                 return when (onBoardingDetailId) {
                     OnBoardingItemDto.TargetOutingOneToTwoPerWeek.id -> {
@@ -144,6 +137,7 @@ class OnBoardingDataSourceImpl @Inject constructor(
                             ),
                         )
                     }
+
                     OnBoardingItemDto.TargetOutingThreeToFourPerWeek.id -> {
                         OnBoardingAbstractTextDto(
                             textItemList = listOf(
@@ -158,6 +152,7 @@ class OnBoardingDataSourceImpl @Inject constructor(
                             ),
                         )
                     }
+
                     OnBoardingItemDto.TargetOutingMoreThenFivePerWeek.id -> {
                         OnBoardingAbstractTextDto(
                             textItemList = listOf(
@@ -172,6 +167,7 @@ class OnBoardingDataSourceImpl @Inject constructor(
                             ),
                         )
                     }
+
                     OnBoardingItemDto.TargetOutingUnknown.id -> {
                         OnBoardingAbstractTextDto(
                             textItemList = listOf(
@@ -186,11 +182,13 @@ class OnBoardingDataSourceImpl @Inject constructor(
                             ),
                         )
                     }
+
                     else -> {
                         null
                     }
                 }
             }
+
             else -> {
                 return null
             }
@@ -220,6 +218,7 @@ class OnBoardingDataSourceImpl @Inject constructor(
                                 )
                             }
                         }
+
                         OnBoardingItemDto.Connectedness.id -> {
                             onBoardingAbstractTextItemList.apply {
                                 add(
@@ -236,6 +235,7 @@ class OnBoardingDataSourceImpl @Inject constructor(
                                 )
                             }
                         }
+
                         OnBoardingItemDto.Vitality.id -> {
                             onBoardingAbstractTextItemList.apply {
                                 add(
@@ -252,6 +252,7 @@ class OnBoardingDataSourceImpl @Inject constructor(
                                 )
                             }
                         }
+
                         OnBoardingItemDto.Growth.id -> {
                             onBoardingAbstractTextItemList.apply {
                                 add(
@@ -271,6 +272,7 @@ class OnBoardingDataSourceImpl @Inject constructor(
                     }
                 }
             }
+
             else -> {
             }
         }

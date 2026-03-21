@@ -1,7 +1,6 @@
 package com.threegap.bitnagil.data.version.service
 
 import com.threegap.bitnagil.data.version.model.response.VersionCheckResponse
-import com.threegap.bitnagil.network.model.BaseResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -11,5 +10,5 @@ interface VersionService {
         @Query("major") majorVersion: Int,
         @Query("minor") minorVersion: Int,
         @Query("patch") patchVersion: Int,
-    ): BaseResponse<VersionCheckResponse>
+    ): Result<VersionCheckResponse>
 }

@@ -1,6 +1,5 @@
 package com.threegap.bitnagil.data.user.datasourceImpl
 
-import com.threegap.bitnagil.data.common.safeApiCall
 import com.threegap.bitnagil.data.user.datasource.UserRemoteDataSource
 import com.threegap.bitnagil.data.user.model.response.UserProfileResponse
 import com.threegap.bitnagil.data.user.service.UserService
@@ -10,5 +9,5 @@ class UserRemoteDataSourceImpl @Inject constructor(
     private val userService: UserService,
 ) : UserRemoteDataSource {
     override suspend fun fetchUserProfile(): Result<UserProfileResponse> =
-        safeApiCall { userService.fetchUserProfile() }
+        userService.fetchUserProfile()
 }

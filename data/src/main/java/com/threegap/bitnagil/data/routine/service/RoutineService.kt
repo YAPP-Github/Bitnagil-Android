@@ -5,7 +5,6 @@ import com.threegap.bitnagil.data.routine.model.request.RoutineEditRequest
 import com.threegap.bitnagil.data.routine.model.request.RoutineRegisterRequest
 import com.threegap.bitnagil.data.routine.model.response.RoutineResponse
 import com.threegap.bitnagil.data.routine.model.response.RoutineScheduleResponse
-import com.threegap.bitnagil.network.model.BaseResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -20,35 +19,35 @@ interface RoutineService {
     suspend fun fetchRoutineSchedule(
         @Query("startDate") startDate: String,
         @Query("endDate") endDate: String,
-    ): BaseResponse<RoutineScheduleResponse>
+    ): Result<RoutineScheduleResponse>
 
     @GET("/api/v2/routines/{routineId}")
     suspend fun getRoutine(
         @Path("routineId") routineId: String,
-    ): BaseResponse<RoutineResponse>
+    ): Result<RoutineResponse>
 
     @PUT("/api/v2/routines/completions")
     suspend fun routineCompletion(
         @Body request: RoutineCompletionRequest,
-    ): BaseResponse<Unit>
+    ): Result<Unit>
 
     @DELETE("/api/v1/routines/{routineId}")
     suspend fun deleteRoutine(
         @Path("routineId") routineId: String,
-    ): BaseResponse<Unit>
+    ): Result<Unit>
 
     @DELETE("/api/v2/routines/day/{routineId}")
     suspend fun deleteRoutineForDay(
         @Path("routineId") routineId: String,
-    ): BaseResponse<Unit>
+    ): Result<Unit>
 
     @POST("/api/v2/routines")
     suspend fun postRoutine(
         @Body routineRegisterRequest: RoutineRegisterRequest,
-    ): BaseResponse<Unit>
+    ): Result<Unit>
 
     @PATCH("/api/v2/routines")
     suspend fun patchRoutine(
         @Body routineEditRequest: RoutineEditRequest,
-    ): BaseResponse<Unit>
+    ): Result<Unit>
 }

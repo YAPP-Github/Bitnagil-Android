@@ -14,29 +14,25 @@ class AuthRepositoryImpl @Inject constructor(
     private val authRemoteDataSource: AuthRemoteDataSource,
     private val authLocalDataSource: AuthLocalDataSource,
 ) : AuthRepository {
+
     override suspend fun login(socialAccessToken: String, socialType: String): Result<AuthSession> =
         authRemoteDataSource.login(socialAccessToken, LoginRequest(socialType))
             .map { it.toDomain() }
 
     override suspend fun submitAgreement(termsAgreement: TermsAgreement): Result<Unit> =
-        authRemoteDataSource.submitAgreement(
-            termsAgreement.toDto(),
-        )
+        authRemoteDataSource.submitAgreement(termsAgreement.toDto())
 
-    override suspend fun logout(): Result<Unit> {
-        return authRemoteDataSource.logout().also {
-            if (it.isSuccess) authLocalDataSource.clearAuthToken()
-        }
-    }
+    override suspend fun logout(): Result<Unit> =
+        authRemoteDataSource.logout()
+            .onSuccess { authLocalDataSource.clearAuthToken() }
 
-    override suspend fun withdrawal(reason: String): Result<Unit> {
-        return authRemoteDataSource.withdrawal(reason).also {
-            if (it.isSuccess) authLocalDataSource.clearAuthToken()
-        }
-    }
+    override suspend fun withdrawal(reason: String): Result<Unit> =
+        authRemoteDataSource.withdrawal(reason)
+            .onSuccess { authLocalDataSource.clearAuthToken() }
 
     override suspend fun reissueToken(refreshToken: String): Result<AuthSession> =
-        authRemoteDataSource.reissueToken(refreshToken).map { it.toDomain() }
+        authRemoteDataSource.reissueToken(refreshToken)
+            .map { it.toDomain() }
 
     override suspend fun getRefreshToken(): String? =
         authLocalDataSource.getRefreshToken()
