@@ -92,16 +92,41 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    @Kakao
-    fun provideKakaoOkHttpClient(
+    fun provideBaseOkHttpClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
-        @Kakao kakaoAuthInterceptor: Interceptor,
     ): OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(kakaoAuthInterceptor)
         .addInterceptor(httpLoggingInterceptor)
         .connectTimeout(10L, TimeUnit.SECONDS)
         .writeTimeout(30L, TimeUnit.SECONDS)
         .readTimeout(30L, TimeUnit.SECONDS)
+        .build()
+
+    @Provides
+    @Singleton
+    @NoneAuth
+    fun provideNoneAuthOkHttpClient(baseClient: OkHttpClient): OkHttpClient =
+        baseClient.newBuilder().build()
+
+    @Provides
+    @Singleton
+    @Auth
+    fun provideAuthOkHttpClient(
+        baseClient: OkHttpClient,
+        @Auth authInterceptor: Interceptor,
+        tokenAuthenticator: TokenAuthenticator,
+    ): OkHttpClient = baseClient.newBuilder()
+        .addInterceptor(authInterceptor)
+        .authenticator(tokenAuthenticator)
+        .build()
+
+    @Provides
+    @Singleton
+    @Kakao
+    fun provideKakaoOkHttpClient(
+        baseClient: OkHttpClient,
+        @Kakao kakaoAuthInterceptor: Interceptor,
+    ): OkHttpClient = baseClient.newBuilder()
+        .addInterceptor(kakaoAuthInterceptor)
         .build()
 
     @Provides
@@ -140,34 +165,6 @@ object NetworkModule {
     @Auth
     fun provideAuthInterceptor(tokenProvider: TokenProvider): Interceptor =
         AuthInterceptor(tokenProvider)
-
-    @Provides
-    @Singleton
-    @Auth
-    fun provideAuthOkHttpClient(
-        httpLoggingInterceptor: HttpLoggingInterceptor,
-        @Auth authInterceptor: Interceptor,
-        tokenAuthenticator: TokenAuthenticator,
-    ): OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(authInterceptor)
-        .addInterceptor(httpLoggingInterceptor)
-        .authenticator(tokenAuthenticator)
-        .connectTimeout(10L, TimeUnit.SECONDS)
-        .writeTimeout(30L, TimeUnit.SECONDS)
-        .readTimeout(30L, TimeUnit.SECONDS)
-        .build()
-
-    @Provides
-    @Singleton
-    @NoneAuth
-    fun provideNoneAuthOkHttpClient(
-        httpLoggingInterceptor: HttpLoggingInterceptor,
-    ): OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(httpLoggingInterceptor)
-        .connectTimeout(10L, TimeUnit.SECONDS)
-        .writeTimeout(30L, TimeUnit.SECONDS)
-        .readTimeout(30L, TimeUnit.SECONDS)
-        .build()
 
     @Provides
     @Singleton
