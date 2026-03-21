@@ -10,6 +10,7 @@ import com.threegap.bitnagil.network.Kakao
 import com.threegap.bitnagil.network.NoneAuth
 import com.threegap.bitnagil.network.auth.AuthInterceptor
 import com.threegap.bitnagil.network.auth.TokenAuthenticator
+import com.threegap.bitnagil.network.calladapter.ResultCallAdapterFactory
 import com.threegap.bitnagil.network.token.ReissueService
 import com.threegap.bitnagil.network.token.TokenProvider
 import dagger.Module
@@ -45,7 +46,7 @@ object NetworkModule {
     fun provideJson(): Json =
         Json {
             ignoreUnknownKeys = true
-            prettyPrint = true
+            prettyPrint = BuildConfig.DEBUG
             explicitNulls = false
         }
 
@@ -53,6 +54,10 @@ object NetworkModule {
     @Singleton
     fun provideJsonConverter(json: Json): Converter.Factory =
         json.asConverterFactory(APPLICATION_JSON.toMediaType())
+
+    @Provides
+    @Singleton
+    fun provideResultCallAdapterFactory(): ResultCallAdapterFactory = ResultCallAdapterFactory()
 
     @Provides
     @Singleton
@@ -172,10 +177,12 @@ object NetworkModule {
     fun provideAuthRetrofit(
         baseUrl: String,
         converterFactory: Converter.Factory,
+        resultCallAdapterFactory: ResultCallAdapterFactory,
         @Auth okHttpClient: OkHttpClient,
     ): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .addConverterFactory(converterFactory)
+        .addCallAdapterFactory(resultCallAdapterFactory)
         .client(okHttpClient)
         .build()
 
@@ -185,10 +192,12 @@ object NetworkModule {
     fun provideNoneAuthRetrofit(
         baseUrl: String,
         converterFactory: Converter.Factory,
+        resultCallAdapterFactory: ResultCallAdapterFactory,
         @NoneAuth okHttpClient: OkHttpClient,
     ): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .addConverterFactory(converterFactory)
+        .addCallAdapterFactory(resultCallAdapterFactory)
         .client(okHttpClient)
         .build()
 }
