@@ -1,7 +1,5 @@
 package com.threegap.bitnagil.data.routine.datasourceImpl
 
-import com.threegap.bitnagil.data.common.safeApiCall
-import com.threegap.bitnagil.data.common.safeUnitApiCall
 import com.threegap.bitnagil.data.routine.datasource.RoutineRemoteDataSource
 import com.threegap.bitnagil.data.routine.model.request.RoutineCompletionRequest
 import com.threegap.bitnagil.data.routine.model.request.RoutineEditRequest
@@ -15,37 +13,23 @@ class RoutineRemoteDataSourceImpl @Inject constructor(
     private val routineService: RoutineService,
 ) : RoutineRemoteDataSource {
     override suspend fun fetchWeeklyRoutines(startDate: String, endDate: String): Result<RoutineScheduleResponse> =
-        safeApiCall {
-            routineService.fetchRoutineSchedule(startDate, endDate)
-        }
+        routineService.fetchRoutineSchedule(startDate, endDate)
 
     override suspend fun syncRoutineCompletion(routineCompletionRequest: RoutineCompletionRequest): Result<Unit> =
-        safeUnitApiCall {
-            routineService.routineCompletion(routineCompletionRequest)
-        }
+        routineService.routineCompletion(routineCompletionRequest)
 
     override suspend fun getRoutine(routineId: String): Result<RoutineResponse> =
-        safeApiCall {
-            routineService.getRoutine(routineId)
-        }
+        routineService.getRoutine(routineId)
 
     override suspend fun deleteRoutine(routineId: String): Result<Unit> =
-        safeUnitApiCall {
-            routineService.deleteRoutine(routineId)
-        }
+        routineService.deleteRoutine(routineId)
 
     override suspend fun deleteRoutineForDay(routineId: String): Result<Unit> =
-        safeUnitApiCall {
-            routineService.deleteRoutineForDay(routineId)
-        }
+        routineService.deleteRoutineForDay(routineId)
 
     override suspend fun registerRoutine(request: RoutineRegisterRequest): Result<Unit> =
-        safeUnitApiCall {
-            routineService.postRoutine(request)
-        }
+        routineService.postRoutine(request)
 
     override suspend fun editRoutine(request: RoutineEditRequest): Result<Unit> =
-        safeUnitApiCall {
-            routineService.patchRoutine(request)
-        }
+        routineService.patchRoutine(request)
 }

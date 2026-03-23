@@ -1,7 +1,6 @@
 package com.threegap.bitnagil.data.version.datasourceImpl
 
 import com.threegap.bitnagil.data.BuildConfig
-import com.threegap.bitnagil.data.common.safeApiCall
 import com.threegap.bitnagil.data.version.datasource.VersionDataSource
 import com.threegap.bitnagil.data.version.model.response.VersionCheckResponse
 import com.threegap.bitnagil.data.version.service.VersionService
@@ -12,11 +11,9 @@ class VersionDataSourceImpl @Inject constructor(
 ) : VersionDataSource {
 
     override suspend fun checkVersion(): Result<VersionCheckResponse> =
-        safeApiCall {
-            versionService.checkVersion(
-                majorVersion = BuildConfig.VERSION_MAJOR,
-                minorVersion = BuildConfig.VERSION_MINOR,
-                patchVersion = BuildConfig.VERSION_PATCH,
-            )
-        }
+        versionService.checkVersion(
+            majorVersion = BuildConfig.VERSION_MAJOR,
+            minorVersion = BuildConfig.VERSION_MINOR,
+            patchVersion = BuildConfig.VERSION_PATCH,
+        )
 }

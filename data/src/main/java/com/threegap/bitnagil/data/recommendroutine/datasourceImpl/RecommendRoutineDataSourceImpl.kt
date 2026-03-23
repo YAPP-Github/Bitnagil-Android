@@ -1,6 +1,5 @@
 package com.threegap.bitnagil.data.recommendroutine.datasourceImpl
 
-import com.threegap.bitnagil.data.common.safeApiCall
 import com.threegap.bitnagil.data.recommendroutine.datasource.RecommendRoutineDataSource
 import com.threegap.bitnagil.data.recommendroutine.model.response.RecommendRoutinesResponse
 import com.threegap.bitnagil.data.recommendroutine.model.response.RecommendedRoutineResponse
@@ -12,12 +11,8 @@ class RecommendRoutineDataSourceImpl @Inject constructor(
 ) : RecommendRoutineDataSource {
 
     override suspend fun fetchRecommendRoutines(): Result<RecommendRoutinesResponse> =
-        safeApiCall {
-            recommendRoutineService.fetchRecommendRoutines()
-        }
+        recommendRoutineService.fetchRecommendRoutines()
 
     override suspend fun getRecommendRoutine(recommendRoutineId: Long): Result<RecommendedRoutineResponse> =
-        safeApiCall {
-            recommendRoutineService.getRecommendRoutine(recommendRoutineId)
-        }
+        recommendRoutineService.getRecommendRoutine(recommendRoutineId)
 }

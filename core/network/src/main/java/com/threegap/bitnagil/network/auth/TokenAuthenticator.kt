@@ -43,20 +43,10 @@ class TokenAuthenticator(
             return null
         }
 
-        return runCatching {
-            reissueService.reissueToken(refreshToken)
-        }.fold(
-            onSuccess = { baseResponse ->
-                if (baseResponse.data != null && baseResponse.code == SUCCESS_CODE) {
-                    tokenProvider.saveTokens(
-                        accessToken = baseResponse.data.accessToken,
-                        refreshToken = baseResponse.data.refreshToken,
-                    )
-                    buildRequestWithToken(response.request, baseResponse.data.accessToken)
-                } else {
-                    handleTokenExpiration()
-                    null
-                }
+        return reissueService.reissueToken(refreshToken).fold(
+            onSuccess = { authToken ->
+                tokenProvider.saveTokens(accessToken = authToken.accessToken, refreshToken = authToken.refreshToken)
+                buildRequestWithToken(response.request, authToken.accessToken)
             },
             onFailure = {
                 handleTokenExpiration()
@@ -95,6 +85,5 @@ class TokenAuthenticator(
         private const val MAX_RETRY = 2
         private const val AUTHORIZATION = "Authorization"
         private const val TOKEN_PREFIX = "Bearer"
-        private const val SUCCESS_CODE = "CO000"
     }
 }
