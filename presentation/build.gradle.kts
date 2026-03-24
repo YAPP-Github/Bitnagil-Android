@@ -2,12 +2,8 @@ plugins {
     alias(libs.plugins.bitnagil.android.library)
     alias(libs.plugins.bitnagil.android.compose.library)
     alias(libs.plugins.bitnagil.android.hilt)
-    alias(libs.plugins.kotlin.parcelize)
-    alias(libs.plugins.kotlin.serialization)
-}
-
-android {
-    namespace = "com.threegap.bitnagil.presentation"
+    alias(libs.plugins.bitnagil.kotlin.parcelize)
+    alias(libs.plugins.bitnagil.kotlin.serialization)
 }
 
 dependencies {
@@ -17,7 +13,6 @@ dependencies {
     implementation(libs.bundles.androidx.core)
     implementation(libs.bundles.orbit)
     implementation(libs.kakao.v2.user)
-    implementation(libs.kotlinx.serialization.json)
     implementation(libs.lottie.compose)
     implementation(libs.bundles.coil)
     implementation(libs.accompanist.permissions)
