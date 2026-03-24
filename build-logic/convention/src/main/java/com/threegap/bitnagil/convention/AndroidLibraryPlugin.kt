@@ -1,8 +1,6 @@
 package com.threegap.bitnagil.convention
 
-import com.android.build.gradle.LibraryExtension
-import com.threegap.bitnagil.convention.extension.configureAppVersion
-import com.threegap.bitnagil.convention.extension.configureApplicationId
+import com.android.build.api.dsl.LibraryExtension
 import com.threegap.bitnagil.convention.extension.configureKotlinAndroid
 import com.threegap.bitnagil.convention.extension.configureKotlinCoroutine
 import org.gradle.api.Plugin
@@ -13,14 +11,12 @@ class AndroidLibraryPlugin : Plugin<Project> {
     override fun apply(target: Project): Unit = with(target) {
         pluginManager.apply {
             apply("com.android.library")
-            apply("org.jetbrains.kotlin.android")
+            apply("org.jlleitschuh.gradle.ktlint")
         }
 
         extensions.configure<LibraryExtension> {
             configureKotlinAndroid(this)
-            configureKotlinCoroutine(this)
-            configureAppVersion()
-            configureApplicationId()
+            configureKotlinCoroutine()
         }
     }
 }

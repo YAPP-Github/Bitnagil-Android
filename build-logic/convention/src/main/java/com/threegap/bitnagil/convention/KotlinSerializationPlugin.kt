@@ -5,16 +5,12 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 
-class HiltPlugin : Plugin<Project> {
+class KotlinSerializationPlugin : Plugin<Project> {
     override fun apply(target: Project): Unit = with(target) {
-        pluginManager.apply {
-            apply("dagger.hilt.android.plugin")
-            apply("com.google.devtools.ksp")
-        }
+        pluginManager.apply("org.jetbrains.kotlin.plugin.serialization")
 
         dependencies {
-            "implementation"(libs.findLibrary("hilt.android").get())
-            "ksp"(libs.findLibrary("hilt.compiler").get())
+            "implementation"(libs.findLibrary("kotlinx-serialization-json").get())
         }
     }
 }

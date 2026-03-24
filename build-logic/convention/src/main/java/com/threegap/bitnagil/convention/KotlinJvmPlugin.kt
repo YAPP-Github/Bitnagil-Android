@@ -13,6 +13,7 @@ class KotlinJvmPlugin : Plugin<Project> {
             pluginManager.apply {
                 apply("java-library")
                 apply("org.jetbrains.kotlin.jvm")
+                apply("org.jlleitschuh.gradle.ktlint")
             }
         }
 

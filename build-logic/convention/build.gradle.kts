@@ -46,5 +46,15 @@ gradlePlugin {
             id = "bitnagil.kotlin"
             implementationClass = "com.threegap.bitnagil.convention.KotlinJvmPlugin"
         }
+
+        register("kotlinSerialization") {
+            id = "bitnagil.kotlin.serialization"
+            implementationClass = "com.threegap.bitnagil.convention.KotlinSerializationPlugin"
+        }
+
+        register("kotlinParcelize") {
+            id = "bitnagil.kotlin.parcelize"
+            implementationClass = "com.threegap.bitnagil.convention.KotlinParcelizePlugin"
+        }
     }
 }

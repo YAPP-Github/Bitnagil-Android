@@ -3,9 +3,4 @@ plugins {
     alias(libs.plugins.bitnagil.android.compose.library)
 }
 
-android {
-    namespace = "com.threegap.bitnagil.designsystem"
-}
-
-dependencies {
-}
+dependencies {}

@@ -1,6 +1,6 @@
 package com.threegap.bitnagil.convention
 
-import com.android.build.gradle.LibraryExtension
+import com.android.build.api.dsl.LibraryExtension
 import com.threegap.bitnagil.convention.extension.configureComposeAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
