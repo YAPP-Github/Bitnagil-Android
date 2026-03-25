@@ -27,8 +27,9 @@ internal class CollapsibleHeaderState(
     val expandedHeaderHeightDp: Dp,
 ) {
     private val expandedHeaderHeightPx: Float = with(density) { expandedHeaderHeightDp.toPx() }
+    private val initialStickyHeaderHeightPx: Float = with(density) { initialStickyHeaderHeightDp.toPx() }
 
-    var stickyHeaderActualBottomPx by mutableFloatStateOf(0f)
+    var stickyHeaderActualBottomPx by mutableFloatStateOf(initialStickyHeaderHeightPx)
         internal set
 
     val collapsedContentOffsetDp: Dp
