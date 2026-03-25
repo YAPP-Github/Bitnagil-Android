@@ -56,8 +56,7 @@ internal class CollapsibleHeaderState(
             val target = when {
                 available.y < -50f -> 0f
                 available.y > 50f -> expandedHeaderHeightPx
-                else -> if (currentHeightPx < expandedHeaderHeightPx / 2) 0f
-                else expandedHeaderHeightPx
+                else -> if (currentHeightPx < expandedHeaderHeightPx / 2) 0f else expandedHeaderHeightPx
             }
 
             snapTo(targetHeight = target, velocity = available.y)
@@ -87,7 +86,6 @@ internal class CollapsibleHeaderState(
                 stiffness = Spring.StiffnessMediumLow,
             ),
         ) { value, _ -> currentHeightPx = value.coerceIn(0f, expandedHeaderHeightPx) }
-
     }
 }
 
