@@ -3,12 +3,10 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.bitnagil.android.application)
     alias(libs.plugins.bitnagil.android.hilt)
-    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.bitnagil.kotlin.serialization)
 }
 
 android {
-    namespace = "com.threegap.bitnagil"
-
     val properties =
         Properties().apply {
             val propFile = rootProject.file("local.properties")

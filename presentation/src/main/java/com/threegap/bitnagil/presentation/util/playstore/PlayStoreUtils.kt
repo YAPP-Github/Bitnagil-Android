@@ -16,14 +16,12 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
-import com.threegap.bitnagil.presentation.BuildConfig
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.system.exitProcess
 
-private const val PACKAGE_NAME = BuildConfig.APPLICATION_ID
 private const val GOOGLE_PLAY_PACKAGE = "com.android.vending"
 private const val APP_EXIT_DELAY = 500L
 
@@ -32,7 +30,8 @@ fun openAppInPlayStore(
     shouldFinishApp: Boolean = true,
 ) {
     activity?.let {
-        val isSuccess = tryOpenPlayStore(it) || tryOpenWebBrowser(it)
+        val packageName = it.packageName
+        val isSuccess = tryOpenPlayStore(it, packageName) || tryOpenWebBrowser(it, packageName)
 
         if (isSuccess && shouldFinishApp) {
             finishAppWithDelay(it)
@@ -40,37 +39,37 @@ fun openAppInPlayStore(
     }
 }
 
-private fun tryOpenPlayStore(activity: ComponentActivity): Boolean =
+private fun tryOpenPlayStore(activity: ComponentActivity, packageName: String): Boolean =
     try {
-        val intent = createPlayStoreIntent()
+        val intent = createPlayStoreIntent(packageName)
         activity.startActivity(intent)
         true
     } catch (e: ActivityNotFoundException) {
         false
     }
 
-private fun tryOpenWebBrowser(activity: ComponentActivity): Boolean =
+private fun tryOpenWebBrowser(activity: ComponentActivity, packageName: String): Boolean =
     try {
-        val intent = createWebIntent()
+        val intent = createWebIntent(packageName)
         activity.startActivity(intent)
         true
     } catch (e: Exception) {
         false
     }
 
-private fun createPlayStoreIntent(): Intent =
+private fun createPlayStoreIntent(packageName: String): Intent =
     Intent(
         Intent.ACTION_VIEW,
-        "market://details?id=$PACKAGE_NAME".toUri(),
+        "market://details?id=$packageName".toUri(),
     ).apply {
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         setPackage(GOOGLE_PLAY_PACKAGE)
     }
 
-private fun createWebIntent(): Intent =
+private fun createWebIntent(packageName: String): Intent =
     Intent(
         Intent.ACTION_VIEW,
-        "https://play.google.com/store/apps/details?id=$PACKAGE_NAME".toUri(),
+        "https://play.google.com/store/apps/details?id=$packageName".toUri(),
     ).apply {
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     }
