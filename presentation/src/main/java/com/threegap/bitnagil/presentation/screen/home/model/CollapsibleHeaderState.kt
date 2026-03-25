@@ -23,20 +23,23 @@ import androidx.compose.ui.unit.dp
 @Stable
 internal class CollapsibleHeaderState(
     private val density: Density,
-    val stickyHeaderHeightDp: Dp,
+    val initialStickyHeaderHeightDp: Dp,
     val expandedHeaderHeightDp: Dp,
 ) {
-    private val stickyHeaderHeightPx: Float = with(density) { stickyHeaderHeightDp.toPx() }
-
     private val expandedHeaderHeightPx: Float = with(density) { expandedHeaderHeightDp.toPx() }
+    private val initialStickyHeaderHeightPx: Float = with(density) { initialStickyHeaderHeightDp.toPx() }
 
-    val collapsedContentOffsetDp: Dp = with(density) { stickyHeaderHeightPx.toDp() + 18.dp }
+    var stickyHeaderActualBottomPx by mutableFloatStateOf(initialStickyHeaderHeightPx)
+        internal set
+
+    val collapsedContentOffsetDp: Dp
+        get() = with(density) { stickyHeaderActualBottomPx.toDp() }
 
     var currentHeightPx by mutableFloatStateOf(expandedHeaderHeightPx)
         private set
 
     val expansionProgress: Float
-        get() = if (expandedHeaderHeightPx > 0f) (currentHeightPx / expandedHeaderHeightPx).coerceIn(0f, 1f) else 1f
+        get() = (currentHeightPx / expandedHeaderHeightPx).coerceIn(0f, 1f)
 
     val nestedScrollConnection = object : NestedScrollConnection {
         override fun onPreScroll(available: Offset, source: NestedScrollSource) =
@@ -46,33 +49,22 @@ internal class CollapsibleHeaderState(
             if (available.y > 0) consumeDelta(available.y) else Offset.Zero
 
         override suspend fun onPreFling(available: Velocity): Velocity {
-            if (currentHeightPx <= 0f || currentHeightPx >= expandedHeaderHeightPx) return Velocity.Zero
+            val isFullyCollapsed = currentHeightPx < 1f
+            val isFullyExpanded = currentHeightPx > expandedHeaderHeightPx - 1f
 
-            val collapse = 0f
-            val expand = expandedHeaderHeightPx
+            if (isFullyCollapsed || isFullyExpanded) return Velocity.Zero
 
             val target = when {
-                available.y < -50f -> collapse
-                available.y > 50f -> expand
-                else -> if (currentHeightPx - collapse < expand - currentHeightPx) collapse else expand
+                available.y < -50f -> 0f
+                available.y > 50f -> expandedHeaderHeightPx
+                else -> if (currentHeightPx < expandedHeaderHeightPx / 2) 0f else expandedHeaderHeightPx
             }
 
             snapTo(targetHeight = target, velocity = available.y)
-
-            return Velocity(0f, available.y)
+            return Velocity.Zero
         }
 
         override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
-            if (available.y > 0 && currentHeightPx < expandedHeaderHeightPx) {
-                snapTo(targetHeight = expandedHeaderHeightPx, velocity = available.y)
-                return Velocity(0f, available.y)
-            }
-
-            if (available.y < 0 && currentHeightPx > 0f) {
-                snapTo(targetHeight = 0f, velocity = available.y)
-                return Velocity(0f, available.y)
-            }
-
             return Velocity.Zero
         }
     }
@@ -94,9 +86,7 @@ internal class CollapsibleHeaderState(
                 dampingRatio = Spring.DampingRatioNoBouncy,
                 stiffness = Spring.StiffnessMediumLow,
             ),
-        ) { value, _ ->
-            currentHeightPx = value
-        }
+        ) { value, _ -> currentHeightPx = value.coerceIn(0f, expandedHeaderHeightPx) }
     }
 }
 
@@ -104,17 +94,17 @@ internal class CollapsibleHeaderState(
 internal fun rememberCollapsibleHeaderState(
     density: Density = LocalDensity.current,
     windowInfo: WindowInfo = LocalWindowInfo.current,
-    stickyHeaderHeight: Dp = 48.dp,
+    initialStickyHeaderHeightDp: Dp = 48.dp,
     minExpandedHeaderHeight: Dp = 146.dp,
 ): CollapsibleHeaderState {
     val containerSize = windowInfo.containerSize
-    return remember(density, containerSize, minExpandedHeaderHeight, stickyHeaderHeight) {
+    return remember(density, containerSize, minExpandedHeaderHeight, initialStickyHeaderHeightDp) {
         val screenHeightDp = with(density) { containerSize.height.toDp() }
         val expandedHeaderHeightDp = (screenHeightDp * 0.18f).coerceAtLeast(minExpandedHeaderHeight)
 
         CollapsibleHeaderState(
             density = density,
-            stickyHeaderHeightDp = stickyHeaderHeight,
+            initialStickyHeaderHeightDp = initialStickyHeaderHeightDp,
             expandedHeaderHeightDp = expandedHeaderHeightDp,
         )
     }
