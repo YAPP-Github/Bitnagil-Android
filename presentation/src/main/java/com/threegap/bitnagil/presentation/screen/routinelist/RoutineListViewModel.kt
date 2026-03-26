@@ -3,18 +3,15 @@ package com.threegap.bitnagil.presentation.screen.routinelist
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.threegap.bitnagil.domain.routine.usecase.DeleteRoutineForDayUseCase
 import com.threegap.bitnagil.domain.routine.usecase.DeleteRoutineUseCase
-import com.threegap.bitnagil.domain.routine.usecase.FetchWeeklyRoutinesUseCase
-import com.threegap.bitnagil.domain.routine.usecase.GetWriteRoutineEventFlowUseCase
+import com.threegap.bitnagil.domain.routine.usecase.ObserveWeeklyRoutinesUseCase
 import com.threegap.bitnagil.presentation.screen.home.util.getCurrentWeekDays
 import com.threegap.bitnagil.presentation.screen.routinelist.contract.RoutineListSideEffect
 import com.threegap.bitnagil.presentation.screen.routinelist.contract.RoutineListState
 import com.threegap.bitnagil.presentation.screen.routinelist.model.RoutineUiModel
 import com.threegap.bitnagil.presentation.screen.routinelist.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.viewmodel.container
@@ -24,10 +21,9 @@ import javax.inject.Inject
 @HiltViewModel
 class RoutineListViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val fetchWeeklyRoutinesUseCase: FetchWeeklyRoutinesUseCase,
+    private val observeWeeklyRoutinesUseCase: ObserveWeeklyRoutinesUseCase,
     private val deleteRoutineUseCase: DeleteRoutineUseCase,
     private val deleteRoutineForDayUseCase: DeleteRoutineForDayUseCase,
-    private val getWriteRoutineEventFlowUseCase: GetWriteRoutineEventFlowUseCase,
 ) : ContainerHost<RoutineListState, RoutineListSideEffect>, ViewModel() {
 
     override val container: Container<RoutineListState, RoutineListSideEffect> = container(initialState = RoutineListState.INIT)
@@ -41,8 +37,7 @@ class RoutineListViewModel @Inject constructor(
 
     init {
         updateDate(selectedDate)
-        fetchRoutines()
-        observeRoutineChanges()
+        observeWeeklyRoutines()
     }
 
     fun updateDate(selectedDate: LocalDate) {
@@ -75,29 +70,14 @@ class RoutineListViewModel @Inject constructor(
         }
     }
 
-    private fun observeRoutineChanges() {
-        viewModelScope.launch {
-            getWriteRoutineEventFlowUseCase().collect {
-                fetchRoutines()
-            }
-        }
-    }
-
-    private fun fetchRoutines() {
+    private fun observeWeeklyRoutines() {
         intent {
             reduce { state.copy(isLoading = true) }
-            val currentWeek = state.selectedDate.getCurrentWeekDays()
-            val startDate = currentWeek.first().toString()
-            val endDate = currentWeek.last().toString()
-            fetchWeeklyRoutinesUseCase(startDate, endDate).fold(
-                onSuccess = { routineSchedule ->
-                    reduce { state.copy(isLoading = false, routines = routineSchedule.toUiModel()) }
-                },
-                onFailure = {
-                    Log.e("RoutineListViewModel", "루틴 가져오기 실패: ${it.message}")
-                    reduce { state.copy(isLoading = false) }
-                },
-            )
+            val weekDays = state.selectedDate.getCurrentWeekDays()
+            observeWeeklyRoutinesUseCase(weekDays.first().toString(), weekDays.last().toString())
+                .collect { schedule ->
+                    reduce { state.copy(isLoading = false, routines = schedule.toUiModel()) }
+                }
         }
     }
 
@@ -107,8 +87,7 @@ class RoutineListViewModel @Inject constructor(
             reduce { state.copy(isLoading = true) }
             deleteRoutineUseCase(selectedRoutine.routineId).fold(
                 onSuccess = {
-                    fetchRoutines()
-                    reduce { state.copy(deleteConfirmBottomSheetVisible = false) }
+                    reduce { state.copy(isLoading = false, deleteConfirmBottomSheetVisible = false) }
                     postSideEffect(RoutineListSideEffect.ShowToast("삭제가 완료되었습니다."))
                 },
                 onFailure = {
@@ -121,12 +100,11 @@ class RoutineListViewModel @Inject constructor(
 
     fun deleteRoutineForToday() {
         intent {
-            reduce { state.copy(isLoading = true) }
             val selectedRoutine = state.selectedRoutine ?: return@intent
+            reduce { state.copy(isLoading = true) }
             deleteRoutineForDayUseCase(selectedRoutine.routineId).fold(
                 onSuccess = {
-                    fetchRoutines()
-                    reduce { state.copy(deleteConfirmBottomSheetVisible = false) }
+                    reduce { state.copy(isLoading = false, deleteConfirmBottomSheetVisible = false) }
                     postSideEffect(RoutineListSideEffect.ShowToast("삭제가 완료되었습니다."))
                 },
                 onFailure = {
