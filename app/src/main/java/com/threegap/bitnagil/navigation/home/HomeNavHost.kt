@@ -60,11 +60,16 @@ fun HomeNavHost(
         activity?.setStatusBarContentColor(isLightContent = isHomeTab)
     }
 
+    val selectedBottomTab = navigator.currentHomeRoute ?: navigator.startDestination
+
     Box(modifier = modifier.fillMaxSize()) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             bottomBar = {
-                HomeBottomNavigationBar(navController = navigator.navController)
+                HomeBottomNavigationBar(
+                    selectedTab = selectedBottomTab,
+                    onTabSelected = navigator::navigateTo,
+                )
             },
             contentWindowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
             content = { innerPadding ->
@@ -73,7 +78,7 @@ fun HomeNavHost(
                     startDestination = navigator.startDestination,
                     modifier = modifier.padding(innerPadding),
                 ) {
-                    composable(HomeRoute.Home.route) {
+                    composable<HomeRoute.Home> {
                         HomeScreenContainer(
                             navigateToGuide = navigateToGuide,
                             navigateToRegisterRoutine = {
@@ -86,14 +91,14 @@ fun HomeNavHost(
                         )
                     }
 
-                    composable(HomeRoute.RecommendRoutine.route) {
+                    composable<HomeRoute.RecommendRoutine> {
                         RecommendRoutineScreenContainer(
                             navigateToEmotion = navigateToEmotion,
                             navigateToRegisterRoutine = navigateToRegisterRoutine,
                         )
                     }
 
-                    composable(HomeRoute.MyPage.route) {
+                    composable<HomeRoute.MyPage> {
                         MyPageScreenContainer(
                             navigateToSetting = navigateToSetting,
                             navigateToOnBoarding = navigateToOnBoarding,
