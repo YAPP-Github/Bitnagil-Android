@@ -40,7 +40,7 @@ class RoutineRepositoryImpl @Inject constructor(
     private val originalStatesByDate = mutableMapOf<String, MutableMap<String, RoutineCompletionInfo>>()
     private val syncTrigger = MutableSharedFlow<String>(
         extraBufferCapacity = 1,
-        onBufferOverflow = BufferOverflow.DROP_LATEST,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST,
     )
 
     init {
