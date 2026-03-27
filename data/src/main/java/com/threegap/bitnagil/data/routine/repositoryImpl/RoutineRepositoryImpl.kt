@@ -19,6 +19,8 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.filterNotNull
@@ -41,6 +43,8 @@ class RoutineRepositoryImpl @Inject constructor(
     private val mutex = Mutex()
     private val pendingChangesByDate = mutableMapOf<String, MutableMap<String, RoutineCompletionInfo>>()
     private val originalStatesByDate = mutableMapOf<String, MutableMap<String, RoutineCompletionInfo>>()
+    private val _syncError = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    override val syncError: SharedFlow<Unit> = _syncError.asSharedFlow()
     private val syncTrigger = MutableSharedFlow<Unit>(
         extraBufferCapacity = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST,
@@ -105,6 +109,7 @@ class RoutineRepositoryImpl @Inject constructor(
             val syncRequest = RoutineCompletionInfos(routineCompletionInfos = actualChanges.values.toList())
             routineRemoteDataSource.syncRoutineCompletion(syncRequest.toDto())
                 .onFailure {
+                    _syncError.emit(Unit)
                     val range = routineLocalDataSource.lastFetchRange ?: return@onFailure
                     fetchAndSave(range.first, range.second)
                 }

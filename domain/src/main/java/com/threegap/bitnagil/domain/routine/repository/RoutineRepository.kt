@@ -6,8 +6,10 @@ import com.threegap.bitnagil.domain.routine.model.RoutineEditInfo
 import com.threegap.bitnagil.domain.routine.model.RoutineRegisterInfo
 import com.threegap.bitnagil.domain.routine.model.RoutineSchedule
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharedFlow
 
 interface RoutineRepository {
+    val syncError: SharedFlow<Unit>
     fun observeWeeklyRoutines(startDate: String, endDate: String): Flow<RoutineSchedule>
     suspend fun applyRoutineToggle(dateKey: String, routineId: String, completionInfo: RoutineCompletionInfo)
     suspend fun getRoutine(routineId: String): Result<Routine>
