@@ -12,6 +12,7 @@ data class HomeState(
     val selectedDate: LocalDate,
     val currentWeeks: List<LocalDate>,
     val routineSchedule: RoutineScheduleUiModel,
+    val showSyncErrorDialog: Boolean,
 ) {
     val selectedDateRoutines: List<RoutineUiModel>
         get() = routineSchedule.dailyRoutines[selectedDate.toString()]?.routines ?: emptyList()
@@ -23,6 +24,7 @@ data class HomeState(
             selectedDate = LocalDate.now(),
             currentWeeks = LocalDate.now().getCurrentWeekDays(),
             routineSchedule = RoutineScheduleUiModel.INIT,
+            showSyncErrorDialog = false,
         )
     }
 }

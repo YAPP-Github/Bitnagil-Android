@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.threegap.bitnagil.domain.emotion.usecase.ObserveDailyEmotionUseCase
 import com.threegap.bitnagil.domain.routine.model.ToggleStrategy
 import com.threegap.bitnagil.domain.routine.usecase.ApplyRoutineToggleUseCase
+import com.threegap.bitnagil.domain.routine.usecase.ObserveRoutineSyncErrorUseCase
 import com.threegap.bitnagil.domain.routine.usecase.ObserveWeeklyRoutinesUseCase
 import com.threegap.bitnagil.domain.user.usecase.ObserveUserProfileUseCase
 import com.threegap.bitnagil.presentation.screen.home.contract.HomeSideEffect
@@ -31,6 +32,7 @@ class HomeViewModel @Inject constructor(
     private val observeUserProfileUseCase: ObserveUserProfileUseCase,
     private val observeDailyEmotionUseCase: ObserveDailyEmotionUseCase,
     private val applyRoutineToggleUseCase: ApplyRoutineToggleUseCase,
+    private val observeRoutineSyncErrorUseCase: ObserveRoutineSyncErrorUseCase,
 ) : ContainerHost<HomeState, HomeSideEffect>, ViewModel() {
 
     override val container: Container<HomeState, HomeSideEffect> =
@@ -41,6 +43,7 @@ class HomeViewModel @Inject constructor(
                 observeDailyEmotion()
                 observeUserProfile()
                 observeWeeklyRoutines()
+                observeRoutineSyncError()
             },
         )
 
@@ -84,6 +87,22 @@ class HomeViewModel @Inject constructor(
                     .catch { e -> Log.e("HomeViewModel", "루틴 가져오기 실패: ${e.message}") }
                     .collect { reduce { state.copy(routineSchedule = it.toUiModel()) } }
             }
+        }
+    }
+
+    private fun observeRoutineSyncError() {
+        intent {
+            repeatOnSubscription {
+                observeRoutineSyncErrorUseCase().collect {
+                    reduce { state.copy(showSyncErrorDialog = true) }
+                }
+            }
+        }
+    }
+
+    fun dismissSyncErrorDialog() {
+        intent {
+            reduce { state.copy(showSyncErrorDialog = false) }
         }
     }
 
