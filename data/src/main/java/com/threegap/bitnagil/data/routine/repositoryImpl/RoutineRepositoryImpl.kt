@@ -25,6 +25,8 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -36,9 +38,10 @@ class RoutineRepositoryImpl @Inject constructor(
 ) : RoutineRepository {
 
     private val repositoryScope = CoroutineScope(SupervisorJob() + dispatcher)
+    private val mutex = Mutex()
     private val pendingChangesByDate = mutableMapOf<String, MutableMap<String, RoutineCompletionInfo>>()
     private val originalStatesByDate = mutableMapOf<String, MutableMap<String, RoutineCompletionInfo>>()
-    private val syncTrigger = MutableSharedFlow<String>(
+    private val syncTrigger = MutableSharedFlow<Unit>(
         extraBufferCapacity = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST,
     )
@@ -48,7 +51,7 @@ class RoutineRepositoryImpl @Inject constructor(
         repositoryScope.launch {
             syncTrigger
                 .debounce(500L)
-                .collect { dateKey -> flushPendingChanges(dateKey) }
+                .collect { flushAllPendingChanges() }
         }
     }
 
@@ -71,28 +74,41 @@ class RoutineRepositoryImpl @Inject constructor(
     }
 
     override suspend fun applyRoutineToggle(dateKey: String, routineId: String, completionInfo: RoutineCompletionInfo) {
-        if (originalStatesByDate[dateKey]?.containsKey(routineId) != true) {
-            routineLocalDataSource.getCompletionInfo(dateKey, routineId)?.let {
-                originalStatesByDate.getOrPut(dateKey) { mutableMapOf() }[routineId] = it
+        mutex.withLock {
+            if (originalStatesByDate[dateKey]?.containsKey(routineId) != true) {
+                routineLocalDataSource.getCompletionInfo(dateKey, routineId)?.let {
+                    originalStatesByDate.getOrPut(dateKey) { mutableMapOf() }[routineId] = it
+                }
             }
+            pendingChangesByDate.getOrPut(dateKey) { mutableMapOf() }[routineId] = completionInfo
         }
         routineLocalDataSource.applyOptimisticToggle(dateKey, routineId, completionInfo)
-        pendingChangesByDate.getOrPut(dateKey) { mutableMapOf() }[routineId] = completionInfo
-        syncTrigger.emit(dateKey)
+        syncTrigger.emit(Unit)
     }
 
-    private suspend fun flushPendingChanges(dateKey: String) {
-        val snapshot = pendingChangesByDate.remove(dateKey)
-        val originals = originalStatesByDate.remove(dateKey)
-        val actualChanges = snapshot?.filter { (routineId, pending) -> originals?.get(routineId) != pending }
-        if (actualChanges.isNullOrEmpty()) return
+    private suspend fun flushAllPendingChanges() {
+        val snapshot: Map<String, Map<String, RoutineCompletionInfo>>
+        val originals: Map<String, Map<String, RoutineCompletionInfo>>
+        mutex.withLock {
+            snapshot = pendingChangesByDate.mapValues { it.value.toMap() }
+            originals = originalStatesByDate.mapValues { it.value.toMap() }
+            pendingChangesByDate.clear()
+            originalStatesByDate.clear()
+        }
 
-        val syncRequest = RoutineCompletionInfos(routineCompletionInfos = actualChanges.values.toList())
-        routineRemoteDataSource.syncRoutineCompletion(syncRequest.toDto())
-            .onFailure {
-                val range = routineLocalDataSource.lastFetchRange ?: return
-                fetchAndSave(range.first, range.second)
+        for ((dateKey, pendingForDate) in snapshot) {
+            val actualChanges = pendingForDate.filter { (routineId, pending) ->
+                originals[dateKey]?.get(routineId) != pending
             }
+            if (actualChanges.isEmpty()) continue
+
+            val syncRequest = RoutineCompletionInfos(routineCompletionInfos = actualChanges.values.toList())
+            routineRemoteDataSource.syncRoutineCompletion(syncRequest.toDto())
+                .onFailure {
+                    val range = routineLocalDataSource.lastFetchRange ?: return@onFailure
+                    fetchAndSave(range.first, range.second)
+                }
+        }
     }
 
     private suspend fun refreshCache() {

@@ -115,6 +115,20 @@ class RoutineRepositoryImplTest {
     }
 
     @Test
+    fun `서로 다른 날짜에 토글 시 debounce 후 두 날짜 모두 sync되어야 한다`() = runTest {
+        repository = createRepository(testScheduler)
+        runCurrent()
+        val (dateKey1, routineId1) = setupCacheWithRoutineOnDate("2024-01-01", "routine1", isCompleted = false)
+        val (dateKey2, routineId2) = setupCacheWithRoutineOnDate("2024-01-02", "routine2", isCompleted = false)
+
+        repository.applyRoutineToggle(dateKey1, routineId1, RoutineCompletionInfo(routineId1, routineCompleteYn = true, subRoutineCompleteYn = emptyList()))
+        repository.applyRoutineToggle(dateKey2, routineId2, RoutineCompletionInfo(routineId2, routineCompleteYn = true, subRoutineCompleteYn = emptyList()))
+
+        advanceTimeBy(501L)
+        assertEquals(2, remoteDataSource.syncCount.get())
+    }
+
+    @Test
     fun `A→B→A 토글 시 최종 상태가 원래와 동일하면 API를 호출하지 않아야 한다`() = runTest {
         repository = createRepository(testScheduler)
         runCurrent() // repositoryScope의 syncTrigger collector 시작
@@ -175,33 +189,33 @@ class RoutineRepositoryImplTest {
 
     // --- Helpers ---
 
-    private fun setupCacheWithRoutine(isCompleted: Boolean): Pair<String, String> {
-        val dateKey = "2024-01-01"
-        val routineId = "routine1"
-        val schedule = RoutineSchedule(
-            dailyRoutines = mapOf(
-                dateKey to DailyRoutines(
-                    routines = listOf(
-                        Routine(
-                            id = routineId,
-                            name = "테스트 루틴",
-                            repeatDays = listOf(DayOfWeek.MONDAY),
-                            executionTime = "08:00",
-                            startDate = dateKey,
-                            endDate = dateKey,
-                            routineDate = dateKey,
-                            isCompleted = isCompleted,
-                            isDeleted = false,
-                            subRoutineNames = emptyList(),
-                            subRoutineCompletionStates = emptyList(),
-                            recommendedRoutineType = null,
-                        ),
+    private fun setupCacheWithRoutine(isCompleted: Boolean): Pair<String, String> =
+        setupCacheWithRoutineOnDate("2024-01-01", "routine1", isCompleted)
+
+    private fun setupCacheWithRoutineOnDate(dateKey: String, routineId: String, isCompleted: Boolean): Pair<String, String> {
+        val existing = localDataSource.routineSchedule.value?.dailyRoutines ?: emptyMap()
+        val newDailyRoutines = existing + mapOf(
+            dateKey to DailyRoutines(
+                routines = listOf(
+                    Routine(
+                        id = routineId,
+                        name = "테스트 루틴",
+                        repeatDays = listOf(DayOfWeek.MONDAY),
+                        executionTime = "08:00",
+                        startDate = dateKey,
+                        endDate = dateKey,
+                        routineDate = dateKey,
+                        isCompleted = isCompleted,
+                        isDeleted = false,
+                        subRoutineNames = emptyList(),
+                        subRoutineCompletionStates = emptyList(),
+                        recommendedRoutineType = null,
                     ),
-                    isAllCompleted = isCompleted,
                 ),
+                isAllCompleted = isCompleted,
             ),
         )
-        localDataSource.saveSchedule(schedule, dateKey, dateKey)
+        localDataSource.saveSchedule(RoutineSchedule(newDailyRoutines), dateKey, dateKey)
         return dateKey to routineId
     }
 
