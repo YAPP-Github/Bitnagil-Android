@@ -14,6 +14,7 @@ import com.threegap.bitnagil.domain.routine.model.RoutineSchedule
 import com.threegap.bitnagil.domain.routine.repository.RoutineRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
@@ -125,7 +126,7 @@ class RoutineRepositoryImplTest {
         repository.applyRoutineToggle(dateKey2, routineId2, RoutineCompletionInfo(routineId2, routineCompleteYn = true, subRoutineCompleteYn = emptyList()))
 
         advanceTimeBy(501L)
-        assertEquals(2, remoteDataSource.syncCount.get())
+        assertEquals(1, remoteDataSource.syncCount.get())
     }
 
     @Test
@@ -146,7 +147,7 @@ class RoutineRepositoryImplTest {
     @Test
     fun `sync 실패 시 서버 데이터로 로컬 캐시가 rollback되어야 한다`() = runTest {
         repository = createRepository(testScheduler)
-        runCurrent() // repositoryScope의 syncTrigger collector 시작
+        runCurrent()
         remoteDataSource.scheduleResponse = Result.success(RoutineScheduleResponse(emptyMap()))
         remoteDataSource.syncResult = Result.failure(Exception("네트워크 오류"))
         val (dateKey, routineId) = setupCacheWithRoutine(isCompleted = false)
@@ -156,10 +157,11 @@ class RoutineRepositoryImplTest {
             routineId = routineId,
             completionInfo = RoutineCompletionInfo(routineId, routineCompleteYn = true, subRoutineCompleteYn = emptyList()),
         )
-        advanceTimeBy(501L)
 
-        // sync 실패 후 fetchAndSave 호출 → 서버 값(emptyMap)으로 덮어씀
-        assertEquals(1, remoteDataSource.fetchCount.get())
+        advanceTimeBy(1200L) // debounce(500) + retry delay(200 + 400) + 여유
+
+        assertEquals(3, remoteDataSource.syncCount.get()) // 1회 시도 + 2회 재시도
+        assertEquals(1, remoteDataSource.fetchCount.get()) // 롤백 fetch 1회
         assertEquals(RoutineSchedule(emptyMap()), localDataSource.routineSchedule.value)
     }
 
@@ -185,6 +187,33 @@ class RoutineRepositoryImplTest {
         repository.deleteRoutine("routine1")
 
         assertEquals(0, remoteDataSource.fetchCount.get())
+    }
+
+    @Test
+    fun `sync 1차 실패 후 재시도 성공 시 syncError가 emit되지 않아야 한다`() = runTest {
+        repository = createRepository(testScheduler)
+        runCurrent()
+        remoteDataSource.syncFailCount = 1 // 1번만 실패, 이후 성공
+        val (dateKey, routineId) = setupCacheWithRoutine(isCompleted = false)
+
+        var syncErrorEmitted = false
+        val job = launch {
+            repository.syncError.collect { syncErrorEmitted = true }
+        }
+
+        repository.applyRoutineToggle(
+            dateKey = dateKey,
+            routineId = routineId,
+            completionInfo = RoutineCompletionInfo(routineId, routineCompleteYn = true, subRoutineCompleteYn = emptyList()),
+        )
+
+        advanceTimeBy(1200L) // debounce + 재시도 여유 시간
+
+        assertEquals(2, remoteDataSource.syncCount.get()) // 1차 실패 + 2차 성공
+        assertEquals(false, syncErrorEmitted)             // 에러 다이얼로그 없음
+        assertEquals(0, remoteDataSource.fetchCount.get()) // 롤백 fetch 없음
+
+        job.cancel()
     }
 
     // --- Helpers ---
@@ -225,6 +254,7 @@ class RoutineRepositoryImplTest {
         var scheduleResponse: Result<RoutineScheduleResponse> = Result.success(RoutineScheduleResponse(emptyMap()))
         var syncResult: Result<Unit> = Result.success(Unit)
         var deleteResult: Result<Unit> = Result.success(Unit)
+        var syncFailCount: Int = 0
         val fetchCount = AtomicInteger(0)
         val syncCount = AtomicInteger(0)
 
@@ -234,8 +264,12 @@ class RoutineRepositoryImplTest {
         }
 
         override suspend fun syncRoutineCompletion(routineCompletionRequest: RoutineCompletionRequest): Result<Unit> {
-            syncCount.incrementAndGet()
-            return syncResult
+            val attempt = syncCount.incrementAndGet()
+            return if (attempt <= syncFailCount) {
+                Result.failure(Exception("네트워크 오류"))
+            } else {
+                syncResult
+            }
         }
 
         override suspend fun getRoutine(routineId: String): Result<com.threegap.bitnagil.data.routine.model.response.RoutineResponse> =
