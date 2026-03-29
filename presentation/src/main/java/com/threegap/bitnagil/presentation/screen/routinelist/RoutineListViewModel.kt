@@ -26,7 +26,15 @@ class RoutineListViewModel @Inject constructor(
     private val deleteRoutineForDayUseCase: DeleteRoutineForDayUseCase,
 ) : ContainerHost<RoutineListState, RoutineListSideEffect>, ViewModel() {
 
-    override val container: Container<RoutineListState, RoutineListSideEffect> = container(initialState = RoutineListState.INIT)
+    override val container: Container<RoutineListState, RoutineListSideEffect> =
+        container(
+            initialState = RoutineListState.INIT,
+            buildSettings = { repeatOnSubscribedStopTimeout = 5_000L },
+            onCreate = {
+                updateDate(selectedDate)
+                observeWeeklyRoutines()
+            }
+        )
 
     private val selectedDate = savedStateHandle.get<String>("selectedDate")
         ?.takeIf { it.isNotBlank() }
@@ -34,11 +42,6 @@ class RoutineListViewModel @Inject constructor(
             runCatching { LocalDate.parse(dateString) }.getOrNull()
         }
         ?: LocalDate.now()
-
-    init {
-        updateDate(selectedDate)
-        observeWeeklyRoutines()
-    }
 
     fun updateDate(selectedDate: LocalDate) {
         intent {
@@ -72,12 +75,14 @@ class RoutineListViewModel @Inject constructor(
 
     private fun observeWeeklyRoutines() {
         intent {
-            reduce { state.copy(isLoading = true) }
-            val weekDays = state.selectedDate.getCurrentWeekDays()
-            observeWeeklyRoutinesUseCase(weekDays.first().toString(), weekDays.last().toString())
-                .collect { schedule ->
-                    reduce { state.copy(isLoading = false, routines = schedule.toUiModel()) }
-                }
+            repeatOnSubscription {
+                reduce { state.copy(isLoading = true) }
+                val weekDays = state.selectedDate.getCurrentWeekDays()
+                observeWeeklyRoutinesUseCase(weekDays.first().toString(), weekDays.last().toString())
+                    .collect { schedule ->
+                        reduce { state.copy(isLoading = false, routines = schedule.toUiModel()) }
+                    }
+            }
         }
     }
 
