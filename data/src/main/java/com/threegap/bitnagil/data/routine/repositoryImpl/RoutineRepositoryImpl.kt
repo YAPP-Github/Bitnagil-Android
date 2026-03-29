@@ -100,20 +100,21 @@ class RoutineRepositoryImpl @Inject constructor(
             originalStatesByDate.clear()
         }
 
-        for ((dateKey, pendingForDate) in snapshot) {
-            val actualChanges = pendingForDate.filter { (routineId, pending) ->
+        val actualChanges = snapshot.flatMap { (dateKey, pendingForDate) ->
+            pendingForDate.filter { (routineId, pending) ->
                 originals[dateKey]?.get(routineId) != pending
-            }
-            if (actualChanges.isEmpty()) continue
-
-            val syncRequest = RoutineCompletionInfos(routineCompletionInfos = actualChanges.values.toList())
-            routineRemoteDataSource.syncRoutineCompletion(syncRequest.toDto())
-                .onFailure {
-                    _syncError.emit(Unit)
-                    val range = routineLocalDataSource.lastFetchRange ?: return@onFailure
-                    fetchAndSave(range.first, range.second)
-                }
+            }.values
         }
+
+        if (actualChanges.isEmpty()) return
+
+        val syncRequest = RoutineCompletionInfos(routineCompletionInfos = actualChanges)
+        routineRemoteDataSource.syncRoutineCompletion(syncRequest.toDto())
+            .onFailure {
+                _syncError.emit(Unit)
+                val range = routineLocalDataSource.lastFetchRange ?: return@onFailure
+                fetchAndSave(range.first, range.second)
+            }
     }
 
     private suspend fun refreshCache() {
