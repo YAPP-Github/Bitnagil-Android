@@ -18,6 +18,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -109,15 +110,38 @@ class RoutineRepositoryImpl @Inject constructor(
         if (actualChanges.isEmpty()) return
 
         val syncRequest = RoutineCompletionInfos(routineCompletionInfos = actualChanges)
-        routineRemoteDataSource.syncRoutineCompletion(syncRequest.toDto())
-            .onFailure { error ->
-                _syncError.emit(Unit)
-                val range = routineLocalDataSource.lastFetchRange ?: return@onFailure
-                fetchAndSave(range.first, range.second)
-                    .onFailure { rollbackError ->
-                        Log.e("RoutineRepository", "롤백 실패: ${rollbackError.message}")
-                    }
-            }
+        val result = syncWithRetry(syncRequest)
+
+        result.onFailure {
+            _syncError.emit(Unit)
+            val range = routineLocalDataSource.lastFetchRange ?: return
+            fetchAndSave(range.first, range.second)
+                .onFailure { rollbackError ->
+                    Log.e("RoutineRepository", "롤백 실패: ${rollbackError.message}")
+                }
+        }
+    }
+
+    private suspend fun syncWithRetry(
+        syncRequest: RoutineCompletionInfos,
+        maxRetries: Int = 2,
+        initialDelayMillis: Long = 200L,
+    ): Result<Unit> {
+        var delayMillis = initialDelayMillis
+
+        repeat(maxRetries + 1) { attempt ->
+            val result = routineRemoteDataSource.syncRoutineCompletion(syncRequest.toDto())
+
+            if (result.isSuccess) return result
+
+            val isLastAttempt = attempt == maxRetries
+            if (isLastAttempt) return result
+
+            delay(delayMillis)
+            delayMillis *= 2
+        }
+
+        return Result.failure(IllegalStateException("Unreachable"))
     }
 
     private suspend fun refreshCache() {
