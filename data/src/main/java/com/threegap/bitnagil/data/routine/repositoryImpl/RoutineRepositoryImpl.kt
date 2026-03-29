@@ -1,5 +1,6 @@
 package com.threegap.bitnagil.data.routine.repositoryImpl
 
+import android.util.Log
 import com.threegap.bitnagil.data.di.IoDispatcher
 import com.threegap.bitnagil.data.routine.datasource.RoutineLocalDataSource
 import com.threegap.bitnagil.data.routine.datasource.RoutineRemoteDataSource
@@ -62,20 +63,19 @@ class RoutineRepositoryImpl @Inject constructor(
     override fun observeWeeklyRoutines(startDate: String, endDate: String): Flow<RoutineSchedule> = flow {
         if (routineLocalDataSource.lastFetchRange != (startDate to endDate)) {
             routineLocalDataSource.clearCache()
-            fetchAndSave(startDate, endDate)
+            fetchAndSave(startDate, endDate).getOrThrow()
         }
         emitAll(
             routineLocalDataSource.routineSchedule
-                .onEach { if (it == null) fetchAndSave(startDate, endDate) }
+                .onEach { if (it == null) fetchAndSave(startDate, endDate).getOrThrow() }
                 .filterNotNull(),
         )
     }
 
-    private suspend fun fetchAndSave(startDate: String, endDate: String) {
+    private suspend fun fetchAndSave(startDate: String, endDate: String): Result<Unit> =
         routineRemoteDataSource.fetchWeeklyRoutines(startDate, endDate)
             .onSuccess { routineLocalDataSource.saveSchedule(it.toDomain(), startDate, endDate) }
-            .onFailure { throw it }
-    }
+            .map { }
 
     override suspend fun applyRoutineToggle(dateKey: String, routineId: String, completionInfo: RoutineCompletionInfo) {
         mutex.withLock {
@@ -110,10 +110,13 @@ class RoutineRepositoryImpl @Inject constructor(
 
         val syncRequest = RoutineCompletionInfos(routineCompletionInfos = actualChanges)
         routineRemoteDataSource.syncRoutineCompletion(syncRequest.toDto())
-            .onFailure {
+            .onFailure { error ->
                 _syncError.emit(Unit)
                 val range = routineLocalDataSource.lastFetchRange ?: return@onFailure
                 fetchAndSave(range.first, range.second)
+                    .onFailure { rollbackError ->
+                        Log.e("RoutineRepository", "롤백 실패: ${rollbackError.message}")
+                    }
             }
     }
 
