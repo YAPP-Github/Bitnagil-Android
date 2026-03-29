@@ -27,8 +27,7 @@ class HomeNavigator(
         @Composable get() = currentHomeRoute == HomeRoute.Home
 
     @Composable
-    fun shouldShowFloatingAction(): Boolean =
-        currentHomeRoute == HomeRoute.Home || currentHomeRoute == HomeRoute.RecommendRoutine
+    fun shouldShowFloatingAction(): Boolean = currentHomeRoute?.showFloatingButton == true
 
     fun navigateTo(route: HomeRoute) {
         navController.navigate(route) {

@@ -5,14 +5,22 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 sealed interface HomeRoute {
-    @Serializable
-    data object Home : HomeRoute
+    val showFloatingButton: Boolean
 
     @Serializable
-    data object RecommendRoutine : HomeRoute
+    data object Home : HomeRoute {
+        override val showFloatingButton: Boolean = true
+    }
 
     @Serializable
-    data object MyPage : HomeRoute
+    data object RecommendRoutine : HomeRoute {
+        override val showFloatingButton: Boolean = true
+    }
+
+    @Serializable
+    data object MyPage : HomeRoute {
+        override val showFloatingButton: Boolean = false
+    }
 }
 
 data class HomeTab(
