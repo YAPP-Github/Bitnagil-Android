@@ -14,6 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.Image
 import coil3.compose.AsyncImage
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
@@ -53,15 +54,24 @@ fun CollapsibleHeader(
             )
         }
 
-        AsyncImage(
-            model = dailyEmotion.imageUrl,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .size(baseImageWidth, baseImageHeight),
-            contentDescription = null,
-            placeholder = painterResource(R.drawable.default_emotion),
-            error = painterResource(R.drawable.default_emotion),
-        )
+        if (dailyEmotion.imageUrl.isEmpty()) {
+            Image(
+                painter = painterResource(R.drawable.default_emotion),
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .size(baseImageWidth, baseImageHeight),
+                contentDescription = null,
+            )
+        } else {
+            AsyncImage(
+                model = dailyEmotion.imageUrl,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .size(baseImageWidth, baseImageHeight),
+                contentDescription = null,
+                error = painterResource(R.drawable.default_emotion),
+            )
+        }
     }
 }
 
