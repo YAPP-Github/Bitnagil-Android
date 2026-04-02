@@ -7,7 +7,6 @@ import coil3.SingletonImageLoader
 import coil3.disk.DiskCache
 import coil3.memory.MemoryCache
 import coil3.network.okhttp.OkHttpNetworkFetcherFactory
-import coil3.request.CachePolicy
 import coil3.request.crossfade
 import coil3.util.DebugLogger
 import com.kakao.sdk.common.KakaoSdk
@@ -42,8 +41,6 @@ class BitnagilApplication : Application(), SingletonImageLoader.Factory {
                     .maxSizeBytes(50L * 1024 * 1024)
                     .build()
             }
-            .memoryCachePolicy(CachePolicy.ENABLED)
-            .diskCachePolicy(CachePolicy.ENABLED)
             .crossfade(true)
             .logger(if (BuildConfig.DEBUG) DebugLogger() else null)
             .build()
