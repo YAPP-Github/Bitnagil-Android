@@ -72,7 +72,8 @@ android {
                 ?: System.getenv("BITNAGIL_PROD_URL")
                 ?: throw GradleException("bitnagil.prod.url 값이 없습니다.")
             buildConfigField("String", "BASE_URL", "\"$prodUrl\"")
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
