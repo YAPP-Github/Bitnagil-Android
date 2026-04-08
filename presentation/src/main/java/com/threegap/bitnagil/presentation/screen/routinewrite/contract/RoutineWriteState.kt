@@ -4,6 +4,7 @@ import android.os.Parcelable
 import com.threegap.bitnagil.domain.recommendroutine.model.RecommendCategory
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.Date
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.Day
+import com.threegap.bitnagil.presentation.screen.routinewrite.model.ExpandableSection
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.RepeatType
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.RoutineWriteType
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.SelectableDay
@@ -26,10 +27,7 @@ data class RoutineWriteState(
     val showStartDatePickerBottomSheet: Boolean,
     val showEndDatePickerBottomSheet: Boolean,
     val routineWriteType: RoutineWriteType,
-    val subRoutineUiExpanded: Boolean,
-    val repeatDaysUiExpanded: Boolean,
-    val periodUiExpanded: Boolean,
-    val startTimeUiExpanded: Boolean,
+    val expandedSection: ExpandableSection,
     val recommendedRoutineType: RecommendCategory?,
 ) : Parcelable {
     companion object {
@@ -77,10 +75,7 @@ data class RoutineWriteState(
             showEndDatePickerBottomSheet = false,
             showTimePickerBottomSheet = false,
             routineWriteType = RoutineWriteType.Add,
-            subRoutineUiExpanded = false,
-            repeatDaysUiExpanded = false,
-            periodUiExpanded = false,
-            startTimeUiExpanded = false,
+            expandedSection = ExpandableSection.NONE,
             startDate = Date.now(),
             endDate = Date.now(),
             recommendedRoutineType = null,

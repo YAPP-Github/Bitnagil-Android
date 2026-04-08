@@ -41,6 +41,7 @@ import com.threegap.bitnagil.presentation.screen.routinewrite.component.template
 import com.threegap.bitnagil.presentation.screen.routinewrite.contract.RoutineWriteSideEffect
 import com.threegap.bitnagil.presentation.screen.routinewrite.contract.RoutineWriteState
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.Day
+import com.threegap.bitnagil.presentation.screen.routinewrite.model.ExpandableSection
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.RepeatType
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.RoutineWriteType
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.Time
@@ -184,7 +185,7 @@ private fun RoutineWriteScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 ExpandableContent(
-                    expand = state.subRoutineUiExpanded,
+                    expand = state.expandedSection == ExpandableSection.SUB_ROUTINE,
                     required = false,
                     iconResourceId = R.drawable.img_subroutines,
                     title = "세부루틴",
@@ -230,7 +231,7 @@ private fun RoutineWriteScreen(
                 }
 
                 ExpandableContent(
-                    expand = state.repeatDaysUiExpanded,
+                    expand = state.expandedSection == ExpandableSection.REPEAT_DAYS,
                     required = true,
                     iconResourceId = R.drawable.img_repeat_days,
                     title = "반복 요일",
@@ -286,7 +287,7 @@ private fun RoutineWriteScreen(
                 }
 
                 ExpandableContent(
-                    expand = state.periodUiExpanded,
+                    expand = state.expandedSection == ExpandableSection.PERIOD,
                     required = true,
                     iconResourceId = R.drawable.img_routine_period,
                     title = "목표 기간",
@@ -315,7 +316,7 @@ private fun RoutineWriteScreen(
                 }
 
                 ExpandableContent(
-                    expand = state.startTimeUiExpanded,
+                    expand = state.expandedSection == ExpandableSection.START_TIME,
                     required = true,
                     iconResourceId = R.drawable.img_start_time,
                     title = "시간",
@@ -371,7 +372,7 @@ private fun getSubRoutinePlaceHolder(index: Int): String {
 fun RoutineWriteScreenPreview() {
     BitnagilTheme {
         RoutineWriteScreen(
-            state = RoutineWriteState.INIT.copy(periodUiExpanded = true, startTimeUiExpanded = true),
+            state = RoutineWriteState.INIT.copy(expandedSection = ExpandableSection.PERIOD),
             setRoutineName = {},
             setSubRoutineName = { _, _ -> },
             selectRepeatTime = {},
