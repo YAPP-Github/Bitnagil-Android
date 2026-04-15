@@ -20,19 +20,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIcon
 
 @Composable
 fun HomeBottomNavigationBar(
-    navController: NavController,
+    selectedTab: HomeRoute,
+    onTabSelected: (HomeRoute) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
-
-    Column {
+    Column(modifier = modifier) {
         HorizontalDivider(
             modifier = Modifier.fillMaxWidth(),
             thickness = 1.dp,
@@ -47,19 +44,13 @@ fun HomeBottomNavigationBar(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            HomeRoute.entries.map { homeRoute ->
+            homeTabList.forEach { homeTab ->
                 HomeBottomNavigationItem(
                     modifier = Modifier.weight(1f),
-                    icon = homeRoute.icon,
-                    title = homeRoute.title,
-                    onClick = {
-                        if (currentRoute != homeRoute.route) {
-                            navController.navigate(homeRoute.route) {
-                                popUpTo(0) { inclusive = true }
-                            }
-                        }
-                    },
-                    selected = currentRoute == homeRoute.route,
+                    icon = homeTab.icon,
+                    title = homeTab.title,
+                    selected = selectedTab == homeTab.route,
+                    onClick = { onTabSelected(homeTab.route) },
                 )
             }
         }
@@ -71,8 +62,8 @@ private fun HomeBottomNavigationItem(
     modifier: Modifier = Modifier,
     icon: Int,
     title: String,
-    onClick: () -> Unit,
     selected: Boolean,
+    onClick: () -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
@@ -111,9 +102,8 @@ private fun HomeBottomNavigationItem(
 @Composable
 @Preview
 private fun HomeBottomNavigationBarPreview() {
-    val navigator = rememberHomeNavigator()
-
     HomeBottomNavigationBar(
-        navController = navigator.navController,
+        selectedTab = HomeRoute.Home,
+        onTabSelected = {},
     )
 }

@@ -1,11 +1,11 @@
 package com.threegap.bitnagil.data.report.datasource
 
-import com.threegap.bitnagil.data.report.model.request.ReportRequestDto
-import com.threegap.bitnagil.data.report.model.response.ReportDetailDto
-import com.threegap.bitnagil.data.report.model.response.ReportHistoriesPerDateDto
+import com.threegap.bitnagil.data.report.model.request.ReportRequest
+import com.threegap.bitnagil.data.report.model.response.ReportDetailResponse
+import com.threegap.bitnagil.data.report.model.response.ReportHistoriesPerDateResponse
 
 interface ReportDataSource {
-    suspend fun submitReport(reportRequestDto: ReportRequestDto): Result<Long>
-    suspend fun getReports(): Result<ReportHistoriesPerDateDto>
-    suspend fun getReport(reportId: String): Result<ReportDetailDto>
+    suspend fun submitReport(reportRequest: ReportRequest): Result<Long>
+    suspend fun getReports(): Result<ReportHistoriesPerDateResponse>
+    suspend fun getReport(reportId: String): Result<ReportDetailResponse>
 }

@@ -1,5 +1,8 @@
 package com.threegap.bitnagil.domain.auth.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 enum class UserRole {
     USER,
     GUEST,
@@ -7,17 +10,4 @@ enum class UserRole {
     WITHDRAWN,
     UNKNOWN,
     ;
-
-    fun isGuest() = this == GUEST
-
-    companion object {
-        fun fromString(value: String): UserRole =
-            when (value) {
-                "USER" -> USER
-                "GUEST" -> GUEST
-                "ONBOARDING" -> ONBOARDING
-                "WITHDRAWN" -> WITHDRAWN
-                else -> UNKNOWN
-            }
-    }
 }

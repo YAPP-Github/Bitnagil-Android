@@ -3,10 +3,6 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
-android {
-    namespace = "com.threegap.bitnagil.network"
-}
-
 dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(platform(libs.retrofit.bom))

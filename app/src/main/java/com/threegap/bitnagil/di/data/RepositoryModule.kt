@@ -10,7 +10,6 @@ import com.threegap.bitnagil.data.report.repositoryImpl.ReportRepositoryImpl
 import com.threegap.bitnagil.data.routine.repositoryImpl.RoutineRepositoryImpl
 import com.threegap.bitnagil.data.user.repositoryImpl.UserRepositoryImpl
 import com.threegap.bitnagil.data.version.repositoryImpl.VersionRepositoryImpl
-import com.threegap.bitnagil.data.writeroutine.repositoryImpl.WriteRoutineRepositoryImpl
 import com.threegap.bitnagil.domain.address.repository.AddressRepository
 import com.threegap.bitnagil.domain.auth.repository.AuthRepository
 import com.threegap.bitnagil.domain.emotion.repository.EmotionRepository
@@ -21,7 +20,6 @@ import com.threegap.bitnagil.domain.report.repository.ReportRepository
 import com.threegap.bitnagil.domain.routine.repository.RoutineRepository
 import com.threegap.bitnagil.domain.user.repository.UserRepository
 import com.threegap.bitnagil.domain.version.repository.VersionRepository
-import com.threegap.bitnagil.domain.writeroutine.repository.WriteRoutineRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -47,10 +45,6 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindEmotionRepository(emotionRepositoryImpl: EmotionRepositoryImpl): EmotionRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindWriteRoutineRepository(writeRoutineRepositoryImpl: WriteRoutineRepositoryImpl): WriteRoutineRepository
 
     @Binds
     @Singleton

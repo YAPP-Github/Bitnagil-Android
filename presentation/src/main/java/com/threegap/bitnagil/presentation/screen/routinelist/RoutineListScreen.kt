@@ -1,0 +1,165 @@
+package com.threegap.bitnagil.presentation.screen.routinelist
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.component.block.BitnagilTopBar
+import com.threegap.bitnagil.presentation.screen.routinelist.component.template.DeleteConfirmBottomSheet
+import com.threegap.bitnagil.presentation.screen.routinelist.component.template.EditConfirmBottomSheet
+import com.threegap.bitnagil.presentation.screen.routinelist.component.template.EmptyRoutineListView
+import com.threegap.bitnagil.presentation.screen.routinelist.component.template.RoutineDetailsCard
+import com.threegap.bitnagil.presentation.screen.routinelist.component.template.WeeklyDatePicker
+import com.threegap.bitnagil.presentation.screen.routinelist.contract.RoutineListSideEffect
+import com.threegap.bitnagil.presentation.screen.routinelist.contract.RoutineListState
+import com.threegap.bitnagil.presentation.screen.routinelist.model.RoutineListStatePreviewProvider
+import com.threegap.bitnagil.presentation.screen.routinelist.model.RoutineUiModel
+import com.threegap.bitnagil.presentation.util.toast.GlobalBitnagilToast
+import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
+import java.time.LocalDate
+
+@Composable
+fun RoutineListScreenContainer(
+    viewModel: RoutineListViewModel = hiltViewModel(),
+    navigateToBack: () -> Unit,
+    navigateToEditRoutine: (String, Boolean) -> Unit,
+    navigateToAddRoutine: () -> Unit,
+) {
+    val uiState by viewModel.collectAsState()
+
+    viewModel.collectSideEffect { sideEffect ->
+        when (sideEffect) {
+            is RoutineListSideEffect.ShowToast -> GlobalBitnagilToast.showCheck(sideEffect.message)
+            is RoutineListSideEffect.NavigateToBack -> navigateToBack()
+            is RoutineListSideEffect.NavigateToAddRoutine -> navigateToAddRoutine()
+            is RoutineListSideEffect.NavigateToEditRoutine -> {
+                navigateToEditRoutine(sideEffect.routineId, sideEffect.updateRoutineFromNowDate)
+            }
+        }
+    }
+
+    if (uiState.deleteConfirmBottomSheetVisible) {
+        uiState.selectedRoutine?.let { routine ->
+            DeleteConfirmBottomSheet(
+                isRepeatRoutine = routine.repeatDay.isNotEmpty(),
+                onDismissRequest = viewModel::hideDeleteConfirmBottomSheet,
+                onDeleteToday = viewModel::deleteRoutineForToday,
+                onDeleteAll = viewModel::deleteRoutineCompletely,
+                onCancel = viewModel::hideDeleteConfirmBottomSheet,
+            )
+        }
+    }
+
+    if (uiState.editConfirmBottomSheetVisible) {
+        uiState.selectedRoutine?.let {
+            EditConfirmBottomSheet(
+                onDismissRequest = viewModel::hideEditConfirmBottomSheet,
+                onApplyToday = { viewModel.navigateToEditRoutine(true) },
+                onApplyTomorrow = { viewModel.navigateToEditRoutine(false) },
+            )
+        }
+    }
+
+    RoutineListScreen(
+        uiState = uiState,
+        onDateSelect = viewModel::updateDate,
+        onShowDeleteConfirmBottomSheet = viewModel::showDeleteConfirmBottomSheet,
+        onShowEditConfirmBottomSheet = viewModel::showEditConfirmBottomSheet,
+        onRegisterRoutineClick = viewModel::navigateToAddRoutine,
+        onBackClick = viewModel::navigateToBack,
+    )
+}
+
+@Composable
+private fun RoutineListScreen(
+    uiState: RoutineListState,
+    onDateSelect: (LocalDate) -> Unit,
+    onShowDeleteConfirmBottomSheet: (RoutineUiModel) -> Unit,
+    onShowEditConfirmBottomSheet: (RoutineUiModel) -> Unit,
+    onRegisterRoutineClick: () -> Unit,
+    onBackClick: () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(BitnagilTheme.colors.coolGray99)
+            .statusBarsPadding(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        BitnagilTopBar(
+            title = "루틴리스트",
+            showBackButton = true,
+            onBackClick = onBackClick,
+        )
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        WeeklyDatePicker(
+            selectedDate = uiState.selectedDate,
+            weeklyDates = uiState.currentWeekDates,
+            onDateSelect = onDateSelect,
+            modifier = Modifier
+                .padding(vertical = 10.dp, horizontal = 16.dp),
+        )
+
+        if (uiState.selectedDateRoutines.isEmpty()) {
+            EmptyRoutineListView(
+                onRegisterRoutineClick = onRegisterRoutineClick,
+                modifier = Modifier.fillMaxSize(),
+            )
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(bottom = 10.dp),
+            ) {
+                items(
+                    items = uiState.selectedDateRoutines,
+                    key = { routine -> routine.routineId },
+                ) { routine ->
+                    RoutineDetailsCard(
+                        routine = routine,
+                        onEditClick = { onShowEditConfirmBottomSheet(routine) },
+                        onDeleteClick = { onShowDeleteConfirmBottomSheet(routine) },
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun RoutineListScreenPreview(
+    @PreviewParameter(RoutineListStatePreviewProvider::class) uiState: RoutineListState,
+) {
+    BitnagilTheme {
+        RoutineListScreen(
+            uiState = uiState,
+            onDateSelect = {},
+            onShowDeleteConfirmBottomSheet = {},
+            onShowEditConfirmBottomSheet = {},
+            onRegisterRoutineClick = {},
+            onBackClick = {},
+        )
+    }
+}

@@ -10,6 +10,7 @@ import com.threegap.bitnagil.network.Kakao
 import com.threegap.bitnagil.network.NoneAuth
 import com.threegap.bitnagil.network.auth.AuthInterceptor
 import com.threegap.bitnagil.network.auth.TokenAuthenticator
+import com.threegap.bitnagil.network.calladapter.ResultCallAdapterFactory
 import com.threegap.bitnagil.network.token.ReissueService
 import com.threegap.bitnagil.network.token.TokenProvider
 import dagger.Module
@@ -45,7 +46,7 @@ object NetworkModule {
     fun provideJson(): Json =
         Json {
             ignoreUnknownKeys = true
-            prettyPrint = true
+            prettyPrint = BuildConfig.DEBUG
             explicitNulls = false
         }
 
@@ -53,6 +54,10 @@ object NetworkModule {
     @Singleton
     fun provideJsonConverter(json: Json): Converter.Factory =
         json.asConverterFactory(APPLICATION_JSON.toMediaType())
+
+    @Provides
+    @Singleton
+    fun provideResultCallAdapterFactory(): ResultCallAdapterFactory = ResultCallAdapterFactory()
 
     @Provides
     @Singleton
@@ -92,16 +97,41 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    @Kakao
-    fun provideKakaoOkHttpClient(
+    fun provideBaseOkHttpClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
-        @Kakao kakaoAuthInterceptor: Interceptor,
     ): OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(kakaoAuthInterceptor)
         .addInterceptor(httpLoggingInterceptor)
         .connectTimeout(10L, TimeUnit.SECONDS)
         .writeTimeout(30L, TimeUnit.SECONDS)
         .readTimeout(30L, TimeUnit.SECONDS)
+        .build()
+
+    @Provides
+    @Singleton
+    @NoneAuth
+    fun provideNoneAuthOkHttpClient(baseClient: OkHttpClient): OkHttpClient =
+        baseClient.newBuilder().build()
+
+    @Provides
+    @Singleton
+    @Auth
+    fun provideAuthOkHttpClient(
+        baseClient: OkHttpClient,
+        @Auth authInterceptor: Interceptor,
+        tokenAuthenticator: TokenAuthenticator,
+    ): OkHttpClient = baseClient.newBuilder()
+        .addInterceptor(authInterceptor)
+        .authenticator(tokenAuthenticator)
+        .build()
+
+    @Provides
+    @Singleton
+    @Kakao
+    fun provideKakaoOkHttpClient(
+        baseClient: OkHttpClient,
+        @Kakao kakaoAuthInterceptor: Interceptor,
+    ): OkHttpClient = baseClient.newBuilder()
+        .addInterceptor(kakaoAuthInterceptor)
         .build()
 
     @Provides
@@ -144,41 +174,15 @@ object NetworkModule {
     @Provides
     @Singleton
     @Auth
-    fun provideAuthOkHttpClient(
-        httpLoggingInterceptor: HttpLoggingInterceptor,
-        @Auth authInterceptor: Interceptor,
-        tokenAuthenticator: TokenAuthenticator,
-    ): OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(authInterceptor)
-        .addInterceptor(httpLoggingInterceptor)
-        .authenticator(tokenAuthenticator)
-        .connectTimeout(10L, TimeUnit.SECONDS)
-        .writeTimeout(30L, TimeUnit.SECONDS)
-        .readTimeout(30L, TimeUnit.SECONDS)
-        .build()
-
-    @Provides
-    @Singleton
-    @NoneAuth
-    fun provideNoneAuthOkHttpClient(
-        httpLoggingInterceptor: HttpLoggingInterceptor,
-    ): OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(httpLoggingInterceptor)
-        .connectTimeout(10L, TimeUnit.SECONDS)
-        .writeTimeout(30L, TimeUnit.SECONDS)
-        .readTimeout(30L, TimeUnit.SECONDS)
-        .build()
-
-    @Provides
-    @Singleton
-    @Auth
     fun provideAuthRetrofit(
         baseUrl: String,
         converterFactory: Converter.Factory,
+        resultCallAdapterFactory: ResultCallAdapterFactory,
         @Auth okHttpClient: OkHttpClient,
     ): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .addConverterFactory(converterFactory)
+        .addCallAdapterFactory(resultCallAdapterFactory)
         .client(okHttpClient)
         .build()
 
@@ -188,10 +192,12 @@ object NetworkModule {
     fun provideNoneAuthRetrofit(
         baseUrl: String,
         converterFactory: Converter.Factory,
+        resultCallAdapterFactory: ResultCallAdapterFactory,
         @NoneAuth okHttpClient: OkHttpClient,
     ): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .addConverterFactory(converterFactory)
+        .addCallAdapterFactory(resultCallAdapterFactory)
         .client(okHttpClient)
         .build()
 }

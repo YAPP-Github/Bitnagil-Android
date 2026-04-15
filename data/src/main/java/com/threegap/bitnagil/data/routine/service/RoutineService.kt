@@ -1,40 +1,53 @@
 package com.threegap.bitnagil.data.routine.service
 
-import com.threegap.bitnagil.data.routine.model.request.RoutineCompletionRequestDto
-import com.threegap.bitnagil.data.routine.model.response.RoutineDto
-import com.threegap.bitnagil.data.routine.model.response.RoutinesResponseDto
-import com.threegap.bitnagil.network.model.BaseResponse
+import com.threegap.bitnagil.data.routine.model.request.RoutineCompletionRequest
+import com.threegap.bitnagil.data.routine.model.request.RoutineEditRequest
+import com.threegap.bitnagil.data.routine.model.request.RoutineRegisterRequest
+import com.threegap.bitnagil.data.routine.model.response.RoutineResponse
+import com.threegap.bitnagil.data.routine.model.response.RoutineScheduleResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.PATCH
+import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface RoutineService {
     @GET("/api/v2/routines")
-    suspend fun fetchRoutines(
+    suspend fun fetchRoutineSchedule(
         @Query("startDate") startDate: String,
         @Query("endDate") endDate: String,
-    ): BaseResponse<RoutinesResponseDto>
+    ): Result<RoutineScheduleResponse>
 
     @GET("/api/v2/routines/{routineId}")
     suspend fun getRoutine(
         @Path("routineId") routineId: String,
-    ): BaseResponse<RoutineDto>
+    ): Result<RoutineResponse>
 
     @PUT("/api/v2/routines/completions")
     suspend fun routineCompletion(
-        @Body request: RoutineCompletionRequestDto,
-    ): BaseResponse<Unit>
+        @Body request: RoutineCompletionRequest,
+    ): Result<Unit>
 
     @DELETE("/api/v1/routines/{routineId}")
     suspend fun deleteRoutine(
         @Path("routineId") routineId: String,
-    ): BaseResponse<Unit>
+    ): Result<Unit>
 
     @DELETE("/api/v2/routines/day/{routineId}")
     suspend fun deleteRoutineForDay(
         @Path("routineId") routineId: String,
-    ): BaseResponse<Unit>
+    ): Result<Unit>
+
+    @POST("/api/v2/routines")
+    suspend fun postRoutine(
+        @Body routineRegisterRequest: RoutineRegisterRequest,
+    ): Result<Unit>
+
+    @PATCH("/api/v2/routines")
+    suspend fun patchRoutine(
+        @Body routineEditRequest: RoutineEditRequest,
+    ): Result<Unit>
 }

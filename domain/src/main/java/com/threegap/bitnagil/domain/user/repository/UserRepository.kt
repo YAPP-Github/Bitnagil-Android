@@ -1,7 +1,10 @@
 package com.threegap.bitnagil.domain.user.repository
 
 import com.threegap.bitnagil.domain.user.model.UserProfile
+import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
-    suspend fun fetchUserProfile(): Result<UserProfile>
+    fun observeUserProfile(): Flow<Result<UserProfile>>
+    suspend fun getUserProfile(): Result<UserProfile>
+    fun clearCache()
 }

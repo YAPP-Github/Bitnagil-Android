@@ -1,11 +1,10 @@
 plugins {
     alias(libs.plugins.bitnagil.android.library)
     alias(libs.plugins.bitnagil.android.hilt)
-    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.bitnagil.kotlin.serialization)
 }
 
 android {
-    namespace = "com.threegap.bitnagil.data"
 }
 
 dependencies {
@@ -13,11 +12,13 @@ dependencies {
     implementation(projects.core.datastore)
     implementation(projects.domain)
 
-    implementation(libs.kotlinx.serialization.json)
     implementation(platform(libs.okhttp.bom))
     implementation(libs.bundles.okhttp)
     implementation(platform(libs.retrofit.bom))
     implementation(libs.bundles.retrofit)
     implementation(libs.play.services.location)
     implementation(libs.kotlinx.coroutines.play)
+
+    testImplementation(libs.androidx.junit)
+    testImplementation(libs.kotlin.coroutines.test)
 }

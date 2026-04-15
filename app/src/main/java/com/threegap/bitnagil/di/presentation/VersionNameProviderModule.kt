@@ -1,7 +1,7 @@
 package com.threegap.bitnagil.di.presentation
 
-import com.threegap.bitnagil.presentation.common.version.AndroidApplicationVersionNameProvider
-import com.threegap.bitnagil.presentation.common.version.VersionNameProvider
+import com.threegap.bitnagil.presentation.util.version.VersionNameProvider
+import com.threegap.bitnagil.util.version.PackageManagerVersionNameProvider
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -13,5 +13,5 @@ import javax.inject.Singleton
 abstract class VersionNameProviderModule {
     @Binds
     @Singleton
-    abstract fun bindVersionNameProvider(androidApplicationVersionNameProvider: AndroidApplicationVersionNameProvider): VersionNameProvider
+    abstract fun bindVersionNameProvider(impl: PackageManagerVersionNameProvider): VersionNameProvider
 }

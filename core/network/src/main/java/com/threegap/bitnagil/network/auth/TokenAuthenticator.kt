@@ -19,7 +19,6 @@ class TokenAuthenticator(
     private val authMutex = Mutex()
 
     override fun authenticate(route: Route?, response: Response): Request? {
-        if (response.request.header(AUTO_LOGIN_HEADER) != null) return null
         if (!shouldRetry(response)) return null
 
         val currentToken = runBlocking { tokenProvider.getAccessToken() }
@@ -44,20 +43,10 @@ class TokenAuthenticator(
             return null
         }
 
-        return runCatching {
-            reissueService.reissueToken(refreshToken)
-        }.fold(
-            onSuccess = { baseResponse ->
-                if (baseResponse.data != null && baseResponse.code == SUCCESS_CODE) {
-                    tokenProvider.saveTokens(
-                        accessToken = baseResponse.data.accessToken,
-                        refreshToken = baseResponse.data.refreshToken,
-                    )
-                    buildRequestWithToken(response.request, baseResponse.data.accessToken)
-                } else {
-                    handleTokenExpiration()
-                    null
-                }
+        return reissueService.reissueToken(refreshToken).fold(
+            onSuccess = { authToken ->
+                tokenProvider.saveTokens(accessToken = authToken.accessToken, refreshToken = authToken.refreshToken)
+                buildRequestWithToken(response.request, authToken.accessToken)
             },
             onFailure = {
                 handleTokenExpiration()
@@ -83,7 +72,6 @@ class TokenAuthenticator(
     private fun buildRequestWithToken(originalRequest: Request, token: String): Request {
         return originalRequest.newBuilder()
             .header(AUTHORIZATION, "$TOKEN_PREFIX $token")
-            .removeHeader(AUTO_LOGIN_HEADER)
             .build()
     }
 
@@ -97,7 +85,5 @@ class TokenAuthenticator(
         private const val MAX_RETRY = 2
         private const val AUTHORIZATION = "Authorization"
         private const val TOKEN_PREFIX = "Bearer"
-        private const val SUCCESS_CODE = "CO000"
-        private const val AUTO_LOGIN_HEADER = "Auto-Login"
     }
 }

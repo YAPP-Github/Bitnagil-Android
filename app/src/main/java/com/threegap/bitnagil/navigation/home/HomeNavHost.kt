@@ -3,6 +3,7 @@ package com.threegap.bitnagil.navigation.home
 import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -26,10 +28,11 @@ import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilFloatingActionMenu
 import com.threegap.bitnagil.designsystem.component.atom.FloatingActionItem
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
-import com.threegap.bitnagil.presentation.common.toast.GlobalBitnagilToast
-import com.threegap.bitnagil.presentation.home.HomeScreenContainer
-import com.threegap.bitnagil.presentation.mypage.MyPageScreenContainer
-import com.threegap.bitnagil.presentation.recommendroutine.RecommendRoutineScreenContainer
+import com.threegap.bitnagil.presentation.screen.home.HomeScreenContainer
+import com.threegap.bitnagil.presentation.screen.mypage.MyPageScreenContainer
+import com.threegap.bitnagil.presentation.screen.recommendroutine.RecommendRoutineScreenContainer
+import com.threegap.bitnagil.presentation.util.toast.GlobalBitnagilToast
+import com.threegap.bitnagil.util.setStatusBarContentColor
 
 @Composable
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -51,11 +54,22 @@ fun HomeNavHost(
 
     DoubleBackButtonPressedHandler()
 
+    val activity = LocalActivity.current
+    val isHomeTab = navigator.isHomeRoute
+    LaunchedEffect(isHomeTab) {
+        activity?.setStatusBarContentColor(isLightContent = isHomeTab)
+    }
+
+    val selectedBottomTab = navigator.currentHomeRoute ?: navigator.startDestination
+
     Box(modifier = modifier.fillMaxSize()) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             bottomBar = {
-                HomeBottomNavigationBar(navController = navigator.navController)
+                HomeBottomNavigationBar(
+                    selectedTab = selectedBottomTab,
+                    onTabSelected = navigator::navigateTo,
+                )
             },
             contentWindowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
             content = { innerPadding ->
@@ -64,7 +78,7 @@ fun HomeNavHost(
                     startDestination = navigator.startDestination,
                     modifier = modifier.padding(innerPadding),
                 ) {
-                    composable(HomeRoute.Home.route) {
+                    composable<HomeRoute.Home> {
                         HomeScreenContainer(
                             navigateToGuide = navigateToGuide,
                             navigateToRegisterRoutine = {
@@ -77,14 +91,14 @@ fun HomeNavHost(
                         )
                     }
 
-                    composable(HomeRoute.RecommendRoutine.route) {
+                    composable<HomeRoute.RecommendRoutine> {
                         RecommendRoutineScreenContainer(
                             navigateToEmotion = navigateToEmotion,
                             navigateToRegisterRoutine = navigateToRegisterRoutine,
                         )
                     }
 
-                    composable(HomeRoute.MyPage.route) {
+                    composable<HomeRoute.MyPage> {
                         MyPageScreenContainer(
                             navigateToSetting = navigateToSetting,
                             navigateToOnBoarding = navigateToOnBoarding,

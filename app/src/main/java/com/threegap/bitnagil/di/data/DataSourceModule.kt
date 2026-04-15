@@ -8,8 +8,10 @@ import com.threegap.bitnagil.data.auth.datasource.AuthLocalDataSource
 import com.threegap.bitnagil.data.auth.datasource.AuthRemoteDataSource
 import com.threegap.bitnagil.data.auth.datasourceimpl.AuthLocalDataSourceImpl
 import com.threegap.bitnagil.data.auth.datasourceimpl.AuthRemoteDataSourceImpl
-import com.threegap.bitnagil.data.emotion.datasource.EmotionDataSource
-import com.threegap.bitnagil.data.emotion.datasourceImpl.EmotionDataSourceImpl
+import com.threegap.bitnagil.data.emotion.datasource.EmotionLocalDataSource
+import com.threegap.bitnagil.data.emotion.datasource.EmotionRemoteDataSource
+import com.threegap.bitnagil.data.emotion.datasourceImpl.EmotionLocalDataSourceImpl
+import com.threegap.bitnagil.data.emotion.datasourceImpl.EmotionRemoteDataSourceImpl
 import com.threegap.bitnagil.data.file.datasource.FileDataSource
 import com.threegap.bitnagil.data.file.datasourceImpl.FileDataSourceImpl
 import com.threegap.bitnagil.data.onboarding.datasource.OnBoardingDataSource
@@ -20,12 +22,12 @@ import com.threegap.bitnagil.data.report.datasource.ReportDataSource
 import com.threegap.bitnagil.data.report.datasourceImpl.ReportDataSourceImpl
 import com.threegap.bitnagil.data.routine.datasource.RoutineRemoteDataSource
 import com.threegap.bitnagil.data.routine.datasourceImpl.RoutineRemoteDataSourceImpl
-import com.threegap.bitnagil.data.user.datasource.UserDataSource
-import com.threegap.bitnagil.data.user.datasourceImpl.UserDataSourceImpl
+import com.threegap.bitnagil.data.user.datasource.UserLocalDataSource
+import com.threegap.bitnagil.data.user.datasource.UserRemoteDataSource
+import com.threegap.bitnagil.data.user.datasourceImpl.UserLocalDataSourceImpl
+import com.threegap.bitnagil.data.user.datasourceImpl.UserRemoteDataSourceImpl
 import com.threegap.bitnagil.data.version.datasource.VersionDataSource
 import com.threegap.bitnagil.data.version.datasourceImpl.VersionDataSourceImpl
-import com.threegap.bitnagil.data.writeroutine.datasource.WriteRoutineDataSource
-import com.threegap.bitnagil.data.writeroutine.datasourceImpl.WriteRoutineDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -54,15 +56,19 @@ abstract class DataSourceModule {
 
     @Binds
     @Singleton
-    abstract fun bindEmotionDataSource(emotionDataSourceImpl: EmotionDataSourceImpl): EmotionDataSource
+    abstract fun bindEmotionLocalDataSource(emotionLocalDataSourceImpl: EmotionLocalDataSourceImpl): EmotionLocalDataSource
 
     @Binds
     @Singleton
-    abstract fun bindWriteRoutineDataSource(writeRoutineDataSourceImpl: WriteRoutineDataSourceImpl): WriteRoutineDataSource
+    abstract fun bindEmotionRemoteDataSource(emotionRemoteDataSourceImpl: EmotionRemoteDataSourceImpl): EmotionRemoteDataSource
 
     @Binds
     @Singleton
-    abstract fun bindUserDataSource(userDataSourceImpl: UserDataSourceImpl): UserDataSource
+    abstract fun bindUserLocalDataSource(userLocalDataSourceImpl: UserLocalDataSourceImpl): UserLocalDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindUserRemoteDataSource(userRemoteDataSourceImpl: UserRemoteDataSourceImpl): UserRemoteDataSource
 
     @Binds
     @Singleton

@@ -3,12 +3,10 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.bitnagil.android.application)
     alias(libs.plugins.bitnagil.android.hilt)
-    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.bitnagil.kotlin.serialization)
 }
 
 android {
-    namespace = "com.threegap.bitnagil"
-
     val properties =
         Properties().apply {
             val propFile = rootProject.file("local.properties")
@@ -74,7 +72,8 @@ android {
                 ?: System.getenv("BITNAGIL_PROD_URL")
                 ?: throw GradleException("bitnagil.prod.url 값이 없습니다.")
             buildConfigField("String", "BASE_URL", "\"$prodUrl\"")
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
@@ -102,4 +101,5 @@ dependencies {
     implementation(libs.bundles.retrofit)
     implementation(platform(libs.okhttp.bom))
     implementation(libs.bundles.okhttp)
+    implementation(libs.bundles.coil)
 }

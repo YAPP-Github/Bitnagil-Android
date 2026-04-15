@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.bitnagil.kotlin)
+    alias(libs.plugins.bitnagil.kotlin.serialization)
 }
 
 dependencies {
