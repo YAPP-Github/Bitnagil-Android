@@ -6,10 +6,10 @@ targetSdk = "36"
 applicationId = "com.threegap.bitnagil"
 
 ## App Versioning
-versionCode = "7"
+versionCode = "8"
 versionMajor = "2"
 versionMinor = "2"
-versionPatch = "0"
+versionPatch = "1"
 
 # Android Gradle Plugin
 androidGradlePlugin = "9.1.0"
