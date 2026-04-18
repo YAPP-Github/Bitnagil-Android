@@ -1,11 +1,22 @@
 -keepattributes SourceFile,LineNumberTable
 -renamesourcefileattribute SourceFile
 
-# [Kakao SDK 버그 방어]
-# AccessTokenInterceptor에서 ClientErrorCause 상수를 리플렉션(getField)으로 찾기 때문에 난독화에서 제외함
--keep enum com.kakao.sdk.common.model.ClientErrorCause {
-    *;
-}
+# [Kakao SDK 프로가드 규칙]
+# https://developers.kakao.com/docs/ko/android/getting-started#project-pro-guard
+-keep class com.kakao.sdk.**.model.* { <fields>; }
+
+# https://github.com/square/okhttp/pull/6792
+-dontwarn org.bouncycastle.jsse.**
+-dontwarn org.conscrypt.*
+-dontwarn org.openjsse.**
+
+# refrofit2 (with r8 full mode)
+-if interface * { @retrofit2.http.* <methods>; }
+-keep,allowobfuscation interface <1>
+-keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
+-if interface * { @retrofit2.http.* public *** *(...); }
+-keep,allowoptimization,allowshrinking,allowobfuscation class <3>
+-keep,allowobfuscation,allowshrinking class retrofit2.Response
 
 # [Kotlinx Serialization]
 # 모든 @Serializable 클래스의 직렬화 로직 및 serializer 메서드 유지
