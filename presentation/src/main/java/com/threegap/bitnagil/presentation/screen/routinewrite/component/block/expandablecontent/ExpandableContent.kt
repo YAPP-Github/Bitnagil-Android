@@ -94,7 +94,7 @@ fun ExpandableContent(
                 }
                 if (!expand) {
                     Text(
-                        text = if (showValueText) valueText ?: placeHolder else placeHolder,
+                        text = if (showValueText) valueText else placeHolder,
                         style = if (showValueText) mainTextStyle else subTextStyle,
                     )
                 }

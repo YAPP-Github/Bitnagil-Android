@@ -98,19 +98,19 @@ private fun DatePickerBottomSheetContent(
     val lastDaysOfPrevMonth = remember(currentYear, currentMonth) {
         CalendarUtils.lastDaysOfPrevMonth(currentYear, currentMonth)
     }
-    val firstDaysOfNextMonth = remember(currentYear, currentMonth) {
-        CalendarUtils.firstDaysOfNextMonth(currentYear, currentMonth)
-    }
     val currentDaysOfMonth = remember(currentYear, currentMonth) {
         CalendarUtils.getDayAmountOfMonth(currentYear, currentMonth)
     }
 
-    val prevMonthButtonEnabled by remember(availableStartDate) {
+    val totalCells = 42
+    val firstDaysOfNextMonthCount = totalCells - lastDaysOfPrevMonth.size - currentDaysOfMonth
+
+    val prevMonthButtonEnabled by remember(availableStartDate, currentYear, currentMonth) {
         derivedStateOf {
             (availableStartDate == null) || (availableStartDate.year < currentYear) || (availableStartDate.month < currentMonth)
         }
     }
-    val nextMonthButtonEnabled by remember(availableEndDate) {
+    val nextMonthButtonEnabled by remember(availableEndDate, currentYear, currentMonth) {
         derivedStateOf {
             (availableEndDate == null) || (availableEndDate.year > currentYear) || (availableEndDate.month > currentMonth)
         }
@@ -186,13 +186,31 @@ private fun DatePickerBottomSheetContent(
                 }
 
                 itemsIndexed(lastDaysOfPrevMonth) { _, day ->
+                    val prevMonth = if (currentMonth == 1) 12 else currentMonth - 1
+                    val prevYear = if (currentMonth == 1) currentYear - 1 else currentYear
+                    val prevDate = Date(prevYear, prevMonth, day)
+                    val available = prevDate.checkInRange(availableStartDate, availableEndDate)
+
                     Box(
-                        modifier = Modifier.aspectRatio(1f),
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .clickableWithoutRipple {
+                                if (!available) return@clickableWithoutRipple
+                                if (currentMonth == 1) {
+                                    currentMonth = 12
+                                    currentYear -= 1
+                                } else {
+                                    currentMonth -= 1
+                                }
+                                selectedDate = prevDate
+                            },
                         contentAlignment = Alignment.Center,
                     ) {
                         Text(
                             "$day",
-                            style = BitnagilTheme.typography.subtitle1Regular.copy(color = BitnagilTheme.colors.coolGray80),
+                            style = BitnagilTheme.typography.subtitle1Regular.copy(
+                                color = if (available) BitnagilTheme.colors.coolGray80 else BitnagilTheme.colors.coolGray95,
+                            ),
                         )
                     }
                 }
@@ -202,13 +220,16 @@ private fun DatePickerBottomSheetContent(
                     val currentDate = Date(year = currentYear, month = currentMonth, day = index + 1)
                     val available = currentDate.checkInRange(startDate = availableStartDate, endDate = availableEndDate)
                     Box(
-                        modifier = Modifier.aspectRatio(1f).background(
-                            color = if (selected) { BitnagilTheme.colors.orange50 } else { Color.Transparent },
-                            shape = if (selected) { RoundedCornerShape(12.dp) } else { RectangleShape },
-                        ).clickableWithoutRipple {
-                            if (!available) return@clickableWithoutRipple
-                            selectedDate = currentDate
-                        },
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .background(
+                                color = if (selected) BitnagilTheme.colors.orange50 else Color.Transparent,
+                                shape = if (selected) RoundedCornerShape(12.dp) else RectangleShape,
+                            )
+                            .clickableWithoutRipple {
+                                if (!available) return@clickableWithoutRipple
+                                selectedDate = currentDate
+                            },
                         contentAlignment = Alignment.Center,
                     ) {
                         Text(
@@ -224,14 +245,33 @@ private fun DatePickerBottomSheetContent(
                     }
                 }
 
-                itemsIndexed(firstDaysOfNextMonth) { _, day ->
+                items(firstDaysOfNextMonthCount) { index ->
+                    val day = index + 1
+                    val nextMonth = if (currentMonth == 12) 1 else currentMonth + 1
+                    val nextYear = if (currentMonth == 12) currentYear + 1 else currentYear
+                    val nextDate = Date(nextYear, nextMonth, day)
+                    val available = nextDate.checkInRange(availableStartDate, availableEndDate)
+
                     Box(
-                        modifier = Modifier.aspectRatio(1f),
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .clickableWithoutRipple {
+                                if (!available) return@clickableWithoutRipple
+                                if (currentMonth == 12) {
+                                    currentMonth = 1
+                                    currentYear += 1
+                                } else {
+                                    currentMonth += 1
+                                }
+                                selectedDate = nextDate
+                            },
                         contentAlignment = Alignment.Center,
                     ) {
                         Text(
                             "$day",
-                            style = BitnagilTheme.typography.subtitle1Regular.copy(color = BitnagilTheme.colors.coolGray80),
+                            style = BitnagilTheme.typography.subtitle1Regular.copy(
+                                color = if (available) BitnagilTheme.colors.coolGray80 else BitnagilTheme.colors.coolGray95,
+                            ),
                         )
                     }
                 }

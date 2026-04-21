@@ -12,6 +12,7 @@ import com.threegap.bitnagil.presentation.screen.routinewrite.contract.RoutineWr
 import com.threegap.bitnagil.presentation.screen.routinewrite.contract.RoutineWriteState
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.Date
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.Day
+import com.threegap.bitnagil.presentation.screen.routinewrite.model.ExpandableSection
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.RepeatType
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.RoutineWriteType
 import com.threegap.bitnagil.presentation.screen.routinewrite.model.SelectableDay
@@ -299,37 +300,49 @@ class RoutineWriteViewModel @AssistedInject constructor(
     }
 
     fun toggleSubRoutineUiExpanded() = intent {
-        val currentSubRoutineUiExpanded = state.subRoutineUiExpanded
         reduce {
             state.copy(
-                subRoutineUiExpanded = !currentSubRoutineUiExpanded,
+                expandedSection = if (state.expandedSection == ExpandableSection.SUB_ROUTINE) {
+                    ExpandableSection.NONE
+                } else {
+                    ExpandableSection.SUB_ROUTINE
+                },
             )
         }
     }
 
     fun toggleRepeatDaysUiExpanded() = intent {
-        val currentRepeatDaysUiExpanded = state.repeatDaysUiExpanded
         reduce {
             state.copy(
-                repeatDaysUiExpanded = !currentRepeatDaysUiExpanded,
+                expandedSection = if (state.expandedSection == ExpandableSection.REPEAT_DAYS) {
+                    ExpandableSection.NONE
+                } else {
+                    ExpandableSection.REPEAT_DAYS
+                },
             )
         }
     }
 
     fun togglePeriodUiExpanded() = intent {
-        val currentPeriodUiExpanded = state.periodUiExpanded
         reduce {
             state.copy(
-                periodUiExpanded = !currentPeriodUiExpanded,
+                expandedSection = if (state.expandedSection == ExpandableSection.PERIOD) {
+                    ExpandableSection.NONE
+                } else {
+                    ExpandableSection.PERIOD
+                },
             )
         }
     }
 
     fun toggleStartTimeUiExpanded() = intent {
-        val currentStartTimeUiExpanded = state.startTimeUiExpanded
         reduce {
             state.copy(
-                startTimeUiExpanded = !currentStartTimeUiExpanded,
+                expandedSection = if (state.expandedSection == ExpandableSection.START_TIME) {
+                    ExpandableSection.NONE
+                } else {
+                    ExpandableSection.START_TIME
+                },
             )
         }
     }
