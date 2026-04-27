@@ -17,7 +17,7 @@ fun NavStatusBarEffect(navController: NavController) {
     LaunchedEffect(navBackStackEntry) {
         navBackStackEntry?.repeatOnLifecycle(Lifecycle.State.RESUMED) {
             activity?.window?.let { window ->
-                StatusBarAppearanceManager().applyStatusBarColorByLuminance(window)
+                StatusBarAppearanceManager.applyStatusBarColorByLuminance(window)
             }
         }
     }

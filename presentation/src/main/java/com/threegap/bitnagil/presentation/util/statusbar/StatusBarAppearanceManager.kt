@@ -13,7 +13,9 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.graphics.get
 import androidx.core.view.WindowInsetsControllerCompat
 
-class StatusBarAppearanceManager {
+object StatusBarAppearanceManager {
+    private const val LUMINANCE_THRESHOLD = 150
+
     fun applyStatusBarColorByLuminance(window: Window) {
         val height = getStatusBarHeight(window = window)
         if (height <= 0) return
@@ -24,7 +26,8 @@ class StatusBarAppearanceManager {
         ) { bmp ->
             bmp?.let {
                 val lum = calculateLuminance(it)
-                WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = (lum > 150)
+                WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = (lum > LUMINANCE_THRESHOLD)
+                it.recycle()
             }
         }
     }
@@ -40,9 +43,28 @@ class StatusBarAppearanceManager {
         height: Int,
         onResult: (Bitmap?) -> Unit
     ) {
+        val width = window.decorView.width
+        if (width <= 0) {
+            onResult(null)
+            return
+        }
+
         val rect = Rect(0, 0, window.decorView.width, height)
         val bmp = createBitmap(rect.width(), rect.height())
-        PixelCopy.request(window, rect, bmp, {_ -> onResult(bmp)}, Handler(Looper.getMainLooper()))
+
+        try {
+            PixelCopy.request(window, rect, bmp, { result ->
+                if (result == PixelCopy.SUCCESS) {
+                    onResult(bmp)
+                } else {
+                    bmp.recycle()
+                    onResult(null)
+                }
+            }, Handler(Looper.getMainLooper()))
+        } catch (_: Exception) {
+            bmp.recycle()
+            onResult(null)
+        }
     }
 
     private fun calculateLuminance(bitmap: Bitmap): Int {
