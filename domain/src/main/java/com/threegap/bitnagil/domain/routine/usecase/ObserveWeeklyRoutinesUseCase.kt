@@ -2,12 +2,12 @@ package com.threegap.bitnagil.domain.routine.usecase
 
 import com.threegap.bitnagil.domain.routine.model.RoutineSchedule
 import com.threegap.bitnagil.domain.routine.repository.RoutineRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class FetchWeeklyRoutinesUseCase @Inject constructor(
+class ObserveWeeklyRoutinesUseCase @Inject constructor(
     private val routineRepository: RoutineRepository,
 ) {
-    suspend operator fun invoke(startDate: String, endDate: String): Result<RoutineSchedule> {
-        return routineRepository.fetchWeeklyRoutines(startDate, endDate)
-    }
+    operator fun invoke(startDate: String, endDate: String): Flow<RoutineSchedule> =
+        routineRepository.observeWeeklyRoutines(startDate, endDate)
 }

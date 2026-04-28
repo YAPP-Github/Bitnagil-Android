@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.component.block.BitnagilConfirmDialog
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.screen.home.component.template.CollapsibleHeader
 import com.threegap.bitnagil.presentation.screen.home.component.template.EmptyRoutineView
@@ -62,6 +63,15 @@ fun HomeScreenContainer(
             is HomeSideEffect.NavigateToEmotion -> navigateToEmotion()
             is HomeSideEffect.NavigateToRoutineList -> navigateToRoutineList(sideEffect.selectedDate)
         }
+    }
+
+    if (uiState.showSyncErrorDialog) {
+        BitnagilConfirmDialog(
+            title = "루틴 완료를 저장하지 못했어요",
+            description = "네트워크 연결에 문제가 있었던 것 같아요.\n다시 한 번 시도해 주세요.",
+            confirmButtonText = "확인",
+            onConfirm = viewModel::dismissSyncErrorDialog,
+        )
     }
 
     HomeScreen(
