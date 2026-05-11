@@ -3,7 +3,6 @@ package com.threegap.bitnagil.navigation.home
 import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.activity.compose.BackHandler
-import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -31,8 +29,8 @@ import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.screen.home.HomeScreenContainer
 import com.threegap.bitnagil.presentation.screen.mypage.MyPageScreenContainer
 import com.threegap.bitnagil.presentation.screen.recommendroutine.RecommendRoutineScreenContainer
+import com.threegap.bitnagil.presentation.util.statusbar.NavStatusBarEffect
 import com.threegap.bitnagil.presentation.util.toast.GlobalBitnagilToast
-import com.threegap.bitnagil.util.setStatusBarContentColor
 
 @Composable
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -54,11 +52,7 @@ fun HomeNavHost(
 
     DoubleBackButtonPressedHandler()
 
-    val activity = LocalActivity.current
-    val isHomeTab = navigator.isHomeRoute
-    LaunchedEffect(isHomeTab) {
-        activity?.setStatusBarContentColor(isLightContent = isHomeTab)
-    }
+    NavStatusBarEffect(navController = navigator.navController)
 
     val selectedBottomTab = navigator.currentHomeRoute ?: navigator.startDestination
 

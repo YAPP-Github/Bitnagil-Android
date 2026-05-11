@@ -27,12 +27,15 @@ import com.threegap.bitnagil.presentation.screen.splash.SplashScreenContainer
 import com.threegap.bitnagil.presentation.screen.terms.TermsAgreementScreenContainer
 import com.threegap.bitnagil.presentation.screen.webview.BitnagilWebViewScreen
 import com.threegap.bitnagil.presentation.screen.withdrawal.WithdrawalScreenContainer
+import com.threegap.bitnagil.presentation.util.statusbar.NavStatusBarEffect
 
 @Composable
 fun MainNavHost(
     navigator: MainNavigator,
     modifier: Modifier = Modifier,
 ) {
+    NavStatusBarEffect(navController = navigator.navController)
+
     NavHost(
         navController = navigator.navController,
         startDestination = navigator.startDestination,

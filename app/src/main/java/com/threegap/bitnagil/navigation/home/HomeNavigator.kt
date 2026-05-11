@@ -23,9 +23,6 @@ class HomeNavigator(
             }
         }
 
-    val isHomeRoute: Boolean
-        @Composable get() = currentHomeRoute == HomeRoute.Home
-
     @Composable
     fun shouldShowFloatingAction(): Boolean = currentHomeRoute?.showFloatingButton == true
 
