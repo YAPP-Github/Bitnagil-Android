@@ -4,19 +4,16 @@ import com.threegap.bitnagil.data.onboarding.datasource.OnBoardingDataSource
 import com.threegap.bitnagil.data.onboarding.model.dto.OnBoardingDto
 import com.threegap.bitnagil.data.onboarding.model.request.GetOnBoardingRecommendRoutinesRequest
 import com.threegap.bitnagil.data.onboarding.model.request.RegisterOnBoardingRecommendRoutinesRequest
+import com.threegap.bitnagil.data.routine.datasource.RoutineLocalDataSource
 import com.threegap.bitnagil.domain.onboarding.model.OnBoarding
 import com.threegap.bitnagil.domain.onboarding.model.OnBoardingAbstract
 import com.threegap.bitnagil.domain.onboarding.model.OnBoardingRecommendRoutine
-import com.threegap.bitnagil.domain.onboarding.model.OnBoardingRecommendRoutineEvent
 import com.threegap.bitnagil.domain.onboarding.repository.OnBoardingRepository
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import javax.inject.Inject
 
 class OnBoardingRepositoryImpl @Inject constructor(
     private val onBoardingDataSource: OnBoardingDataSource,
+    private val routineLocalDataSource: RoutineLocalDataSource,
 ) : OnBoardingRepository {
     override suspend fun getOnBoardingList(): List<OnBoarding> {
         val onBoardingDtos = onBoardingDataSource.getOnBoardingList()
@@ -59,7 +56,7 @@ class OnBoardingRepositoryImpl @Inject constructor(
 
         return onBoardingDataSource.registerRecommendRoutineList(selectedRecommendRoutineIds = request.recommendedRoutineIds).also {
             if (it.isSuccess) {
-                _onBoardingRecommendRoutineEventFlow.emit(OnBoardingRecommendRoutineEvent.AddRoutines(selectedRecommendRoutineIds))
+                routineLocalDataSource.clearCache()
             }
         }
     }
@@ -73,10 +70,4 @@ class OnBoardingRepositoryImpl @Inject constructor(
             )
         }
     }
-
-    private val _onBoardingRecommendRoutineEventFlow = MutableSharedFlow<OnBoardingRecommendRoutineEvent>(
-        extraBufferCapacity = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST,
-    )
-    override suspend fun getOnBoardingRecommendRoutineEventFlow(): Flow<OnBoardingRecommendRoutineEvent> = _onBoardingRecommendRoutineEventFlow.asSharedFlow()
 }

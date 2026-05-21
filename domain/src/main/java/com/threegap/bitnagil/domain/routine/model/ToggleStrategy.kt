@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.screen.home.model
+package com.threegap.bitnagil.domain.routine.model
 
 sealed interface ToggleStrategy {
     data object Main : ToggleStrategy
