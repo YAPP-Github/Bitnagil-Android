@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(./**/build/**)",
+      "Read(./**/.gradle/**)",
+      "Read(./local.properties)",
+      "Read(./**/*.keystore)",
+      "Read(./**/*.jks)"
+    ]
+  }
+}

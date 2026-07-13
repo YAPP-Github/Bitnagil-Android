@@ -220,3 +220,7 @@ fabric.properties
 !/gradle/wrapper/gradle-wrapper.jar
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,kotlin,android,androidstudio
+
+### Claude Code ###
+.claude/settings.local.json
+CLAUDE.local.md
