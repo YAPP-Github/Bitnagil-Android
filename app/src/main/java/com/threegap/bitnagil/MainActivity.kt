@@ -15,6 +15,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilToastContainer
 import com.threegap.bitnagil.designsystem.component.atom.rememberBitnagilToast
 import com.threegap.bitnagil.presentation.util.toast.GlobalBitnagilToast
@@ -45,16 +46,18 @@ class MainActivity : ComponentActivity() {
                 GlobalBitnagilToast.initialize(globalToast)
             }
 
-            Box(modifier = Modifier.fillMaxSize()) {
-                MainScreen(navigator = mainNavigator)
+            BitnagilTheme {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    MainScreen(navigator = mainNavigator)
 
-                BitnagilToastContainer(
-                    state = globalToast,
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .navigationBarsPadding()
-                        .padding(bottom = if (mainNavigator.hasBottomNavigationBarRoute()) 80.dp else 16.dp),
-                )
+                    BitnagilToastContainer(
+                        state = globalToast,
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .navigationBarsPadding()
+                            .padding(bottom = if (mainNavigator.hasBottomNavigationBarRoute()) 80.dp else 16.dp),
+                    )
+                }
             }
         }
     }
