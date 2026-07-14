@@ -1,5 +1,6 @@
 package com.threegap.bitnagil.di.data
 
+import com.threegap.bitnagil.data.activitylog.repositoryImpl.ActivityLogRepositoryImpl
 import com.threegap.bitnagil.data.address.repositoryImpl.AddressRepositoryImpl
 import com.threegap.bitnagil.data.auth.repositoryimpl.AuthRepositoryImpl
 import com.threegap.bitnagil.data.emotion.repositoryImpl.EmotionRepositoryImpl
@@ -10,6 +11,7 @@ import com.threegap.bitnagil.data.report.repositoryImpl.ReportRepositoryImpl
 import com.threegap.bitnagil.data.routine.repositoryImpl.RoutineRepositoryImpl
 import com.threegap.bitnagil.data.user.repositoryImpl.UserRepositoryImpl
 import com.threegap.bitnagil.data.version.repositoryImpl.VersionRepositoryImpl
+import com.threegap.bitnagil.domain.activitylog.repository.ActivityLogRepository
 import com.threegap.bitnagil.domain.address.repository.AddressRepository
 import com.threegap.bitnagil.domain.auth.repository.AuthRepository
 import com.threegap.bitnagil.domain.emotion.repository.EmotionRepository
@@ -69,4 +71,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindReportRepository(impl: ReportRepositoryImpl): ReportRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindActivityLogRepository(impl: ActivityLogRepositoryImpl): ActivityLogRepository
 }
