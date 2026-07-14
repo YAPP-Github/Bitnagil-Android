@@ -28,18 +28,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIconButton
 import com.threegap.bitnagil.presentation.screen.summary.component.template.summarycalendar.SummaryCalendarView
-import com.threegap.bitnagil.presentation.screen.summary.model.SummaryUiState
+import com.threegap.bitnagil.presentation.screen.summary.contract.SummaryState
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
 import java.time.YearMonth
 
 @Composable
 fun SummaryScreenContainer(
-    viewModel: SummaryViewModel,
+    viewModel: SummaryViewModel = hiltViewModel(),
 ) {
     val state by viewModel.collectAsState()
 
@@ -53,7 +54,7 @@ private const val INITIAL_PAGE = Int.MAX_VALUE / 2
 
 @Composable
 fun SummaryScreen(
-    state: SummaryUiState,
+    state: SummaryState,
     onMonthChanged: (YearMonth) -> Unit = {}
 ) {
     val verticalScrollState = rememberScrollState()
@@ -159,11 +160,10 @@ fun SummaryScreen(
         ) { page ->
             val monthOffset = page - INITIAL_PAGE
             val displayMonth = YearMonth.now().plusMonths(monthOffset.toLong())
-            val highlightedDays = state.summaryEmotionDaysMap[displayMonth] ?: emptyList()
 
             SummaryCalendarView(
                 yearMonth = displayMonth,
-                emotionDays = highlightedDays,
+                emotionDays = state.emotionCellsOf(displayMonth),
                 modifier = Modifier.padding(horizontal = 20.dp)
             )
         }
@@ -176,6 +176,6 @@ fun SummaryScreen(
 @Composable
 private fun SummaryScreenPreview() {
     BitnagilTheme {
-        SummaryScreen(state = SummaryUiState())
+        SummaryScreen(state = SummaryState.INIT)
     }
 }
