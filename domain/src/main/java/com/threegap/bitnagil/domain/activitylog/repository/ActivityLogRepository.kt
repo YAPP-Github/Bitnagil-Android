@@ -7,5 +7,5 @@ import java.time.YearMonth
 
 interface ActivityLogRepository {
     suspend fun getBadges(yearMonth: YearMonth): Result<List<Badge>>
-    suspend fun getEmotionMarbles(startDate: LocalDate, endDate: LocalDate): Result<List<EmotionMarble>>
+    suspend fun getEmotionMarbles(startDate: LocalDate, endDate: LocalDate, forceRefresh: Boolean = false): Result<List<EmotionMarble>>
 }

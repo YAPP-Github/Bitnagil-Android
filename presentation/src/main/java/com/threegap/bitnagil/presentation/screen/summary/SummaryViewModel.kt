@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.threegap.bitnagil.domain.activitylog.usecase.GetBadgesUseCase
 import com.threegap.bitnagil.domain.activitylog.usecase.GetEmotionMarblesUseCase
+import com.threegap.bitnagil.domain.emotion.usecase.GetEmotionRegisteredEventFlowUseCase
 import com.threegap.bitnagil.presentation.screen.summary.contract.SummaryState
 import com.threegap.bitnagil.presentation.screen.summary.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,22 +19,20 @@ import javax.inject.Inject
 class SummaryViewModel @Inject constructor(
     private val getBadgesUseCase: GetBadgesUseCase,
     private val getEmotionMarblesUseCase: GetEmotionMarblesUseCase,
+    private val getEmotionRegisteredEventFlowUseCase: GetEmotionRegisteredEventFlowUseCase,
 ) : ContainerHost<SummaryState, Unit>, ViewModel() {
 
     override val container = container<SummaryState, Unit>(initialState = SummaryState.INIT)
 
-    // 이미 요청한 달은 다시 부르지 않는다. 실패한 달은 제거해 다시 진입할 때 재시도되도록 한다.
-    private val requestedBadgeMonths = mutableSetOf<YearMonth>()
-    private val requestedEmotionMarbleMonths = mutableSetOf<YearMonth>()
-
     init {
         onMonthChanged(YearMonth.now())
+        observeEmotionRegisteredEvent()
     }
 
     fun onMonthChanged(newMonth: YearMonth) = intent {
         reduce { state.copy(currentMonth = newMonth) }
 
-        // 현재, 이전, 다음 달 데이터 프리페칭
+        // 현재, 이전, 다음 달 데이터 프리페칭. 이미 캐시된 달은 Repository가 즉시 반환한다.
         val monthsToLoad = listOf(
             newMonth.minusMonths(1),
             newMonth,
@@ -42,13 +41,15 @@ class SummaryViewModel @Inject constructor(
 
         coroutineScope {
             monthsToLoad.forEach { targetMonth ->
-                if (requestedBadgeMonths.add(targetMonth)) {
-                    launch { fetchBadges(targetMonth) }
-                }
-                if (requestedEmotionMarbleMonths.add(targetMonth)) {
-                    launch { fetchEmotionMarbles(targetMonth) }
-                }
+                launch { fetchBadges(targetMonth) }
+                launch { fetchEmotionMarbles(targetMonth) }
             }
+        }
+    }
+
+    private fun observeEmotionRegisteredEvent() = intent {
+        getEmotionRegisteredEventFlowUseCase().collect { registeredMonth ->
+            fetchEmotionMarbles(registeredMonth, forceRefresh = true)
         }
     }
 
@@ -67,20 +68,20 @@ class SummaryViewModel @Inject constructor(
                 },
                 onFailure = {
                     Log.e("SummaryViewModel", "뱃지 가져오기 실패: ${it.message}")
-                    requestedBadgeMonths.remove(yearMonth)
                     reduce { state.copy(loadingCount = state.loadingCount - 1) }
                 },
             )
         }
     }
 
-    private suspend fun fetchEmotionMarbles(yearMonth: YearMonth) {
+    private suspend fun fetchEmotionMarbles(yearMonth: YearMonth, forceRefresh: Boolean = false) {
         subIntent {
             reduce { state.copy(loadingCount = state.loadingCount + 1) }
 
             getEmotionMarblesUseCase(
                 startDate = yearMonth.atDay(1),
                 endDate = yearMonth.atEndOfMonth(),
+                forceRefresh = forceRefresh,
             ).fold(
                 onSuccess = { marblesByDate ->
                     val emotionCells = marblesByDate.values.map { it.toUiModel() }
@@ -93,7 +94,6 @@ class SummaryViewModel @Inject constructor(
                 },
                 onFailure = {
                     Log.e("SummaryViewModel", "감정 구슬 가져오기 실패: ${it.message}")
-                    requestedEmotionMarbleMonths.remove(yearMonth)
                     reduce { state.copy(loadingCount = state.loadingCount - 1) }
                 },
             )

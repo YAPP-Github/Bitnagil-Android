@@ -8,8 +8,12 @@ import javax.inject.Inject
 class GetEmotionMarblesUseCase @Inject constructor(
     private val activityLogRepository: ActivityLogRepository,
 ) {
-    suspend operator fun invoke(startDate: LocalDate, endDate: LocalDate): Result<Map<LocalDate, EmotionMarble>> {
-        return activityLogRepository.getEmotionMarbles(startDate = startDate, endDate = endDate)
+    suspend operator fun invoke(
+        startDate: LocalDate,
+        endDate: LocalDate,
+        forceRefresh: Boolean = false,
+    ): Result<Map<LocalDate, EmotionMarble>> {
+        return activityLogRepository.getEmotionMarbles(startDate = startDate, endDate = endDate, forceRefresh = forceRefresh)
             .map { marbles -> marbles.associateBy { it.date } }
     }
 }
