@@ -8,13 +8,13 @@ data class SummaryState(
     val loadingCount: Int,
     val currentMonth: YearMonth,
     val emotionCellsByMonth: Map<YearMonth, List<SummaryEmotionCellUiModel>>,
-    val badgesByMonth: Map<YearMonth, List<SummaryBadgeUiModel>>,
+    val badgesByMonth: Map<YearMonth, SummaryBadgeUiModel>,
 ) {
     val isLoading: Boolean
         get() = loadingCount > 0
 
-    val currentMonthBadges: List<SummaryBadgeUiModel>
-        get() = badgesByMonth[currentMonth].orEmpty()
+    val currentMonthBadges: SummaryBadgeUiModel?
+        get() = badgesByMonth[currentMonth]
 
     fun emotionCellsOf(yearMonth: YearMonth): List<SummaryEmotionCellUiModel> =
         emotionCellsByMonth[yearMonth].orEmpty()

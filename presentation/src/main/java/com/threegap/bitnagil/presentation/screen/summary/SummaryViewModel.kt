@@ -58,10 +58,10 @@ class SummaryViewModel @Inject constructor(
             reduce { state.copy(loadingCount = state.loadingCount + 1) }
 
             getBadgesUseCase(yearMonth).fold(
-                onSuccess = { badges ->
+                onSuccess = { monthlyBadge ->
                     reduce {
                         state.copy(
-                            badgesByMonth = state.badgesByMonth + (yearMonth to badges.map { it.toUiModel() }),
+                            badgesByMonth = state.badgesByMonth + (yearMonth to monthlyBadge.toUiModel()),
                             loadingCount = state.loadingCount - 1,
                         )
                     }

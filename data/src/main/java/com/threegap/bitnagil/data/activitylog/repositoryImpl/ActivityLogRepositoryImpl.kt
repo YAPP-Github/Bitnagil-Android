@@ -3,8 +3,8 @@ package com.threegap.bitnagil.data.activitylog.repositoryImpl
 import com.threegap.bitnagil.data.activitylog.datasource.ActivityLogLocalDataSource
 import com.threegap.bitnagil.data.activitylog.datasource.ActivityLogRemoteDataSource
 import com.threegap.bitnagil.data.activitylog.model.response.toDomain
-import com.threegap.bitnagil.domain.activitylog.model.Badge
 import com.threegap.bitnagil.domain.activitylog.model.EmotionMarble
+import com.threegap.bitnagil.domain.activitylog.model.MonthlyBadge
 import com.threegap.bitnagil.domain.activitylog.repository.ActivityLogRepository
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -22,7 +22,7 @@ class ActivityLogRepositoryImpl @Inject constructor(
     private val badgeFetchMutex = Mutex()
     private val emotionMarbleFetchMutex = Mutex()
 
-    override suspend fun getBadges(yearMonth: YearMonth): Result<List<Badge>> {
+    override suspend fun getBadges(yearMonth: YearMonth): Result<MonthlyBadge> {
         activityLogLocalDataSource.badgesByMonth.value[yearMonth]?.let { return Result.success(it) }
 
         return badgeFetchMutex.withLock {
@@ -32,7 +32,7 @@ class ActivityLogRepositoryImpl @Inject constructor(
                 year = yearMonth.year,
                 month = yearMonth.monthValue,
             )
-                .map { badges -> badges.map { it.toDomain() } }
+                .map { it.toDomain() }
                 .onSuccess { activityLogLocalDataSource.saveBadges(yearMonth, it) }
         }
     }
