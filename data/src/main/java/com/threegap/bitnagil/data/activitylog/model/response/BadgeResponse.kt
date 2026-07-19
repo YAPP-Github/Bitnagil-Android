@@ -20,7 +20,7 @@ data class MonthlyBadgeResponse(
 @Serializable
 data class BadgeResponse(
     @SerialName("badgeType")
-    val badgeType: BadgeType,
+    val badgeType: String,
     @SerialName("imageUrl")
     val imageUrl: String,
     @SerialName("acquiredAt")
@@ -36,7 +36,10 @@ fun MonthlyBadgeResponse.toDomain(): MonthlyBadge =
 
 fun BadgeResponse.toDomain(): Badge =
     Badge(
-        type = badgeType,
+        type = badgeType.toBadgeType(),
         imageUrl = imageUrl,
         acquiredAt = acquiredAt?.let { LocalDateTime.parse(it) },
     )
+
+private fun String.toBadgeType(): BadgeType =
+    runCatching { BadgeType.valueOf(this) }.getOrDefault(BadgeType.UNKNOWN)
