@@ -1,7 +1,6 @@
 package com.threegap.bitnagil.presentation.screen.summary.model
 
 import com.threegap.bitnagil.domain.activitylog.model.Badge
-import com.threegap.bitnagil.domain.activitylog.model.BadgeType
 import com.threegap.bitnagil.domain.activitylog.model.MonthlyBadge
 
 data class SummaryBadgeUiModel(
@@ -11,8 +10,8 @@ data class SummaryBadgeUiModel(
 )
 
 data class SummaryBadgeItemUiModel(
-    val type: BadgeType,
-    val imageUrl: String,
+    val type: SummaryBadgeTypeUiModel,
+    val image: BadgeImage,
     val acquired: Boolean,
 )
 
@@ -23,9 +22,11 @@ fun MonthlyBadge.toUiModel(): SummaryBadgeUiModel =
         badges = badges.map { it.toUiModel() },
     )
 
-fun Badge.toUiModel(): SummaryBadgeItemUiModel =
-    SummaryBadgeItemUiModel(
-        type = type,
-        imageUrl = imageUrl,
+fun Badge.toUiModel(): SummaryBadgeItemUiModel {
+    val uiType = type.toUiModel()
+    return SummaryBadgeItemUiModel(
+        type = uiType,
+        image = if (uiType == SummaryBadgeTypeUiModel.Unknown) BadgeImage.Default else BadgeImage.Remote(imageUrl),
         acquired = acquired,
     )
+}
