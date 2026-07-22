@@ -3,7 +3,6 @@ package com.threegap.bitnagil.presentation.screen.summary.component.template.sum
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -59,7 +58,7 @@ fun SummaryBadgeView(
         ) {
             summaryBadge?.let {
                 Text(
-                    summaryBadge.badgeTitle,
+                    summaryBadge.badgeDescription,
                     style = BitnagilTheme.typography.cafe24SsurroundAir,
                     color = BitnagilTheme.colors.white,
                     textAlign = TextAlign.Center
@@ -69,8 +68,8 @@ fun SummaryBadgeView(
                     badges = summaryBadge.badges
                 )
 
-                BadgeDescriptionView(
-                    badgeDescription = summaryBadge.badgeDescription,
+                BadgeTitleView(
+                    badgeTitle = summaryBadge.badgeTitle,
                     isBadgeReserved = summaryBadge.badges.firstOrNull()?.type?.isReserved ?: false,
                     modifier = Modifier
                 )
@@ -174,40 +173,10 @@ private fun SummaryBadgeListView(
     ) {
         badges.forEach { badge ->
             if (isSingleItem)
-                Box(
-                    modifier = Modifier.height(125.dp).aspectRatio(1f)
-                ) {
-                    SummaryBadgeItemView(
-                        badge = badge,
-                        modifier = Modifier.align(alignment = Alignment.Center)
-                            .size(125.dp)
-                            .aspectRatio(1f)
-                            .rotate(14f)
-                    )
-
-                    StarImage(
-                        modifier = Modifier.width(6.dp).height(5.dp)
-                            .align(Alignment.TopStart)
-                            .offset(x = 12.dp, y = 8.dp).rotate(-34f),
-                        color = BitnagilTheme.colors.white,
-                        contentScale = ContentScale.FillBounds
-                    )
-
-                    StarImage(
-                        modifier = Modifier.width(13.dp).height(11.dp)
-                            .align(Alignment.TopStart)
-                            .offset(x = 1.dp, y = 12.dp).rotate(-13f),
-                        color = BitnagilTheme.colors.white,
-                        contentScale = ContentScale.FillBounds
-                    )
-
-                    StarImage(
-                        modifier = Modifier.size(18.dp)
-                            .align(Alignment.BottomEnd)
-                            .offset(x = -(5).dp, y = -(5).dp),
-                        color = BitnagilTheme.colors.white
-                    )
-                }
+                SummaryBadgeItemView(
+                    badge = badge,
+                    modifier = Modifier.size(125.dp).aspectRatio(1f)
+                )
             else
                 SummaryBadgeItemView(
                     badge = badge,
@@ -240,8 +209,8 @@ private fun SummaryBadgeItemView(
 }
 
 @Composable
-private fun BadgeDescriptionView(
-    badgeDescription: String,
+private fun BadgeTitleView(
+    badgeTitle: String,
     isBadgeReserved: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -256,11 +225,11 @@ private fun BadgeDescriptionView(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_shine),
             contentDescription = null,
             modifier = Modifier.size(15.dp),
-            colorFilter = ColorFilter.tint(if (isBadgeReserved) BitnagilTheme.colors.kakao else BitnagilTheme.colors.coolGray95)
+            colorFilter = ColorFilter.tint(if (isBadgeReserved) BitnagilTheme.colors.coolGray95 else BitnagilTheme.colors.kakao)
         )
 
         Text(
-            text = badgeDescription,
+            text = badgeTitle,
             style = BitnagilTheme.typography.caption1Medium,
             color = BitnagilTheme.colors.white
         )
@@ -273,7 +242,7 @@ private fun SummaryBadgePreview() {
     BitnagilTheme {
         SummaryBadgeView(
             summaryBadge = SummaryBadgeUiModel(
-                badgeTitle = "덕분에 도시가\n개선되고 있어요!",
+                badgeTitle = "외출 전문가",
                 badges = listOf(
                     SummaryBadgeItemUiModel(
                         type = SummaryBadgeTypeUiModel.Unknown,
@@ -281,7 +250,7 @@ private fun SummaryBadgePreview() {
                         acquired = false,
                     ),
                 ),
-                badgeDescription = "외출 전문가"
+                badgeDescription = "덕분에 도시가\n개선되고 있어요!"
             ),
             modifier = Modifier
         )
