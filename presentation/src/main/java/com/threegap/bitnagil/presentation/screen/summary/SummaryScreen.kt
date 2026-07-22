@@ -27,6 +27,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIconButton
+import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.screen.summary.component.template.summarybadge.SummaryBadgeView
 import com.threegap.bitnagil.presentation.screen.summary.component.template.summarycalendar.SummaryCalendarView
 import com.threegap.bitnagil.presentation.screen.summary.contract.SummaryState
@@ -37,12 +38,14 @@ import java.time.YearMonth
 @Composable
 fun SummaryScreenContainer(
     viewModel: SummaryViewModel = hiltViewModel(),
+    navigateToYouthPolicies: () -> Unit
 ) {
     val state by viewModel.collectAsState()
 
     SummaryScreen(
         state = state,
-        onMonthChanged = viewModel::onMonthChanged
+        onMonthChanged = viewModel::onMonthChanged,
+        onClickYouthPolicies = navigateToYouthPolicies
     )
 }
 
@@ -51,7 +54,8 @@ private const val INITIAL_PAGE = Int.MAX_VALUE / 2
 @Composable
 fun SummaryScreen(
     state: SummaryState,
-    onMonthChanged: (YearMonth) -> Unit = {}
+    onMonthChanged: (YearMonth) -> Unit = {},
+    onClickYouthPolicies: () -> Unit,
 ) {
     val verticalScrollState = rememberScrollState()
     val pagerState = rememberPagerState(initialPage = INITIAL_PAGE) { Int.MAX_VALUE }
@@ -95,7 +99,7 @@ fun SummaryScreen(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            Text("더보기", color = BitnagilTheme.colors.orange500, modifier = Modifier.padding(10.dp), style = BitnagilTheme.typography.body2SemiBold)
+            Text("더보기", color = BitnagilTheme.colors.orange500, modifier = Modifier.clickableWithoutRipple(onClick = onClickYouthPolicies).padding(10.dp), style = BitnagilTheme.typography.body2SemiBold)
         }
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -157,6 +161,6 @@ fun SummaryScreen(
 @Composable
 private fun SummaryScreenPreview() {
     BitnagilTheme {
-        SummaryScreen(state = SummaryState.INIT)
+        SummaryScreen(state = SummaryState.INIT, onClickYouthPolicies = {})
     }
 }

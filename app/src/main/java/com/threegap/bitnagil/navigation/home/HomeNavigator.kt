@@ -19,6 +19,7 @@ class HomeNavigator(
                 destination?.hasRoute(HomeRoute.Home::class) == true -> HomeRoute.Home
                 destination?.hasRoute(HomeRoute.RecommendRoutine::class) == true -> HomeRoute.RecommendRoutine
                 destination?.hasRoute(HomeRoute.MyPage::class) == true -> HomeRoute.MyPage
+                destination?.hasRoute(HomeRoute.Summary::class) == true -> HomeRoute.Summary
                 else -> null
             }
         }
