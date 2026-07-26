@@ -28,12 +28,16 @@ import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIconButton
 import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
+import com.threegap.bitnagil.presentation.screen.summary.component.template.emotiondaybottomsheet.EmotionDayBottomSheet
 import com.threegap.bitnagil.presentation.screen.summary.component.template.summarybadge.SummaryBadgeView
 import com.threegap.bitnagil.presentation.screen.summary.component.template.summarycalendar.SummaryCalendarView
 import com.threegap.bitnagil.presentation.screen.summary.contract.SummaryState
+import com.threegap.bitnagil.presentation.screen.summary.model.SummaryEmotionType
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
+import java.time.LocalDate
 import java.time.YearMonth
+import java.time.temporal.ChronoUnit
 
 @Composable
 fun SummaryScreenContainer(
@@ -42,9 +46,17 @@ fun SummaryScreenContainer(
 ) {
     val state by viewModel.collectAsState()
 
+    state.selectedEmotionDay?.let { selectedEmotionDay ->
+        EmotionDayBottomSheet(
+            onDismiss = viewModel::clearSelectedEmotionDay,
+            emotionDay = selectedEmotionDay,
+        )
+    }
+
     SummaryScreen(
         state = state,
         onMonthChanged = viewModel::onMonthChanged,
+        onClickEmotionDay = viewModel::selectEmotionDay,
         onClickYouthPolicies = navigateToYouthPolicies
     )
 }
@@ -55,6 +67,7 @@ private const val INITIAL_PAGE = Int.MAX_VALUE / 2
 fun SummaryScreen(
     state: SummaryState,
     onMonthChanged: (YearMonth) -> Unit = {},
+    onClickEmotionDay: (LocalDate, SummaryEmotionType) -> Unit = { _, _ -> },
     onClickYouthPolicies: () -> Unit,
 ) {
     val verticalScrollState = rememberScrollState()
@@ -149,6 +162,13 @@ fun SummaryScreen(
             SummaryCalendarView(
                 yearMonth = displayMonth,
                 emotionDays = state.emotionCellsOf(displayMonth),
+                onClickOtherMonthDay = { targetMonth ->
+                    scope.launch {
+                        val monthDiff = ChronoUnit.MONTHS.between(displayMonth, targetMonth)
+                        pagerState.animateScrollToPage(page + monthDiff.toInt())
+                    }
+                },
+                onClickEmotionDay = onClickEmotionDay,
                 modifier = Modifier.padding(horizontal = 20.dp)
             )
         }

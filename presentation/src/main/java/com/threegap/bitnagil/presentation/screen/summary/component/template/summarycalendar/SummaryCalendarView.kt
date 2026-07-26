@@ -19,9 +19,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.threegap.bitnagil.designsystem.BitnagilTheme
+import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.screen.summary.model.SummaryEmotionCellUiModel
 import com.threegap.bitnagil.presentation.screen.summary.model.SummaryEmotionType
 import java.time.DayOfWeek
+import java.time.LocalDate
 import java.time.YearMonth
 
 @Composable
@@ -30,6 +32,8 @@ fun SummaryCalendarView(
     emotionDays: List<SummaryEmotionCellUiModel>,
     modifier: Modifier = Modifier,
     firstDayOfWeek: DayOfWeek = DayOfWeek.SUNDAY,
+    onClickOtherMonthDay: (YearMonth) -> Unit = {},
+    onClickEmotionDay: (LocalDate, SummaryEmotionType) -> Unit = { _, _ -> },
 ) {
     val firstDayOfMonth = yearMonth.atDay(1)
 
@@ -64,10 +68,22 @@ fun SummaryCalendarView(
                     val isCurrentMonth = date.monthValue == yearMonth.monthValue
                     val emotionCellUiModel = if (isCurrentMonth) emotionDays.firstOrNull { it.day == date.dayOfMonth } else null
 
+                    // 이전/다음 달 날짜는 해당 달로 이동하고, 이번 달 날짜는 감정이 기록된 경우에만 선택할 수 있다.
+                    val onClick: (() -> Unit)? = when {
+                        !isCurrentMonth -> {
+                            { onClickOtherMonthDay(YearMonth.from(date)) }
+                        }
+                        emotionCellUiModel != null -> {
+                            { onClickEmotionDay(date, emotionCellUiModel.emotionType) }
+                        }
+                        else -> null
+                    }
+
                     SummaryCalendarCell(
                         isCurrentMonth = isCurrentMonth,
                         emotionType = emotionCellUiModel?.emotionType,
                         day = date.dayOfMonth,
+                        onClick = onClick,
                         modifier = Modifier.weight(1f),
                     )
                 }
@@ -92,9 +108,12 @@ fun SummaryCalendarCell(
     emotionType: SummaryEmotionType?,
     day: Int,
     modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
 ) {
     Box(
-        modifier = modifier.aspectRatio(1f),
+        modifier = modifier
+            .aspectRatio(1f)
+            .then(if (onClick != null) Modifier.clickableWithoutRipple(onClick = onClick) else Modifier),
         contentAlignment = Alignment.Center,
     ) {
         Box(

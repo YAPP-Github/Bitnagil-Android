@@ -6,12 +6,15 @@ import com.threegap.bitnagil.domain.activitylog.usecase.GetBadgesUseCase
 import com.threegap.bitnagil.domain.activitylog.usecase.GetEmotionMarblesUseCase
 import com.threegap.bitnagil.domain.emotion.usecase.GetEmotionRegisteredEventFlowUseCase
 import com.threegap.bitnagil.presentation.screen.summary.contract.SummaryState
+import com.threegap.bitnagil.presentation.screen.summary.model.SummaryEmotionDayUiModel
+import com.threegap.bitnagil.presentation.screen.summary.model.SummaryEmotionType
 import com.threegap.bitnagil.presentation.screen.summary.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.viewmodel.container
+import java.time.LocalDate
 import java.time.YearMonth
 import javax.inject.Inject
 
@@ -45,6 +48,18 @@ class SummaryViewModel @Inject constructor(
                 launch { fetchEmotionMarbles(targetMonth) }
             }
         }
+    }
+
+    fun selectEmotionDay(date: LocalDate, emotionType: SummaryEmotionType) = intent {
+        reduce {
+            state.copy(
+                selectedEmotionDay = SummaryEmotionDayUiModel(date = date, emotionType = emotionType),
+            )
+        }
+    }
+
+    fun clearSelectedEmotionDay() = intent {
+        reduce { state.copy(selectedEmotionDay = null) }
     }
 
     private fun observeEmotionRegisteredEvent() = intent {

@@ -2,6 +2,7 @@ package com.threegap.bitnagil.presentation.screen.summary.contract
 
 import com.threegap.bitnagil.presentation.screen.summary.model.SummaryBadgeUiModel
 import com.threegap.bitnagil.presentation.screen.summary.model.SummaryEmotionCellUiModel
+import com.threegap.bitnagil.presentation.screen.summary.model.SummaryEmotionDayUiModel
 import java.time.YearMonth
 
 data class SummaryState(
@@ -9,6 +10,7 @@ data class SummaryState(
     val currentMonth: YearMonth,
     val emotionCellsByMonth: Map<YearMonth, List<SummaryEmotionCellUiModel>>,
     val badgesByMonth: Map<YearMonth, SummaryBadgeUiModel>,
+    val selectedEmotionDay: SummaryEmotionDayUiModel?,
 ) {
     val isLoading: Boolean
         get() = loadingCount > 0
@@ -25,6 +27,7 @@ data class SummaryState(
             currentMonth = YearMonth.now(),
             emotionCellsByMonth = emptyMap(),
             badgesByMonth = emptyMap(),
+            selectedEmotionDay = null,
         )
     }
 }
