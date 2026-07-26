@@ -6,8 +6,8 @@ import com.threegap.bitnagil.domain.activitylog.usecase.GetBadgesUseCase
 import com.threegap.bitnagil.domain.activitylog.usecase.GetEmotionMarblesUseCase
 import com.threegap.bitnagil.domain.emotion.usecase.GetEmotionRegisteredEventFlowUseCase
 import com.threegap.bitnagil.presentation.screen.summary.contract.SummaryState
+import com.threegap.bitnagil.presentation.screen.summary.model.SummaryEmotionCellUiModel
 import com.threegap.bitnagil.presentation.screen.summary.model.SummaryEmotionDayUiModel
-import com.threegap.bitnagil.presentation.screen.summary.model.SummaryEmotionType
 import com.threegap.bitnagil.presentation.screen.summary.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.coroutineScope
@@ -50,10 +50,14 @@ class SummaryViewModel @Inject constructor(
         }
     }
 
-    fun selectEmotionDay(date: LocalDate, emotionType: SummaryEmotionType) = intent {
+    fun selectEmotionDay(date: LocalDate, emotionCell: SummaryEmotionCellUiModel) = intent {
         reduce {
             state.copy(
-                selectedEmotionDay = SummaryEmotionDayUiModel(date = date, emotionType = emotionType),
+                selectedEmotionDay = SummaryEmotionDayUiModel(
+                    date = date,
+                    emotionType = emotionCell.emotionType,
+                    imageUrl = emotionCell.imageUrl,
+                ),
             )
         }
     }

@@ -5,6 +5,7 @@ import java.time.LocalDate
 data class SummaryEmotionDayUiModel(
     val date: LocalDate,
     val emotionType: SummaryEmotionType,
+    val imageUrl: String,
 ) {
     val dayText: String
         get() = "${date.year}년 ${date.monthValue}월 ${date.dayOfMonth}일의 감정"

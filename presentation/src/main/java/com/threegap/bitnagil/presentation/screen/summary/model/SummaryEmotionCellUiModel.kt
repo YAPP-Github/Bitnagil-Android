@@ -6,12 +6,14 @@ import com.threegap.bitnagil.domain.emotion.model.EmotionMarbleType
 data class SummaryEmotionCellUiModel(
     val day: Int,
     val emotionType: SummaryEmotionType,
+    val imageUrl: String,
 )
 
 fun EmotionMarble.toUiModel(): SummaryEmotionCellUiModel =
     SummaryEmotionCellUiModel(
         day = date.dayOfMonth,
         emotionType = type.toUiModel(),
+        imageUrl = imageUrl,
     )
 
 fun EmotionMarbleType.toUiModel(): SummaryEmotionType =

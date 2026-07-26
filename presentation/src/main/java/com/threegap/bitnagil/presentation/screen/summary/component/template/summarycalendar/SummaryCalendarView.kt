@@ -33,7 +33,7 @@ fun SummaryCalendarView(
     modifier: Modifier = Modifier,
     firstDayOfWeek: DayOfWeek = DayOfWeek.SUNDAY,
     onClickOtherMonthDay: (YearMonth) -> Unit = {},
-    onClickEmotionDay: (LocalDate, SummaryEmotionType) -> Unit = { _, _ -> },
+    onClickEmotionDay: (LocalDate, SummaryEmotionCellUiModel) -> Unit = { _, _ -> },
 ) {
     val firstDayOfMonth = yearMonth.atDay(1)
 
@@ -74,7 +74,7 @@ fun SummaryCalendarView(
                             { onClickOtherMonthDay(YearMonth.from(date)) }
                         }
                         emotionCellUiModel != null -> {
-                            { onClickEmotionDay(date, emotionCellUiModel.emotionType) }
+                            { onClickEmotionDay(date, emotionCellUiModel) }
                         }
                         else -> null
                     }
@@ -137,12 +137,12 @@ private fun SummaryCalendarPreview() {
         SummaryCalendarView(
             yearMonth = YearMonth.now(),
             emotionDays = listOf(
-                SummaryEmotionCellUiModel(6, SummaryEmotionType.CALM),
-                SummaryEmotionCellUiModel(8, SummaryEmotionType.ANXIETY),
-                SummaryEmotionCellUiModel(9, SummaryEmotionType.VITALITY),
-                SummaryEmotionCellUiModel(11, SummaryEmotionType.LETHARGY),
-                SummaryEmotionCellUiModel(14, SummaryEmotionType.SATISFACTION),
-                SummaryEmotionCellUiModel(16, SummaryEmotionType.FATIGUE),
+                SummaryEmotionCellUiModel(6, SummaryEmotionType.CALM, ""),
+                SummaryEmotionCellUiModel(8, SummaryEmotionType.ANXIETY, ""),
+                SummaryEmotionCellUiModel(9, SummaryEmotionType.VITALITY, ""),
+                SummaryEmotionCellUiModel(11, SummaryEmotionType.LETHARGY, ""),
+                SummaryEmotionCellUiModel(14, SummaryEmotionType.SATISFACTION, ""),
+                SummaryEmotionCellUiModel(16, SummaryEmotionType.FATIGUE, ""),
             ),
             firstDayOfWeek = DayOfWeek.SUNDAY
         )

@@ -32,7 +32,7 @@ import com.threegap.bitnagil.presentation.screen.summary.component.template.emot
 import com.threegap.bitnagil.presentation.screen.summary.component.template.summarybadge.SummaryBadgeView
 import com.threegap.bitnagil.presentation.screen.summary.component.template.summarycalendar.SummaryCalendarView
 import com.threegap.bitnagil.presentation.screen.summary.contract.SummaryState
-import com.threegap.bitnagil.presentation.screen.summary.model.SummaryEmotionType
+import com.threegap.bitnagil.presentation.screen.summary.model.SummaryEmotionCellUiModel
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
 import java.time.LocalDate
@@ -67,7 +67,7 @@ private const val INITIAL_PAGE = Int.MAX_VALUE / 2
 fun SummaryScreen(
     state: SummaryState,
     onMonthChanged: (YearMonth) -> Unit = {},
-    onClickEmotionDay: (LocalDate, SummaryEmotionType) -> Unit = { _, _ -> },
+    onClickEmotionDay: (LocalDate, SummaryEmotionCellUiModel) -> Unit = { _, _ -> },
     onClickYouthPolicies: () -> Unit,
 ) {
     val verticalScrollState = rememberScrollState()
