@@ -10,5 +10,6 @@ interface ActivityLogLocalDataSource {
     val emotionMarblesByMonth: StateFlow<Map<YearMonth, List<EmotionMarble>>>
     fun saveBadges(yearMonth: YearMonth, monthlyBadge: MonthlyBadge)
     fun saveEmotionMarbles(yearMonth: YearMonth, emotionMarbles: List<EmotionMarble>)
+    fun removeEmotionMarbles(yearMonth: YearMonth)
     fun clearCache()
 }

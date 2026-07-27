@@ -57,4 +57,8 @@ class ActivityLogRepositoryImpl @Inject constructor(
                 .onSuccess { activityLogLocalDataSource.saveEmotionMarbles(yearMonth, it) }
         }
     }
+
+    override fun invalidateEmotionMarbleCache(yearMonth: YearMonth) {
+        activityLogLocalDataSource.removeEmotionMarbles(yearMonth)
+    }
 }

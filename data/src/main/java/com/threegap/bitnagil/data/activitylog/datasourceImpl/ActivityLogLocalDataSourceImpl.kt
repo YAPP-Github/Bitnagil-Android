@@ -25,6 +25,10 @@ class ActivityLogLocalDataSourceImpl @Inject constructor() : ActivityLogLocalDat
         _emotionMarblesByMonth.update { it + (yearMonth to emotionMarbles) }
     }
 
+    override fun removeEmotionMarbles(yearMonth: YearMonth) {
+        _emotionMarblesByMonth.update { it - yearMonth }
+    }
+
     override fun clearCache() {
         _badgesByMonth.update { emptyMap() }
         _emotionMarblesByMonth.update { emptyMap() }
