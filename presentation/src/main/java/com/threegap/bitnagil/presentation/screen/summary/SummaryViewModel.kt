@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.threegap.bitnagil.domain.activitylog.usecase.GetBadgesUseCase
 import com.threegap.bitnagil.domain.activitylog.usecase.GetEmotionMarblesUseCase
-import com.threegap.bitnagil.domain.emotion.usecase.GetEmotionRegisteredEventFlowUseCase
 import com.threegap.bitnagil.presentation.screen.summary.contract.SummaryState
 import com.threegap.bitnagil.presentation.screen.summary.model.SummaryEmotionCellUiModel
 import com.threegap.bitnagil.presentation.screen.summary.model.SummaryEmotionDayUiModel
@@ -22,14 +21,12 @@ import javax.inject.Inject
 class SummaryViewModel @Inject constructor(
     private val getBadgesUseCase: GetBadgesUseCase,
     private val getEmotionMarblesUseCase: GetEmotionMarblesUseCase,
-    private val getEmotionRegisteredEventFlowUseCase: GetEmotionRegisteredEventFlowUseCase,
 ) : ContainerHost<SummaryState, Unit>, ViewModel() {
 
     override val container = container<SummaryState, Unit>(initialState = SummaryState.INIT)
 
     init {
         onMonthChanged(YearMonth.now())
-        observeEmotionRegisteredEvent()
     }
 
     fun onMonthChanged(newMonth: YearMonth) = intent {
@@ -66,12 +63,6 @@ class SummaryViewModel @Inject constructor(
         reduce { state.copy(selectedEmotionDay = null) }
     }
 
-    private fun observeEmotionRegisteredEvent() = intent {
-        getEmotionRegisteredEventFlowUseCase().collect { registeredMonth ->
-            fetchEmotionMarbles(registeredMonth, forceRefresh = true)
-        }
-    }
-
     private suspend fun fetchBadges(yearMonth: YearMonth) {
         subIntent {
             reduce { state.copy(loadingCount = state.loadingCount + 1) }
@@ -93,14 +84,13 @@ class SummaryViewModel @Inject constructor(
         }
     }
 
-    private suspend fun fetchEmotionMarbles(yearMonth: YearMonth, forceRefresh: Boolean = false) {
+    private suspend fun fetchEmotionMarbles(yearMonth: YearMonth) {
         subIntent {
             reduce { state.copy(loadingCount = state.loadingCount + 1) }
 
             getEmotionMarblesUseCase(
                 startDate = yearMonth.atDay(1),
                 endDate = yearMonth.atEndOfMonth(),
-                forceRefresh = forceRefresh,
             ).fold(
                 onSuccess = { marblesByDate ->
                     val emotionCells = marblesByDate.values.map { it.toUiModel() }

@@ -8,8 +8,6 @@ import com.threegap.bitnagil.domain.emotion.model.Emotion
 import com.threegap.bitnagil.domain.emotion.model.EmotionRecommendRoutine
 import com.threegap.bitnagil.domain.emotion.repository.EmotionRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flow
@@ -17,7 +15,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.time.LocalDate
-import java.time.YearMonth
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -28,7 +25,6 @@ class EmotionRepositoryImpl @Inject constructor(
 ) : EmotionRepository {
 
     private val fetchMutex = Mutex()
-    private val _emotionRegisteredEventFlow = MutableSharedFlow<YearMonth>()
 
     override suspend fun getEmotions(): Result<List<Emotion>> {
         return emotionRemoteDataSource.getEmotions().map { response ->
@@ -43,14 +39,10 @@ class EmotionRepositoryImpl @Inject constructor(
             }
         }.also {
             if (it.isSuccess) {
-                val today = LocalDate.now()
-                fetchAndSaveDailyEmotion(today = today, forceRefresh = true)
-                _emotionRegisteredEventFlow.emit(YearMonth.from(today))
+                fetchAndSaveDailyEmotion(today = LocalDate.now(), forceRefresh = true)
             }
         }
     }
-
-    override suspend fun getEmotionRegisteredEventFlow(): Flow<YearMonth> = _emotionRegisteredEventFlow.asSharedFlow()
 
     override fun observeDailyEmotion(): Flow<Result<DailyEmotion>> = flow {
         fetchAndSaveDailyEmotion(LocalDate.now())
