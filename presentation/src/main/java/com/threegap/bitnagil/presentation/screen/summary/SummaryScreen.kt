@@ -161,7 +161,7 @@ fun SummaryScreen(
 
             SummaryCalendarView(
                 yearMonth = displayMonth,
-                emotionDays = state.emotionCellsOf(displayMonth),
+                emotionDays = state.emotionCellsAround(displayMonth),
                 onClickOtherMonthDay = { targetMonth ->
                     scope.launch {
                         val monthDiff = ChronoUnit.MONTHS.between(displayMonth, targetMonth)

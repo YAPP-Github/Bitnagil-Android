@@ -66,7 +66,7 @@ fun SummaryCalendarView(
                 repeat(7) { dayIndex ->
                     val date = startDate.plusDays((weekIndex * 7 + dayIndex).toLong())
                     val isCurrentMonth = date.monthValue == yearMonth.monthValue
-                    val emotionCellUiModel = if (isCurrentMonth) emotionDays.firstOrNull { it.day == date.dayOfMonth } else null
+                    val emotionCellUiModel = emotionDays.firstOrNull { it.date == date }
 
                     // 이전/다음 달 날짜는 해당 달로 이동하고, 이번 달 날짜는 감정이 기록된 경우에만 선택할 수 있다.
                     val onClick: (() -> Unit)? = when {
@@ -119,7 +119,10 @@ fun SummaryCalendarCell(
         Box(
             modifier = Modifier
                 .size(34.dp)
-                .background(color = emotionType?.backgroundColor ?: Color.Transparent, shape = CircleShape)
+                .background(
+                    color = emotionType?.let { if (isCurrentMonth) it.backgroundColor else BitnagilTheme.colors.coolGray98 } ?: Color.Transparent,
+                    shape = CircleShape,
+                ),
         )
 
         Text(
@@ -133,16 +136,21 @@ fun SummaryCalendarCell(
 @Preview(showBackground = true)
 @Composable
 private fun SummaryCalendarPreview() {
+    val currentMonth = YearMonth.now()
+    val prevMonth = currentMonth.minusMonths(1)
+    val nextMonth = currentMonth.plusMonths(1)
     BitnagilTheme {
         SummaryCalendarView(
-            yearMonth = YearMonth.now(),
+            yearMonth = currentMonth,
             emotionDays = listOf(
-                SummaryEmotionCellUiModel(6, SummaryEmotionType.CALM, ""),
-                SummaryEmotionCellUiModel(8, SummaryEmotionType.ANXIETY, ""),
-                SummaryEmotionCellUiModel(9, SummaryEmotionType.VITALITY, ""),
-                SummaryEmotionCellUiModel(11, SummaryEmotionType.LETHARGY, ""),
-                SummaryEmotionCellUiModel(14, SummaryEmotionType.SATISFACTION, ""),
-                SummaryEmotionCellUiModel(16, SummaryEmotionType.FATIGUE, ""),
+                SummaryEmotionCellUiModel(prevMonth.atDay(30), SummaryEmotionType.CALM, ""),
+                SummaryEmotionCellUiModel(currentMonth.atDay(6), SummaryEmotionType.CALM, ""),
+                SummaryEmotionCellUiModel(currentMonth.atDay(8), SummaryEmotionType.ANXIETY, ""),
+                SummaryEmotionCellUiModel(currentMonth.atDay(9), SummaryEmotionType.VITALITY, ""),
+                SummaryEmotionCellUiModel(currentMonth.atDay(11), SummaryEmotionType.LETHARGY, ""),
+                SummaryEmotionCellUiModel(currentMonth.atDay(14), SummaryEmotionType.SATISFACTION, ""),
+                SummaryEmotionCellUiModel(currentMonth.atDay(16), SummaryEmotionType.FATIGUE, ""),
+                SummaryEmotionCellUiModel(nextMonth.atDay(1), SummaryEmotionType.FATIGUE, ""),
             ),
             firstDayOfWeek = DayOfWeek.SUNDAY
         )

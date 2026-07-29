@@ -21,6 +21,9 @@ data class SummaryState(
     fun emotionCellsOf(yearMonth: YearMonth): List<SummaryEmotionCellUiModel> =
         emotionCellsByMonth[yearMonth].orEmpty()
 
+    fun emotionCellsAround(yearMonth: YearMonth): List<SummaryEmotionCellUiModel> =
+        emotionCellsOf(yearMonth.minusMonths(1)) + emotionCellsOf(yearMonth) + emotionCellsOf(yearMonth.plusMonths(1))
+
     companion object {
         val INIT = SummaryState(
             loadingCount = 0,
