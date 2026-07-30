@@ -263,7 +263,7 @@ private fun GestureDescriptionText(
         ) {
             Text("선택한 감정 구슬을 아래로 놓아주세요", style = BitnagilTheme.typography.body2Medium.copy(color = BitnagilTheme.colors.coolGray50))
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             Image(
                 painter = painterResource(R.drawable.ic_double_down_arrow_24),
@@ -317,7 +317,7 @@ private fun EmotionPager(
         val density = LocalDensity.current
         val screenWidth = with(density) { constraints.maxWidth.toDp() }
 
-        val itemSize = 140.dp
+        val itemSize = 132.dp
         val centerItemYOffset = 50.dp
         val contentPadding = (screenWidth - itemSize) / 2
         val pageSpacing = ((screenWidth - itemSize * 2) / 2)
