@@ -143,7 +143,7 @@ private fun SummaryCalendarPreview() {
         SummaryCalendarView(
             yearMonth = currentMonth,
             emotionDays = listOf(
-                SummaryEmotionCellUiModel(prevMonth.atDay(30), SummaryEmotionType.CALM, ""),
+                SummaryEmotionCellUiModel(prevMonth.atEndOfMonth(), SummaryEmotionType.CALM, ""),
                 SummaryEmotionCellUiModel(currentMonth.atDay(6), SummaryEmotionType.CALM, ""),
                 SummaryEmotionCellUiModel(currentMonth.atDay(8), SummaryEmotionType.ANXIETY, ""),
                 SummaryEmotionCellUiModel(currentMonth.atDay(9), SummaryEmotionType.VITALITY, ""),

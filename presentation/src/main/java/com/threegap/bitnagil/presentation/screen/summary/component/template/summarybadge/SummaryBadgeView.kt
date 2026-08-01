@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -92,8 +91,7 @@ private fun Background(
                     0.3f to Color(0xFFFE7120),
                 ),
             )
-            .statusBarsPadding()
-            .height(260.dp),
+            .statusBarsPadding(),
     ) {
         val width = constraints.maxWidth.pxToDp()
 
