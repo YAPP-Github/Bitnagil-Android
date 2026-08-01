@@ -1,19 +1,15 @@
 package com.threegap.bitnagil.presentation.screen.summary.component.template.emotiondaybottomsheet
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
@@ -25,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -113,63 +108,21 @@ private fun EmotionDayBottomSheetContent(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(emotionDay.imageUrl)
+                .crossfade(true)
+                .build(),
+            contentDescription = null,
+            contentScale = ContentScale.Fit,
+            modifier = Modifier.fillMaxWidth()
                 .height(200.dp)
                 .padding(start = 24.dp, end = 24.dp, bottom = 18.dp)
                 .background(
                     color = BitnagilTheme.colors.white,
                     shape = RoundedCornerShape(12.dp),
-                ),
-        ) {
-            Text(
-                emotionDay.emotionType.displayName,
-                style = BitnagilTheme.typography.body2SemiBold,
-                color = emotionDay.emotionType.textColor,
-                maxLines = 1,
-                modifier = Modifier
-                    .offset(x = 12.dp, y = 12.dp)
-                    .background(color = emotionDay.emotionType.backgroundColor, shape = RoundedCornerShape(8.dp))
-                    .padding(horizontal = 18.dp, vertical = 5.dp)
-            )
-
-            Box(
-                modifier = Modifier.align(alignment = Alignment.BottomCenter),
-                contentAlignment = Alignment.BottomCenter
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.img_pomo_hand),
-                    contentScale = ContentScale.FillBounds,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .width(88.dp)
-                        .height(64.dp),
                 )
-
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(emotionDay.imageUrl)
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = null,
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier
-                        .size(130.dp)
-                        .offset(y = -(28).dp),
-                )
-
-                Image(
-                    painter = painterResource(R.drawable.img_pomo_thumb),
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .width(36.dp)
-                        .height(28.dp)
-                        .offset(x = (-6).dp, y = (-24).dp),
-                    contentDescription = null,
-                )
-            }
-        }
+        )
     }
 }
 
