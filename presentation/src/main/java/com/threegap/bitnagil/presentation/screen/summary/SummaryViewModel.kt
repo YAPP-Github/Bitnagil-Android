@@ -88,10 +88,7 @@ class SummaryViewModel @Inject constructor(
         subIntent {
             reduce { state.copy(loadingCount = state.loadingCount + 1) }
 
-            getEmotionMarblesUseCase(
-                startDate = yearMonth.atDay(1),
-                endDate = yearMonth.atEndOfMonth(),
-            ).fold(
+            getEmotionMarblesUseCase(yearMonth).fold(
                 onSuccess = { marblesByDate ->
                     val emotionCells = marblesByDate.values.map { it.toUiModel() }
                     reduce {

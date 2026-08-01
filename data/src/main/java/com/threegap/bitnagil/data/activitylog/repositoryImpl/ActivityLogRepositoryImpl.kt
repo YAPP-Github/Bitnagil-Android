@@ -8,7 +8,6 @@ import com.threegap.bitnagil.domain.activitylog.model.MonthlyBadge
 import com.threegap.bitnagil.domain.activitylog.repository.ActivityLogRepository
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import java.time.LocalDate
 import java.time.YearMonth
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -37,9 +36,7 @@ class ActivityLogRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getEmotionMarbles(startDate: LocalDate, endDate: LocalDate, forceRefresh: Boolean): Result<List<EmotionMarble>> {
-        val yearMonth = YearMonth.from(startDate)
-
+    override suspend fun getEmotionMarbles(yearMonth: YearMonth, forceRefresh: Boolean): Result<List<EmotionMarble>> {
         if (!forceRefresh) {
             activityLogLocalDataSource.emotionMarblesByMonth.value[yearMonth]?.let { return Result.success(it) }
         }
@@ -50,8 +47,8 @@ class ActivityLogRepositoryImpl @Inject constructor(
             }
 
             activityLogRemoteDataSource.getEmotionMarbles(
-                startDate = startDate.toString(),
-                endDate = endDate.toString(),
+                startDate = yearMonth.atDay(1).toString(),
+                endDate = yearMonth.atEndOfMonth().toString(),
             )
                 .map { marbles -> marbles.map { it.toDomain() } }
                 .onSuccess { activityLogLocalDataSource.saveEmotionMarbles(yearMonth, it) }
