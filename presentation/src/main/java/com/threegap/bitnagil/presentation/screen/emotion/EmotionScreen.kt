@@ -41,7 +41,7 @@ fun EmotionScreenContainer(
         EmotionScreenStep.Emotion -> BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
             val height = constraints.maxHeight.pxToDp()
 
-            if (height > 600.dp) {
+            if (height >= 700.dp) {
                 SwipeEmotionSelectionScreen(
                     state = state,
                     onClickPreviousButton = navigateToBack,

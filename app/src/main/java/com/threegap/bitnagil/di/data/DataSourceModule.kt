@@ -1,5 +1,9 @@
 package com.threegap.bitnagil.di.data
 
+import com.threegap.bitnagil.data.activitylog.datasource.ActivityLogLocalDataSource
+import com.threegap.bitnagil.data.activitylog.datasource.ActivityLogRemoteDataSource
+import com.threegap.bitnagil.data.activitylog.datasourceImpl.ActivityLogLocalDataSourceImpl
+import com.threegap.bitnagil.data.activitylog.datasourceImpl.ActivityLogRemoteDataSourceImpl
 import com.threegap.bitnagil.data.address.datasource.AddressDataSource
 import com.threegap.bitnagil.data.address.datasource.LocationDataSource
 import com.threegap.bitnagil.data.address.datasourceImpl.AddressDataSourceImpl
@@ -93,4 +97,12 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindReportDataSource(impl: ReportDataSourceImpl): ReportDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindActivityLogRemoteDataSource(impl: ActivityLogRemoteDataSourceImpl): ActivityLogRemoteDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindActivityLogLocalDataSource(impl: ActivityLogLocalDataSourceImpl): ActivityLogLocalDataSource
 }

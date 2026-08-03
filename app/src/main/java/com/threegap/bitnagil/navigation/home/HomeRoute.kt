@@ -21,6 +21,11 @@ sealed interface HomeRoute {
     data object MyPage : HomeRoute {
         override val showFloatingButton: Boolean = false
     }
+
+    @Serializable
+    data object Summary : HomeRoute {
+        override val showFloatingButton: Boolean = false
+    }
 }
 
 data class HomeTab(
@@ -32,5 +37,6 @@ data class HomeTab(
 val homeTabList = listOf(
     HomeTab(HomeRoute.Home, "홈", R.drawable.ic_home),
     HomeTab(HomeRoute.RecommendRoutine, "추천 루틴", R.drawable.ic_routine_recommend),
+    HomeTab(HomeRoute.Summary, "리포트", R.drawable.ic_report),
     HomeTab(HomeRoute.MyPage, "마이페이지", R.drawable.ic_profile),
 )

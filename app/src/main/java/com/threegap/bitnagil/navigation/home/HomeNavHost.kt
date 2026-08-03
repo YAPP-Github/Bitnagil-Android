@@ -29,6 +29,7 @@ import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.screen.home.HomeScreenContainer
 import com.threegap.bitnagil.presentation.screen.mypage.MyPageScreenContainer
 import com.threegap.bitnagil.presentation.screen.recommendroutine.RecommendRoutineScreenContainer
+import com.threegap.bitnagil.presentation.screen.summary.SummaryScreenContainer
 import com.threegap.bitnagil.presentation.util.statusbar.NavStatusBarEffect
 import com.threegap.bitnagil.presentation.util.toast.GlobalBitnagilToast
 
@@ -99,6 +100,12 @@ fun HomeNavHost(
                             navigateToNotice = navigateToNotice,
                             navigateToQnA = navigateToQnA,
                             navigateToReportHistory = navigateToReportHistory,
+                        )
+                    }
+
+                    composable<HomeRoute.Summary> {
+                        SummaryScreenContainer(
+                            navigateToYouthPolicies = {} // todo - 청년공고 화면 구현 후 연결 필요
                         )
                     }
                 }

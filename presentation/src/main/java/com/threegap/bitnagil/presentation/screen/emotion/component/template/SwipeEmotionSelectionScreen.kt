@@ -37,6 +37,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -263,7 +264,7 @@ private fun GestureDescriptionText(
         ) {
             Text("선택한 감정 구슬을 아래로 놓아주세요", style = BitnagilTheme.typography.body2Medium.copy(color = BitnagilTheme.colors.coolGray50))
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             Image(
                 painter = painterResource(R.drawable.ic_double_down_arrow_24),
@@ -317,7 +318,7 @@ private fun EmotionPager(
         val density = LocalDensity.current
         val screenWidth = with(density) { constraints.maxWidth.toDp() }
 
-        val itemSize = 140.dp
+        val itemSize = 132.dp
         val centerItemYOffset = 50.dp
         val contentPadding = (screenWidth - itemSize) / 2
         val pageSpacing = ((screenWidth - itemSize * 2) / 2)
@@ -374,9 +375,14 @@ private fun EmotionPagerItem(
     enabled: Boolean,
     onSelectEmotion: (String) -> Unit,
 ) {
-    val pageOffset = (
-        (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
-        ).absoluteValue
+    val pageOffsetState = remember(pagerState, page) {
+        derivedStateOf {
+            ((pagerState.currentPage - page) + pagerState.currentPageOffsetFraction).absoluteValue
+        }
+    }
+    val isCenterPage by remember(pageOffsetState) {
+        derivedStateOf { pageOffsetState.value == 0f }
+    }
 
     val offsetY = remember { Animatable(0f) }
     val coroutineScope = rememberCoroutineScope()
@@ -387,14 +393,14 @@ private fun EmotionPagerItem(
             .size(size)
             .aspectRatio(1f)
             .graphicsLayer {
-                translationY = lerp(start = centerItemYOffset * 1f, stop = 0f, pageOffset)
+                translationY = lerp(start = centerItemYOffset * 1f, stop = 0f, pageOffsetState.value)
             }
             .offset {
                 IntOffset(0, offsetY.value.toInt())
             }
             .draggable(
                 orientation = Orientation.Vertical,
-                enabled = (pageOffset == 0f && enabled),
+                enabled = (isCenterPage && enabled),
                 state = rememberDraggableState { deltaY ->
                     coroutineScope.launch {
                         val newOffsetY = offsetY.value + deltaY
