@@ -65,6 +65,16 @@ android {
                 ?: System.getenv("BITNAGIL_DEV_URL")
                 ?: throw GradleException("bitnagil.dev.url 값이 없습니다.")
             buildConfigField("String", "BASE_URL", "\"$devUrl\"")
+
+            val facebookDebugAppId = properties["facebook.debug.app.id"] as? String
+                ?: System.getenv("FACEBOOK_DEBUG_APP_ID")
+                ?: throw GradleException("facebook.debug.app.id 값이 없습니다.")
+            val facebookDebugClientToken = properties["facebook.debug.client.token"] as? String
+                ?: System.getenv("FACEBOOK_DEBUG_CLIENT_TOKEN")
+                ?: throw GradleException("facebook.debug.client.token 값이 없습니다.")
+
+            resValue("string", "facebook_app_id", facebookDebugAppId)
+            resValue("string", "facebook_client_token", facebookDebugClientToken)
         }
 
         release {
@@ -72,6 +82,17 @@ android {
                 ?: System.getenv("BITNAGIL_PROD_URL")
                 ?: throw GradleException("bitnagil.prod.url 값이 없습니다.")
             buildConfigField("String", "BASE_URL", "\"$prodUrl\"")
+
+            val facebookAppId = properties["facebook.app.id"] as? String
+                ?: System.getenv("FACEBOOK_APP_ID")
+                ?: throw GradleException("facebook.app.id 값이 없습니다.")
+            val facebookClientToken = properties["facebook.client.token"] as? String
+                ?: System.getenv("FACEBOOK_CLIENT_TOKEN")
+                ?: throw GradleException("facebook.client.token 값이 없습니다.")
+
+            resValue("string", "facebook_app_id", facebookAppId)
+            resValue("string", "facebook_client_token", facebookClientToken)
+
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
@@ -84,6 +105,7 @@ android {
 
     buildFeatures {
         buildConfig = true
+        resValues = true
     }
 }
 
@@ -97,6 +119,7 @@ dependencies {
     implementation(projects.presentation)
 
     implementation(libs.kakao.v2.user)
+    implementation(libs.facebook.core)
     implementation(platform(libs.retrofit.bom))
     implementation(libs.bundles.retrofit)
     implementation(platform(libs.okhttp.bom))

@@ -9,6 +9,8 @@ import coil3.memory.MemoryCache
 import coil3.network.okhttp.OkHttpNetworkFetcherFactory
 import coil3.request.crossfade
 import coil3.util.DebugLogger
+import com.facebook.FacebookSdk
+import com.facebook.LoggingBehavior
 import com.kakao.sdk.common.KakaoSdk
 import com.threegap.bitnagil.di.core.CoilEntryPoint
 import dagger.hilt.EntryPoints
@@ -21,6 +23,7 @@ class BitnagilApplication : Application(), SingletonImageLoader.Factory {
     override fun onCreate() {
         super.onCreate()
         initKakaoSdk()
+        configureMetaAppEvents()
     }
 
     override fun newImageLoader(context: PlatformContext): ImageLoader {
@@ -48,5 +51,12 @@ class BitnagilApplication : Application(), SingletonImageLoader.Factory {
 
     private fun initKakaoSdk() {
         KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_APP_KEY)
+    }
+
+    private fun configureMetaAppEvents() {
+        if (BuildConfig.DEBUG) {
+            FacebookSdk.setIsDebugEnabled(true)
+            FacebookSdk.addLoggingBehavior(LoggingBehavior.APP_EVENTS)
+        }
     }
 }
