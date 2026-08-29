@@ -10,6 +10,6 @@ class MetaAnalyticsLogger(private val context: Context) : AnalyticsLogger {
     private val logger by lazy { AppEventsLogger.newLogger(context) }
 
     override fun logOnBoardingCompleted() {
-        logger.logEvent(AppEventsConstants.EVENT_NAME_COMPLETED_REGISTRATION)
+        logger.logEvent(AppEventsConstants.EVENT_NAME_COMPLETED_TUTORIAL)
     }
 }
