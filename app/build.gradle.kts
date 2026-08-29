@@ -1,4 +1,5 @@
-import java.util.Properties
+import com.threegap.bitnagil.convention.extension.propertyOrNull
+import com.threegap.bitnagil.convention.extension.requireProperty
 
 plugins {
     alias(libs.plugins.bitnagil.android.application)
@@ -7,34 +8,17 @@ plugins {
 }
 
 android {
-    val properties =
-        Properties().apply {
-            val propFile = rootProject.file("local.properties")
-            if (propFile.exists()) {
-                load(propFile.inputStream())
-            }
-        }
-
     signingConfigs {
         create("release") {
-            keyAlias = properties["release.key.alias"] as? String
-                ?: System.getenv("RELEASE_KEY_ALIAS")
-                ?: throw GradleException("RELEASE_KEY_ALIAS 값이 없습니다.")
-            keyPassword = properties["release.key.password"] as? String
-                ?: System.getenv("RELEASE_KEY_PASSWORD")
-                ?: throw GradleException("RELEASE_KEY_PASSWORD 값이 없습니다.")
-            storePassword = properties["release.keystore.password"] as? String
-                ?: System.getenv("RELEASE_KEYSTORE_PASSWORD")
-                ?: throw GradleException("RELEASE_KEYSTORE_PASSWORD 값이 없습니다.")
-            storeFile = File("${properties["release.keystore.path"]}")
+            keyAlias = requireProperty("release.key.alias", "RELEASE_KEY_ALIAS")
+            keyPassword = requireProperty("release.key.password", "RELEASE_KEY_PASSWORD")
+            storePassword = requireProperty("release.keystore.password", "RELEASE_KEYSTORE_PASSWORD")
+            storeFile = File("${propertyOrNull("release.keystore.path", "RELEASE_KEYSTORE_PATH")}")
         }
     }
 
     defaultConfig {
-        val kakaoNativeAppKey =
-            (properties["kakao.native.app.key"] as? String)
-                ?: System.getenv("KAKAO_NATIVE_APP_KEY")
-                ?: throw GradleException("KAKAO_NATIVE_APP_KEY 값이 없습니다.")
+        val kakaoNativeAppKey = requireProperty("kakao.native.app.key", "KAKAO_NATIVE_APP_KEY")
 
         manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = kakaoNativeAppKey
         buildConfigField(
@@ -43,10 +27,7 @@ android {
             value = "\"$kakaoNativeAppKey\"",
         )
 
-        val kakaoRestApiKey =
-            (properties["kakao.rest.api.key"] as? String)
-                ?: System.getenv("KAKAO_REST_API_KEY")
-                ?: throw GradleException("KAKAO_REST_API_KEY 값이 없습니다.")
+        val kakaoRestApiKey = requireProperty("kakao.rest.api.key", "KAKAO_REST_API_KEY")
 
         buildConfigField(
             type = "String",
@@ -61,34 +42,22 @@ android {
             versionNameSuffix = "-DEBUG"
             isDebuggable = true
 
-            val devUrl = properties["bitnagil.dev.url"] as? String
-                ?: System.getenv("BITNAGIL_DEV_URL")
-                ?: throw GradleException("bitnagil.dev.url 값이 없습니다.")
+            val devUrl = requireProperty("bitnagil.dev.url", "BITNAGIL_DEV_URL")
             buildConfigField("String", "BASE_URL", "\"$devUrl\"")
 
-            val facebookDebugAppId = properties["facebook.debug.app.id"] as? String
-                ?: System.getenv("FACEBOOK_DEBUG_APP_ID")
-                ?: throw GradleException("facebook.debug.app.id 값이 없습니다.")
-            val facebookDebugClientToken = properties["facebook.debug.client.token"] as? String
-                ?: System.getenv("FACEBOOK_DEBUG_CLIENT_TOKEN")
-                ?: throw GradleException("facebook.debug.client.token 값이 없습니다.")
+            val facebookDebugAppId = requireProperty("facebook.debug.app.id", "FACEBOOK_DEBUG_APP_ID")
+            val facebookDebugClientToken = requireProperty("facebook.debug.client.token", "FACEBOOK_DEBUG_CLIENT_TOKEN")
 
             resValue("string", "facebook_app_id", facebookDebugAppId)
             resValue("string", "facebook_client_token", facebookDebugClientToken)
         }
 
         release {
-            val prodUrl = properties["bitnagil.prod.url"] as? String
-                ?: System.getenv("BITNAGIL_PROD_URL")
-                ?: throw GradleException("bitnagil.prod.url 값이 없습니다.")
+            val prodUrl = requireProperty("bitnagil.prod.url", "BITNAGIL_PROD_URL")
             buildConfigField("String", "BASE_URL", "\"$prodUrl\"")
 
-            val facebookAppId = properties["facebook.app.id"] as? String
-                ?: System.getenv("FACEBOOK_APP_ID")
-                ?: throw GradleException("facebook.app.id 값이 없습니다.")
-            val facebookClientToken = properties["facebook.client.token"] as? String
-                ?: System.getenv("FACEBOOK_CLIENT_TOKEN")
-                ?: throw GradleException("facebook.client.token 값이 없습니다.")
+            val facebookAppId = requireProperty("facebook.app.id", "FACEBOOK_APP_ID")
+            val facebookClientToken = requireProperty("facebook.client.token", "FACEBOOK_CLIENT_TOKEN")
 
             resValue("string", "facebook_app_id", facebookAppId)
             resValue("string", "facebook_client_token", facebookClientToken)
