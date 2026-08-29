@@ -346,7 +346,7 @@ class OnBoardingViewModel @AssistedInject constructor(
 
         registerRecommendOnBoardingRoutinesUseCase(selectedRecommendRoutineIds = selectedRoutineIds).fold(
             onSuccess = { _ ->
-                analyticsLogger.logOnBoardingCompleted()
+                runCatching { analyticsLogger.logOnBoardingCompleted() }
                 postSideEffect(sideEffect = OnBoardingSideEffect.NavigateToHomeScreen)
             },
             onFailure = {
@@ -355,7 +355,7 @@ class OnBoardingViewModel @AssistedInject constructor(
     }
 
     fun skipRegisterRecommendRoutines() = intent {
-        analyticsLogger.logOnBoardingCompleted()
+        runCatching { analyticsLogger.logOnBoardingCompleted() }
         postSideEffect(sideEffect = OnBoardingSideEffect.NavigateToHomeScreen)
     }
 }

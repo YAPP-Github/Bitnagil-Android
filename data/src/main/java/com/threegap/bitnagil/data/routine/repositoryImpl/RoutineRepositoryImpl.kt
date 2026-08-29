@@ -34,7 +34,7 @@ class RoutineRepositoryImpl @Inject constructor(
         if (!routineCompletionInfos.hasCompletedRoutine) return
 
         val isFirstCompletion = routineLocalDataSource.markFirstRoutineCompletion().getOrDefault(false)
-        if (isFirstCompletion) analyticsLogger.logFirstRoutineCompleted()
+        if (isFirstCompletion) runCatching { analyticsLogger.logFirstRoutineCompleted() }
     }
 
     override suspend fun getRoutine(routineId: String): Result<Routine> =

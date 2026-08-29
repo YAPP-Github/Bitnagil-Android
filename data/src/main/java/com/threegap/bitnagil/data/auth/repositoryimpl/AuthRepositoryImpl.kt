@@ -23,7 +23,7 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun submitAgreement(termsAgreement: TermsAgreement): Result<Unit> =
         authRemoteDataSource.submitAgreement(termsAgreement.toDto())
-            .onSuccess { analyticsLogger.logSignUpCompleted() }
+            .onSuccess { runCatching { analyticsLogger.logSignUpCompleted() } }
 
     override suspend fun logout(): Result<Unit> =
         authRemoteDataSource.logout()
