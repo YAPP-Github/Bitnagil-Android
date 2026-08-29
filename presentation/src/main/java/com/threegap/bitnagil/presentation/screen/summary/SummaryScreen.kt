@@ -1,6 +1,5 @@
 package com.threegap.bitnagil.presentation.screen.summary
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,14 +19,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.threegap.bitnagil.designsystem.BitnagilTheme
 import com.threegap.bitnagil.designsystem.R
 import com.threegap.bitnagil.designsystem.component.atom.BitnagilIconButton
-import com.threegap.bitnagil.designsystem.modifier.clickableWithoutRipple
 import com.threegap.bitnagil.presentation.screen.summary.component.template.emotiondaybottomsheet.EmotionDayBottomSheet
 import com.threegap.bitnagil.presentation.screen.summary.component.template.summarybadge.SummaryBadgeView
 import com.threegap.bitnagil.presentation.screen.summary.component.template.summarycalendar.SummaryCalendarView
@@ -95,25 +92,6 @@ fun SummaryScreen(
                 .fillMaxWidth()
                 .height(360.dp),
         )
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(color = BitnagilTheme.colors.orange25)
-                .padding(10.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = painterResource(R.drawable.ic_complaint),
-                contentDescription = null
-            )
-
-            Text("청년 공고도 확인할 수 있어요!", style = BitnagilTheme.typography.body2SemiBold, modifier = Modifier.padding(start = 10.dp))
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            Text("더보기", color = BitnagilTheme.colors.orange500, modifier = Modifier.clickableWithoutRipple(onClick = onClickYouthPolicies).padding(10.dp), style = BitnagilTheme.typography.body2SemiBold)
-        }
 
         Spacer(modifier = Modifier.height(20.dp))
 
