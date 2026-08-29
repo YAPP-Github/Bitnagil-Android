@@ -35,8 +35,8 @@ fun Project.propertyOrNull(propertyKey: String, environmentKey: String): String?
     localProperties.getProperty(propertyKey) ?: System.getenv(environmentKey)
 
 /**
- * [propertyOrNull] 과 동일하되, 값이 없으면 설정 단계에서 실패한다.
+ * [propertyOrNull] 과 동일하되, 값이 없거나 비어 있으면 설정 단계에서 실패한다.
  */
 fun Project.requireProperty(propertyKey: String, environmentKey: String): String =
-    propertyOrNull(propertyKey, environmentKey)
+    propertyOrNull(propertyKey, environmentKey)?.takeIf(String::isNotBlank)
         ?: throw GradleException("$propertyKey 값이 없습니다.")
