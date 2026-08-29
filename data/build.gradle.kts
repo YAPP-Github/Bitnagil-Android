@@ -8,6 +8,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.analytics)
     implementation(projects.core.network)
     implementation(projects.core.datastore)
     implementation(projects.domain)
