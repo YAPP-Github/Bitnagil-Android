@@ -1,5 +1,6 @@
 package com.threegap.bitnagil.data.auth.repositoryimpl
 
+import com.threegap.bitnagil.analytics.AnalyticsLogger
 import com.threegap.bitnagil.data.auth.datasource.AuthLocalDataSource
 import com.threegap.bitnagil.data.auth.datasource.AuthRemoteDataSource
 import com.threegap.bitnagil.data.auth.model.request.LoginRequest
@@ -13,6 +14,7 @@ import javax.inject.Inject
 class AuthRepositoryImpl @Inject constructor(
     private val authRemoteDataSource: AuthRemoteDataSource,
     private val authLocalDataSource: AuthLocalDataSource,
+    private val analyticsLogger: AnalyticsLogger,
 ) : AuthRepository {
 
     override suspend fun login(socialAccessToken: String, socialType: String): Result<AuthSession> =
@@ -21,6 +23,7 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun submitAgreement(termsAgreement: TermsAgreement): Result<Unit> =
         authRemoteDataSource.submitAgreement(termsAgreement.toDto())
+            .onSuccess { analyticsLogger.logSignUpCompleted() }
 
     override suspend fun logout(): Result<Unit> =
         authRemoteDataSource.logout()
