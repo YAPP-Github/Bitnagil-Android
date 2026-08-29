@@ -7,6 +7,7 @@ plugins {
 }
 
 dependencies {
+    implementation(projects.core.analytics)
     implementation(projects.core.designsystem)
     implementation(projects.domain)
 

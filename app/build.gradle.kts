@@ -44,23 +44,11 @@ android {
 
             val devUrl = requireProperty("bitnagil.dev.url", "BITNAGIL_DEV_URL")
             buildConfigField("String", "BASE_URL", "\"$devUrl\"")
-
-            val facebookDebugAppId = requireProperty("facebook.debug.app.id", "FACEBOOK_DEBUG_APP_ID")
-            val facebookDebugClientToken = requireProperty("facebook.debug.client.token", "FACEBOOK_DEBUG_CLIENT_TOKEN")
-
-            resValue("string", "facebook_app_id", facebookDebugAppId)
-            resValue("string", "facebook_client_token", facebookDebugClientToken)
         }
 
         release {
             val prodUrl = requireProperty("bitnagil.prod.url", "BITNAGIL_PROD_URL")
             buildConfigField("String", "BASE_URL", "\"$prodUrl\"")
-
-            val facebookAppId = requireProperty("facebook.app.id", "FACEBOOK_APP_ID")
-            val facebookClientToken = requireProperty("facebook.client.token", "FACEBOOK_CLIENT_TOKEN")
-
-            resValue("string", "facebook_app_id", facebookAppId)
-            resValue("string", "facebook_client_token", facebookClientToken)
 
             isMinifyEnabled = true
             isShrinkResources = true
@@ -74,11 +62,11 @@ android {
 
     buildFeatures {
         buildConfig = true
-        resValues = true
     }
 }
 
 dependencies {
+    implementation(projects.core.analytics)
     implementation(projects.core.datastore)
     implementation(projects.core.designsystem)
     implementation(projects.core.network)
@@ -88,7 +76,6 @@ dependencies {
     implementation(projects.presentation)
 
     implementation(libs.kakao.v2.user)
-    implementation(libs.facebook.core)
     implementation(platform(libs.retrofit.bom))
     implementation(libs.bundles.retrofit)
     implementation(platform(libs.okhttp.bom))

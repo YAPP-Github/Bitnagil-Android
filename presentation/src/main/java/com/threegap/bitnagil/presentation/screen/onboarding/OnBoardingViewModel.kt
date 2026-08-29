@@ -3,6 +3,7 @@ package com.threegap.bitnagil.presentation.screen.onboarding
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.threegap.bitnagil.analytics.AnalyticsLogger
 import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingAbstractUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingsUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.GetRecommendOnBoardingRoutinesUseCase
@@ -16,7 +17,6 @@ import com.threegap.bitnagil.presentation.screen.onboarding.model.OnBoardingPage
 import com.threegap.bitnagil.presentation.screen.onboarding.model.OnBoardingSetType
 import com.threegap.bitnagil.presentation.screen.onboarding.model.navarg.OnBoardingScreenArg
 import com.threegap.bitnagil.presentation.screen.onboarding.model.toUiModel
-import com.threegap.bitnagil.presentation.util.analytics.AnalyticsLogger
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

@@ -26,6 +26,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "Bitnagil"
 include(":app")
+include(":core:analytics")
 include(":core:datastore")
 include(":core:designsystem")
 include(":core:network")

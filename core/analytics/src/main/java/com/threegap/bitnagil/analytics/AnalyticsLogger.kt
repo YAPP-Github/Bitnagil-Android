@@ -1,4 +1,4 @@
-package com.threegap.bitnagil.presentation.util.analytics
+package com.threegap.bitnagil.analytics
 
 interface AnalyticsLogger {
     /**

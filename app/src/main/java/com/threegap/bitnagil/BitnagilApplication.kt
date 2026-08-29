@@ -9,9 +9,8 @@ import coil3.memory.MemoryCache
 import coil3.network.okhttp.OkHttpNetworkFetcherFactory
 import coil3.request.crossfade
 import coil3.util.DebugLogger
-import com.facebook.FacebookSdk
-import com.facebook.LoggingBehavior
 import com.kakao.sdk.common.KakaoSdk
+import com.threegap.bitnagil.analytics.meta.MetaAnalyticsInitializer
 import com.threegap.bitnagil.di.core.CoilEntryPoint
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.HiltAndroidApp
@@ -54,9 +53,6 @@ class BitnagilApplication : Application(), SingletonImageLoader.Factory {
     }
 
     private fun configureMetaAppEvents() {
-        if (BuildConfig.DEBUG) {
-            FacebookSdk.setIsDebugEnabled(true)
-            FacebookSdk.addLoggingBehavior(LoggingBehavior.APP_EVENTS)
-        }
+        MetaAnalyticsInitializer.initialize(isDebugBuild = BuildConfig.DEBUG)
     }
 }
