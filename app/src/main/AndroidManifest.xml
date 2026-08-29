@@ -57,5 +57,9 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <meta-data android:name="com.facebook.sdk.AutoInitEnabled" android:value="true" />
+        <meta-data android:name="com.facebook.sdk.AutoLogAppEventsEnabled" android:value="true" />
+        <meta-data android:name="com.facebook.sdk.AdvertiserIDCollectionEnabled" android:value="true" />
     </application>
 </manifest>

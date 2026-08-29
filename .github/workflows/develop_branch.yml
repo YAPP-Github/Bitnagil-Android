@@ -24,6 +24,10 @@ jobs:
           RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
           RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
           RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+          FACEBOOK_APP_ID: ${{ secrets.FACEBOOK_APP_ID }}
+          FACEBOOK_CLIENT_TOKEN: ${{ secrets.FACEBOOK_CLIENT_TOKEN }}
+          FACEBOOK_DEBUG_APP_ID: ${{ secrets.FACEBOOK_DEBUG_APP_ID }}
+          FACEBOOK_DEBUG_CLIENT_TOKEN: ${{ secrets.FACEBOOK_DEBUG_CLIENT_TOKEN }}
         run: |
           # Keystore Decoding
           echo $RELEASE_STORE_BASE_64 > encoded_keystore.txt
@@ -38,6 +42,10 @@ jobs:
           echo "release.key.password=$RELEASE_KEY_PASSWORD" >> local.properties
           echo "release.keystore.password=$RELEASE_STORE_PASSWORD" >> local.properties
           echo "release.keystore.path=../release.jks" >> local.properties
+          echo "facebook.app.id=$FACEBOOK_APP_ID" >> local.properties
+          echo "facebook.client.token=$FACEBOOK_CLIENT_TOKEN" >> local.properties
+          echo "facebook.debug.app.id=$FACEBOOK_DEBUG_APP_ID" >> local.properties
+          echo "facebook.debug.client.token=$FACEBOOK_DEBUG_CLIENT_TOKEN" >> local.properties
 
       - name: set up JDK 17
         uses: actions/setup-java@v4
