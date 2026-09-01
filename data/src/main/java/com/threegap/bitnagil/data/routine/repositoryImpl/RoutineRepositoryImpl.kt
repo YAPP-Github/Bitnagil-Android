@@ -1,5 +1,7 @@
 package com.threegap.bitnagil.data.routine.repositoryImpl
 
+import com.threegap.bitnagil.analytics.AnalyticsLogger
+import com.threegap.bitnagil.data.routine.datasource.RoutineLocalDataSource
 import com.threegap.bitnagil.data.routine.datasource.RoutineRemoteDataSource
 import com.threegap.bitnagil.data.routine.model.request.toDto
 import com.threegap.bitnagil.data.routine.model.response.toDomain
@@ -17,6 +19,8 @@ import javax.inject.Inject
 
 class RoutineRepositoryImpl @Inject constructor(
     private val routineRemoteDataSource: RoutineRemoteDataSource,
+    private val routineLocalDataSource: RoutineLocalDataSource,
+    private val analyticsLogger: AnalyticsLogger,
 ) : RoutineRepository {
     override suspend fun fetchWeeklyRoutines(startDate: String, endDate: String): Result<RoutineSchedule> =
         routineRemoteDataSource.fetchWeeklyRoutines(startDate, endDate)
@@ -24,6 +28,14 @@ class RoutineRepositoryImpl @Inject constructor(
 
     override suspend fun syncRoutineCompletion(routineCompletionInfos: RoutineCompletionInfos): Result<Unit> =
         routineRemoteDataSource.syncRoutineCompletion(routineCompletionInfos.toDto())
+            .onSuccess { logFirstRoutineCompletionIfNeeded(routineCompletionInfos) }
+
+    private suspend fun logFirstRoutineCompletionIfNeeded(routineCompletionInfos: RoutineCompletionInfos) {
+        if (!routineCompletionInfos.hasCompletedRoutine) return
+
+        val isFirstCompletion = routineLocalDataSource.markFirstRoutineCompletion().getOrDefault(false)
+        if (isFirstCompletion) runCatching { analyticsLogger.logFirstRoutineCompleted() }
+    }
 
     override suspend fun getRoutine(routineId: String): Result<Routine> =
         routineRemoteDataSource.getRoutine(routineId).map { it.toDomain() }

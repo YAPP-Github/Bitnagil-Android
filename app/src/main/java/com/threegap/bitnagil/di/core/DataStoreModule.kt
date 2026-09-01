@@ -6,6 +6,8 @@ import com.threegap.bitnagil.datastore.auth.serializer.AuthTokenSerializer
 import com.threegap.bitnagil.datastore.auth.serializer.AuthTokenSerializerImpl
 import com.threegap.bitnagil.datastore.auth.storage.AuthTokenDataStore
 import com.threegap.bitnagil.datastore.auth.storage.AuthTokenStorageFactory
+import com.threegap.bitnagil.datastore.routine.storage.RoutineAchievementDataStore
+import com.threegap.bitnagil.datastore.routine.storage.RoutineAchievementStorageFactory
 import com.threegap.bitnagil.security.crypto.Crypto
 import dagger.Module
 import dagger.Provides
@@ -38,4 +40,10 @@ object DataStoreModule {
         @ApplicationContext context: Context,
         serializer: AuthTokenSerializer,
     ): AuthTokenDataStore = AuthTokenStorageFactory.create(context, serializer)
+
+    @Provides
+    @Singleton
+    fun provideRoutineAchievementDataStore(
+        @ApplicationContext context: Context,
+    ): RoutineAchievementDataStore = RoutineAchievementStorageFactory.create(context)
 }

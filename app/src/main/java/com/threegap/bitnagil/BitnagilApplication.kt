@@ -10,6 +10,7 @@ import coil3.network.okhttp.OkHttpNetworkFetcherFactory
 import coil3.request.crossfade
 import coil3.util.DebugLogger
 import com.kakao.sdk.common.KakaoSdk
+import com.threegap.bitnagil.analytics.meta.MetaAnalyticsInitializer
 import com.threegap.bitnagil.di.core.CoilEntryPoint
 import dagger.hilt.EntryPoints
 import dagger.hilt.android.HiltAndroidApp
@@ -21,6 +22,7 @@ class BitnagilApplication : Application(), SingletonImageLoader.Factory {
     override fun onCreate() {
         super.onCreate()
         initKakaoSdk()
+        configureMetaAppEvents()
     }
 
     override fun newImageLoader(context: PlatformContext): ImageLoader {
@@ -48,5 +50,9 @@ class BitnagilApplication : Application(), SingletonImageLoader.Factory {
 
     private fun initKakaoSdk() {
         KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_APP_KEY)
+    }
+
+    private fun configureMetaAppEvents() {
+        MetaAnalyticsInitializer.initialize(isDebugBuild = BuildConfig.DEBUG)
     }
 }

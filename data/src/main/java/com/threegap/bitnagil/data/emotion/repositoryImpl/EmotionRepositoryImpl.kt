@@ -16,7 +16,9 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.time.LocalDate
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class EmotionRepositoryImpl @Inject constructor(
     private val emotionRemoteDataSource: EmotionRemoteDataSource,
     private val emotionLocalDataSource: EmotionLocalDataSource,
@@ -36,7 +38,9 @@ class EmotionRepositoryImpl @Inject constructor(
                 emotionRecommendedRoutineDto.toEmotionRecommendRoutine()
             }
         }.also {
-            if (it.isSuccess) fetchAndSaveDailyEmotion(today = LocalDate.now(), forceRefresh = true)
+            if (it.isSuccess) {
+                fetchAndSaveDailyEmotion(today = LocalDate.now(), forceRefresh = true)
+            }
         }
     }
 

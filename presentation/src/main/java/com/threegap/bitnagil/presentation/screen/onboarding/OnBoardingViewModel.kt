@@ -3,6 +3,7 @@ package com.threegap.bitnagil.presentation.screen.onboarding
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.threegap.bitnagil.analytics.AnalyticsLogger
 import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingAbstractUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.GetOnBoardingsUseCase
 import com.threegap.bitnagil.domain.onboarding.usecase.GetRecommendOnBoardingRoutinesUseCase
@@ -36,6 +37,7 @@ class OnBoardingViewModel @AssistedInject constructor(
     private val registerRecommendOnBoardingRoutinesUseCase: RegisterRecommendOnBoardingRoutinesUseCase,
     private val getUserProfileUseCase: GetUserProfileUseCase,
     private val getUserOnBoardingUseCase: GetUserOnBoardingUseCase,
+    private val analyticsLogger: AnalyticsLogger,
     @Assisted private val onBoardingArg: OnBoardingScreenArg,
 ) : ContainerHost<OnBoardingState, OnBoardingSideEffect>, ViewModel() {
     @AssistedFactory interface Factory {
@@ -344,6 +346,7 @@ class OnBoardingViewModel @AssistedInject constructor(
 
         registerRecommendOnBoardingRoutinesUseCase(selectedRecommendRoutineIds = selectedRoutineIds).fold(
             onSuccess = { _ ->
+                runCatching { analyticsLogger.logOnBoardingCompleted() }
                 postSideEffect(sideEffect = OnBoardingSideEffect.NavigateToHomeScreen)
             },
             onFailure = {
@@ -352,6 +355,7 @@ class OnBoardingViewModel @AssistedInject constructor(
     }
 
     fun skipRegisterRecommendRoutines() = intent {
+        runCatching { analyticsLogger.logOnBoardingCompleted() }
         postSideEffect(sideEffect = OnBoardingSideEffect.NavigateToHomeScreen)
     }
 }

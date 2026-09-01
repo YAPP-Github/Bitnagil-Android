@@ -1,5 +1,6 @@
 package com.threegap.bitnagil.di.data
 
+import com.threegap.bitnagil.data.activitylog.service.ActivityLogService
 import com.threegap.bitnagil.data.address.service.AddressService
 import com.threegap.bitnagil.data.auth.service.AuthService
 import com.threegap.bitnagil.data.auth.service.LoginService
@@ -74,4 +75,8 @@ object ServiceModule {
     @Provides
     @Singleton
     fun provideReportService(@Auth retrofit: Retrofit): ReportService = retrofit.create()
+
+    @Provides
+    @Singleton
+    fun provideActivityLogService(@Auth retrofit: Retrofit): ActivityLogService = retrofit.create()
 }
