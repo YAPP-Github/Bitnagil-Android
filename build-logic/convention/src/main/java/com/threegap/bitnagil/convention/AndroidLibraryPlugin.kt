@@ -11,7 +11,7 @@ class AndroidLibraryPlugin : Plugin<Project> {
     override fun apply(target: Project): Unit = with(target) {
         pluginManager.apply {
             apply("com.android.library")
-            apply("org.jlleitschuh.gradle.ktlint")
+            apply("bitnagil.ktlint")
         }
 
         extensions.configure<LibraryExtension> {

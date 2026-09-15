@@ -18,6 +18,7 @@ dependencies {
     compileOnly(libs.android.gradle.plugin)
     compileOnly(libs.kotlin.gradle.plugin)
     compileOnly(libs.compose.compiler.gradle.plugin)
+    compileOnly(libs.ktlint.gradle.plugin)
 }
 
 gradlePlugin {
@@ -55,6 +56,11 @@ gradlePlugin {
         register("kotlinParcelize") {
             id = "bitnagil.kotlin.parcelize"
             implementationClass = "com.threegap.bitnagil.convention.KotlinParcelizePlugin"
+        }
+
+        register("ktlint") {
+            id = "bitnagil.ktlint"
+            implementationClass = "com.threegap.bitnagil.convention.KtlintConventionPlugin"
         }
     }
 }

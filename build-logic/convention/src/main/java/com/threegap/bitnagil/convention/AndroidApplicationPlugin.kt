@@ -15,7 +15,7 @@ class AndroidApplicationPlugin : Plugin<Project> {
         pluginManager.apply {
             apply("com.android.application")
             apply("org.jetbrains.kotlin.plugin.compose")
-            apply("org.jlleitschuh.gradle.ktlint")
+            apply("bitnagil.ktlint")
         }
 
         extensions.configure<ApplicationExtension> {
