@@ -1,5 +1,6 @@
 plugins {
     `kotlin-dsl`
+    alias(libs.plugins.ktlint)
 }
 
 group = "com.threegap.bitnagil.convention"
@@ -12,6 +13,12 @@ java {
 
 kotlin {
     jvmToolchain(17)
+}
+
+ktlint {
+    version.set(libs.versions.ktlintEngine.get())
+    verbose.set(true)
+    filter { exclude { element -> element.file.path.contains("generated/") } }
 }
 
 dependencies {

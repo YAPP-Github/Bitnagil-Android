@@ -21,5 +21,4 @@ internal fun Project.configureComposeAndroid(commonExtension: CommonExtension) {
         "implementation"(libs.findBundle("compose.lifecycle").get())
         "debugImplementation"(libs.findBundle("compose.debug").get())
     }
-
 }
