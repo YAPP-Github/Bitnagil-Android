@@ -11,7 +11,7 @@ data class SummaryEmotionDayUiModel(
         get() = "${date.year}년 ${date.monthValue}월 ${date.dayOfMonth}일의 감정"
 
     val emotionText: String
-        get() = when(emotionType) {
+        get() = when (emotionType) {
             SummaryEmotionType.CALM -> "이날은 평온했나봐요! 평온함은 마음이 고요하고 편안해 균형을 이루는 상태예요."
             SummaryEmotionType.VITALITY -> "이날은 활기찼나봐요! 활기참은 생기가 가득 차 활발하고 적극적인 상태예요."
             SummaryEmotionType.LETHARGY -> "이날은 무기력했나봐요! 무기력함은 의욕이 없어 아무것도 하기 힘든 상태예요."

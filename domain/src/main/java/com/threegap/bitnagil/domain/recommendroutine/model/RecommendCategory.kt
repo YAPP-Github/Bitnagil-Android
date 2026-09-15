@@ -12,5 +12,4 @@ enum class RecommendCategory {
     GROW,
     OUTING_REPORT,
     UNKNOWN,
-    ;
 }

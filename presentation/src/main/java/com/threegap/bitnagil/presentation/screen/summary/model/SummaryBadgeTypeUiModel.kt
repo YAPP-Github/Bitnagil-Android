@@ -3,7 +3,7 @@ package com.threegap.bitnagil.presentation.screen.summary.model
 import com.threegap.bitnagil.domain.activitylog.model.BadgeType
 
 sealed class SummaryBadgeTypeUiModel(
-    val isReserved: Boolean = false
+    val isReserved: Boolean = false,
 ) {
     data object MotivationExpert : SummaryBadgeTypeUiModel()
     data object CheckExpert : SummaryBadgeTypeUiModel()

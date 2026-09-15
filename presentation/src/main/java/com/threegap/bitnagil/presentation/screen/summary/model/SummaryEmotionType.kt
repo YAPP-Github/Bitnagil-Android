@@ -12,5 +12,5 @@ enum class SummaryEmotionType(
     LETHARGY(Color(0xFFEAEBEC), Color(0xFF5A5C63), "무기력함"),
     ANXIETY(Color(0xFFFFEEE4), Color(0xFFFE7120), "불안함"),
     SATISFACTION(Color(0xFFE2F3F6), Color(0xFF26A792), "만족함"),
-    FATIGUE(Color(0xFFFFE1E1), Color(0xFFFF5151), "피곤함")
+    FATIGUE(Color(0xFFFFE1E1), Color(0xFFFF5151), "피곤함"),
 }

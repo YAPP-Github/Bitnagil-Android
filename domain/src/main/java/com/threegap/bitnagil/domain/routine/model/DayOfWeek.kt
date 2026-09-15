@@ -11,5 +11,4 @@ enum class DayOfWeek {
     FRIDAY,
     SATURDAY,
     SUNDAY,
-    ;
 }

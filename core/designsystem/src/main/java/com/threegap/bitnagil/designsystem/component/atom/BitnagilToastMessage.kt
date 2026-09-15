@@ -96,7 +96,7 @@ class BitnagilToastState {
     private var _icon by mutableIntStateOf(0)
     private var _isVisible by mutableStateOf(false)
     private var _toastId by mutableIntStateOf(0)
-    private var _lastShowTime = 0L
+    private var lastShowTime = 0L
 
     val text: String get() = _text
     val icon: Int get() = _icon
@@ -116,14 +116,14 @@ class BitnagilToastState {
 
     private fun shouldPreventDuplicateShow(text: String, icon: Int?): Boolean {
         val currentTime = System.currentTimeMillis()
-        return _text == text && _icon == icon && currentTime - _lastShowTime < 500L
+        return _text == text && _icon == icon && currentTime - lastShowTime < 500L
     }
 
     private fun showToast(text: String, icon: Int) {
         _text = text
         _icon = icon
         _isVisible = true
-        _lastShowTime = System.currentTimeMillis()
+        lastShowTime = System.currentTimeMillis()
         _toastId += 1
     }
 }

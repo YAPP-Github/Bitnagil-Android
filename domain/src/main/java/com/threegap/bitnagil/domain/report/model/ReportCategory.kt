@@ -8,5 +8,4 @@ enum class ReportCategory {
     LIGHTING,
     WATERFACILITY,
     AMENITY,
-    ;
 }

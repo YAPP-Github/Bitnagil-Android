@@ -9,5 +9,4 @@ enum class UserRole {
     ONBOARDING,
     WITHDRAWN,
     UNKNOWN,
-    ;
 }
