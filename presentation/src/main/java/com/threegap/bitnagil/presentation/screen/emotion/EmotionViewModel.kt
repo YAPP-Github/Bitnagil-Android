@@ -72,7 +72,7 @@ class EmotionViewModel @Inject constructor(
                         reduce {
                             state.copy(
                                 recommendRoutines = recommendRoutines,
-                                step = EmotionScreenStep.RecommendRoutines,
+                                step = EmotionScreenStep.RECOMMEND_ROUTINES,
                                 isLoading = false,
                                 showLoadingView = false,
                             )
@@ -101,11 +101,11 @@ class EmotionViewModel @Inject constructor(
     fun moveToPrev() =
         intent {
             when (state.step) {
-                EmotionScreenStep.Emotion -> postSideEffect(EmotionSideEffect.NavigateToBack)
-                EmotionScreenStep.RecommendRoutines -> reduce {
+                EmotionScreenStep.EMOTION -> postSideEffect(EmotionSideEffect.NavigateToBack)
+                EmotionScreenStep.RECOMMEND_ROUTINES -> reduce {
                     state.copy(
                         recommendRoutines = listOf(),
-                        step = EmotionScreenStep.Emotion,
+                        step = EmotionScreenStep.EMOTION,
                         isLoading = false,
                     )
                 }

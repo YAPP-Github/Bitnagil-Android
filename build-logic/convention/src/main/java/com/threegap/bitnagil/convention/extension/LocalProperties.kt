@@ -1,8 +1,8 @@
 package com.threegap.bitnagil.convention.extension
 
-import java.util.Properties
 import org.gradle.api.GradleException
 import org.gradle.api.Project
+import java.util.Properties
 
 private const val LOCAL_PROPERTIES_FILE_NAME = "local.properties"
 private const val LOCAL_PROPERTIES_EXTRA_KEY = "bitnagilLocalProperties"

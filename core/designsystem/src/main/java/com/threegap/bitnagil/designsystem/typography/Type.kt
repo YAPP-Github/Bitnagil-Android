@@ -8,8 +8,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
-import com.threegap.bitnagil.designsystem.font.cafe24SsurroundAir as cafe24SsurroundAirFamily
 import com.threegap.bitnagil.designsystem.font.pretendard
+import com.threegap.bitnagil.designsystem.font.cafe24SsurroundAir as cafe24SsurroundAirFamily
 
 @Immutable
 class BitnagilTypography internal constructor(private val density: Density) {

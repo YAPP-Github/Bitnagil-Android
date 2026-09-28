@@ -7,5 +7,4 @@ enum class ReportStatus {
     PENDING,
     IN_PROGRESS,
     COMPLETED,
-    ;
 }

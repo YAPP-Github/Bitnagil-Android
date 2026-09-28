@@ -38,7 +38,7 @@ fun EmotionScreenContainer(
     }
 
     when (state.step) {
-        EmotionScreenStep.Emotion -> BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+        EmotionScreenStep.EMOTION -> BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
             val height = constraints.maxHeight.pxToDp()
 
             if (height >= 700.dp) {
@@ -59,7 +59,7 @@ fun EmotionScreenContainer(
                 )
             }
         }
-        EmotionScreenStep.RecommendRoutines -> EmotionRecommendRoutineScreen(
+        EmotionScreenStep.RECOMMEND_ROUTINES -> EmotionRecommendRoutineScreen(
             state = state,
             onClickRoutine = viewModel::selectRecommendRoutine,
             onClickRegisterRecommendRoutines = viewModel::registerRecommendRoutines,

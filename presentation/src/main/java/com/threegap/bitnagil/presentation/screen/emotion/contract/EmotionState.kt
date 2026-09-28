@@ -21,7 +21,7 @@ data class EmotionState(
             emotionTypeUiModels = emptyList(),
             isLoading = true,
             recommendRoutines = emptyList(),
-            step = EmotionScreenStep.Emotion,
+            step = EmotionScreenStep.EMOTION,
             showLoadingView = false,
         )
     }

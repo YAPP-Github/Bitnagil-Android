@@ -15,7 +15,8 @@ versionPatch = "0"
 androidGradlePlugin = "9.1.0"
 
 # Formatting Plugin
-ktlint = "11.3.2"
+ktlint = "14.2.0"
+ktlintEngine = "1.5.0"
 
 # AndroidX
 androidxCore = "1.18.0"
@@ -142,6 +143,7 @@ lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", versio
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 facebook-core = { group = "com.facebook.android", name = "facebook-core", version.ref = "facebookSdk" }
+ktlint-gradle-plugin = { group = "org.jlleitschuh.gradle", name = "ktlint-gradle", version.ref = "ktlint" }
 
 
 [bundles]

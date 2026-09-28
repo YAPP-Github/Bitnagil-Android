@@ -7,5 +7,4 @@ enum class RecommendLevel {
     LEVEL1,
     LEVEL2,
     LEVEL3,
-    ;
 }

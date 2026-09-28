@@ -457,7 +457,7 @@ private fun Preview() {
                     ),
                 ),
                 isLoading = false,
-                step = EmotionScreenStep.Emotion,
+                step = EmotionScreenStep.EMOTION,
                 recommendRoutines = listOf(),
                 showLoadingView = false,
             ),

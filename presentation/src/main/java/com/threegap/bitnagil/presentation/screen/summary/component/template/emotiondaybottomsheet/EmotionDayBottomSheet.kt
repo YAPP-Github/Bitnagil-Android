@@ -72,12 +72,12 @@ private fun EmotionDayBottomSheetContent(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 18.dp)
+            .padding(vertical = 18.dp),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = emotionDay.dayText,
@@ -103,7 +103,7 @@ private fun EmotionDayBottomSheetContent(
             color = BitnagilTheme.colors.coolGray40,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp)
+                .padding(horizontal = 24.dp),
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -121,7 +121,7 @@ private fun EmotionDayBottomSheetContent(
                 .background(
                     color = BitnagilTheme.colors.white,
                     shape = RoundedCornerShape(12.dp),
-                )
+                ),
         )
     }
 }

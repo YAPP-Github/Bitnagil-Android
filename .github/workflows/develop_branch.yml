@@ -59,4 +59,4 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
 
       - name: Build and Verify
-        run: ./gradlew ktlintCheck testDebugUnitTest assembleDebug
+        run: ./gradlew ktlintCheck :build-logic:convention:ktlintCheck testDebugUnitTest assembleDebug --continue

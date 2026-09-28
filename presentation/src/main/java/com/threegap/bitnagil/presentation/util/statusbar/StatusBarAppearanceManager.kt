@@ -8,9 +8,9 @@ import android.os.Looper
 import android.view.PixelCopy
 import android.view.Window
 import androidx.core.graphics.createBitmap
+import androidx.core.graphics.get
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.graphics.get
 import androidx.core.view.WindowInsetsControllerCompat
 
 object StatusBarAppearanceManager {
@@ -41,7 +41,7 @@ object StatusBarAppearanceManager {
     private fun captureStatusBarBitmap(
         window: Window,
         height: Int,
-        onResult: (Bitmap?) -> Unit
+        onResult: (Bitmap?) -> Unit,
     ) {
         val width = window.decorView.width
         if (width <= 0) {

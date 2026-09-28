@@ -54,7 +54,7 @@ fun SummaryCalendarView(
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.Center,
                     style = BitnagilTheme.typography.body2Medium,
-                    color = BitnagilTheme.colors.coolGray40
+                    color = BitnagilTheme.colors.coolGray40,
                 )
             }
         }
@@ -152,7 +152,7 @@ private fun SummaryCalendarPreview() {
                 SummaryEmotionCellUiModel(currentMonth.atDay(16), SummaryEmotionType.FATIGUE, ""),
                 SummaryEmotionCellUiModel(nextMonth.atDay(1), SummaryEmotionType.FATIGUE, ""),
             ),
-            firstDayOfWeek = DayOfWeek.SUNDAY
+            firstDayOfWeek = DayOfWeek.SUNDAY,
         )
     }
 }

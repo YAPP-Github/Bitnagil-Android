@@ -8,5 +8,11 @@ plugins {
     alias(libs.plugins.kotlin.parcelize) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.hilt) apply false
-    alias(libs.plugins.ktlint) apply false
+    alias(libs.plugins.ktlint)
+}
+
+ktlint {
+    version.set(libs.versions.ktlintEngine.get())
+    verbose.set(true)
+    filter { exclude { element -> element.file.path.contains("generated/") } }
 }

@@ -39,7 +39,7 @@ import java.time.temporal.ChronoUnit
 @Composable
 fun SummaryScreenContainer(
     viewModel: SummaryViewModel = hiltViewModel(),
-    navigateToYouthPolicies: () -> Unit
+    navigateToYouthPolicies: () -> Unit,
 ) {
     val state by viewModel.collectAsState()
 
@@ -54,7 +54,7 @@ fun SummaryScreenContainer(
         state = state,
         onMonthChanged = viewModel::onMonthChanged,
         onClickEmotionDay = viewModel::selectEmotionDay,
-        onClickYouthPolicies = navigateToYouthPolicies
+        onClickYouthPolicies = navigateToYouthPolicies,
     )
 }
 
@@ -110,11 +110,11 @@ fun SummaryScreen(
                         pagerState.animateScrollToPage(pagerState.currentPage - 1)
                     }
                 },
-                modifier = Modifier.size(48.dp)
+                modifier = Modifier.size(48.dp),
             )
             Text(
                 "${state.currentMonth.year}년 ${state.currentMonth.monthValue}월",
-                style = BitnagilTheme.typography.subtitle1SemiBold
+                style = BitnagilTheme.typography.subtitle1SemiBold,
             )
             BitnagilIconButton(
                 id = R.drawable.ic_right_arrow_20,
@@ -123,7 +123,7 @@ fun SummaryScreen(
                         pagerState.animateScrollToPage(pagerState.currentPage + 1)
                     }
                 },
-                modifier = Modifier.size(48.dp)
+                modifier = Modifier.size(48.dp),
             )
         }
 
@@ -132,7 +132,7 @@ fun SummaryScreen(
         HorizontalPager(
             state = pagerState,
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.Top
+            verticalAlignment = Alignment.Top,
         ) { page ->
             val monthOffset = page - INITIAL_PAGE
             val displayMonth = YearMonth.now().plusMonths(monthOffset.toLong())
@@ -147,7 +147,7 @@ fun SummaryScreen(
                     }
                 },
                 onClickEmotionDay = onClickEmotionDay,
-                modifier = Modifier.padding(horizontal = 20.dp)
+                modifier = Modifier.padding(horizontal = 20.dp),
             )
         }
 

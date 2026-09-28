@@ -119,7 +119,7 @@ private fun Preview() {
                     ),
                 ),
                 isLoading = false,
-                step = EmotionScreenStep.RecommendRoutines,
+                step = EmotionScreenStep.RECOMMEND_ROUTINES,
                 recommendRoutines = listOf(
                     EmotionRecommendRoutineUiModel(
                         id = "1",

@@ -43,34 +43,34 @@ import com.threegap.bitnagil.presentation.util.dimension.pxToDp
 @Composable
 fun SummaryBadgeView(
     summaryBadge: SummaryBadgeUiModel?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Background(
-        modifier = modifier.clipToBounds()
+        modifier = modifier.clipToBounds(),
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.Center)
+                .align(Alignment.Center),
         ) {
             summaryBadge?.let {
                 Text(
                     summaryBadge.badgeDescription,
                     style = BitnagilTheme.typography.cafe24SsurroundAir,
                     color = BitnagilTheme.colors.white,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
 
                 SummaryBadgeListView(
-                    badges = summaryBadge.badges
+                    badges = summaryBadge.badges,
                 )
 
                 BadgeTitleView(
                     badgeTitle = summaryBadge.badgeTitle,
                     isBadgeReserved = summaryBadge.badges.firstOrNull()?.type?.isReserved ?: false,
-                    modifier = Modifier
+                    modifier = Modifier,
                 )
             }
         }
@@ -100,7 +100,7 @@ private fun Background(
                 .width(width * 0.55f)
                 .aspectRatio(1f)
                 .offset(x = (-93).dp, y = (-81).dp)
-                .rotate(103f)
+                .rotate(103f),
         )
 
         StarImage(
@@ -108,7 +108,7 @@ private fun Background(
                 .width(width * 0.13f)
                 .aspectRatio(1f)
                 .offset(x = 24.dp, y = 188.dp)
-                .rotate(24f)
+                .rotate(24f),
         )
 
         StarImage(
@@ -116,7 +116,7 @@ private fun Background(
                 .width(width * 0.06f)
                 .aspectRatio(1f)
                 .offset(x = 50.dp, y = 270.dp)
-                .rotate(330f)
+                .rotate(330f),
         )
 
         StarImage(
@@ -135,7 +135,7 @@ private fun Background(
                 .align(Alignment.TopEnd)
                 .offset(x = 30.dp, y = 50.dp)
                 .rotate(342f),
-            color = BitnagilTheme.colors.orange500
+            color = BitnagilTheme.colors.orange500,
         )
 
         content()
@@ -146,14 +146,14 @@ private fun Background(
 private fun StarImage(
     modifier: Modifier = Modifier,
     color: Color = BitnagilTheme.colors.orange400,
-    contentScale: ContentScale = ContentScale.Fit
+    contentScale: ContentScale = ContentScale.Fit,
 ) {
     Image(
         imageVector = ImageVector.vectorResource(id = R.drawable.ic_shine),
         contentDescription = null,
         colorFilter = ColorFilter.tint(color),
         contentScale = contentScale,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -167,18 +167,18 @@ private fun SummaryBadgeListView(
     Row(
         modifier = modifier.fillMaxWidth().padding(horizontal = 30.dp),
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         badges.forEach { badge ->
             if (isSingleItem)
                 SummaryBadgeItemView(
                     badge = badge,
-                    modifier = Modifier.size(125.dp).aspectRatio(1f)
+                    modifier = Modifier.size(125.dp).aspectRatio(1f),
                 )
             else
                 SummaryBadgeItemView(
                     badge = badge,
-                    modifier = Modifier.widthIn(max = 100.dp).weight(1f, fill = false)
+                    modifier = Modifier.widthIn(max = 100.dp).weight(1f, fill = false),
                 )
         }
     }
@@ -194,14 +194,14 @@ private fun SummaryBadgeItemView(
             Image(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_badge_question),
                 contentDescription = null,
-                modifier = modifier.aspectRatio(1f).padding(9.dp)
+                modifier = modifier.aspectRatio(1f).padding(9.dp),
             )
 
         is BadgeImage.Remote ->
             AsyncImage(
                 model = image.url,
                 contentDescription = null,
-                modifier = modifier.aspectRatio(1f)
+                modifier = modifier.aspectRatio(1f),
             )
     }
 }
@@ -217,19 +217,19 @@ private fun BadgeTitleView(
             .background(color = BitnagilTheme.colors.orange700, shape = RoundedCornerShape(8.dp))
             .padding(horizontal = 12.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Image(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_shine),
             contentDescription = null,
             modifier = Modifier.size(15.dp),
-            colorFilter = ColorFilter.tint(if (isBadgeReserved) BitnagilTheme.colors.coolGray95 else BitnagilTheme.colors.kakao)
+            colorFilter = ColorFilter.tint(if (isBadgeReserved) BitnagilTheme.colors.coolGray95 else BitnagilTheme.colors.kakao),
         )
 
         Text(
             text = badgeTitle,
             style = BitnagilTheme.typography.caption1Medium,
-            color = BitnagilTheme.colors.white
+            color = BitnagilTheme.colors.white,
         )
     }
 }
@@ -248,9 +248,9 @@ private fun SummaryBadgePreview() {
                         acquired = false,
                     ),
                 ),
-                badgeDescription = "덕분에 도시가\n개선되고 있어요!"
+                badgeDescription = "덕분에 도시가\n개선되고 있어요!",
             ),
-            modifier = Modifier
+            modifier = Modifier,
         )
     }
 }

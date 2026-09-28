@@ -1,5 +1,6 @@
 plugins {
     `kotlin-dsl`
+    alias(libs.plugins.ktlint)
 }
 
 group = "com.threegap.bitnagil.convention"
@@ -14,10 +15,17 @@ kotlin {
     jvmToolchain(17)
 }
 
+ktlint {
+    version.set(libs.versions.ktlintEngine.get())
+    verbose.set(true)
+    filter { exclude { element -> element.file.path.contains("generated/") } }
+}
+
 dependencies {
     compileOnly(libs.android.gradle.plugin)
     compileOnly(libs.kotlin.gradle.plugin)
     compileOnly(libs.compose.compiler.gradle.plugin)
+    compileOnly(libs.ktlint.gradle.plugin)
 }
 
 gradlePlugin {
@@ -55,6 +63,11 @@ gradlePlugin {
         register("kotlinParcelize") {
             id = "bitnagil.kotlin.parcelize"
             implementationClass = "com.threegap.bitnagil.convention.KotlinParcelizePlugin"
+        }
+
+        register("ktlint") {
+            id = "bitnagil.ktlint"
+            implementationClass = "com.threegap.bitnagil.convention.KtlintConventionPlugin"
         }
     }
 }

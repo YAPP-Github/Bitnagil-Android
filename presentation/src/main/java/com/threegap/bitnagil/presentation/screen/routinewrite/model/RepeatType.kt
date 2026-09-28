@@ -5,5 +5,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 enum class RepeatType : Parcelable {
-    DAILY, DAY
+    DAILY,
+    DAY,
 }

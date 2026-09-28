@@ -105,7 +105,7 @@ fun HomeNavHost(
 
                     composable<HomeRoute.Summary> {
                         SummaryScreenContainer(
-                            navigateToYouthPolicies = {} // todo - 청년공고 화면 구현 후 연결 필요
+                            navigateToYouthPolicies = {}, // todo - 청년공고 화면 구현 후 연결 필요
                         )
                     }
                 }
